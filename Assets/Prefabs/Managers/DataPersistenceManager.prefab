@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 7414425873017027549}
   - component: {fileID: 1213336936345118661}
   - component: {fileID: 1672881147835838050}
-  - component: {fileID: 7245691441535051483}
-  - component: {fileID: 7730279940687791539}
+  - component: {fileID: 6021402086401575301}
+  - component: {fileID: 3837515663381369885}
   m_Layer: 0
   m_Name: DataPersistenceManager
   m_TagString: Untagged
@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1121961411
+  GlobalObjectIdHash: 3586991958
   InScenePlacedSourceGlobalObjectIdHash: 2828541971
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -69,7 +69,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fileName: data.json
---- !u!114 &7245691441535051483
+--- !u!114 &6021402086401575301
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -97,7 +97,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &7730279940687791539
+--- !u!114 &3837515663381369885
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

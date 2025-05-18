@@ -129,7 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3090487354
+  GlobalObjectIdHash: 3306253470
   InScenePlacedSourceGlobalObjectIdHash: 1713908540
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -154,40 +154,6 @@ MonoBehaviour:
     _dateTime: 1999-01-01T13:30:00.0000000
     _seasonStatus: 0
   statusUI: {fileID: 0}
-  sun: {fileID: 1710937038682175534}
-  moon: {fileID: 8904396849815954864}
-  orbitRadius: 20
-  globalLight: {fileID: 0}
-  gradient:
-    serializedVersion: 2
-    key0: {r: 0, g: 0.15104198, b: 1, a: 1}
-    key1: {r: 1, g: 0.9053277, b: 0, a: 1}
-    key2: {r: 1, g: 1, b: 1, a: 0}
-    key3: {r: 1, g: 1, b: 1, a: 0}
-    key4: {r: 1, g: 0.5497076, b: 0, a: 0}
-    key5: {r: 1, g: 0, b: 0.03571415, a: 0}
-    key6: {r: 0.3805971, g: 0, b: 1, a: 0}
-    key7: {r: 0, g: 0.14210558, b: 1, a: 0}
-    ctime0: 5937
-    ctime1: 13338
-    ctime2: 16114
-    ctime3: 42174
-    ctime4: 44641
-    ctime5: 46800
-    ctime6: 49421
-    ctime7: 55589
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 8
-    m_NumAlphaKeys: 2
   minutesToIncrease: 0
 --- !u!1 &4192969039877689472
 GameObject:

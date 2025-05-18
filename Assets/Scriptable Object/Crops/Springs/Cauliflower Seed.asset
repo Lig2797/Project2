@@ -15,6 +15,7 @@ MonoBehaviour:
   CropSetting:
     cropProductName: Cauliflower
     growthStages:
+    - {fileID: 11400000, guid: 9ae68e0cd4a174b4787081a8909a9257, type: 2}
     - {fileID: 11400000, guid: 1c145a4e3d121e94d95d46ae113b6bd8, type: 2}
     - {fileID: 11400000, guid: c06c36b3e21877641a3ad694ff8333a8, type: 2}
     - {fileID: 11400000, guid: 94c9d56d78ec5094087628c9638a6034, type: 2}

@@ -15,6 +15,7 @@ MonoBehaviour:
   CropSetting:
     cropProductName: Broccoli
     growthStages:
+    - {fileID: 11400000, guid: 0894b3f4eacc0ba4d979ccd694b8fc91, type: 2}
     - {fileID: 11400000, guid: 9d60621ee73980c48968c1411c8e706c, type: 2}
     - {fileID: 11400000, guid: b82e2e24c1bc6fe45afcb73e90538792, type: 2}
     - {fileID: 11400000, guid: 686510587b47c8042ab81397835a612e, type: 2}

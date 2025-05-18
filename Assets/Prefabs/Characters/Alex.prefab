@@ -270,7 +270,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1449220059
-  m_SortingLayer: 12
+  m_SortingLayer: 15
   m_SortingOrder: 1
   m_Sprite: {fileID: 1764248313, guid: 6d5dacad31d5dc9458c33856e6a57497, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -463,7 +463,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1449220059
-  m_SortingLayer: 12
+  m_SortingLayer: 15
   m_SortingOrder: 0
   m_Sprite: {fileID: 659270592, guid: 8f61e7cf7a36914449d44136773dc15b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -592,10 +592,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0db804c88d5e614bbca7bee1a38a546, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _inputReader: {fileID: 11400000, guid: cf53f8622c1b9894ba0584efa38f4650, type: 2}
+  tileTargeter: {fileID: 4101560532654197353}
+  _inventoryController: {fileID: 0}
+  _acceleration: 25
   walkSpeed: 2
   runSpeed: 3
-  vehicleSpeed: 0
+  _vehicleSpeed: 0
   noTargetStates:
   - Sword
   - Axe
@@ -608,28 +610,16 @@ MonoBehaviour:
   - WaterCan
   - Pickaxe
   - Shovel
-  tileTargeter: {fileID: 4101560532654197353}
   _canMove: 1
   _currentSpeed: 0
-  movement: {x: 0, y: 0}
-  _currentVehicle: {fileID: 0}
+  _movement: {x: 0, y: 0}
   _isFacingRight: 1
-  _canRun: 1
-  _isRuning: 0
-  _canRide: 0
-  _isRidingVehicle: 0
-  _isHoldingItem: 0
-  _canAttack: 1
-  _canSleep: 0
-  _isSleeping: 0
-  _currentBed: {fileID: 0}
-  _hadTarget: 0
+  _inputReader: {fileID: 11400000, guid: cf53f8622c1b9894ba0584efa38f4650, type: 2}
   _itemOnHand: {fileID: 2382300655017927629}
   virtualCamera: {fileID: 0}
-  _inventoryController: {fileID: 0}
   _inventoryManagerSO: {fileID: 11400000, guid: 80487e6faf0fa794284f8125827666cd, type: 2}
-  onPlayerLoad: {fileID: 11400000, guid: 40dcf0ed3e09bbb428fb1a1116eb45eb, type: 2}
-  onPlayerSave: {fileID: 11400000, guid: 5a78db38ab07f0f4b8a40914ccf06b8b, type: 2}
+  onPlayerLoadEvent: {fileID: 11400000, guid: 40dcf0ed3e09bbb428fb1a1116eb45eb, type: 2}
+  onPlayerSaveEvent: {fileID: 11400000, guid: 5a78db38ab07f0f4b8a40914ccf06b8b, type: 2}
 --- !u!114 &4101560532654197353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -698,7 +688,6 @@ MonoBehaviour:
   onOpenInventory: {fileID: 11400000, guid: 802f9a3ee923a0a4a95d06ccbdd7f7e6, type: 2}
   onCloseInventory: {fileID: 11400000, guid: 7424e7b02d0fa744cb65eff3f7094fbb, type: 2}
   onChangeSelectedSlot: {fileID: 11400000, guid: c20612576d1523447bf3b05b1b432950, type: 2}
-  onAddItemToInventory: {fileID: 11400000, guid: 34231fe85d027f242ab91258d8e674d2, type: 2}
   onInventoryLoad: {fileID: 11400000, guid: 956238ba4a4dc724c98d4c10596c8317, type: 2}
 --- !u!114 &643758986225740226
 MonoBehaviour:

@@ -76,7 +76,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1449220059
-  m_SortingLayer: 12
+  m_SortingLayer: 15
   m_SortingOrder: 0
   m_Sprite: {fileID: -790498180, guid: 82a56d660086c94439a932cf6e53cf3f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -163,8 +163,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 185786727
-  InScenePlacedSourceGlobalObjectIdHash: 0
+  GlobalObjectIdHash: 3093838206
+  InScenePlacedSourceGlobalObjectIdHash: 89726477
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -185,14 +185,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 733a2349-9d2b-4a5d-8441-5830e12d6ab2
-  item: {fileID: 11400000, guid: d6b133717e4c1834ea613b6d51262c5d, type: 2}
-  _collider2D: {fileID: 3906291288246050922}
-  _TargetzoneCollider2D: {fileID: 1989492343227124061}
+  item: {fileID: 11400000, guid: a8f74ae94e7dc48488cb5ad3f5251e14, type: 2}
   CanPickup:
-    m_InternalValue: 1
+    m_InternalValue: 0
   targetTransform: {fileID: 0}
   _acceleration: 0.5
   _maxSpeed: 0.5
+  onItemWorldTouchPlayer: {fileID: 11400000, guid: 34231fe85d027f242ab91258d8e674d2, type: 2}
 --- !u!1 &2086567148679051196
 GameObject:
   m_ObjectHideFlags: 0
