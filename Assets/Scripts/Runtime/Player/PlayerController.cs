@@ -248,6 +248,11 @@ public class PlayerController : NetworkBehaviour
     #endregion
     #endregion
 
+    //Game Event
+    [SerializeField] private GameEvent onPlayerLoad;
+    [SerializeField] private GameEvent onPlayerSave;
+    [SerializeField] private GameEvent onSubmit;
+
     #region Setup Before Game Start
     private void Awake()
     {
@@ -264,6 +269,7 @@ public class PlayerController : NetworkBehaviour
         _inputReader.playerActions.interactEvent += OnInteract;
         _inputReader.playerActions.secondInteractEvent += OnSecondInteract;
         _inputReader.playerActions.runEvent += OnRun;
+        _inputReader.playerActions.submitEvent += OnSubmit;
         _inventoryManagerSO.onChangedSelectedSlot += CheckAnimation;
     }
 
@@ -274,6 +280,7 @@ public class PlayerController : NetworkBehaviour
         _inputReader.playerActions.interactEvent -= OnInteract;
         _inputReader.playerActions.secondInteractEvent -= OnSecondInteract;
         _inputReader.playerActions.runEvent -= OnRun;
+        _inputReader.playerActions.submitEvent -= OnSubmit;
         _inventoryManagerSO.onChangedSelectedSlot -= CheckAnimation;
     }
 
@@ -598,6 +605,14 @@ public class PlayerController : NetworkBehaviour
             }
         }
     }
+
+    private void OnSubmit()
+    {
+        onSubmit.Raise(this, ActionMap.Player);
+        _inputReader.SwitchActionMap(ActionMap.UI);
+    }
+
+    // Load & Save
     private void OnSecondInteract()
     {
         if (CanRide && CurrentVehicle != null)
