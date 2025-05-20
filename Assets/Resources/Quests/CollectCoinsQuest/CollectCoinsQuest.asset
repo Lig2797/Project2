@@ -9,14 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98b48890cdb70ac4ca6566270efcdd9f, type: 3}
+  m_Script: {fileID: 11500000, guid: 7ef4bd2c9dfc16d4db7df4e7c4ee9607, type: 3}
   m_Name: CollectCoinsQuest
   m_EditorClassIdentifier: 
   <id>k__BackingField: CollectCoinsQuest
-  displayName: Collect the Coins!
-  levelRequirement: 1
+  displayName: Collect Coins Quest
+  levelRequirement: 0
   questPrerequisites: []
   questStepPrefabs:
   - {fileID: 1860606814585445061, guid: 65a28304aa460bc46852b9b46948ac3b, type: 3}
-  goldReward: 50
-  experienceReward: 250
+  goldReward: 200
+  experienceReward: 400
