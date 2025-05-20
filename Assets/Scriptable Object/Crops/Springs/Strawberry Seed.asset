@@ -15,6 +15,7 @@ MonoBehaviour:
   CropSetting:
     cropProductName: Strawberry
     growthStages:
+    - {fileID: 11400000, guid: 0894b3f4eacc0ba4d979ccd694b8fc91, type: 2}
     - {fileID: 11400000, guid: 120951d2de6d48f40b299e5ba87dc3f7, type: 2}
     - {fileID: 11400000, guid: 242489af990b5f8458b6ed397d511075, type: 2}
     - {fileID: 11400000, guid: 019f230a70f6b6c488948d8b9c481866, type: 2}

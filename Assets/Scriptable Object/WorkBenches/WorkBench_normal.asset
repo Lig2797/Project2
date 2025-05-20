@@ -12,6 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2937cd1ec553aec45961e357bc702d01, type: 3}
   m_Name: WorkBench_normal
   m_EditorClassIdentifier: 
+  CropSetting:
+    cropProductName: 
+    growthStages: []
+    TimeToGrowth: 0
+    season: 0
+  cropLevelImage: []
   tile: {fileID: 0}
   ruleTile: {fileID: 0}
   animatedTile: {fileID: 0}

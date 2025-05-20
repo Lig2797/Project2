@@ -15,6 +15,7 @@ MonoBehaviour:
   CropSetting:
     cropProductName: Carrot
     growthStages:
+    - {fileID: 11400000, guid: c741bb8cb37a32b4a8517b13fbbeeaa4, type: 2}
     - {fileID: 11400000, guid: 4edb6b34a3e8c5a429e62b414034551c, type: 2}
     - {fileID: 11400000, guid: c8fe3e67fb367f84f839d1d85aaeb6e3, type: 2}
     - {fileID: 11400000, guid: 170d9adebfba86a40bbb4ea64815ef3e, type: 2}

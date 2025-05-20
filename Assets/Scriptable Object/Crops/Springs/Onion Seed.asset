@@ -15,6 +15,7 @@ MonoBehaviour:
   CropSetting:
     cropProductName: Onion
     growthStages:
+    - {fileID: 11400000, guid: 0894b3f4eacc0ba4d979ccd694b8fc91, type: 2}
     - {fileID: 11400000, guid: c3c573ce0e4b6e94e855e21d38f5319a, type: 2}
     - {fileID: 11400000, guid: cba61e3a08d27c248b83da5852abc623, type: 2}
     - {fileID: 11400000, guid: 5ce968d7305539c4385760fc967d8670, type: 2}
