@@ -6,7 +6,9 @@ using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+#if UNITY_EDITOR
 using static UnityEditor.Progress;
+#endif
 
 public class UI_InventoryItem : MonoBehaviour, IPointerDownHandler
 {

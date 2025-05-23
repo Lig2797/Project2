@@ -1,0 +1,21 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="LoadingScreen" src="project://database/Assets/UI%20Toolkit/Uxml/LoadingScreen.uxml?fileID=9197481963319205126&amp;guid=98f3b818fc9af01499d9ab714ddc3b8b&amp;type=3#LoadingScreen" />
+    <ui:Template name="SaveFile" src="project://database/Assets/UI%20Toolkit/Uxml/SaveFile.uxml?fileID=9197481963319205126&amp;guid=39a4f0435d28d6d4381f20839f855151&amp;type=3#SaveFile" />
+    <ui:Template name="SettingPanel" src="project://database/Assets/UI%20Toolkit/Uxml/SettingPanel.uxml?fileID=9197481963319205126&amp;guid=791b335b7e77dab42891a32cbc00eb83&amp;type=3#SettingPanel" />
+    <Style src="project://database/Assets/UI%20Toolkit/Style/button-style.uss?fileID=7433441132597879392&amp;guid=98856b5a5ed39424abb6e7cecc2711e9&amp;type=3#button-style" />
+    <Style src="project://database/Assets/UI%20Toolkit/Uss/Common.uss?fileID=7433441132597879392&amp;guid=e5eed4f115c0f5e4daef98d8b44f43e3&amp;type=3#Common" />
+    <ui:VisualElement name="MainMenuContainer" class="mainmenu-panel">
+        <ui:Label tabindex="0" text="Miracle Farm" parse-escape-sequences="true" display-tooltip-when-elided="true" name="GameTitleLabel" enable-rich-text="true" class="gametitlelabel-style gametitlelable--zoom" style="transition-property: all; transition-duration: 1s; transition-timing-function: ease; transition-delay: 0s;" />
+        <ui:VisualElement name="ButtonContainer" style="align-items: center; align-self: auto; margin-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; width: auto; justify-content: flex-start; height: auto;">
+            <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="SingleplayerButton" text="Singleplayer" class="button-style" style="padding-left: 10px;" />
+            <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="MultiplayerButton" text="Multiplayer" class="button-style" style="padding-left: 10px;" />
+            <ui:VisualElement name="ButtonContainer" style="flex-grow: 1; flex-direction: row; justify-content: space-between; width: 600px; align-items: center; margin-top: 20px;">
+                <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="OptionsButton" text="Options" class="button-style" style="padding-left: 10px; width: 290px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="QuitButton" text="Quit" class="button-style" style="padding-left: 10px; width: 290px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:Instance template="LoadingScreen" name="LoadingScreen" style="display: none; position: absolute; right: auto; width: 100%; height: 100%; visibility: visible; overflow: visible;" />
+    <ui:Instance template="SaveFile" name="SaveFilePanel" class="savefile-panel" style="transition-duration: 0.5s; transition-timing-function: ease-in-out;" />
+    <ui:Instance template="SettingPanel" name="SettingPanel" class="setting-panel" />
+</ui:UXML>

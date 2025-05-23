@@ -620,6 +620,9 @@ MonoBehaviour:
   _inventoryManagerSO: {fileID: 11400000, guid: 80487e6faf0fa794284f8125827666cd, type: 2}
   onPlayerLoadEvent: {fileID: 11400000, guid: 40dcf0ed3e09bbb428fb1a1116eb45eb, type: 2}
   onPlayerSaveEvent: {fileID: 11400000, guid: 5a78db38ab07f0f4b8a40914ccf06b8b, type: 2}
+  onPlayerLoad: {fileID: 0}
+  onPlayerSave: {fileID: 0}
+  onSubmit: {fileID: 11400000, guid: 49cfcb36600939e44b6db91a234b880b, type: 2}
 --- !u!114 &4101560532654197353
 MonoBehaviour:
   m_ObjectHideFlags: 0

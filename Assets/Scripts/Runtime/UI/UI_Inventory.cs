@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
+#if UNITY_EDITOR
 using UnityEditorInternal.Profiling.Memory.Experimental;
+#endif
 using UnityEngine;
 using UnityEngine.Rendering;
 
