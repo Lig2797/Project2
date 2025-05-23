@@ -45,15 +45,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3773117662
+  GlobalObjectIdHash: 4240998033
   InScenePlacedSourceGlobalObjectIdHash: 2179131864
+  DeferredDespawnTick: 0
+  Ownership: 1
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
+  SceneMigrationSynchronization: 0
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!114 &5386229405368730217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,6 +70,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76dfd7e1cc9dd4a4895919244f94cbea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   items:
   - {fileID: 11400000, guid: a8f74ae94e7dc48488cb5ad3f5251e14, type: 2}
   - {fileID: 11400000, guid: 6d83434b3d6fb0e4b8fd4c556c255717, type: 2}

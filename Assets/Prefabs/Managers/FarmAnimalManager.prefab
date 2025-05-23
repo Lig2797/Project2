@@ -45,15 +45,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 4196285575
+  GlobalObjectIdHash: 4257154666
   InScenePlacedSourceGlobalObjectIdHash: 862269765
+  DeferredDespawnTick: 0
+  Ownership: 1
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
+  SceneMigrationSynchronization: 0
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!114 &7465288948651295769
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,4 +70,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab69b53621d429645a32c81803077bac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   farmAnimals: []

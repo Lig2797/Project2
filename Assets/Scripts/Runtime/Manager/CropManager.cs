@@ -38,7 +38,7 @@ public class CropManager : Singleton<CropManager>, IDataPersistence
             var stage = crop.Value.CurrentStage;
             var cropSeed = ItemDatabase.Instance.GetItemByName(cropName);
 
-            cropTilemap.SetTile(cropPos, cropSeed.CropSetting.growthStages[stage-1]);
+            cropTilemap.SetTile(cropPos, cropSeed.CropSetting.growthStages[stage]);
         }
     }
     /// <summary>

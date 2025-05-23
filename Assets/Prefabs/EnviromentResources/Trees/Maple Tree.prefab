@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4763312408438566351}
   - component: {fileID: 2986477172446649099}
   - component: {fileID: 99882147283229194}
+  - component: {fileID: 181672851930991639}
   m_Layer: 0
   m_Name: Maple Tree
   m_TagString: Untagged
@@ -55,6 +56,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -77,7 +81,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1449220059
-  m_SortingLayer: 12
+  m_SortingLayer: 15
   m_SortingOrder: 0
   m_Sprite: {fileID: -2111084553, guid: 621639a1c189b36479c1f0aeec13c06a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -92,7 +96,7 @@ SpriteRenderer:
   m_SpriteSortPoint: 1
 --- !u!95 &7104534038762311621
 Animator:
-  serializedVersion: 5
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -106,6 +110,7 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
@@ -119,6 +124,7 @@ CapsuleCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1059118235141350529}
   m_Enabled: 1
+  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -142,7 +148,8 @@ CapsuleCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_UsedByComposite: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
   m_Offset: {x: 0.0046755797, y: -0.39773238}
   m_Size: {x: 0.7802341, y: 0.4294917}
   m_Direction: 1
@@ -158,8 +165,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d198d6755d118f4bbb072d76f07050f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   entityInfo: {fileID: 11400000, guid: 1ccc778b3b62b5b47bce960cac8cb654, type: 2}
   itemDropPrefab: {fileID: 1324879070572636304, guid: 758e550aad33f9247bb2707f07dfc14c, type: 3}
+  _animator: {fileID: 0}
 --- !u!114 &99882147283229194
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,6 +201,31 @@ MonoBehaviour:
   _isAlive: 1
   isInvincible: 0
   invincibilityTime: 0.1
+--- !u!114 &181672851930991639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1059118235141350529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 3590504701
+  InScenePlacedSourceGlobalObjectIdHash: 1249891198
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!1 &3646881572690721612
 GameObject:
   m_ObjectHideFlags: 0
@@ -232,6 +266,7 @@ CapsuleCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3646881572690721612}
   m_Enabled: 1
+  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -255,7 +290,8 @@ CapsuleCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_UsedByComposite: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
   m_Offset: {x: 0.0052644014, y: -0.15083754}
   m_Size: {x: 0.46376348, y: 0.87491965}
   m_Direction: 0
@@ -299,6 +335,7 @@ CapsuleCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8137878852580217850}
   m_Enabled: 1
+  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -322,7 +359,8 @@ CapsuleCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_UsedByComposite: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
   m_Offset: {x: 0.002341628, y: -0.27749908}
   m_Size: {x: 0.46960902, y: 0.6332886}
   m_Direction: 0

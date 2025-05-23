@@ -45,15 +45,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1731977291
+  GlobalObjectIdHash: 3792794844
   InScenePlacedSourceGlobalObjectIdHash: 2855245133
+  DeferredDespawnTick: 0
+  Ownership: 1
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
+  SceneMigrationSynchronization: 0
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!114 &9026489683539994187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,7 +70,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52979b94ed66a294eb6cdc43c12bf413, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hoedTilemap: {fileID: 0}
-  _wateredTilemap: {fileID: 0}
-  _hoedRuleTile: {fileID: 11400000, guid: 3b1ff827cbf7d9f49afa711b3cd7b882, type: 2}
-  _wateredRuleTile: {fileID: 11400000, guid: 16825ce115a3f274db3839e3dc730808, type: 2}
+  ShowTopMostFoldoutHeaderGroup: 1
+  tilemaps:
+  - {fileID: 0}
+  - {fileID: 0}
+  ruleTiles:
+  - {fileID: 11400000, guid: 3b1ff827cbf7d9f49afa711b3cd7b882, type: 2}
+  - {fileID: 11400000, guid: 16825ce115a3f274db3839e3dc730808, type: 2}

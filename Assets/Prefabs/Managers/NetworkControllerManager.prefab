@@ -47,13 +47,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GlobalObjectIdHash: 3347140356
   InScenePlacedSourceGlobalObjectIdHash: 3854393897
+  DeferredDespawnTick: 0
+  Ownership: 1
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
+  SceneMigrationSynchronization: 0
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!114 &5121571393672898875
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,5 +70,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2e05d4b5bcfbe94aa8973eb4fbbdede, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onPlayerLoadEvent: {fileID: 11400000, guid: 40dcf0ed3e09bbb428fb1a1116eb45eb, type: 2}
-  onPlayerSaveEvent: {fileID: 11400000, guid: 5a78db38ab07f0f4b8a40914ccf06b8b, type: 2}
+  ShowTopMostFoldoutHeaderGroup: 1
