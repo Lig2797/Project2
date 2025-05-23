@@ -28,7 +28,7 @@ public class DialoguePanelUI : MonoBehaviour
     private Dictionary<string, DialogueAudioInfoSO> audioInfoDictionary;
     private AudioSource audioSource;
 
-    private bool canContinueToNextLine;
+    public bool canContinueToNextLine;
 
     private Coroutine displayLineCoroutine;
 

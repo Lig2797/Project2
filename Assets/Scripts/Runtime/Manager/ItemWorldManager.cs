@@ -1,7 +1,9 @@
 using Unity.Netcode;
 using UnityEngine;
 using System.Collections;
+#if UNITY_EDITOR
 using static UnityEditor.Progress;
+#endif
 using Unity.VisualScripting;
 using System;
 using System.Collections.Generic;
@@ -14,8 +16,10 @@ public class ItemWorldManager : Singleton<ItemWorldManager>, IDataPersistence
     public GameObject itemDropPrefab;
     public ItemWorldControl[] itemsOnMap;
 
-    public void OnEnable()
+    protected override void Awake()
     {
+        base.Awake();
+        
         // Always construct your NetworkList before spawning
         if (networkItemWorldList == null)
         {
