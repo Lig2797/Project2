@@ -23,7 +23,7 @@ public class Projectile : MonoBehaviour
 
     private void Start()
     {
-        rb.velocity = new Vector2(moveSpeed.x * transform.localScale.x, moveSpeed.y);
+        rb.linearVelocity = new Vector2(moveSpeed.x * transform.localScale.x, moveSpeed.y);
 
         Destroy(gameObject, 3f);
     }
@@ -32,7 +32,7 @@ public class Projectile : MonoBehaviour
     {
         if (isHit)
         {
-            rb.velocity = Vector2.zero;
+            rb.linearVelocity = Vector2.zero;
         }
     }
 
