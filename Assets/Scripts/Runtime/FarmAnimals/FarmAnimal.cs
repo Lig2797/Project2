@@ -192,7 +192,7 @@ public abstract class FarmAnimal : MonoBehaviour
         Vector2 currentPosition = _body.position;
         Vector2 direction = (targetPosition - currentPosition).normalized;
 
-        _body.velocity = direction * speed;
+        _body.linearVelocity = direction * speed;
 
         if (direction != Vector2.zero)
             LastMovement = direction;
@@ -206,7 +206,7 @@ public abstract class FarmAnimal : MonoBehaviour
 
     private IEnumerator StopMoving(int minute)
     {
-        _body.velocity = Vector2.zero; 
+        _body.linearVelocity = Vector2.zero; 
         canMove = false; 
 
         yield return new WaitForSeconds(minute); 
@@ -242,7 +242,7 @@ public abstract class FarmAnimal : MonoBehaviour
 
     public void SetAnimator()
     {
-        _animator.SetFloat("Speed", _body.velocity.magnitude);
+        _animator.SetFloat("Speed", _body.linearVelocity.magnitude);
 
     }
     protected virtual void ApplyStage() { }

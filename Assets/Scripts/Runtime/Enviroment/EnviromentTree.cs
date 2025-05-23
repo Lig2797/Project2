@@ -9,7 +9,6 @@ public class EnviromentTree : ItemDropableEntity
     {
         base.Awake();
         _animator = GetComponent<Animator>();
-        _animator.runtimeAnimatorController = entityInfo.animators;
     }
     protected void OnEnable()
     {

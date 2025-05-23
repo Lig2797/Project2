@@ -411,10 +411,10 @@ public class PlayerController : NetworkBehaviour
     {
         if (!CanMove)
         {
-            if (rb.velocity.magnitude > 0.1f)
-                rb.AddForce(rb.velocity * -_acceleration, ForceMode2D.Force);
+            if (rb.linearVelocity.magnitude > 0.1f)
+                rb.AddForce(rb.linearVelocity * -_acceleration, ForceMode2D.Force);
             else
-                rb.velocity = Vector2.zero;
+                rb.linearVelocity = Vector2.zero;
 
             return;
         }
@@ -425,33 +425,33 @@ public class PlayerController : NetworkBehaviour
             {
                 if (!IsRunning)
                 {
-                    if (rb.velocity.magnitude > walkSpeed)
+                    if (rb.linearVelocity.magnitude > walkSpeed)
                     {
-                        rb.velocity = rb.velocity.normalized * walkSpeed;
+                        rb.linearVelocity = rb.linearVelocity.normalized * walkSpeed;
                     }
                 }
                 else
                 {
-                    if (rb.velocity.magnitude > runSpeed)
+                    if (rb.linearVelocity.magnitude > runSpeed)
                     {
-                        rb.velocity = rb.velocity.normalized * runSpeed;
+                        rb.linearVelocity = rb.linearVelocity.normalized * runSpeed;
                     }
                 }
             }
             else
             {
-                if (rb.velocity.magnitude > _vehicleSpeed)
+                if (rb.linearVelocity.magnitude > _vehicleSpeed)
                 {
-                    rb.velocity = rb.velocity.normalized * _vehicleSpeed;
+                    rb.linearVelocity = rb.linearVelocity.normalized * _vehicleSpeed;
                 }
             }
         }
         else // do deceleration
         {
-            if (rb.velocity.magnitude > 0.1f)
-                rb.AddForce(rb.velocity * -_acceleration, ForceMode2D.Force);
+            if (rb.linearVelocity.magnitude > 0.1f)
+                rb.AddForce(rb.linearVelocity * -_acceleration, ForceMode2D.Force);
             else
-                rb.velocity = Vector2.zero;
+                rb.linearVelocity = Vector2.zero;
         }
         //rb.MovePosition(rb.position + _movement * CurrentSpeed * Time.fixedDeltaTime);
     }
