@@ -8,6 +8,7 @@ ScriptedImporter:
   assetBundleName: 
   assetBundleVariant: 
   script: {fileID: 11500000, guid: 62a9f0aa5b59740cfbadc7e5f9823bb0, type: 3}
+  importerVersion: 2
   textureImporterSettings:
     alphaSource: 1
     mipMapMode: 0
@@ -83,6 +84,8 @@ ScriptedImporter:
     generateAnimationClips: 1
     addSortingGroup: 1
     addShadowCasters: 0
+    generateIndividualEvents: 1
+    generateSpriteAtlas: 1
   asepriteImporterSettings:
     fileImportMode: 1
     importHiddenLayers: 0
@@ -96,6 +99,8 @@ ScriptedImporter:
     generateAnimationClips: 1
     addSortingGroup: 1
     addShadowCasters: 0
+    generateIndividualEvents: 1
+    generateSpriteAtlas: 1
   importFileNodeState: 1
   platformSettingsDirtyTick: 0
   textureAssetName: 
@@ -105,6 +110,7 @@ ScriptedImporter:
     pivot: {x: 0, y: 0}
     alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
     rect:
       serializedVersion: 2
       x: 0
@@ -126,6 +132,7 @@ ScriptedImporter:
     pivot: {x: 0.35315984, y: 0.73195875}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
     rect:
       serializedVersion: 2
       x: 4
@@ -146,6 +153,7 @@ ScriptedImporter:
     pivot: {x: 0.34749034, y: 0.7395834}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
     rect:
       serializedVersion: 2
       x: 281
@@ -166,6 +174,7 @@ ScriptedImporter:
     pivot: {x: 0.34749034, y: 0.74736845}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
     rect:
       serializedVersion: 2
       x: 4
@@ -186,6 +195,7 @@ ScriptedImporter:
     pivot: {x: 0.34749034, y: 0.7553191}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
     rect:
       serializedVersion: 2
       x: 538
@@ -206,6 +216,7 @@ ScriptedImporter:
     pivot: {x: 0.34749034, y: 0.74736845}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
     rect:
       serializedVersion: 2
       x: 271
@@ -226,6 +237,7 @@ ScriptedImporter:
     pivot: {x: 0.34749034, y: 0.7395834}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
     rect:
       serializedVersion: 2
       x: 548
@@ -242,15 +254,21 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 548, y: 4}
   spriteSheetImportData: []
+  tileSetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: -1125141686
+    uuid:
+      value0: 332541170
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 332541170
     name: orc2_left_hurt
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: orc2_left_hurt_Frame_0
+    - name: Frame_0
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
@@ -259,7 +277,7 @@ ScriptedImporter:
         width: 269
         height: 194
       spriteId: 63f0274d7d7598d46ab267966d1b8bd1
-    - name: orc2_left_hurt_Frame_1
+    - name: Frame_1
       frameIndex: 1
       additiveSortOrder: 0
       cellRect:
@@ -268,7 +286,7 @@ ScriptedImporter:
         width: 259
         height: 192
       spriteId: 4d6abeb4e688ae64cba321e55b2c6491
-    - name: orc2_left_hurt_Frame_2
+    - name: Frame_2
       frameIndex: 2
       additiveSortOrder: 0
       cellRect:
@@ -277,7 +295,7 @@ ScriptedImporter:
         width: 259
         height: 190
       spriteId: 85a89de57b78a3f41bb4a401e2eaf814
-    - name: orc2_left_hurt_Frame_3
+    - name: Frame_3
       frameIndex: 3
       additiveSortOrder: 0
       cellRect:
@@ -286,7 +304,7 @@ ScriptedImporter:
         width: 259
         height: 188
       spriteId: 702d0b5c4b24bcf43b5737346a083d77
-    - name: orc2_left_hurt_Frame_4
+    - name: Frame_4
       frameIndex: 4
       additiveSortOrder: 0
       cellRect:
@@ -295,7 +313,7 @@ ScriptedImporter:
         width: 259
         height: 190
       spriteId: 1b415ac15c56bdb469d494ec678dd3f0
-    - name: orc2_left_hurt_Frame_5
+    - name: Frame_5
       frameIndex: 5
       additiveSortOrder: 0
       cellRect:
@@ -305,9 +323,13 @@ ScriptedImporter:
         height: 192
       spriteId: 27ee473c42c06fe4fa2f711fda081d8a
     linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
     parentIndex: -1
+  tileSets: []
   platformSettings: []
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 
   canvasSize: {x: 64, y: 64}
+  previousTextureSize: {x: 1024, y: 512}

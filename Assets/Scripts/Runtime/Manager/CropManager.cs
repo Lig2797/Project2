@@ -7,7 +7,7 @@ using Unity.Netcode;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using static UnityEngine.Experimental.Rendering.Universal.PixelPerfectCamera;
+using static UnityEngine.Rendering.Universal.PixelPerfectCamera;
 
 public class CropManager : Singleton<CropManager>
 {

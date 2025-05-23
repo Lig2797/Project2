@@ -57,7 +57,7 @@ public class ItemWorldControl : NetworkBehaviour
         if (targetTransform == null)
         {
             _currentVelocity = Vector2.zero;
-            rb.velocity = Vector2.zero;
+            rb.linearVelocity = Vector2.zero;
 
         }
         else
@@ -68,7 +68,7 @@ public class ItemWorldControl : NetworkBehaviour
             _currentVelocity = direction * _acceleration;
             _currentVelocity = Vector2.ClampMagnitude(_currentVelocity, _maxSpeed);
             _acceleration += 0.1f;
-            rb.velocity = _currentVelocity;
+            rb.linearVelocity = _currentVelocity;
         }
         
     }
