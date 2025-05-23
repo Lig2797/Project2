@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections.LowLevel.Unsafe;
+using Unity.Netcode;
 using UnityEngine;
 
-public class InventoryController : MonoBehaviour
+public class InventoryController : NetworkBehaviour
 {
     [SerializeField] private InputReader _inputReader;
     [SerializeField] private InventoryManagerSO _inventoryManagerSO;
@@ -12,18 +14,10 @@ public class InventoryController : MonoBehaviour
     [SerializeField] private GameEvent onCloseInventory;
     [SerializeField] private GameEvent onChangeSelectedSlot;
     [SerializeField] private GameEvent onInventoryLoad;
-    private void OnEnable()
-    {
-        _inputReader.playerActions.changeInventorySlotEvent += GetInputValueToChangeSlot;
-        _inputReader.playerActions.openInventoryEvent += OpenInventory;
-        _inputReader.uiActions.closeInventoryEvent += CloseInventory;
-    }
 
-    private void OnDisable()
+    private void Start()
     {
-        _inputReader.playerActions.changeInventorySlotEvent -= GetInputValueToChangeSlot;
-        _inputReader.playerActions.openInventoryEvent -= OpenInventory;
-        _inputReader.uiActions.closeInventoryEvent -= CloseInventory;
+        if (!IsOwner) enabled = false;
     }
 
     private void OpenInventory()
@@ -76,14 +70,23 @@ public class InventoryController : MonoBehaviour
 
     public void StartToLoad(GameData gameData)
     {
+        _inputReader.playerActions.changeInventorySlotEvent += GetInputValueToChangeSlot;
+        _inputReader.playerActions.openInventoryEvent += OpenInventory;
+        _inputReader.uiActions.closeInventoryEvent += CloseInventory;
+
         _inventoryManagerSO.inventory = gameData.InventoryData;
         ItemDatabase.Instance.SetItem(_inventoryManagerSO.inventory.InventoryItemList);
         onInventoryLoad.Raise(this, null);
         _inventoryManagerSO.RefreshCurrentHoldingItem();
+        onChangeSelectedSlot.Raise(this, _inventoryManagerSO.selectedSlot);
     }
     public void StartToSave(ref GameData gameData)
     {
         gameData.SetInventoryData(_inventoryManagerSO.inventory);
+
+        _inputReader.playerActions.changeInventorySlotEvent -= GetInputValueToChangeSlot;
+        _inputReader.playerActions.openInventoryEvent -= OpenInventory;
+        _inputReader.uiActions.closeInventoryEvent -= CloseInventory;
     }
 
 }

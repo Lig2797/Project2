@@ -22,6 +22,10 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 1355fa09b7426a740a853c0eb3bfa3fb, type: 2}
     - {fileID: 11400000, guid: 2fc75b1f63296e14ab657c2ca35a0127, type: 2}
     TimeToGrowth: 4320
+    canReHarvest: 0
+    numOfProductCouldDrop: 01000000
+    ratioForEachNum:
+    - 100
     season: 0
   cropLevelImage: []
   tile: {fileID: 0}
@@ -30,7 +34,7 @@ MonoBehaviour:
   tilemap: {fileID: 6474455846099095451, guid: 3e7eb26198626ca45a259f3cbc07d563, type: 3}
   type: 4
   actionType: 4
-  range: {x: 5, y: 4}
+  range: {x: 5, y: 4, z: 0}
   stackable: 1
   image: {fileID: 1043205899, guid: 6d5dacad31d5dc9458c33856e6a57497, type: 3}
   itemName: Broccoli Seed

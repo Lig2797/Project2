@@ -1,24 +1,32 @@
-using System.Collections;
-using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.Sprites;
 
-public class ItemOnHand : MonoBehaviour
+public class ItemOnHand : NetworkBehaviour
 {
-
-    void Start()
+    [ServerRpc(RequireOwnership = false)]
+    public void ActivateItemOnHandServerRpc(string itemName, bool isActivate)
     {
-        
+        ActivateItemOnHandClientRpc(itemName, isActivate);
     }
 
-    // Update is called once per frame
-    void Update()
+    [ClientRpc]
+    public void ActivateItemOnHandClientRpc(string itemName, bool isActivate)
     {
-        
-    }
+        if (isActivate)
+        {
+            Item item = ItemDatabase.Instance.GetItemByName(itemName);
+            SetItemSprite(item.image);
+        }
+        else
+        {
+            SetItemSprite(null);
+        }
 
+    }
     public void SetItemSprite(Sprite image)
     {
         transform.GetComponent<SpriteRenderer>().sprite = image;
     }
+
+
 }

@@ -23,6 +23,11 @@ MonoBehaviour:
     - {fileID: 11400000, guid: c565af72e524f7845a51f41614210ad6, type: 2}
     - {fileID: 11400000, guid: 59b5b13649c5fe7489fdb1d7ab3b0002, type: 2}
     TimeToGrowth: 4320
+    canReHarvest: 1
+    numOfProductCouldDrop: 0100000002000000
+    ratioForEachNum:
+    - 70
+    - 30
     season: 0
   cropLevelImage: []
   tile: {fileID: 0}
@@ -31,7 +36,7 @@ MonoBehaviour:
   tilemap: {fileID: 0}
   type: 4
   actionType: 4
-  range: {x: 5, y: 4}
+  range: {x: 5, y: 4, z: 0}
   stackable: 1
   image: {fileID: 86337522, guid: 2c60b7215c492ce4e97bac0488dabdcb, type: 3}
   itemName: Tomato Seed

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,7 @@ public class TileManager : Singleton<TileManager>, IDataPersistence
         set { _hoedTiles = value; }
     }
    
+
     private SerializableDictionary<Vector3Int, WateredTileData> _wateredTiles = new SerializableDictionary<Vector3Int, WateredTileData>();
     public SerializableDictionary<Vector3Int, WateredTileData> WateredTiles
     {
@@ -29,66 +31,125 @@ public class TileManager : Singleton<TileManager>, IDataPersistence
         set { _wateredTiles = value; }
     }
 
-    private TileSaveData _tileSaveData = new TileSaveData();
+    public NetworkDictionary<NetworkVector3Int, HoedTileData> HoedTilesNetwork;
+    public NetworkDictionary<NetworkVector3Int, WateredTileData> WateredTilesNetwork;
 
+
+    private TileSaveData _tileSaveData = new TileSaveData();
 
     private void OnEnable()
     {
-        EnviromentalStatusManager.OnTimeIncrease += UpdateAllTileStatus;
+        if(HoedTilesNetwork == null)
+        HoedTilesNetwork = new NetworkDictionary<NetworkVector3Int, HoedTileData>();
+        if(WateredTilesNetwork == null)
+        WateredTilesNetwork = new NetworkDictionary<NetworkVector3Int, WateredTileData>();
     }
 
-    private void OnDisable()
+    public void SyncTileOnLateJoin()
     {
-        EnviromentalStatusManager.OnTimeIncrease -= UpdateAllTileStatus;
+        foreach (var hoedTile in HoedTilesNetwork)
+        {
+            var tilePos = hoedTile.Key.ToVector3Int();
+            var tileMap = GetTilemapByName(FarmGroundTilemapName);
+            var tile = GetRuleTileByName(HoedTileName);
+
+            tileMap.SetTile(tilePos, tile);
+        }
+
+        foreach(var wateredTile in WateredTilesNetwork)
+        {
+            var tilePos = wateredTile.Key.ToVector3Int();
+            var tileMap = GetTilemapByName(WateredGroundTilemapName);
+            var tile = GetRuleTileByName(WateredTileName);
+
+            tileMap.SetTile(tilePos, tile);
+        }
+
     }
 
     private Tilemap GetTilemapByName(string tilemapName)
     {
-        return tilemaps.Find(x => x.name == tilemapName);
+        foreach (var tilemap in tilemaps)
+        {
+            if (tilemap.name == tilemapName)
+            {
+                return tilemap;
+            }
+        }
+        return null;
     }
     private RuleTile GetRuleTileByName(string ruleTileName)
     {
-        
-        return ruleTiles.Find(x => x.name == ruleTileName);
+        foreach(var ruleTile in ruleTiles)
+        {
+            if (ruleTile.name == ruleTileName)
+            {
+                return ruleTile;
+            }
+        }
+        return null;
     }
     public void UpdateAllTileStatus(int minute)
     {
-        foreach (var hoedTile in HoedTiles.ToList())
+        if (!IsServer) return;
+
+        List<NetworkVector3Int> hoedTilesToRemove = new();
+        List<NetworkVector3Int> wateredTilesToRemove = new();
+
+        // First pass: update hoed tiles
+        foreach (var hoedTile in HoedTilesNetwork)
         {
-            Vector3Int hoedPosition = hoedTile.Key;
+            NetworkVector3Int hoedPosition = hoedTile.Key;
             HoedTileData hoedTileData = hoedTile.Value;
 
-            if (WateredTiles.ContainsKey(hoedPosition) || CropManager.Instance.PlantedCrops.ContainsKey(hoedPosition))
+            if (WateredTilesNetwork.ContainsKey(hoedPosition) || CropManager.Instance.PlantedCropsNetwork.ContainsKey(hoedPosition))
             {
                 hoedTileData.hasSomethingOn = true;
             }
-            hoedTileData.CheckTile(minute);
+
+            hoedTileData.UpdateTile(minute);
+            HoedTilesNetwork[hoedPosition] = hoedTileData;
+
             if (hoedTileData.needRemove)
             {
-                ModifyTile(hoedPosition, FarmGroundTilemapName);
+                hoedTilesToRemove.Add(hoedPosition);
             }
-             
         }
 
-        foreach (var wateredTile in WateredTiles.ToList())
+        // Remove hoed tiles **after** the loop
+        foreach (var pos in hoedTilesToRemove)
         {
-            Vector3Int wateredPosition = wateredTile.Key;
+            ModifyTile(pos.ToVector3Int(), FarmGroundTilemapName);
+        }
+
+        // First pass: update watered tiles
+        foreach (var wateredTile in WateredTilesNetwork)
+        {
+            NetworkVector3Int wateredPosition = wateredTile.Key;
             WateredTileData wateredTileData = wateredTile.Value;
 
+            wateredTileData.UpdateTile(minute);
+            WateredTilesNetwork[wateredPosition] = wateredTileData;
 
-            wateredTileData.CheckTile(minute);
+
             if (wateredTileData.needRemove)
             {
-                ModifyTile(wateredPosition, WateredGroundTilemapName);
+                wateredTilesToRemove.Add(wateredPosition);
             }
+        }
 
+        // Remove watered tiles **after** the loop
+        foreach (var pos in wateredTilesToRemove)
+        {
+            ModifyTile(pos.ToVector3Int(), WateredGroundTilemapName);
         }
     }
 
+
     public void ModifyTile(Vector3Int tilePos, string tilemapName, string ruleTileName = null)
     {
-     
-        RequestToAddTileServerRpc(tilePos, tilemapName, ruleTileName);
+
+        RequestToModifyTileServerRpc(tilePos, tilemapName, ruleTileName);
 
         //HoedTileData newHoedTile = new HoedTileData();
         //_hoedTiles.Add(tilePos, newHoedTile);
@@ -96,8 +157,59 @@ public class TileManager : Singleton<TileManager>, IDataPersistence
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void RequestToAddTileServerRpc(Vector3Int tilePos, string tilemapName, string ruleTileName = null)
+    private void RequestToModifyTileServerRpc(Vector3Int tilePos, string tilemapName, string ruleTileName = null)
     {
+        var targetTilemap = GetTilemapByName(tilemapName);
+        var ruleTile = GetRuleTileByName(ruleTileName);
+
+        if (targetTilemap == null) return;
+
+        NetworkVector3Int networkTilePos = new NetworkVector3Int(tilePos);
+        if (ruleTile != null)
+        {
+            switch (tilemapName)
+            {
+                case "FarmGround":
+                    if (!HoedTilesNetwork.ContainsKey(networkTilePos))
+                    {
+                        HoedTilesNetwork.Add(networkTilePos, new HoedTileData(4320));
+                    }
+                    break;
+
+                case "WateredGround":
+                    if (!WateredTilesNetwork.ContainsKey(networkTilePos))
+                    {
+                        WateredTilesNetwork.Add(networkTilePos, new WateredTileData(4320));
+                    }
+                    break;
+            }
+        }
+        else
+        {
+            // ruleTile is null => remove the tile
+            switch (tilemapName)
+            {
+                case "FarmGround":
+                    if (HoedTilesNetwork.ContainsKey(networkTilePos))
+                    {
+                        HoedTilesNetwork.Remove(networkTilePos);
+                    }
+                    if (WateredTilesNetwork.ContainsKey(networkTilePos))
+                    {
+                        WateredTilesNetwork.Remove(networkTilePos);
+                    }
+                    break;
+
+                case "WateredGround":
+                    if (WateredTilesNetwork.ContainsKey(networkTilePos))
+                    {
+                        WateredTilesNetwork.Remove(networkTilePos);
+                    }
+                    break;
+            }
+        }
+
+        // Then sync visuals for clients (clients don't touch network vars)
         ApplyTileForPlayersClientRpc(tilePos, tilemapName, ruleTileName);
     }
 
@@ -110,103 +222,69 @@ public class TileManager : Singleton<TileManager>, IDataPersistence
         if (targetTilemap != null)
         {
             targetTilemap.SetTile(tilePos, ruleTile);
-
-            if (ruleTile != null)
-            {
-                switch (tilemapName) 
-                {
-                    default:
-                        {
-                            Debug.Log("this tilemap cant do anything" + tilemapName);
-                            break;
-                        }
-                    case "FarmGround":
-                        if(HoedTiles.ContainsKey(tilePos)) // check if tile already exist
-                        {
-                            Debug.Log("this position already contains the tile" + tilemapName);
-                            break;
-                        }
-                        var newHoedTile = new HoedTileData();
-                        _hoedTiles.Add(tilePos, newHoedTile);
-                        break;
-
-                    case "WateredGround":
-                        if(WateredTiles.ContainsKey(tilePos)) // check if tile already exist
-                        {
-                            Debug.Log("this position already contains the tile" + tilemapName);
-                            break;
-                        }
-                        var newWateredTile = new WateredTileData();
-                        _wateredTiles.Add(tilePos, newWateredTile);
-                        break;
-                }
-
-                
-                
-            }
-            else // ruleTile = null means delete it
-            {
-                switch (tilemapName)
-                {
-                    default:
-                        {
-                            Debug.Log("this tilemap cant do anything" + tilemapName);
-                            break;
-                        }
-                    case "FarmGround":
-                        if(!HoedTiles.ContainsKey(tilePos)) // check if tile already exist
-                        {
-                            Debug.Log("this position not contains the tile" + tilemapName);
-                            break;
-                        }
-                        _hoedTiles.Remove(tilePos);
-                        if (WateredTiles.ContainsKey(tilePos)) ModifyTile(tilePos, tilemapName);
-                        break;
-
-                    case "WateredGround":
-                        if (!WateredTiles.ContainsKey(tilePos)) // check if tile already exist
-                        {
-                            Debug.Log("this position not contains the tile" + tilemapName);
-                            break;
-                        }
-                        _wateredTiles.Remove(tilePos);
-                        break;
-                }
-            }
         }
-        else
+    }
+
+    private void SetAllTileDataToNetworkData()
+    {
+        foreach (var hoedTile in HoedTiles)
         {
-            Debug.LogError("Tilemap not found");
+            HoedTilesNetwork.Add(new NetworkVector3Int(hoedTile.Key), hoedTile.Value); // add to network data
+        }
+
+        foreach (var wateredTile in WateredTiles)
+        {
+            WateredTilesNetwork.Add(new NetworkVector3Int(wateredTile.Key), wateredTile.Value); // add to network data
+        }
+    }
+
+    private void SetAllTileNetworkDataToLocal()
+    {
+        HoedTiles.Clear(); // clear local data
+        WateredTiles.Clear(); // clear local data
+        foreach (var hoedTile in HoedTilesNetwork)
+        {
+            HoedTiles.Add(hoedTile.Key.ToVector3Int(), hoedTile.Value); // add to local data
+        }
+
+        foreach (var wateredTile in WateredTilesNetwork)
+        {
+            WateredTiles.Add(wateredTile.Key.ToVector3Int(), wateredTile.Value); // add to local data
         }
     }
 
     public void LoadData(GameData data)
     {
+        // only host can run this
+        
         HoedTiles = data.TileSaveData.HoedTiles;
         WateredTiles = data.TileSaveData.WateredTiles;
-
-        StartCoroutine(ApplyTileUpdates(data));
+        SetAllTileDataToNetworkData();
+        StartCoroutine(ApplyTileUpdatesOnLoadGame());
+        EnviromentalStatusManager.OnTimeIncrease += UpdateAllTileStatus;
     }
-    private IEnumerator ApplyTileUpdates(GameData data)
+    private IEnumerator ApplyTileUpdatesOnLoadGame()
     {
         yield return new WaitForEndOfFrame(); // Wait until rendering is done
 
-        foreach (var hoedTile in HoedTiles)
+        foreach (var hoedTile in HoedTilesNetwork)
         {
-            ModifyTile(hoedTile.Key, FarmGroundTilemapName, HoedTileName);
+            ModifyTile(hoedTile.Key.ToVector3Int(), FarmGroundTilemapName, HoedTileName);
         }
 
-        foreach (var wateredTile in WateredTiles)
+        foreach (var wateredTile in WateredTilesNetwork)
         {
-            ModifyTile(wateredTile.Key, WateredGroundTilemapName, WateredTileName);
+            ModifyTile(wateredTile.Key.ToVector3Int(), WateredGroundTilemapName, WateredTileName);
         }
 
-        CropManager.Instance.LoadCrops(data.TileSaveData.CropTiles);
     }
     public void SaveData(ref GameData data)
     {
-        _tileSaveData.SetTiles(HoedTiles, WateredTiles, CropManager.Instance.PlantedCrops);
+        SetAllTileNetworkDataToLocal();
+        _tileSaveData.SetTilesData(HoedTiles, WateredTiles);
         data.SetTiles(_tileSaveData);
+
+        EnviromentalStatusManager.OnTimeIncrease -= UpdateAllTileStatus;
     }
 
 }

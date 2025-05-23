@@ -92,10 +92,9 @@ public class UI_Inventory : MonoBehaviour
     // on onItemWorldTouchPlayer
     public void AddItemToInventorySlotFromItemWorld(Component sender, object data) // for pick itemworld
     {
-        Debug.Log("on item world touch");
         ItemWorldControl itemWorldControl = sender as ItemWorldControl;
         ItemWorld item = itemWorldControl.GetItemWorld();
-        InventoryItem newItem = new(item.Id, item.Item, 0, item.Quantity);
+        InventoryItem newItem = new(item.Id, item.Item, 0, item.Quantity, item.Level);
         var inventory = _inventoryManagerSO.inventory;
         for (int i = 0; i < inventorySlotsUI.Count; i++)
         {
@@ -105,7 +104,8 @@ public class UI_Inventory : MonoBehaviour
             if (itemUI != null &&
                 itemUI.InventoryItem.Item == newItem.Item &&
                 itemUI.InventoryItem.Item.stackable &&
-                itemUI.InventoryItem.Quantity < itemUI.InventoryItem.MaxStack)
+                itemUI.InventoryItem.Quantity < itemUI.InventoryItem.MaxStack &&
+                itemUI.InventoryItem.Level == newItem.Level)
             {
                 if (itemUI.InventoryItem.Quantity + newItem.Quantity <= itemUI.InventoryItem.MaxStack)
                 {

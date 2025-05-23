@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using System.IO;
 using Unity.Netcode;
 using System;
+using System.Runtime.CompilerServices;
 
 
 public class DataPersistenceManager : Singleton<DataPersistenceManager>
@@ -56,9 +57,6 @@ public class DataPersistenceManager : Singleton<DataPersistenceManager>
 
         // 🔁 Optional: wait an extra frame or two to ensure all NetworkObjects are spawned
         yield return null;
-
-
-        Debug.Log("Player load after network manager start");
         gameData = dataHandler.Load();
 
         if (gameData == null)
@@ -67,18 +65,46 @@ public class DataPersistenceManager : Singleton<DataPersistenceManager>
             NewGame();
             yield break;
         }
-
-        onFinished?.Invoke();
-
-        if (!isHostLoad) yield break;
         // 🔁 Wait until all IDataPersistence objects are found
         yield return new WaitUntil(() => dataPersistenceObjects.All(obj => (obj as NetworkBehaviour)?.IsSpawned == true));
         Debug.Log("All PersistentDataObjects are fully spawned.");
         // ✅ Now all components are ready
-        foreach (IDataPersistence dataPersistenceObject in dataPersistenceObjects)
+        if (isHostLoad)
         {
-            dataPersistenceObject.LoadData(gameData);
+            foreach (IDataPersistence dataPersistenceObject in dataPersistenceObjects)
+            {
+                dataPersistenceObject.LoadData(gameData);
+            }
         }
+        else
+        {
+            SyncWorldDataToPlayerServerRpc();
+        }
+
+
+        onFinished?.Invoke();
+    }
+    [ServerRpc(RequireOwnership = false)]
+    private void SyncWorldDataToPlayerServerRpc(ServerRpcParams rpcParams = default)
+    {
+        var clientId = rpcParams.Receive.SenderClientId;
+
+        var rpcParamsForClient = new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = new[] { clientId }
+            }
+        };
+        SyncWorldDataToPlayerClientRpc(rpcParamsForClient);
+    }
+    [ClientRpc]
+    private void SyncWorldDataToPlayerClientRpc(ClientRpcParams clientRpcParams = default)
+    {
+        TileManager.Instance.SyncTileOnLateJoin();
+        ItemWorldManager.Instance.SyncItemWorldOnLateJoin();
+        CropManager.Instance.SyncCropsOnLateJoin();
+
     }
     public void SaveGame(bool isServerSave) 
     {
@@ -89,11 +115,8 @@ public class DataPersistenceManager : Singleton<DataPersistenceManager>
                 dataPersistenceObject.SaveData(ref gameData);
             }
         }
-        foreach(var item in gameData.ListItemWold.Items)
-        {
-            Debug.Log("itemworld in save file: " + item.Id);
-        }
         dataHandler.Save(gameData);
+
         //CaptureScreenshot();
     }
 

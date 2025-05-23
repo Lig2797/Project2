@@ -1,30 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System.Diagnostics;
+using Unity.Netcode;
 
 [System.Serializable]
-public class HoedTileData
+[GenerateSerializationForTypeAttribute(typeof(HoedTileData))]
+public struct HoedTileData : INetworkSerializable
 {
+    public int timeToRemoveTile;
+    public int removeTileCounter;
+    public bool hasSomethingOn;
+    public bool needRemove;
 
-    [SerializeField] public int timeToRemoveTile;
-    [SerializeField] public int removeTileCounter;
-    [SerializeField] public bool hasSomethingOn;
-    [SerializeField] public bool needRemove;
-
-    public HoedTileData()
+    public HoedTileData(int defaultTime = 4320)
     {
-        timeToRemoveTile = 4320;
+        timeToRemoveTile = defaultTime;
         removeTileCounter = 0;
         hasSomethingOn = false;
         needRemove = false;
     }
 
-    public void CheckTile(int minute)
+    public void UpdateTile(int minute)
     {
         if (!hasSomethingOn)
         {
             removeTileCounter += minute;
-            if(removeTileCounter >= timeToRemoveTile)
+            if (removeTileCounter >= timeToRemoveTile)
             {
                 needRemove = true;
             }
@@ -33,5 +32,13 @@ public class HoedTileData
         {
             removeTileCounter = 0;
         }
+    }
+
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    {
+        serializer.SerializeValue(ref timeToRemoveTile);
+        serializer.SerializeValue(ref removeTileCounter);
+        serializer.SerializeValue(ref hasSomethingOn);
+        serializer.SerializeValue(ref needRemove);
     }
 }

@@ -11,7 +11,7 @@ public class ItemWorld : IItemHolder
     [SerializeField] private string _itemName;
     [SerializeField] private int _quantity;
     [SerializeField] private Vector3 _position;
-   
+    [SerializeField] private int _level;
     public Item Item
     { get { return _item; } }
 
@@ -27,14 +27,16 @@ public class ItemWorld : IItemHolder
     public Vector3 Position
     { get { return _position; } }
     
-
-    public ItemWorld(string id, Item item, int quantity, Vector3 position)
+    public int Level
+    { get { return _level; } }
+    public ItemWorld(string id, Item item, int quantity, Vector3 position, int level)
     {
         this._id = id;
         this._item = item;
         this._itemName = item.itemName;
         this._quantity = quantity;
         this._position = position;
+        this._level = level;
     }
 
     public void SetItem(Item item)
@@ -61,5 +63,9 @@ public class ItemWorld : IItemHolder
     public void SetPositon(Vector3 position)
     {
         _position = position;
+    }
+    public void SetLevel(int level)
+    {
+        _level = level;
     }
 }

@@ -23,6 +23,11 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 03fed469343b5c945a545f62a91ce186, type: 2}
     - {fileID: 11400000, guid: f92dfa4c910b5d043be350ee1d33f9b3, type: 2}
     TimeToGrowth: 4320
+    canReHarvest: 0
+    numOfProductCouldDrop: 0200000003000000
+    ratioForEachNum:
+    - 70
+    - 30
     season: 0
   cropLevelImage: []
   tile: {fileID: 0}
@@ -31,7 +36,7 @@ MonoBehaviour:
   tilemap: {fileID: 6474455846099095451, guid: 3e7eb26198626ca45a259f3cbc07d563, type: 3}
   type: 4
   actionType: 4
-  range: {x: 5, y: 4}
+  range: {x: 5, y: 4, z: 0}
   stackable: 1
   image: {fileID: -1504335201, guid: 6d5dacad31d5dc9458c33856e6a57497, type: 3}
   itemName: Unmilled Rice Seed

@@ -38,7 +38,7 @@ public class Inventory
 
     public bool AddItemToInventory(string id, Item item, int slotIndex, int amount)
     {
-        InventoryItem inventoryItem = new InventoryItem(id, item, slotIndex, amount);
+        InventoryItem inventoryItem = new InventoryItem(id, item, slotIndex, amount,1);
         _inventoryItemList.Add(inventoryItem);
         return true;
     }

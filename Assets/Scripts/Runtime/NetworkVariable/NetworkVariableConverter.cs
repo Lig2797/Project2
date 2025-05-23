@@ -4,8 +4,10 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
+#region Data Converter
 public static class NetworkVariableConverter
 {
+    
     public static ItemWorldNetworkData ItemWorldToNetwork(ItemWorld itemWorld)
     {
         return new ItemWorldNetworkData
@@ -13,7 +15,8 @@ public static class NetworkVariableConverter
             Id = itemWorld.Id,
             ItemName = itemWorld.ItemName,
             Quantity = itemWorld.Quantity,
-            Position = itemWorld.Position
+            Position = itemWorld.Position,
+            Level = itemWorld.Level
         };
     }
 
@@ -24,11 +27,12 @@ public static class NetworkVariableConverter
             data.Id.ToString(),
             item,
             data.Quantity,
-            data.Position
+            data.Position,
+            data.Level
         );
     }
 
-    public static List<ItemWorld> ItemWorldListFromNetwork(List<ItemWorldNetworkData> data)
+    public static List<ItemWorld> ItemWorldListFromNetwork(NetworkList<ItemWorldNetworkData> data)
     {
         List<ItemWorld> itemWorlds = new List<ItemWorld>();
         foreach (var item in data)
@@ -38,6 +42,11 @@ public static class NetworkVariableConverter
         return itemWorlds;
     }
 }
+#endregion
+
+#region Serializable Definition
+
+    #region Item World
 [Serializable]
 public struct ItemWorldNetworkData : INetworkSerializable, IEquatable<ItemWorldNetworkData>
 {
@@ -45,6 +54,7 @@ public struct ItemWorldNetworkData : INetworkSerializable, IEquatable<ItemWorldN
     public FixedString64Bytes ItemName;
     public int Quantity;
     public Vector3 Position;
+    public int Level;
 
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
@@ -52,6 +62,7 @@ public struct ItemWorldNetworkData : INetworkSerializable, IEquatable<ItemWorldN
         serializer.SerializeValue(ref ItemName);
         serializer.SerializeValue(ref Quantity);
         serializer.SerializeValue(ref Position);
+        serializer.SerializeValue(ref Level);
     }
 
     public bool Equals(ItemWorldNetworkData other)
@@ -59,7 +70,8 @@ public struct ItemWorldNetworkData : INetworkSerializable, IEquatable<ItemWorldN
         return Id.Equals(other.Id)
             && ItemName.Equals(other.ItemName)
             && Quantity == other.Quantity
-            && Position.Equals(other.Position);
+            && Position.Equals(other.Position)
+            && Level.Equals(other.Level);
     }
 
     public override bool Equals(object obj)
@@ -69,7 +81,47 @@ public struct ItemWorldNetworkData : INetworkSerializable, IEquatable<ItemWorldN
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(Id, ItemName, Quantity, Position);
+        return HashCode.Combine(Id, ItemName, Quantity, Position, Level);
     }
 }
+#endregion
 
+    #region Vector3Int
+[System.Serializable]
+[GenerateSerializationForTypeAttribute(typeof(NetworkVector3Int))]
+public struct NetworkVector3Int : INetworkSerializable, System.IEquatable<NetworkVector3Int>
+{
+    public int x;
+    public int y;
+    public int z;
+
+    public NetworkVector3Int(int x, int y, int z)
+    {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+
+    public NetworkVector3Int(Vector3Int v)
+    {
+        x = v.x;
+        y = v.y;
+        z = v.z;
+    }
+
+    public Vector3Int ToVector3Int() => new Vector3Int(x, y, z);
+
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    {
+        serializer.SerializeValue(ref x);
+        serializer.SerializeValue(ref y);
+        serializer.SerializeValue(ref z);
+    }
+
+    public bool Equals(NetworkVector3Int other) => x == other.x && y == other.y && z == other.z;
+    public override int GetHashCode() => x ^ (y << 2) ^ (z >> 2);
+
+    
+}
+#endregion
+#endregion

@@ -13,6 +13,7 @@ public class InventoryItem : IItemHolder
     [SerializeField] private int _quantity;
     [SerializeField] private int _maxStack;
     [SerializeField] private int _slotIndex;
+    [SerializeField] private int _level;
 
     public Item Item
     { get { return _item; } }
@@ -32,6 +33,8 @@ public class InventoryItem : IItemHolder
     public int SlotIndex
     {  get { return _slotIndex; } }
 
+    public int Level
+    { get { return _level; } }
     public InventoryItem(string id, Item item, int index)
     {
         this._id = id;
@@ -42,7 +45,7 @@ public class InventoryItem : IItemHolder
         this._slotIndex = index;
     }
 
-    public InventoryItem(string id, Item item, int index, int quantity)
+    public InventoryItem(string id, Item item, int index, int quantity, int level)
     {
         this._id = id;
         this._item = item;
@@ -50,6 +53,7 @@ public class InventoryItem : IItemHolder
         this._quantity = quantity;
         this._maxStack = item.stackable ? 12 : 1;
         this._slotIndex = index;
+        this._level = level;
     }
 
     public void SetItem(Item item)
@@ -81,7 +85,7 @@ public class InventoryItem : IItemHolder
 
     public ItemWorld GetItemWorld()
     {
-        ItemWorld itemWorld = new ItemWorld(_id, _item, _quantity, Vector3.zero);
+        ItemWorld itemWorld = new ItemWorld(_id, _item, _quantity, Vector3.zero, _level);
         return itemWorld;
     }
 }

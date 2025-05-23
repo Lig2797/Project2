@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
 using Unity.VisualScripting;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -286,6 +287,7 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
+    
     public override void OnNetworkDespawn()
     {
         if (IsOwner)
@@ -294,11 +296,15 @@ public class PlayerController : NetworkBehaviour
             onPlayerSaveEvent.Raise(this, isHost);
         }
     }
+
     private void Start()
     {
 
 
-        if (!IsOwner) enabled = false;
+        if (!IsOwner)
+        {
+            enabled = false;
+        }
         else
         {
             virtualCamera = GameObject.Find("Virtual Camera").GetComponent<CinemachineVirtualCamera>();
@@ -404,10 +410,10 @@ public class PlayerController : NetworkBehaviour
     {
         if (!CanMove)
         {
-            if (rb.velocity.magnitude > 0.1f)
-                rb.AddForce(rb.velocity * -_acceleration, ForceMode2D.Force);
+            if (rb.linearVelocity.magnitude > 0.1f)
+                rb.AddForce(rb.linearVelocity * -_acceleration, ForceMode2D.Force);
             else
-                rb.velocity = Vector2.zero;
+                rb.linearVelocity = Vector2.zero;
 
             return;
         }
@@ -418,33 +424,33 @@ public class PlayerController : NetworkBehaviour
             {
                 if (!IsRunning)
                 {
-                    if (rb.velocity.magnitude > walkSpeed)
+                    if (rb.linearVelocity.magnitude > walkSpeed)
                     {
-                        rb.velocity = rb.velocity.normalized * walkSpeed;
+                        rb.linearVelocity = rb.linearVelocity.normalized * walkSpeed;
                     }
                 }
                 else
                 {
-                    if (rb.velocity.magnitude > runSpeed)
+                    if (rb.linearVelocity.magnitude > runSpeed)
                     {
-                        rb.velocity = rb.velocity.normalized * runSpeed;
+                        rb.linearVelocity = rb.linearVelocity.normalized * runSpeed;
                     }
                 }
             }
             else
             {
-                if (rb.velocity.magnitude > _vehicleSpeed)
+                if (rb.linearVelocity.magnitude > _vehicleSpeed)
                 {
-                    rb.velocity = rb.velocity.normalized * _vehicleSpeed;
+                    rb.linearVelocity = rb.linearVelocity.normalized * _vehicleSpeed;
                 }
             }
         }
         else // do deceleration
         {
-            if (rb.velocity.magnitude > 0.1f)
-                rb.AddForce(rb.velocity * -_acceleration, ForceMode2D.Force);
+            if (rb.linearVelocity.magnitude > 0.1f)
+                rb.AddForce(rb.linearVelocity * -_acceleration, ForceMode2D.Force);
             else
-                rb.velocity = Vector2.zero;
+                rb.linearVelocity = Vector2.zero;
         }
         //rb.MovePosition(rb.position + _movement * CurrentSpeed * Time.fixedDeltaTime);
     }
@@ -504,7 +510,7 @@ public class PlayerController : NetworkBehaviour
     {
         if (!CanAttack || IsRidingVehicle) return;
         Item item = _inventoryManagerSO.GetCurrentItem();
-        _itemOnHand.gameObject.SetActive(false);
+        _itemOnHand.ActivateItemOnHandServerRpc(null, false);
         if (item != null)
         {
             IsHoldingItem = true;
@@ -516,7 +522,6 @@ public class PlayerController : NetworkBehaviour
 
         if (IsHoldingItem)
         {
-
             switch (item.type)
             {
                 default:
@@ -535,15 +540,16 @@ public class PlayerController : NetworkBehaviour
                 case ItemType.Crop:
                 case ItemType.Food:
                     {
-                        _itemOnHand.gameObject.SetActive(true);
+                        _itemOnHand.ActivateItemOnHandServerRpc(item.itemName, true);
                         ChangeAnimationState("Pickup_idle");
-                        _itemOnHand.SetItemSprite(item.image);
                         break;
                     }
             }
         }
         else ChangeAnimationState(AnimationStrings.idle);
     }
+
+
     private void ChangeAnimationState(string newState)
     {
         if (CurrentState == newState) return;
@@ -566,7 +572,7 @@ public class PlayerController : NetworkBehaviour
     private void UseCurrentItem()
     {
         Item item = _inventoryManagerSO.GetCurrentItem();
-        Debug.Log(item.name);
+        if(item == null) return;
         switch (item.type)
         {
             default:
@@ -590,11 +596,10 @@ public class PlayerController : NetworkBehaviour
     {
         if (!IsRidingVehicle && CanAttack && Input.GetMouseButton(1))
         {
-            if (tileTargeter.CheckHarverst(transform.position))
+            if (tileTargeter.CheckHarverst())
             {
                 animator.SetTrigger(AnimationStrings.pickup);
                 _itemOnHand.gameObject.SetActive(false);
-
             }
         }
     }
@@ -652,7 +657,6 @@ public class PlayerController : NetworkBehaviour
     public void StartToLoad(GameData gameData)
     {
         player = gameData.PlayerData;
-        Debug.Log("position player after load: " + player.Position);
         transform.position = player.Position;
         _inventoryController.StartToLoad(gameData);
     }

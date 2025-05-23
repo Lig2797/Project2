@@ -27,7 +27,7 @@ public abstract class ItemDropableEntity : NetworkBehaviour
         int numItem = 0;
         numItem = UtilsClass.PickOneByRatio(entityInfo.numOfItemCouldDrop, entityInfo.ratioForEachNum);
         if (makeLessDrop) numItem /= 2;
-        ItemWorld itemWorldDropInfo = new ItemWorld(System.Guid.NewGuid().ToString(), entityInfo.ItemToDrop, numItem, transform.position);
+        ItemWorld itemWorldDropInfo = new ItemWorld(System.Guid.NewGuid().ToString(), entityInfo.ItemToDrop, numItem, transform.position,1);
         ItemWorldManager.Instance.DropItemIntoWorld(itemWorldDropInfo, false, false);
        
     }

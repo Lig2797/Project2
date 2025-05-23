@@ -11,6 +11,7 @@ public class GameData
     [SerializeField] private EnvironmentalStatus _eStatus;
     [SerializeField] private ListItemWorld _listItemWold;
     [SerializeField] private TileSaveData _tileSaveData;
+    [SerializeField] private CropsSaveData _cropsSaveData;
     public Player PlayerData
     { get { return _playerData; } }
 
@@ -25,6 +26,9 @@ public class GameData
 
     public TileSaveData TileSaveData
     { get { return _tileSaveData; } }
+
+    public CropsSaveData CropsSaveData
+    { get { return _cropsSaveData; } }
     public GameData()
     {
         this._playerData = new Player();
@@ -32,6 +36,7 @@ public class GameData
         this._eStatus = new EnvironmentalStatus();
         this._listItemWold = new ListItemWorld();
         this._tileSaveData = new TileSaveData();
+        this._cropsSaveData = new CropsSaveData();
     }
 
     public void SetPlayerData(Player playerData)
@@ -57,5 +62,10 @@ public class GameData
     public void SetTiles(TileSaveData tileSaveData)
     {
         this._tileSaveData = tileSaveData;
+    }
+
+    public void SetCropsData(CropsSaveData cropsSaveData)
+    {
+        this._cropsSaveData = cropsSaveData;
     }
 }

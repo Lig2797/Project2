@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public class TileTargeter : NetworkBehaviour
 {
+    #region Setup variables
     [SerializeField] PlayerController playerController;
     [SerializeField]
     private List<Tilemap> _tilemaps; 
@@ -83,7 +85,9 @@ public class TileTargeter : NetworkBehaviour
         get { return _canPlantGround; }
         set { _canPlantGround = value; }
     }
+    #endregion
 
+    #region Before Gameloop
     private void Awake()
     {
         GetAllTilemaps();
@@ -93,9 +97,12 @@ public class TileTargeter : NetworkBehaviour
     {
         if (!IsOwner) enabled = false;
     }
+
+    #endregion
+
+
     void Update()
     {
-        if(!IsOwner) return;
         GetTargetTile();
     }
     void GetAllTilemaps()
@@ -163,7 +170,7 @@ public class TileTargeter : NetworkBehaviour
 
         // Check if tile is valid to do something
         CanHoe = CheckCanHoe(_clampedTilePosition);
-        CanWater = TileManager.Instance.HoedTiles.ContainsKey(_clampedTilePosition) && !TileManager.Instance.WateredTiles.ContainsKey(_clampedTilePosition);
+        CanWater = TileManager.Instance.HoedTilesNetwork.ContainsKey(new NetworkVector3Int(_clampedTilePosition)) && !TileManager.Instance.WateredTilesNetwork.ContainsKey(new NetworkVector3Int(_clampedTilePosition));
         CanPlantGround = (tilemapCheck[tilemapCheck.Count - 1].name == "FarmGround" || tilemapCheck[tilemapCheck.Count - 1].name == "WateredGround");
     }
 
@@ -199,7 +206,7 @@ public class TileTargeter : NetworkBehaviour
         return true;
     }
 
-    public bool CheckHarverst(Vector3 playerPos)
+    public bool CheckHarverst()
     {
         return CropManager.Instance.TryToHarverst(_clampedTilePosition);
     }
@@ -278,18 +285,16 @@ public class TileTargeter : NetworkBehaviour
                     
                 
             }
-            if (!TileManager.Instance.HoedTiles.ContainsKey(_lockedTilePosition))
+            if (!TileManager.Instance.HoedTilesNetwork.ContainsKey(new NetworkVector3Int(_lockedTilePosition)))
             {
                 TileManager.Instance.ModifyTile(_lockedTilePosition, targetTilemap.name, item.ruleTile.name);
             }
             else
             {
-                Debug.Log("Already hoe");
             }
 
 
         }
-        else Debug.Log("Cant Hoe here");
     }
 
     private void UseWaterCan(Item item)
@@ -306,20 +311,18 @@ public class TileTargeter : NetworkBehaviour
                 }
                     
             }
-            if (!TileManager.Instance.WateredTiles.ContainsKey(_lockedTilePosition))
+            if (!TileManager.Instance.WateredTilesNetwork.ContainsKey(new NetworkVector3Int(_lockedTilePosition)))
             {
                 TileManager.Instance.ModifyTile(_lockedTilePosition, targetTilemap.name, item.ruleTile.name);
 
             }
             else
             {
-                Debug.Log("Already water");
             }
                 
         }
         else
         {
-            Debug.Log("Cant water here");
         }
     }
 

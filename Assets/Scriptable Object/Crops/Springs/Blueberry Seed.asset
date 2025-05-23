@@ -23,6 +23,12 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 3523fb0d2d0e6aa4d87705d3d35b329b, type: 2}
     - {fileID: 11400000, guid: b218124b5ac99054e9cb6946fbeae88a, type: 2}
     TimeToGrowth: 4320
+    canReHarvest: 1
+    numOfProductCouldDrop: 020000000300000004000000
+    ratioForEachNum:
+    - 60
+    - 30
+    - 10
     season: 0
   cropLevelImage: []
   tile: {fileID: 0}
@@ -31,7 +37,7 @@ MonoBehaviour:
   tilemap: {fileID: 6474455846099095451, guid: 3e7eb26198626ca45a259f3cbc07d563, type: 3}
   type: 4
   actionType: 4
-  range: {x: 5, y: 4}
+  range: {x: 5, y: 4, z: 0}
   stackable: 1
   image: {fileID: 759742442, guid: 6d5dacad31d5dc9458c33856e6a57497, type: 3}
   itemName: Blueberry Seed

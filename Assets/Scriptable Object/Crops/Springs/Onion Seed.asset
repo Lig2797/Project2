@@ -23,6 +23,10 @@ MonoBehaviour:
     - {fileID: 11400000, guid: ff5ef6dbe35578543b5935865ebdecd1, type: 2}
     - {fileID: 11400000, guid: 45b3001b4bdc85a4db40f6170b25ccd2, type: 2}
     TimeToGrowth: 4320
+    canReHarvest: 0
+    numOfProductCouldDrop: 01000000
+    ratioForEachNum:
+    - 100
     season: 0
   cropLevelImage: []
   tile: {fileID: 0}
@@ -31,7 +35,7 @@ MonoBehaviour:
   tilemap: {fileID: 6474455846099095451, guid: 3e7eb26198626ca45a259f3cbc07d563, type: 3}
   type: 4
   actionType: 4
-  range: {x: 5, y: 4}
+  range: {x: 5, y: 4, z: 0}
   stackable: 1
   image: {fileID: 17216761, guid: 6d5dacad31d5dc9458c33856e6a57497, type: 3}
   itemName: Onion Seed

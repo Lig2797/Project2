@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Netcode;
 using Unity.VisualScripting;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 
 public class ItemWorldControl : NetworkBehaviour
@@ -42,11 +43,6 @@ public class ItemWorldControl : NetworkBehaviour
         _TargetzoneCollider2D = GetComponentInChildren<Collider2D>();
     }
 
-    public override void OnNetworkSpawn()
-    {
-        ItemWorldManager.Instance.FindItemInListAndInitializeAfterClientJoin(this, id.Value.ToString());
-    }
-
     public override void OnNetworkDespawn()
     {
         base.OnNetworkDespawn();
@@ -57,7 +53,7 @@ public class ItemWorldControl : NetworkBehaviour
         if (targetTransform == null)
         {
             _currentVelocity = Vector2.zero;
-            rb.velocity = Vector2.zero;
+            rb.linearVelocity = Vector2.zero;
 
         }
         else
@@ -68,7 +64,7 @@ public class ItemWorldControl : NetworkBehaviour
             _currentVelocity = direction * _acceleration;
             _currentVelocity = Vector2.ClampMagnitude(_currentVelocity, _maxSpeed);
             _acceleration += 0.1f;
-            rb.velocity = _currentVelocity;
+            rb.linearVelocity = _currentVelocity;
         }
         
     }
@@ -78,13 +74,20 @@ public class ItemWorldControl : NetworkBehaviour
         targetTransform = playerTransform;
     }
 
-    public void SetItemImage(Sprite image)
+    public void SetItemImage()
     {
+        if (item.cropLevelImage != null && // if this is crop
+            item.cropLevelImage.Length > _itemWorld.Level)
+        {
+            item.image = item.cropLevelImage[_itemWorld.Level];
+        }
         transform.GetComponent<SpriteRenderer>().sprite = item.image;
     }
 
     public ItemWorld GetItemWorld()
     {
+        if (_itemWorld == null)
+            InitialItemWorld();
         return _itemWorld;
     }
 
@@ -92,11 +95,11 @@ public class ItemWorldControl : NetworkBehaviour
     {
         if(itemWorld == null)
         {
-            itemWorld = new ItemWorld(System.Guid.NewGuid().ToString(), item, 1, transform.position);
+            itemWorld = new ItemWorld(System.Guid.NewGuid().ToString(), item, 1, transform.position,1);
         }
         _itemWorld = itemWorld;
         item = itemWorld.Item;
-        SetItemImage(item.image);
+        SetItemImage();
         if(IsServer)
         StartCoroutine(DelayedSetId(itemWorld.Id));
     }
@@ -113,7 +116,6 @@ public class ItemWorldControl : NetworkBehaviour
             
             var player = collision.GetComponent<PlayerController>();
             if (player == null) return;
-            Debug.Log("Player touched item");
             _collider2D.enabled = false;    
             if(player.IsLocalPlayer)
             onItemWorldTouchPlayer.Raise(this, null);

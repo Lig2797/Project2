@@ -9,7 +9,10 @@ public class ListItemWorld
     [SerializeField] List<ItemWorld> _items;
 
     public List<ItemWorld> Items
-    { get { return _items; } }
+    { 
+        get { return _items; }
+        private set { _items = value; }
+    }
 
     public ListItemWorld() 
     {
@@ -18,6 +21,8 @@ public class ListItemWorld
 
     public void AddItemWorld(ItemWorld item)
     {
+        var itemToAdd = _items.Find(i => i.Id == item.Id);
+        if(itemToAdd == null)
         _items.Add(item);
     }
 
@@ -27,5 +32,8 @@ public class ListItemWorld
         _items.Remove(itemToRemove);
     }
 
-    
+    public void SetListItemWorld(List<ItemWorld> items)
+    {
+        Items = items;
+    }
 }

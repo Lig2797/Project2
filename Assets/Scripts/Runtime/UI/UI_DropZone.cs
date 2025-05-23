@@ -35,6 +35,7 @@ public class UI_DropZone : MonoBehaviour, IPointerDownHandler
         ItemWorldManager.Instance.DropItemIntoWorld(itemWorldToDrop, true, true);
         _inventoryManagerSO.RemoveItemById(draggedItem.InventoryItem);
         Destroy(draggedItem.gameObject);
+        _inventoryManagerSO.RefreshCurrentHoldingItem();
     }
 
     public void DropOneOfDraggingItemIntoWorld(UI_InventoryItem draggedItem)

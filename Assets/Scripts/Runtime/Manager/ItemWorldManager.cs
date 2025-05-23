@@ -6,14 +6,15 @@ using Unity.VisualScripting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Collections;
 
 public class ItemWorldManager : Singleton<ItemWorldManager>, IDataPersistence
 {
     private ListItemWorld _listItemWorld;
     public NetworkList<ItemWorldNetworkData> networkItemWorldList;
     public GameObject itemDropPrefab;
-    public ItemWorldControl[] itemsOnMap;
-
+    public List<ItemWorldControl> itemsOnMap;
+    public bool IsReadyToInitialize = false;
     public void OnEnable()
     {
         // Always construct your NetworkList before spawning
@@ -24,76 +25,9 @@ public class ItemWorldManager : Singleton<ItemWorldManager>, IDataPersistence
                 readPerm: NetworkVariableReadPermission.Everyone);
         }
     }
-    public override void OnNetworkSpawn() 
+    #region OnLoadStuff
+    public void SpawnItemOnHostLoad()
     {
-        // this run everytime a player join and run before the load game
-        if (networkItemWorldList.Count == 0) return; // host load game first time, network list is empty
-        _listItemWorld = new ListItemWorld();
-        foreach (var item in networkItemWorldList)
-        {
-            var itemWorld = NetworkVariableConverter.ItemWorldFromNetwork(item);
-            _listItemWorld.AddItemWorld(itemWorld);
-        }
-        Debug.Log("item world in local list after client load: ");
-        foreach (var item in _listItemWorld.Items)
-        {
-            Debug.Log(item.Id);
-        }
-
-        networkItemWorldList.OnListChanged += HandleNetworkListChanged;
-    }
-
-    
-
-    public override void OnNetworkDespawn()
-    {
-        networkItemWorldList.OnListChanged -= HandleNetworkListChanged;
-    }
-
-    private void AddItemWorldIntoNetworkList(ListItemWorld itemWorlds)
-    {
-        foreach (var item in itemWorlds.Items)
-        {
-            Debug.Log(item.Id);
-            networkItemWorldList.Add(NetworkVariableConverter.ItemWorldToNetwork(item));
-        }
-
-        foreach (var networkItem in networkItemWorldList)
-        {
-            Debug.Log(networkItem.Id);
-        }
-
-        networkItemWorldList.OnListChanged += HandleNetworkListChanged;
-    }
-
-    private void HandleNetworkListChanged(NetworkListEvent<ItemWorldNetworkData> changeEvent)
-    {
-        switch(changeEvent.Type)
-        {
-            case NetworkListEvent<ItemWorldNetworkData>.EventType.Add:
-                var itemWorld = NetworkVariableConverter.ItemWorldFromNetwork(changeEvent.Value);
-                _listItemWorld.AddItemWorld(itemWorld);
-                Debug.Log("ItemWorldManager: Add item world to local list: " + itemWorld.Id);
-                break;
-            case NetworkListEvent<ItemWorldNetworkData>.EventType.Remove:
-                var itemToDelete = NetworkVariableConverter.ItemWorldFromNetwork(changeEvent.Value);
-                _listItemWorld.RemoveItemWorld(itemToDelete);
-                Debug.Log("ItemWorldManager: Remove item world from local list: " + itemToDelete.Id);
-                break;
-        }
-    }
-
-    public void FindItemInListAndInitializeAfterClientJoin(ItemWorldControl itemWorldControl, string id)
-    {
-        if (IsServer) return;
-        Debug.Log("Start finding item in list and initialize after client join: " + id);
-        var itemWorld = _listItemWorld.Items.Find(x => x.Id == id);
-        itemWorldControl.InitialItemWorld(itemWorld);
-    }
-
-    public void SpawnItem()
-    {
-        
         foreach (var item in _listItemWorld.Items)
         {
             GameObject itemGO = Instantiate(itemDropPrefab, item.Position, Quaternion.identity);
@@ -101,14 +35,13 @@ public class ItemWorldManager : Singleton<ItemWorldManager>, IDataPersistence
             var itemNetworkObject = itemGO.GetComponent<NetworkObject>();
             itemNetworkObject.Spawn();
             itemNetworkObject.GetComponent<ItemWorldControl>().CanPickup.Value = true; // set to true when spawn item in world
-            InitializeItemWorldOnFirstSpawnClientRpc(itemNetworkObject, NetworkVariableConverter.ItemWorldToNetwork(item));
+            InitializeItemWorldOnHostLoadClientRpc(itemNetworkObject, NetworkVariableConverter.ItemWorldToNetwork(item));
         }
 
     }
 
-
     [ClientRpc]
-    private void InitializeItemWorldOnFirstSpawnClientRpc(NetworkObjectReference itemWorldRef, ItemWorldNetworkData itemWorldData)
+    private void InitializeItemWorldOnHostLoadClientRpc(NetworkObjectReference itemWorldRef, ItemWorldNetworkData itemWorldData)
     {
         if(itemWorldRef.TryGet(out NetworkObject obj))
         {
@@ -117,15 +50,35 @@ public class ItemWorldManager : Singleton<ItemWorldManager>, IDataPersistence
             itemWorldControl.InitialItemWorld(itemWorld);
         } 
     }
-    public void AddItemWorld(ItemWorld item)
+    private void AddItemWorldIntoNetworkList()
     {
-        var itemWorldNetworkData = NetworkVariableConverter.ItemWorldToNetwork(item);
-        if (networkItemWorldList.Contains(itemWorldNetworkData)) return;
-        networkItemWorldList.Add(itemWorldNetworkData);
-        Debug.Log("ItemWorldManager: Add item world to local list: " + itemWorldNetworkData.Id.ToString());
+        foreach (var item in _listItemWorld.Items)
+        {
+            networkItemWorldList.Add(NetworkVariableConverter.ItemWorldToNetwork(item));
+        }
+        _listItemWorld.Items.Clear();
     }
+    public void SyncItemWorldOnLateJoin()
+    {
+        itemsOnMap.Clear();
+        itemsOnMap = FindObjectsOfType<ItemWorldControl>().ToList();
+        foreach (var item in itemsOnMap)
+        {
+            foreach (var netItem in networkItemWorldList)
+            {
+                if (netItem.Id == item.id.Value)
+                {
+                    var itemWorld = NetworkVariableConverter.ItemWorldFromNetwork(netItem);
+                    item.InitialItemWorld(itemWorld);
+                    break;
+                }
+            }
+        }
+        itemsOnMap.Clear();
+    }
+    #endregion
 
-
+    #region add and remove item world
     public void RemoveItemWorld(ItemWorld item, ItemWorldControl itemWorldControl)
     {
         RequestToRemoveItemWorldServerRpc(NetworkVariableConverter.ItemWorldToNetwork(item), itemWorldControl.GetComponent<NetworkObject>()); // send to server to remove item world
@@ -135,7 +88,6 @@ public class ItemWorldManager : Singleton<ItemWorldManager>, IDataPersistence
     [ServerRpc(RequireOwnership = false)]
     public void RequestToRemoveItemWorldServerRpc(ItemWorldNetworkData itemWorldNetworkData, NetworkObjectReference itemWorldRef)
     {
-        Debug.Log("[Server] Received RPC to remove item");
         if (!networkItemWorldList.Contains(itemWorldNetworkData))
         {
             Debug.LogWarning("[Server] Item not found in list");
@@ -145,7 +97,6 @@ public class ItemWorldManager : Singleton<ItemWorldManager>, IDataPersistence
 
         if (itemWorldRef.TryGet(out NetworkObject obj))
         {
-            Debug.Log($"[Server] Despawning item: {obj.name}");
 
             networkItemWorldList.Remove(itemWorldNetworkData);
             obj.Despawn();
@@ -159,7 +110,6 @@ public class ItemWorldManager : Singleton<ItemWorldManager>, IDataPersistence
     public void DropItemIntoWorld(ItemWorld itemWorldDropInfo, bool dropByStack, bool dropByPlayer = false)
     {
         var networkData = NetworkVariableConverter.ItemWorldToNetwork(itemWorldDropInfo); // put quantity and position to drop in here
-        Debug.Log(networkData.Quantity);
         RequestToDropItemServerRpc(networkData,dropByStack, dropByPlayer);
     }
     [ServerRpc(RequireOwnership = false)]
@@ -216,10 +166,15 @@ public class ItemWorldManager : Singleton<ItemWorldManager>, IDataPersistence
         newItemNetworkObject.Spawn();
 
         var itemWorldControl = newItemNetworkObject.GetComponent<ItemWorldControl>();
-        itemWorldControl.StartWaitForPickup(5f);
+        itemWorldControl.StartWaitForPickup(2f);
 
-        AddItemWorld(NetworkVariableConverter.ItemWorldFromNetwork(itemWorldNetworkData));
+        AddItemWorld(itemWorldNetworkData);
         SetItemDropStatusClientRpc(itemWorldNetworkData, newItemNetworkObject, randomDir);
+    }
+    public void AddItemWorld(ItemWorldNetworkData itemWorldNetworkData)
+    {
+        if (networkItemWorldList.Contains(itemWorldNetworkData)) return;
+        networkItemWorldList.Add(itemWorldNetworkData);
     }
     [ClientRpc]
     private void SetItemDropStatusClientRpc(ItemWorldNetworkData itemWorldNetworkData, NetworkObjectReference itemNetworkObject, Vector3 randomDir)
@@ -227,19 +182,22 @@ public class ItemWorldManager : Singleton<ItemWorldManager>, IDataPersistence
         if (itemNetworkObject.TryGet(out NetworkObject obj))
         {
             var itemWorld = NetworkVariableConverter.ItemWorldFromNetwork(itemWorldNetworkData);
+
             var itemWorldControl = obj.GetComponent<ItemWorldControl>();
             itemWorldControl.GetComponent<Rigidbody2D>().AddForce(randomDir * 1f, ForceMode2D.Impulse);
             itemWorldControl.InitialItemWorld(itemWorld);
 
         }
     }
+    #endregion
+
+    
+
+    
     public void LoadData(GameData gameData)
     {
-        // only runs first time the host enter the game
-        Debug.Log("Server load item world data");
-        
         _listItemWorld = gameData.ListItemWold;
-        itemsOnMap = FindObjectsOfType<ItemWorldControl>();
+        itemsOnMap = FindObjectsOfType<ItemWorldControl>().ToList();
 
         if (_listItemWorld.Items == null || _listItemWorld.Items.Count == 0) // neu ko co item nao trong world dc luu trong file save truoc do
         {
@@ -268,19 +226,27 @@ public class ItemWorldManager : Singleton<ItemWorldManager>, IDataPersistence
         }
         if (_listItemWorld?.Items?.Count > 0)
         {
-            SpawnItem();
+            SpawnItemOnHostLoad();
         }
 
-        AddItemWorldIntoNetworkList(_listItemWorld);
-    }
+        itemsOnMap.Clear();
 
+        AddItemWorldIntoNetworkList();
+    }
+    
+
+    private void MoveItemWorldFromNetworkToLocalList()
+    {
+        _listItemWorld.Items.Clear();
+        foreach (var item in networkItemWorldList)
+        {
+            var itemWorld = NetworkVariableConverter.ItemWorldFromNetwork(item);
+            _listItemWorld.AddItemWorld(itemWorld);
+        }
+    }
     public void SaveData(ref GameData gameData)
     {
-        Debug.Log("Start to save item world");
-        foreach (var item in _listItemWorld.Items)
-        {
-            Debug.Log(item.Id);
-        }
+        MoveItemWorldFromNetworkToLocalList();
         gameData.SetListItemWorld(_listItemWorld);
     }
 

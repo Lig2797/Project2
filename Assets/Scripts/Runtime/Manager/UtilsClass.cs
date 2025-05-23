@@ -43,4 +43,25 @@ public static class UtilsClass
         // Fallback (should not happen if the ratios are valid)
         return items[items.Length - 1];
     }
+
+    public static void AdjustRatioByFertilizerLevel(ref float[] ratioArray, int fertilizerLevel)
+    {
+        int levelCount = ratioArray.Length;
+
+        // Nothing to do if no fertilizer
+        if (fertilizerLevel <= 0 || levelCount < 2)
+            return;
+
+        // Define fertilizer shift intensity per level (tweakable)
+        float totalShift = 20f * fertilizerLevel; // Max 60% shift at level 3
+
+        // Reduce from level 1
+        ratioArray[0] -= totalShift;
+
+        // Distribute the shifted amount across higher levels
+        float perLevelGain = totalShift / (levelCount - 1);
+
+        for (int i = 1; i < levelCount; i++)
+            ratioArray[i] += perLevelGain;
+    }
 }

@@ -41,7 +41,7 @@ public class UI_CraftingSlot : MonoBehaviour,  IPointerDownHandler
         int ogQuantity = draggedItem.InventoryItem.Quantity;
         draggedItem.InventoryItem.SetQuantity(ogQuantity - 1);
         draggedItem.RefreshCount();
-        InventoryItem newItem = new InventoryItem(System.Guid.NewGuid().ToString(), draggedItem.InventoryItem.Item, -1, 1);
+        InventoryItem newItem = new InventoryItem(System.Guid.NewGuid().ToString(), draggedItem.InventoryItem.Item, -1, 1,draggedItem.InventoryItem.Level);
         _inventoryManagerSO.PutItemDownByRightClick(newItem, newItem.SlotIndex, gameObject);
     }
     public Item GetItem()

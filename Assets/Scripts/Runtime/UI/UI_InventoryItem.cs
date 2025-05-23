@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -54,11 +55,19 @@ public class UI_InventoryItem : MonoBehaviour, IPointerDownHandler
     public void InitialiseItem(InventoryItem newItem)
     {
         _inventoryItem = newItem;
-        image.sprite = newItem.Item.image;
+        SetItemImage();
         RefreshCount();
     }
-
-    public void RefreshCount()
+    public void SetItemImage()
+    {
+        if (_inventoryItem.Item.cropLevelImage != null && // check if this is crop
+            _inventoryItem.Item.cropLevelImage.Length > _inventoryItem.Level)
+        {
+            _inventoryItem.Item.image = _inventoryItem.Item.cropLevelImage[_inventoryItem.Level];
+        }
+        image.sprite = _inventoryItem.Item.image;
+    }
+    public void RefreshCount() 
     {
         countText.text = _inventoryItem.Quantity.ToString();
         countText.gameObject.SetActive(_inventoryItem.Quantity > 1);
@@ -127,16 +136,14 @@ public class UI_InventoryItem : MonoBehaviour, IPointerDownHandler
             {
                 if (draggedItem.InventoryItem.Item == InventoryItem.Item &&
                     draggedItem.InventoryItem.Item.stackable &&
-                    draggedItem.InventoryItem.Quantity < draggedItem.InventoryItem.MaxStack)
+                    draggedItem.InventoryItem.Quantity < draggedItem.InventoryItem.MaxStack &&
+                    draggedItem.InventoryItem.Level == InventoryItem.Level)
                 {
                     OnNewItemCreatedBeginDrag?.Invoke();
-                    _inventoryManagerSO.inventory.AddItemToInventory(InventoryItem, -1);
-                    itemJustGotCreated = false;
 
                     draggedItem.InventoryItem.IncreaseQuantity(1);
                     draggedItem.RefreshCount();
 
-                    _inventoryManagerSO.RemoveItemById(InventoryItem);
                     Destroy(gameObject); // destroy the item that just got created
 
                 }
@@ -145,11 +152,15 @@ public class UI_InventoryItem : MonoBehaviour, IPointerDownHandler
             {
                 if (eventData.button == PointerEventData.InputButton.Left)
                 {
-                    if (_inventoryItem.Item != draggedItem._inventoryItem.Item || InventoryItem.Quantity == InventoryItem.MaxStack)
+                    if (_inventoryItem.Item != draggedItem._inventoryItem.Item || 
+                        InventoryItem.Quantity == InventoryItem.MaxStack ||
+                        _inventoryItem.Item == draggedItem._inventoryItem.Item && _inventoryItem.Level != draggedItem._inventoryItem.Level)
                     {
                         SwapThisItemWith(draggedItem);
                     }
-                    else if(_inventoryItem.Item == draggedItem._inventoryItem.Item && InventoryItem.Quantity < InventoryItem.MaxStack)
+                    else if(_inventoryItem.Item == draggedItem._inventoryItem.Item && 
+                        InventoryItem.Quantity < InventoryItem.MaxStack &&
+                        _inventoryItem.Level == draggedItem._inventoryItem.Level)
                     {
                         OnItemDropOnItem(draggedItem);
                     }
@@ -157,7 +168,8 @@ public class UI_InventoryItem : MonoBehaviour, IPointerDownHandler
                 else if (eventData.button == PointerEventData.InputButton.Right)
                 {
                     if (_inventoryItem.Item == draggedItem._inventoryItem.Item &&
-                        _inventoryItem.Quantity < _inventoryItem.MaxStack)
+                        _inventoryItem.Quantity < _inventoryItem.MaxStack &&
+                        _inventoryItem.Level == draggedItem._inventoryItem.Level)
                     {
                         _inventoryItem.IncreaseQuantity(1);
                         RefreshCount();
@@ -187,7 +199,7 @@ public class UI_InventoryItem : MonoBehaviour, IPointerDownHandler
         int newItemQuantity = ogQuantity / 2;
         _inventoryItem.SetQuantity(ogQuantity- newItemQuantity);
         RefreshCount();
-        InventoryItem newItem = new InventoryItem(System.Guid.NewGuid().ToString(), _inventoryItem.Item, _inventoryItem.SlotIndex, newItemQuantity);
+        InventoryItem newItem = new InventoryItem(System.Guid.NewGuid().ToString(), _inventoryItem.Item, _inventoryItem.SlotIndex, newItemQuantity, _inventoryItem.Level);
         _inventoryManagerSO.PutItemDownByRightClick(newItem,newItem.SlotIndex,parentAfterDrag.gameObject);
     }
 

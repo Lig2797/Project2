@@ -1,58 +1,96 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
+using Unity.Collections;
+using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
-[System.Serializable]
-public class CropData
+[Serializable]
+[GenerateSerializationForTypeAttribute(typeof(CropData))]
+public struct CropData : INetworkSerializable
 {
-    [SerializeField] public int _currentStage;
-    [SerializeField] public int growthTimeLeft;
-    [SerializeField] public bool isWatered;
-    [SerializeField] public int timeToChangeStage;
-    [SerializeField] public int stageTimeCounter;
-    [SerializeField] public bool needChangeStage;
-    [SerializeField] public ESeason season;
-    [SerializeField] public TileBase[] growthStages;
-    [SerializeField] public string cropProductName;
-    [SerializeField] public int[] level; // crop se co 4 level
-    [SerializeField] public float[] ratio;
-    [SerializeField] public bool CanReHarvest;
-    [SerializeField] public int[] numOfProductCouldDrop;
-    [SerializeField] public float[] ratioForEachNum;
-    // them he thong chon level cua crop khi thu hoach
-    public CropData(int growthTime, TileBase[] growthStages, ESeason season, string cropProductName, bool canReHarvest, int[] numOfProductCouldDrop, float[] ratioForEachNum)
+    // --- Growth State ---
+    public int CurrentStage;
+    public int TimeToChangeStage;
+    public int StageTimeCounter;
+    public bool NeedChangeStage;
+
+    // --- Metadata ---
+    public int StagesCount;
+    public ESeason Season;
+    public FixedString64Bytes CropSeedName;
+    public FixedString64Bytes CropProductName;
+    public bool CanReHarvest;
+
+    // --- Harvest Parameters ---
+    public int QuantityFertilizedLevel;
+    public int QualityFertilizedLevel;
+    public int FastGrowFertilizedLevel;
+
+
+    // --- Constructor ---
+    public CropData(
+        int stagesCount,
+        int timeToChangeStage,
+        ESeason season,
+        string cropSeedName,
+        string cropProductName,
+        bool canReHarvest)
     {
-        needChangeStage = false;
-        _currentStage = 0;
-        isWatered = false;
-        growthTimeLeft = growthTime;
-        this.growthStages = growthStages;
-        timeToChangeStage = growthTime / growthStages.Length;
-        stageTimeCounter = 0;
-        this.season = season;
-        this.cropProductName = cropProductName;
-        level = new int[] { 1, 2, 3, 4 };
-        ratio = new float[] { 100, 0, 0, 0 };
+        CurrentStage = 1;
+        TimeToChangeStage = timeToChangeStage;
+        StageTimeCounter = 0;
+        NeedChangeStage = false;
+
+        StagesCount = stagesCount;
+        Season = season;
+        CropSeedName = cropSeedName;
+        CropProductName = cropProductName;
         CanReHarvest = canReHarvest;
-        this.numOfProductCouldDrop = numOfProductCouldDrop;
-        this.ratioForEachNum = ratioForEachNum;
+
+        QuantityFertilizedLevel = 0;
+        QualityFertilizedLevel = 0;
+        FastGrowFertilizedLevel = 1;
     }
 
-    public void GrowthTimeUpdate(int minute)
+    // --- Logic ---
+    public void GrowthTimeUpdate(int minutes)
     {
-        growthTimeLeft -= minute;
-        stageTimeCounter += minute;
+        if (IsFullyGrown()) return;
 
-        if(stageTimeCounter >= timeToChangeStage && _currentStage < growthStages.Length - 1)
+        minutes *= FastGrowFertilizedLevel;
+        StageTimeCounter += minutes;
+
+        if (StageTimeCounter >= TimeToChangeStage)
         {
-            needChangeStage = true;
-            _currentStage++;
-            stageTimeCounter = 0;
+            NeedChangeStage = true;
+            CurrentStage++;
+            StageTimeCounter = 0;
         }
     }
+
     public bool IsFullyGrown()
     {
-        return _currentStage == growthStages.Length - 1;
+        return CurrentStage >= StagesCount;
     }
+
+    // --- Network Serialization ---
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    {
+        serializer.SerializeValue(ref CurrentStage);
+        serializer.SerializeValue(ref TimeToChangeStage);
+        serializer.SerializeValue(ref StageTimeCounter);
+        serializer.SerializeValue(ref NeedChangeStage);
+
+        serializer.SerializeValue(ref StagesCount);
+        serializer.SerializeValue(ref Season);
+        serializer.SerializeValue(ref CropSeedName);
+        serializer.SerializeValue(ref CropProductName);
+        serializer.SerializeValue(ref CanReHarvest);
+
+        serializer.SerializeValue(ref QuantityFertilizedLevel);
+        serializer.SerializeValue(ref QualityFertilizedLevel);
+        serializer.SerializeValue(ref FastGrowFertilizedLevel);
+
+    }
+
+
 }
