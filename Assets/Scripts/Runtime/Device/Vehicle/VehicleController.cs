@@ -40,12 +40,13 @@ public class VehicleController : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        base.OnNetworkSpawn();
+        if (!IsServer) return;
         VehicleLastMovement.OnValueChanged += SetFacingDirectionByAnimator;
         VehicleLastMovement.Value = DefaultFacingDirection;
     }
     private void OnDisable()
     {
+        if (!IsServer) return;
         VehicleLastMovement.OnValueChanged -= SetFacingDirectionByAnimator;
     }
     void Start()
@@ -118,11 +119,11 @@ public class VehicleController : NetworkBehaviour
     {
         animator.SetFloat("Horizontal", Mathf.Abs(newValue.x));
         animator.SetFloat("Vertical", newValue.y);
-        SetCollision(newValue);
+        SetCollisionClientRpc(newValue);
     }
 
-
-    public void SetCollision(Vector2 movement)
+    [ClientRpc]
+    public void SetCollisionClientRpc(Vector2 movement)
     {
         foreach (var col in colliders)
         {

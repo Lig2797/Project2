@@ -5,7 +5,7 @@ using UnityEngine;
 public class StateMachine
 {
     private IState currentState;
-
+    public IState CurrentState => currentState;
     public void ChangeState(IState newState)
     {
         if (currentState == newState) return;

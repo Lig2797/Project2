@@ -10,7 +10,7 @@ public class Singleton<T> : NetworkBehaviour where T : Singleton<T>
         {
             if (instance == null)
             {
-                instance = FindObjectOfType<T>();
+                instance = FindFirstObjectByType<T>();
                 if (instance == null)
                 {
                     Debug.LogError(typeof(T).Name + " is not found in the scene.");

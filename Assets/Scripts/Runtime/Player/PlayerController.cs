@@ -607,6 +607,7 @@ public class PlayerController : NetworkBehaviour
             {
                 animator.SetTrigger(AnimationStrings.pickup);
                 _itemOnHand.gameObject.SetActive(false);
+                CurrentState = null;
             }
         }
     }

@@ -50,7 +50,7 @@ public class UIMainMenuController : MonoBehaviour
         _optionsPanel = root.Q<VisualElement>("SettingPanel");
         _optionsBackButton = root.Q<Button>("OptionsBackButton");
         
-        _loadingManager = FindObjectOfType<LoadingManager>();
+        _loadingManager = FindFirstObjectByType<LoadingManager>();
     }
 
     private void Start()

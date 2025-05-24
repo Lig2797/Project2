@@ -103,10 +103,9 @@ public class TileManager : Singleton<TileManager>, IDataPersistence
             HoedTileData hoedTileData = hoedTile.Value;
 
             if (WateredTilesNetwork.ContainsKey(hoedPosition) || CropManager.Instance.PlantedCropsNetwork.ContainsKey(hoedPosition))
-            {
                 hoedTileData.hasSomethingOn = true;
-            }
-
+            else if(!WateredTilesNetwork.ContainsKey(hoedPosition) && !CropManager.Instance.PlantedCropsNetwork.ContainsKey(hoedPosition))
+                hoedTileData.hasSomethingOn = false;
             hoedTileData.UpdateTile(minute);
             HoedTilesNetwork[hoedPosition] = hoedTileData;
 
