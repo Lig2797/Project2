@@ -1,14 +1,18 @@
 === start ===
+"Chương 1: Chuyến đi theo lời kêu gọi."
+//
+->DONE
+//"Quest đầu tiên đi chào mọi người trong thị trấn 0/5"
+=== meet_josh ===
+"Tôi có nghe thị trưởng nói sắp tới có thêm người đến thị trấn để định cư. Hóa ra là cậu Alex, lâu rồi không gặp, cậu nhìn chín chắn hẳn ra nhỉ."
+#speaker:Alex #background: Say #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
 
-// Alex nhận được thư của ông nội
-"Ông nội đã gửi cho tôi một lá thư cùng chiếc chìa khóa cũ. Tôi sẽ làm gì bây giờ?" #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
++ [Hỏi nghi vấn?] 
+    "Tôi có quen cậu à?" #speaker:Alex #background: Say #portrait:Alex_Default_1 #layout:Right #audio:animal_crossing_mid
+    -> josh_dialogue
 
-+ [Đọc lại thư kỹ càng] 
-    "Tôi đọc lại thư và cảm thấy quyết tâm trở về ngôi làng." #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
-    -> prepare_departure
-
-+ [Bỏ qua thư, chưa chắc chắn]
-    "Tôi chưa chắc mình có nên về không, nhưng có cảm giác không thể từ chối." #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
++ [Bối rối]
+    "TTôi không nhớ cậu lắm, không biết tôi quen cậu như thế nào?" #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
     -> prepare_departure
 
 === prepare_departure ===
