@@ -1,10 +1,32 @@
 === start ===
 
-Lại một ngày bận rộn khác #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+Lại một ngày bận rộn khác #speaker:Alex #background: Think #portrait:Alex_Think #layout:Right #audio:animal_crossing_mid
 
-Ngày nào mình cũng phải đối mặt với hàng đống công việc kể từ khi mình sống một mình hơn 2 năm nay. Các ca làm thêm giờ đang làm kiệt quệ mình. Đôi lúc mình tự hỏi liệu mục đích sống của mình là gì. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+Ngày nào mình cũng phải đối mặt với hàng đống công việc kể từ khi mình sống một mình hơn 2 năm nay. Các ca làm thêm giờ đang làm kiệt quệ mình. Đôi lúc mình tự hỏi liệu mục đích sống của mình là gì. #speaker:Alex #background: Think #portrait:Alex_Think #layout:Right #audio:animal_crossing_mid
 
-"~~~ Ping pong, bạn có bưu kiện mới, xin mời ra nhận hàng."
+"~~~ Ping pong, bạn có bưu kiện mới, xin mời ra nhận hàng." #speaker:??? #background: Say #portrait:Alex_Surprise #layout:Left #audio:animal_crossing_mid
+
+Hửm? Lạ nhỉ, mình đâu có đặt hàng của ai đâu? #speaker:Alex #background: Think #portrait:Alex_Surprise2 #layout:Right #audio:animal_crossing_mid
+
+Nếu là thư của bố mẹ thì chắc chắn họ đã liên lạc trước với mình rồi. Thôi để ra xem thử. #speaker:Alex #background: Think #portrait:Alex_Surprise2 #layout:Right #audio:animal_crossing_mid
+-> DONE
+
+=== grandpa_letter ===
+
+Ô! Là bưu kiện từ dưới quê ông của mình gửi lên. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+
+Hể? toàn đồ làm ruộng thế này, sao ông mình lại gửi những thứ này cho mình nhỉ? #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+
+A! Còn một chiếc hộp nhỏ. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+
+Hmm. Bên trong là 2 chiếc chìa khóa và một bức thư. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+
++ [Đọc lại thư kỹ càng] 
+    Có vẻ cơ hội để mình thay đổi bản thân đã đến rồi. Một cuộc sống ở thôn quê có vẻ sẽ hợp với mình hơn thành thị xô bồ. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+    -> prepare_departure
+    
++ [Bỏ qua thư, chưa chắc chắn]
+    -> DONE
 
 // Alex nhận được thư của ông nội
 "Ông nội đã gửi cho tôi một lá thư cùng chiếc chìa khóa cũ. Tôi sẽ làm gì bây giờ?" #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
@@ -22,76 +44,9 @@ Ngày nào mình cũng phải đối mặt với hàng đống công việc kể
 
 + [Chuẩn bị hành lý kỹ càng] 
     "Tôi thu dọn đồ đạc và sắp xếp những vật dụng cần thiết." #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
-    -> arrival
+    -> DONE
 
 + [Đi ngay lập tức, không chờ đợi]
     "Tôi không chần chừ thêm nữa, lên đường ngay." #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
-    -> arrival
+    -> DONE
 
-=== arrival ===
-"Tôi đã đến làng Eloria. Không khí nơi đây thật trong lành và thân thiện." #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
-
-+ [Đi tìm Josh - bạn thân lâu năm]
-    -> meet_josh
-
-+ [Khám phá làng một mình trước]
-    -> explore_village
-
-=== meet_josh ===
-Alex! Cậu đến rồi à? Thật vui khi gặp lại cậu. #speaker:Josh #background: Say #portrait:Josh_Smile #layout:Left #audio:animal_crossing_mid
-+ [Chào Josh, rất vui được gặp lại cậu] 
-    "Tôi mỉm cười và nói với Josh rằng tôi rất vui." #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
-    -> josh_dialogue
-
-+ [Hỏi Josh về cuộc sống ở làng] 
-    "Tôi hỏi Josh cuộc sống ở đây thế nào." #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
-    -> josh_dialogue
-
-=== josh_dialogue ===
-Làng vẫn thế, nhưng có nhiều điều kỳ lạ đang xảy ra. Tao sẽ giúp mày thích nghi. #speaker:Josh #background: Say #portrait:Josh_Smile #layout:Left #audio:animal_crossing_mid
-+ [Cảm ơn Josh, tôi sẽ cố gắng thích nghi nhanh] 
-    "Tôi biết ơn sự giúp đỡ của Josh." #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
-    -> end_part1
-
-+ [Tôi còn bỡ ngỡ, cần thời gian] 
-    "Tôi hơi lo lắng, nhưng sẽ cố gắng từng bước." #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
-    -> end_part1
-
-=== explore_village ===
-"Tôi đi dạo quanh làng, quan sát mọi thứ xung quanh."
-+ [Gặp Lyria - cô gái mê thảo dược] 
-    -> meet_lyria
-
-+ [Quay lại tìm Josh] 
-    -> meet_josh
-
-=== meet_lyria ===
-Lyria: "Chào Alex, tôi nghe ông nội bạn là một người đặc biệt."
-+ [Hỏi Lyria về phép màu của làng]
-    "Tôi tò mò về những điều kỳ diệu ở đây."
-    -> lyria_magic
-
-+ [Nói lời chào và rút lui nhẹ nhàng]
-    "Tôi cảm thấy có nhiều việc cần làm nên tạm biệt Lyria."
-    -> explore_village
-
-=== lyria_magic ===
-Lyria: "Làng này là một Tâm Linh Địa, có nhiều năng lượng kỳ diệu. Nhưng bóng tối cũng đang rình rập."
-+ [Hỏi thêm về bóng tối]
-    -> dark_warning
-
-+ [Cảm ơn và hứa sẽ cẩn thận]
-    -> explore_village
-
-=== dark_warning ===
-Lyria: "Vùng Đất Bóng Tối đang dần thức tỉnh, cần cảnh giác vào ban đêm."
-+ [Đồng ý và hứa sẽ giúp bảo vệ làng]
-    "Tôi quyết tâm bảo vệ nơi đây."
-    -> end_part1
-
-+ [Tôi sẽ tìm hiểu thêm một mình]
-    -> explore_village
-
-=== end_part1 ===
-"Tôi đã có những bước đầu tiên trong cuộc hành trình ở Eloria."
--> DONE
