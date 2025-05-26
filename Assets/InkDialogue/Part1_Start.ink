@@ -1,5 +1,11 @@
 === start ===
 
+Lại một ngày bận rộn khác #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+
+Ngày nào mình cũng phải đối mặt với hàng đống công việc kể từ khi mình sống một mình hơn 2 năm nay. Các ca làm thêm giờ đang làm kiệt quệ mình. Đôi lúc mình tự hỏi liệu mục đích sống của mình là gì. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+
+"~~~ Ping pong, bạn có bưu kiện mới, xin mời ra nhận hàng."
+
 // Alex nhận được thư của ông nội
 "Ông nội đã gửi cho tôi một lá thư cùng chiếc chìa khóa cũ. Tôi sẽ làm gì bây giờ?" #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
 

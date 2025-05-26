@@ -11,15 +11,15 @@ public class DialogueTrigger : MonoBehaviour
     [Header("Emote Animator")]
     [SerializeField] private Animator emoteAnimator;
 
-    [Header("Ink JSON")]
-    [SerializeField] private TextAsset inkJSON;
+    [Header("Ink Name")]
+    [SerializeField] private string dialogueKnotName;
 
     public bool playerInRange;
 
     private void Awake() 
     {
         playerInRange = false;
-        visualCue.SetActive(false);
+        //visualCue.SetActive(false);
     }
 
     private void OnTriggerEnter2D(Collider2D collider) 
@@ -27,6 +27,7 @@ public class DialogueTrigger : MonoBehaviour
         if (collider.gameObject.tag == "Player")
         {
             playerInRange = true;
+            GameEventsManager.Instance.dialogueEvents.EnterDialogue(dialogueKnotName);
         }
     }
 

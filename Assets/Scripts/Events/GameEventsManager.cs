@@ -10,6 +10,10 @@ public class GameEventsManager : MonoBehaviour
     public MiscEvents miscEvents;
     public QuestEvents questEvents;
     public DialogueEvents dialogueEvents;
+    public ActiveUIPanelEvents activeUIPanelEvents;
+    public OptionsEvents optionsEvents;
+    public StartGameEvents startGameEvents;
+
     public InputReader inputReader;
 
     private void Awake()
@@ -30,5 +34,8 @@ public class GameEventsManager : MonoBehaviour
         miscEvents = new MiscEvents();
         questEvents = new QuestEvents();
         dialogueEvents = new DialogueEvents();
+        activeUIPanelEvents = new ActiveUIPanelEvents();
+        optionsEvents = new OptionsEvents();
+        startGameEvents = new StartGameEvents();
     }
 }

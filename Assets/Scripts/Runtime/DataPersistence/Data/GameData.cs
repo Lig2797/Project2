@@ -6,6 +6,9 @@ using UnityEngine;
 [System.Serializable]
 public class GameData
 {
+    [SerializeField] private string _saveFileName;
+    [SerializeField] private string _saveFilePath;
+    [SerializeField] private DateTime _saveDateTime;
     [SerializeField] private Player _playerData;
     [SerializeField] private Inventory _inventoryData;
     [SerializeField] private EnvironmentalStatus _eStatus;
@@ -31,6 +34,9 @@ public class GameData
     { get { return _cropsSaveData; } }
     public GameData()
     {
+        this._saveFileName = string.Empty;
+        this._saveFilePath = string.Empty;
+        this._saveDateTime = DateTime.Now;
         this._playerData = new Player();
         this._inventoryData = new Inventory();
         this._eStatus = new EnvironmentalStatus();

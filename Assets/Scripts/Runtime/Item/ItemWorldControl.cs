@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Netcode;
 using Unity.VisualScripting;
+#if UNITY_EDITOR
 using UnityEditorInternal.Profiling.Memory.Experimental;
+#endif
 using UnityEngine;
 
 public class ItemWorldControl : NetworkBehaviour

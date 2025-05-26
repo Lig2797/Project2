@@ -26,9 +26,6 @@ public class DataPersistenceManager : Singleton<DataPersistenceManager>
         dataPersistenceObjects = FindAllDataPersistenceObjects();
     }
 
-    
-
-
     private void InitializeDataHandler()
     {
         dataHandler = new FileDataHandler(Application.persistentDataPath, fileName);
@@ -84,6 +81,7 @@ public class DataPersistenceManager : Singleton<DataPersistenceManager>
 
         onFinished?.Invoke();
     }
+
     [ServerRpc(RequireOwnership = false)]
     private void SyncWorldDataToPlayerServerRpc(ServerRpcParams rpcParams = default)
     {
@@ -98,6 +96,7 @@ public class DataPersistenceManager : Singleton<DataPersistenceManager>
         };
         SyncWorldDataToPlayerClientRpc(rpcParamsForClient);
     }
+
     [ClientRpc]
     private void SyncWorldDataToPlayerClientRpc(ClientRpcParams clientRpcParams = default)
     {
@@ -176,6 +175,7 @@ public class DataPersistenceManager : Singleton<DataPersistenceManager>
 
         SaveGame((bool)data);
     }
+
     //private void CaptureScreenshot()
     //{
     //    string screenshotPath = Path.Combine(Application.persistentDataPath, fileName + "_screenshot.png");
