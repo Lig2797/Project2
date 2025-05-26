@@ -61,7 +61,7 @@ public class ItemWorldManager : Singleton<ItemWorldManager>, IDataPersistence
     public void SyncItemWorldOnLateJoin()
     {
         itemsOnMap.Clear();
-        itemsOnMap = FindObjectsOfType<ItemWorldControl>().ToList();
+        itemsOnMap = FindObjectsByType<ItemWorldControl>(FindObjectsSortMode.None).ToList();
         foreach (var item in itemsOnMap)
         {
             foreach (var netItem in networkItemWorldList)
@@ -197,7 +197,7 @@ public class ItemWorldManager : Singleton<ItemWorldManager>, IDataPersistence
     public void LoadData(GameData gameData)
     {
         _listItemWorld = gameData.ListItemWold;
-        itemsOnMap = FindObjectsOfType<ItemWorldControl>().ToList();
+        itemsOnMap = FindObjectsByType<ItemWorldControl>(FindObjectsSortMode.None).ToList();
 
         if (_listItemWorld.Items == null || _listItemWorld.Items.Count == 0) // neu ko co item nao trong world dc luu trong file save truoc do
         {

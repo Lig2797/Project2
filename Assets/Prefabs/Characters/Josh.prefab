@@ -56,6 +56,10 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 22100000, guid: 05f4f2063294b5d449036b26ebeb734a, type: 2}
+    - target: {fileID: 2883913539188681266, guid: 1bee62c1640c1da47ab3b0303eda31dd, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 2993434263
+      objectReference: {fileID: 0}
     - target: {fileID: 3069992538054791838, guid: 1bee62c1640c1da47ab3b0303eda31dd, type: 3}
       propertyPath: m_Name
       value: Josh

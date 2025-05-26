@@ -14,13 +14,11 @@ public class ItemOnHand : NetworkBehaviour
     {
         if (isActivate)
         {
-            Debug.Log("Activate item on hand: " + itemName);
             Item item = ItemDatabase.Instance.GetItemByName(itemName);
             SetItemSprite(item.image);
         }
         else
         {
-            Debug.Log("Deactivate item on hand: " + itemName);
             SetItemSprite(null);
         }
 
