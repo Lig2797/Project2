@@ -4,23 +4,28 @@ using UnityEngine;
 
 public class StateMachine
 {
-    private IState currentState;
-    public IState CurrentState => currentState;
+    private IState _currentState;
+    public IState CurrentState
+    {
+        get { return _currentState; }
+        private set { _currentState = value; }
+    }
+
     public void ChangeState(IState newState)
     {
-        if (currentState == newState) return;
+        if (CurrentState == newState) return;
 
-        currentState?.Exit();
-        currentState = newState;
-        currentState?.Enter();
+        CurrentState?.Exit();
+        CurrentState = newState;
+        CurrentState?.Enter();
     }
 
     public void StateUpdate()
     {
-        currentState?.StateUpdate();
+        CurrentState?.StateUpdate();
     }
     public void StateFixedUpdate()
     {
-        currentState?.StateFixedUpdate();
+        CurrentState?.StateFixedUpdate();
     }
 }

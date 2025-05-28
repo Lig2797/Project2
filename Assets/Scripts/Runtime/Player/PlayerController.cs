@@ -247,48 +247,35 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private GameEvent onPlayerLoadEvent;
     [SerializeField] private GameEvent onPlayerSaveEvent;
     #endregion
+
     #endregion
 
-    //Game Event
+    #region Game Events
     [SerializeField] private GameEvent onPlayerLoad;
     [SerializeField] private GameEvent onPlayerSave;
     [SerializeField] private GameEvent onSubmit;
+    #endregion
 
     #region Setup Before Game Start
-    private void Awake()
-    {
-        _inventoryController = GetComponent<InventoryController>();
-        rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
-        col = GetComponent<Collider2D>();
 
-    }
-    private void OnEnable()
-    {
-        _inputReader.playerActions.moveEvent += OnMove;
-        _inputReader.playerActions.attackEvent += OnAttack;
-        _inputReader.playerActions.interactEvent += OnInteract;
-        _inputReader.playerActions.secondInteractEvent += OnSecondInteract;
-        _inputReader.playerActions.runEvent += OnRun;
-        _inputReader.playerActions.submitEvent += OnSubmit;
-        _inventoryManagerSO.onChangedSelectedSlot += CheckAnimation;
-    }
-
-    private void OnDisable()
-    {
-        _inputReader.playerActions.moveEvent -= OnMove;
-        _inputReader.playerActions.attackEvent -= OnAttack;
-        _inputReader.playerActions.interactEvent -= OnInteract;
-        _inputReader.playerActions.secondInteractEvent -= OnSecondInteract;
-        _inputReader.playerActions.runEvent -= OnRun;
-        _inputReader.playerActions.submitEvent -= OnSubmit;
-        _inventoryManagerSO.onChangedSelectedSlot -= CheckAnimation;
-    }
 
     public override void OnNetworkSpawn()
     {
         if (IsOwner)
         {
+            _inventoryController = GetComponent<InventoryController>();
+            rb = GetComponent<Rigidbody2D>();
+            animator = GetComponent<Animator>();
+            col = GetComponent<Collider2D>();
+
+            _inputReader.playerActions.moveEvent += OnMove;
+            _inputReader.playerActions.attackEvent += OnAttack;
+            _inputReader.playerActions.interactEvent += OnInteract;
+            _inputReader.playerActions.secondInteractEvent += OnSecondInteract;
+            _inputReader.playerActions.runEvent += OnRun;
+            _inputReader.playerActions.submitEvent += OnSubmit;
+            _inventoryManagerSO.onChangedSelectedSlot += CheckAnimation;
+
             bool isHost = NetworkManager.Singleton.IsHost && IsServer; // true only on host machine
             onPlayerLoadEvent.Raise(this, isHost);
         }
@@ -299,6 +286,14 @@ public class PlayerController : NetworkBehaviour
     {
         if (IsOwner)
         {
+            _inputReader.playerActions.moveEvent -= OnMove;
+            _inputReader.playerActions.attackEvent -= OnAttack;
+            _inputReader.playerActions.interactEvent -= OnInteract;
+            _inputReader.playerActions.secondInteractEvent -= OnSecondInteract;
+            _inputReader.playerActions.runEvent -= OnRun;
+            _inputReader.playerActions.submitEvent -= OnSubmit;
+            _inventoryManagerSO.onChangedSelectedSlot -= CheckAnimation;
+
             bool isHost = NetworkManager.Singleton.IsHost && IsServer; // true only on host machine
             onPlayerSaveEvent.Raise(this, isHost);
         }
@@ -322,11 +317,7 @@ public class PlayerController : NetworkBehaviour
     #endregion
 
     #region Game Loop
-    //void Update()
-    //{
-    //    CheckAnimation();
-    //}
-
+    
     private void FixedUpdate()
     {
         MovementHandler();
@@ -571,10 +562,21 @@ public class PlayerController : NetworkBehaviour
     #region Actions
     private void OnAttack()
     {
-        if (!IsRidingVehicle && IsHoldingItem && CanAttack && Input.GetMouseButton(0) && !_inventoryManagerSO.IsPointerOverUI)
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        if (stateInfo.IsTag("Attack1"))
+        {
+            animator.SetBool("CanAttack2", true);
+        }
+        else if(!IsRidingVehicle && IsHoldingItem && CanAttack && Input.GetMouseButton(0) && !_inventoryManagerSO.IsPointerOverUI)
         {
             UseCurrentItem();
         }
+    }
+
+    public void DeactivateAttack2()
+    {
+        animator.SetBool("CanAttack2", false);
     }
     private void UseCurrentItem()
     {
@@ -588,6 +590,7 @@ public class PlayerController : NetworkBehaviour
                 }
             case ItemType.Tool:
                 {
+                    
                     animator.SetTrigger("Attack");
                     tileTargeter.UseTool(!noTargetStates.Contains(CurrentState));
                     break;

@@ -8,6 +8,7 @@ TagManager:
   - Horse
   - Bed
   - House
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -18,7 +19,7 @@ TagManager:
   - Mineral
   - Enemy
   - Player
-  - 
+  - Wall
   - 
   - 
   - 

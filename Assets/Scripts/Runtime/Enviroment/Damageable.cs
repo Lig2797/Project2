@@ -6,23 +6,23 @@ using UnityEngine.Events;
 
 public class Damageable : MonoBehaviour
 {
-    public UnityEvent<int, Vector2> damageableHit;
-
-    [SerializeField]
-    private int _maxHealth = 100;
-
+    public UnityEvent<Vector2> onHit;
     private Animator animator;
 
-    public int MaxHealth
+    public FloatVariable playerHealth;
+    public FloatVariable playerMaxHealth;
+
+    [SerializeField]
+    private float _maxHealth = 100;
+    public float MaxHealth
     {
         get { return _maxHealth; }
         set { _maxHealth = value; }
     }
 
     [SerializeField]
-    private int _health = 100;
-
-    public int Health
+    private float _health = 100;
+    public float Health
     {
         get { return _health; }
         set
@@ -42,8 +42,9 @@ public class Damageable : MonoBehaviour
     [SerializeField]
     private bool isInvincible = false;
 
-    private float timeSinceHit = 0;
-    public float invincibilityTime = 0.25f;
+    private float timeSinceHit;
+    [SerializeField]
+    private float invincibilityTime;
 
     public bool IsAlive
     {
@@ -59,32 +60,49 @@ public class Damageable : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
+        if (GetComponent<PlayerController>() != null)
+        {
+            playerMaxHealth.Value = _maxHealth;
+            playerHealth.Value = playerMaxHealth.Value;
+        }
+        timeSinceHit = 0;
     }
 
     private void Update()
     {
         if (isInvincible)
         {
-            if (timeSinceHit > invincibilityTime)
+            if (timeSinceHit >= invincibilityTime)
             {
                 isInvincible = false;
                 timeSinceHit = 0;
             }
-
+            else
             timeSinceHit += Time.deltaTime;
         }
 
-        if (!IsAlive) Destroy(gameObject);
     }
 
-    public bool Hit(int damage, Vector2 knockback)
+    public bool Hit(float damage, Vector2 knockbackVelocity)
     {
         if (IsAlive && !isInvincible)
         {
-            Health -= damage;
+            if(GetComponent<PlayerController>() != null)
+                {
+                playerHealth.Value -= damage;
+                if (playerHealth.Value <= 0)
+                {
+                    playerHealth.Value = 0;
+                    IsAlive = false;
+                }
+            }
+            else
+            {
+                Health -= damage;
+            }
             isInvincible = true;
 
-            damageableHit?.Invoke(damage, knockback);
+            onHit?.Invoke(knockbackVelocity);
 
             return true;
         }
