@@ -1,5 +1,74 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2545008799080237531
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3788023039931090784}
+  - component: {fileID: 4497359858816378865}
+  m_Layer: 7
+  m_Name: EnemyHitbox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3788023039931090784
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2545008799080237531}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.4, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6814551443767715304}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!70 &4497359858816378865
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2545008799080237531}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 0.6, y: 1}
+  m_Direction: 0
 --- !u!1 &5077854521655654177
 GameObject:
   m_ObjectHideFlags: 0
@@ -17,9 +86,11 @@ GameObject:
   - component: {fileID: 8888658026162569687}
   - component: {fileID: 951666345472364186}
   - component: {fileID: 8016201154110748339}
-  m_Layer: 0
+  - component: {fileID: 2577541456110375268}
+  - component: {fileID: 447543423326718684}
+  m_Layer: 7
   m_Name: Archer_Goblin
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -36,7 +107,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 3788023039931090784}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6545737854487136737
@@ -128,8 +200,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 832988623
-  InScenePlacedSourceGlobalObjectIdHash: 0
+  GlobalObjectIdHash: 3704112378
+  InScenePlacedSourceGlobalObjectIdHash: 832988623
   DeferredDespawnTick: 0
   Ownership: 1
   AlwaysReplicateAsRoot: 0
@@ -261,15 +333,117 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   IdleStateData:
     StandStillTime: 3
-    idleUpClip: {fileID: 0}
-    idleDownClip: {fileID: 0}
-    idleSideClip: {fileID: 0}
+    fanRange: 8
+    fanAngle: 150
+    fanRayCount: 20
   PatrollingStateData:
-    walkingClip: {fileID: 0}
-    walkSpeed: 0
+    walkSpeed: 1
     patrolRadius: 5
     arrivalThreshold: 0.2
-    playerDetectionRange: 5
+    rayOffsetLength: 2
+    fanRange: 8
+    fanAngle: 150
+    fanRayCount: 20
   ChasingStateData:
-    runningClip: {fileID: 0}
+    chaseSpeed: 1.5
+    fanRange: 12
+    fanAngle: 150
+    fanRayCount: 20
+    checkRadius: 1.5
+    rayCount: 16
+    rayOriginOffset: {x: 0, y: 0.5}
+    repulsionStrength: 20
+    TimeToForgetPlayer: 4
+    AttackCooldown: 2
+    AttackRange: 10
   Rb: {fileID: 0}
+  Animator: {fileID: 0}
+  playerTag: Player
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 584
+  DetectorOriginOffset: {x: 0, y: 0.6}
+  GizmoFanOrigin: {x: 0, y: 0}
+  GizmoFanDirection: {x: 0, y: 0}
+  GizmoFanRange: 0
+  GizmoFanAngle: 0
+  GizmoFanRayCount: 0
+  Acceleration: 50
+  _canMove: 1
+  CanAttack: 1
+  projectilePrefab: {fileID: 861314114235552467, guid: 86fbe83f264c51b4d819e4dddb5212fd, type: 3}
+  projectileSpeed: 15
+  _projectileDamage: 10
+--- !u!58 &2577541456110375268
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5077854521655654177}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0.1}
+  m_Radius: 0.3
+--- !u!114 &447543423326718684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5077854521655654177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98572c368dbbedb439adcb4826b1fa13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onHit:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8016201154110748339}
+        m_TargetAssemblyTypeName: EnemyAI, Assembly-CSharp
+        m_MethodName: EnemyOnHit
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  playerHealth: {fileID: 0}
+  playerMaxHealth: {fileID: 0}
+  _maxHealth: 100
+  _health: 100
+  _isAlive: 1
+  isInvincible: 0
+  invincibilityTime: 0.25

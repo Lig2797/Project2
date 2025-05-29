@@ -278,7 +278,6 @@ public class TileTargeter : NetworkBehaviour
     }
     private void UseHoe(Item item)
     {
-
         if (LockedCanHoe)
         {
             Tilemap targetTilemap = null;

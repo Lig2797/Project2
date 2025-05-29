@@ -8,9 +8,13 @@ public class StopAndStartAllActionOnState : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         PlayerController playerController = animator.GetComponent<PlayerController>();
+        EnemyAI enemyAI = animator.GetComponent<EnemyAI>();
         if (playerController != null)
         {
             playerController.StopAllAction();
+        }else if(enemyAI != null)
+        {
+            enemyAI.StopAllAction();
         }
     }
 
@@ -24,9 +28,14 @@ public class StopAndStartAllActionOnState : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         PlayerController playerController = animator.GetComponent<PlayerController>();
+        EnemyAI enemyAI = animator.GetComponent<EnemyAI>();
+
         if (playerController != null)
         {
             playerController.StartAllAction();
+        }else if(enemyAI!= null)
+        {
+            enemyAI.StartAllAction();
         }
     }
 
