@@ -14,13 +14,13 @@ using Unity.Services.Relay.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class KitchenGameLobby : MonoBehaviour {
+public class GameLobby : MonoBehaviour {
 
 
     private const string KEY_RELAY_JOIN_CODE = "RelayJoinCode";
 
 
-    public static KitchenGameLobby Instance { get; private set; }
+    public static GameLobby Instance { get; private set; }
 
 
     public event EventHandler OnCreateLobbyStarted;

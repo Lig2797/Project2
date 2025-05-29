@@ -586,6 +586,7 @@ public class PlayerController : Singleton<PlayerController>, IDataPersistence
             UseCurrentItem();
         }
     }
+
     private void UseCurrentItem()
     {
         Item item = _inventoryManagerSO.GetCurrentItem();
