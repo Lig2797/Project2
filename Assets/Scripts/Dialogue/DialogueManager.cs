@@ -17,19 +17,11 @@ public class DialogueManager : MonoBehaviour
     private InkExternalFunctions inkExternalFunctions;
     private InkDialogueVariables inkDialogueVariables;
 
-    public GameEvent onSubmit;
-
     private void Awake()
     {
         story = new Story(inkJson.text);
         inkExternalFunctions = new InkExternalFunctions();
-        //inkExternalFunctions.Bind(story);
         inkDialogueVariables = new InkDialogueVariables(story);
-    }
-
-    private void OnDestroy()
-    {
-        //inkExternalFunctions.Unbind(story);
     }
 
     private void OnEnable()

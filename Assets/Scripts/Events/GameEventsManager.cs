@@ -12,7 +12,7 @@ public class GameEventsManager : MonoBehaviour
     public DialogueEvents dialogueEvents;
     public ActiveUIPanelEvents activeUIPanelEvents;
     public OptionsEvents optionsEvents;
-    public StartGameEvents startGameEvents;
+    public DataEvents dataEvents;
 
     public InputReader inputReader;
 
@@ -36,6 +36,6 @@ public class GameEventsManager : MonoBehaviour
         dialogueEvents = new DialogueEvents();
         activeUIPanelEvents = new ActiveUIPanelEvents();
         optionsEvents = new OptionsEvents();
-        startGameEvents = new StartGameEvents();
+        dataEvents = new DataEvents();
     }
 }

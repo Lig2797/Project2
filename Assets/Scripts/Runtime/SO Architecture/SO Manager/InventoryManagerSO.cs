@@ -41,7 +41,6 @@ public class InventoryManagerSO : ScriptableObject
         }
     }
 
-
     public Item GetCurrentItem()
     {
         InventoryItem item = inventory.GetInventoryItemOfIndex(_selectedSlot);

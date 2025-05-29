@@ -4,12 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
 using Unity.VisualScripting;
+#if UNITY_EDITOR
 using UnityEditor.PackageManager;
+#endif
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-public class PlayerController : NetworkBehaviour
+public class PlayerController : Singleton<PlayerController>, IDataPersistence
 {
     #region Setup Everything
     #region Components
@@ -246,23 +248,22 @@ public class PlayerController : NetworkBehaviour
     #region Game Events
     [SerializeField] private GameEvent onPlayerLoadEvent;
     [SerializeField] private GameEvent onPlayerSaveEvent;
+    [SerializeField] private GameEvent onSubmit;
     #endregion
     #endregion
 
-    //Game Event
-    [SerializeField] private GameEvent onPlayerLoad;
-    [SerializeField] private GameEvent onPlayerSave;
-    [SerializeField] private GameEvent onSubmit;
 
     #region Setup Before Game Start
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         _inventoryController = GetComponent<InventoryController>();
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         col = GetComponent<Collider2D>();
-
     }
+
     private void OnEnable()
     {
         _inputReader.playerActions.moveEvent += OnMove;
@@ -289,8 +290,9 @@ public class PlayerController : NetworkBehaviour
     {
         if (IsOwner)
         {
+            DontDestroyOnLoad(gameObject);
+
             bool isHost = NetworkManager.Singleton.IsHost && IsServer; // true only on host machine
-            onPlayerLoadEvent.Raise(this, isHost);
         }
     }
 
@@ -300,19 +302,17 @@ public class PlayerController : NetworkBehaviour
         if (IsOwner)
         {
             bool isHost = NetworkManager.Singleton.IsHost && IsServer; // true only on host machine
-            onPlayerSaveEvent.Raise(this, isHost);
+            DataPersistenceManager.Instance.SaveGame();
         }
     }
 
     private void Start()
     {
-
-
         if (!IsOwner)
         {
             enabled = false;
         }
-        else
+        else if (IsOwner && SceneManagement.GetCurrentSceneName().Equals(Loader.Scene.WorldScene.ToString()))
         {
             virtualCamera = GameObject.Find("Virtual Camera").GetComponent<CinemachineVirtualCamera>();
             virtualCamera.Follow = transform;
@@ -330,6 +330,16 @@ public class PlayerController : NetworkBehaviour
     private void FixedUpdate()
     {
         MovementHandler();
+    }
+
+    public void EnableControl()
+    {         
+        if (_inputReader != null) _inputReader.EnableControl();
+    }
+    
+    public void DisableControl()
+    {
+        if (_inputReader != null) _inputReader.DisableControl();
     }
 
     #endregion
@@ -670,18 +680,17 @@ public class PlayerController : NetworkBehaviour
     #endregion
 
     #region Save and Load
-    public void StartToLoad(GameData gameData)
+
+    public void LoadData(GameData gameData)
     {
         player = gameData.PlayerData;
-        transform.position = player.Position;
-        _inventoryController.StartToLoad(gameData);
+        this.gameObject.transform.position = player.Position;
     }
 
-    public void StartToSave(ref GameData gameData)
+    public void SaveData(ref GameData gameData)
     {
         player.SetPosition(transform.position);
         gameData.SetPlayerData(player);
-        _inventoryController.StartToSave(ref gameData);
     }
     #endregion
 }

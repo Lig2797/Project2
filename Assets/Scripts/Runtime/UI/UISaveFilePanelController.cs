@@ -8,10 +8,15 @@ using UnityEngine.UIElements;
 public class UISaveFilePanelController : MonoBehaviour
 {
     private VisualElement _saveFilePanel;
-    private ListView _saveFileList;
+    private ScrollView _saveFileList;
     private Button _newGameButton;
     private Button _loadGameButton;
     private Button _saveFileBackButton;
+
+    private VisualElement _initFileNamePanel;
+    private TextField _fileNameInput;
+    private Button _confirmButton;
+    private Button _cancelButton;
 
     public VisualTreeAsset _saveFileData;
 
@@ -20,54 +25,63 @@ public class UISaveFilePanelController : MonoBehaviour
         var root = GetComponent<UIDocument>().rootVisualElement;
 
         _saveFilePanel = root.Q<VisualElement>("SaveFilePanel");
-        _saveFileList = root.Q<ListView>("SaveFileList");
+        _saveFileList = root.Q<ScrollView>("SaveFileList");
         _newGameButton = root.Q<Button>("NewGameButton");
         _loadGameButton = root.Q<Button>("LoadGameButton");
         _saveFileBackButton = root.Q<Button>("SaveFileBackButton");
+
+        _initFileNamePanel = root.Q<VisualElement>("InitFileNamePanel");
+        _fileNameInput = _initFileNamePanel.Q<TextField>("FileNameInput");
+        _confirmButton = root.Q<Button>("ConfirmButton");
+        _cancelButton = root.Q<Button>("CancelButton");
     }
 
     private void Start()
     {
         _loadGameButton.SetEnabled(false);
-
-        PopulateSaveFiles();
     }
 
     private void OnEnable()
     {
         GameEventsManager.Instance.activeUIPanelEvents.onActiveSingleplayer += OnActive;
         GameEventsManager.Instance.activeUIPanelEvents.onDisActivateSingleplayer += OnDisableActive;
+        GameEventsManager.Instance.dataEvents.onGetListSaveFileData += PopulateSaveFiles;
         _newGameButton.clicked += OnNewGameButtonClicked;
         _loadGameButton.clicked += OnLoadGameButtonClicked;
         _saveFileBackButton.clicked += OnBackButtonClicked;
+
+        _confirmButton.clicked += OnConfirmButtonClicked;
+        _cancelButton.clicked += OnCancelButtonClicked;
     }
 
     private void OnDisable()
     {
         GameEventsManager.Instance.activeUIPanelEvents.onActiveSingleplayer -= OnActive;
         GameEventsManager.Instance.activeUIPanelEvents.onDisActivateSingleplayer -= OnDisableActive;
+        GameEventsManager.Instance.dataEvents.onGetListSaveFileData -= PopulateSaveFiles;
         _newGameButton.clicked -= OnNewGameButtonClicked;
         _loadGameButton.clicked -= OnLoadGameButtonClicked;
         _saveFileBackButton.clicked -= OnBackButtonClicked;
+
+        _confirmButton.clicked -= OnConfirmButtonClicked;
+        _cancelButton.clicked -= OnCancelButtonClicked;
     }
 
     private void OnNewGameButtonClicked()
     {
-        _saveFilePanel.style.display = DisplayStyle.None;
-        GameEventsManager.Instance.startGameEvents.OnNewGameButtonClicked();
-        SceneManager.LoadScene("CutScene");
+        _initFileNamePanel.style.display = DisplayStyle.Flex;
     }
 
     private void OnLoadGameButtonClicked()
     {
-        var selected = _saveFileList.selectedItem as string;
-        if (!string.IsNullOrEmpty(selected))
-        {
-            OnSaveFileSelected(_saveFileList.selectedItems);
-            Debug.Log("Load game: " + selected);
-            _saveFilePanel.style.display = DisplayStyle.None;
-            GameEventsManager.Instance.startGameEvents.OnLoadGameButtonClicked(selected);
-        }
+        //var selected = _saveFileList.selectedItem as string;
+        //if (!string.IsNullOrEmpty(selected))
+        //{
+        //    OnSaveFileSelected(_saveFileList.selectedItems);
+        //    Debug.Log("Load game: " + selected);
+        //    _saveFilePanel.style.display = DisplayStyle.None;
+        //    GameEventsManager.Instance.startGameEvents.OnLoadGameButtonClicked(selected);
+        //}
     }
 
     private void OnBackButtonClicked()
@@ -76,29 +90,38 @@ public class UISaveFilePanelController : MonoBehaviour
         GameEventsManager.Instance.activeUIPanelEvents.OnActiveMainMenu();
     }
 
+    private void OnConfirmButtonClicked()
+    {
+        _initFileNamePanel.style.display = DisplayStyle.None;
+        _saveFilePanel.style.display = DisplayStyle.None;
+        GameEventsManager.Instance.dataEvents.OnInitialized("data");
+        
+        GameMultiplayer.playMultiplayer = false;
+        Loader.Load(Loader.Scene.LobbyScene);
+    }
+
+    private void OnCancelButtonClicked()
+    {
+        _fileNameInput.value = string.Empty;
+        _initFileNamePanel.style.display = DisplayStyle.None;
+    }
+
     private void OnSaveFileSelected(IEnumerable<object> selectedItems)
     {
         _loadGameButton.SetEnabled(selectedItems != null && selectedItems.Any());
     }
 
-    private void PopulateSaveFiles()
+    private void PopulateSaveFiles(Dictionary<string, GameData> saveFiles)
     {
-        var saveNames = new List<string> { "Save 1", "Save 2", "Save 3" };
-
-        _saveFileList.itemsSource = saveNames;
-        _saveFileList.makeItem = () => new VisualElement();
-        _saveFileList.bindItem = (element, index) =>
+        _saveFileList.Clear();
+        foreach (var saveFile in saveFiles)
         {
-            var saveName = saveNames[index];
-            element.Clear();
-            _saveFileData.CloneTree(element);
-            element.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
-            element.style.height = new StyleLength(new Length(400, LengthUnit.Pixel));
-            element.Q<VisualElement>("FileImage").style.backgroundImage = new StyleBackground(new Texture2D(100, 100));
-            element.Q<Label>("FileName").text = saveName;
-            element.Q<Label>("FileDate").text = "2023-10-01";
-        };
-        _saveFileList.selectionType = SelectionType.Single;
+            var saveFileData = _saveFileData.CloneTree();
+            saveFileData.Q<Label>("FileName").text = saveFile.Key;
+            saveFileData.Q<Label>("FileDate").text = saveFile.Value.LastUpdate.ToString("yyyy-MM-dd HH:mm:ss");
+            saveFileData.Q<Button>("FileDataButton").clicked += () => OnSaveFileSelected(new List<object> { saveFiles });
+            _saveFileList.Add(saveFileData);
+        }
     }    
 
     private void OnActive()

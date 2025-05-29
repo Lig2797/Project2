@@ -57,7 +57,7 @@ public class DialoguePanelUI : MonoBehaviour
     {
         GameEventsManager.Instance.dialogueEvents.onDialogueStarted += DialogueStarted;
         GameEventsManager.Instance.dialogueEvents.onDialogueFinished += DialogueFinished;
-        GameEventsManager.Instance.dialogueEvents.onDisplayDialogue += DisplayDialogue;
+        GameEventsManager.Instance.dialogueEvents.onDisplayDialogue += DisplayDialogue; 
     }
 
     private void OnDisable()
@@ -164,11 +164,11 @@ public class DialoguePanelUI : MonoBehaviour
         foreach (char letter in line.ToCharArray())
         {
             // if the submit button is pressed, finish up displaying the line right away
-            //if (GameEventsManager.Instance.inputReader.)
-            //{
-            //    dialogueText.maxVisibleCharacters = line.Length;
-            //    break;
-            //}
+            if (Input.GetKey(KeyCode.Space))
+            {
+                dialogueText.maxVisibleCharacters = line.Length;
+                break;
+            }
 
             // check for rich text tag, if found, add it without waiting
             if (letter == '<' || isAddingRichTextTag)

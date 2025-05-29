@@ -1,5 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
+using Unity.Netcode;
 using UnityEngine;
 
 [System.Serializable]
@@ -58,7 +61,7 @@ public class Player
         this._maxStamina = 100;
         this._currentStamina = 100;
         this._money = 0;
-        this._position = Vector3.zero;
+        this._position = new Vector3(4.371f, 1.154f, 0);
     }
 
     // Get State

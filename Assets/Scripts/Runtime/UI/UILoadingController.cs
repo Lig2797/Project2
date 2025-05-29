@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using System.Collections;
+using Unity.Netcode;
 
 public class UILoadingController : MonoBehaviour
 {
@@ -11,22 +12,35 @@ public class UILoadingController : MonoBehaviour
     private void Awake()
     {
         var root = GetComponent<UIDocument>().rootVisualElement;
+        
         _loadingScreen = root.Q<VisualElement>("LoadingScreen");
         _progressFill = root.Q<VisualElement>("ProgressFill");
-
-        _loadingScreen.style.display = DisplayStyle.None;
     }
 
-    public void LoadSceneWithLoading()
+    private void OnEnable()
     {
-        _loadingScreen.style.display = DisplayStyle.Flex;
+        GameEventsManager.Instance.dataEvents.onDataLoading += LoadSceneWithLoading;
+    }
+
+    private void OnDisable()
+    {
+        GameEventsManager.Instance.dataEvents.onDataLoading -= LoadSceneWithLoading;
+    }
+
+    private void Start()
+    {
+        Loader.LoaderCallback();
+    }
+
+    private void LoadSceneWithLoading(string sceneName)
+    {
         _progressFill.style.width = Length.Percent(0f);
-        StartCoroutine(LoadAsync("WorldScene"));
+        StartCoroutine(LoadAsync(sceneName));
     }
 
     private IEnumerator LoadAsync(string sceneName)
     {
-        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName); 
         operation.allowSceneActivation = false;
         
         float displayedProgress = 0f;

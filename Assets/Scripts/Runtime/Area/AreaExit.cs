@@ -15,7 +15,7 @@ public class AreaExit : MonoBehaviour
         {
             //PlayerController.Instance.CanMove = false;
             UI_Fade.Instance.gameObject.SetActive(true);
-            SceneManagement.Instance.SetTransitionName(sceneTransitionName);
+            SceneManagement.SetTransitionName(sceneTransitionName);
             UI_Fade.Instance.FadeToBlack();
             StartCoroutine(LoadSceneRoutine());
         }

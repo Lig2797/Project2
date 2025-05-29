@@ -65,9 +65,6 @@ public class InventoryController : NetworkBehaviour
         }
     }
 
-
-
-
     public void StartToLoad(GameData gameData)
     {
         _inputReader.playerActions.changeInventorySlotEvent += GetInputValueToChangeSlot;
@@ -80,6 +77,7 @@ public class InventoryController : NetworkBehaviour
         _inventoryManagerSO.RefreshCurrentHoldingItem();
         onChangeSelectedSlot.Raise(this, _inventoryManagerSO.selectedSlot);
     }
+
     public void StartToSave(ref GameData gameData)
     {
         gameData.SetInventoryData(_inventoryManagerSO.inventory);
@@ -88,5 +86,4 @@ public class InventoryController : NetworkBehaviour
         _inputReader.playerActions.openInventoryEvent -= OpenInventory;
         _inputReader.uiActions.closeInventoryEvent -= CloseInventory;
     }
-
 }

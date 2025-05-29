@@ -26,6 +26,11 @@ public class TransparentDetection : MonoBehaviour
             } 
             else if (tilemap) 
             {
+                TilemapRenderer tilemapRenderer = tilemap.GetComponent<TilemapRenderer>();
+                if (tilemapRenderer != null && !tilemapRenderer.enabled)
+                {
+                    tilemapRenderer.sortingLayerName = "Leaf";
+                }
                 StartCoroutine(FadeRoutine(tilemap, fadeTime, tilemap.color.a, transparencyAmount));
             }
         }
@@ -40,6 +45,11 @@ public class TransparentDetection : MonoBehaviour
             } 
             else if (tilemap) 
             {
+                TilemapRenderer tilemapRenderer = tilemap.GetComponent<TilemapRenderer>();
+                if (tilemapRenderer != null && !tilemapRenderer.enabled)
+                {
+                    tilemapRenderer.sortingLayerName = "Player";
+                }
                 StartCoroutine(FadeRoutine(tilemap, fadeTime, tilemap.color.a, 1f));
             }
         }

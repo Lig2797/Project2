@@ -40,6 +40,18 @@ public class InputReader : ScriptableObject
             
     }
 
+    public void EnableControl()
+    {
+        if (input != null)
+            input.Enable();
+    }
+
+    public void DisableControl()
+    {
+        if (input != null)
+            input.Disable();
+    }
+
     public void SwitchActionMap(ActionMap map)
     {
         if (input == null) return;
