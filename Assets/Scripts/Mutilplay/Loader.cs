@@ -21,7 +21,7 @@ public static class Loader
     public static void Load(Scene targetScene)
     {
         Loader.targetScene = targetScene;
-        SceneManager.LoadScene(Scene.LoadingScene.ToString());
+        SceneManager.LoadSceneAsync(Scene.LoadingScene.ToString());
     }
 
     public static void LoadNetwork(Scene targetScene)

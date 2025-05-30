@@ -302,9 +302,6 @@ public class PlayerController : Singleton<PlayerController>, IDataPersistence
         if (IsOwner)
         {
             bool isHost = NetworkManager.Singleton.IsHost && IsServer; // true only on host machine
-            
-            DataPersistenceManager.Instance.SaveGame();
-            DataPersistenceManager.Instance.CaptureScreenshot();
         }
     }
 

@@ -41,6 +41,7 @@ public class UIMainMenuController : MonoBehaviour
         GameEventsManager.Instance.activeUIPanelEvents.onActiveMainMenu += OnActive;
         GameEventsManager.Instance.activeUIPanelEvents.onDisActivateMainMenu += OnDisableActive;
         _singleplayerButton.clicked += OnSingleplayerButtonClicked;
+        _multiplayerButton.clicked += OnMultiplayerButtonClicked;
         _optionsButton.clicked += OnOptionsButtonClicked;
         _quitButton.clicked += () =>
         {
@@ -53,6 +54,7 @@ public class UIMainMenuController : MonoBehaviour
         GameEventsManager.Instance.activeUIPanelEvents.onActiveMainMenu -= OnActive;
         GameEventsManager.Instance.activeUIPanelEvents.onDisActivateMainMenu -= OnDisableActive;
         _singleplayerButton.clicked -= OnSingleplayerButtonClicked;
+        _multiplayerButton.clicked -= OnMultiplayerButtonClicked;
         _optionsButton.clicked -= OnOptionsButtonClicked;
         _quitButton.clicked -= () =>
         {
@@ -64,6 +66,13 @@ public class UIMainMenuController : MonoBehaviour
     {
         OnDisableActive();
         GameEventsManager.Instance.activeUIPanelEvents.OnActiveSingleplayer();
+    }
+
+    public void OnMultiplayerButtonClicked()
+    {
+        OnDisableActive();
+        GameMultiplayer.playMultiplayer = true;
+        Loader.Load(Loader.Scene.LobbyScene);
     }
 
     private void OnOptionsButtonClicked()

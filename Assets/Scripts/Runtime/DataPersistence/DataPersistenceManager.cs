@@ -36,8 +36,13 @@ public class DataPersistenceManager : Singleton<DataPersistenceManager>
         {
             Debug.LogWarning("Data Persistence is currently disabled!");
         }
+    }
 
+    private void Start()
+    {
+        fileName = "data_" + NetworkManager.Singleton.LocalClientId.ToString();
         this.dataHandler = new FileDataHandler(Application.persistentDataPath, fileName, useEncryption);
+        InitializeSelectedProfileId(null);
     }
 
     private void OnEnable()
@@ -49,6 +54,12 @@ public class DataPersistenceManager : Singleton<DataPersistenceManager>
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        SaveGame();
+        CaptureScreenshot();
     }
 
     public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -100,6 +111,11 @@ public class DataPersistenceManager : Singleton<DataPersistenceManager>
 
     public void LoadGame()
     {
+        if (SceneManager.GetActiveScene().name == Loader.Scene.MainMenu.ToString() ||
+            SceneManager.GetActiveScene().name == Loader.Scene.LoadingScene.ToString() ||
+            SceneManager.GetActiveScene().name == Loader.Scene.LobbyScene.ToString() ||
+            disableDataPersistence) return;
+
         // return right away if data persistence is disabled
         if (disableDataPersistence)
         {
@@ -129,7 +145,7 @@ public class DataPersistenceManager : Singleton<DataPersistenceManager>
         }
     }
 
-    public void SaveGame()
+    private void SaveGame()
     {
         if (SceneManager.GetActiveScene().name == Loader.Scene.MainMenu.ToString() ||
             SceneManager.GetActiveScene().name == Loader.Scene.LoadingScene.ToString() ||
@@ -161,7 +177,7 @@ public class DataPersistenceManager : Singleton<DataPersistenceManager>
 
     private void OnApplicationQuit()
     {
-        SaveGame();
+        //SaveGame();
     }
 
     private List<IDataPersistence> FindAllDataPersistenceObjects()
@@ -181,7 +197,7 @@ public class DataPersistenceManager : Singleton<DataPersistenceManager>
         return dataHandler.LoadAllProfiles();
     }
 
-    public void CaptureScreenshot()
+    private void CaptureScreenshot()
     {
         RenderTexture renderTexture = new RenderTexture(Camera.main.pixelWidth, Camera.main.pixelHeight, -10);
         Camera.main.targetTexture = renderTexture;

@@ -11,7 +11,7 @@ public class GameMultiplayer : Singleton<GameMultiplayer>
     public const int MAX_PLAYER_AMOUNT = 4;
     private const string PLAYER_PREFS_PLAYER_NAME_MULTIPLAYER = "PlayerNameMultiplayer";
 
-    public static bool playMultiplayer = true;
+    public static bool playMultiplayer = false;
 
     public event EventHandler OnTryingToJoinGame;
     public event EventHandler OnFailedToJoinGame;

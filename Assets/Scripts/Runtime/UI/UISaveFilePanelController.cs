@@ -111,9 +111,9 @@ public class UISaveFilePanelController : MonoBehaviour
     private void PopulateSaveFiles()
     {
         Dictionary<string, GameData> saveFiles = DataPersistenceManager.Instance.GetAllProfilesGameData();
-
+        var sortedByValue = saveFiles.OrderBy(pair => pair.Value.LastUpdate);
         _saveFileList.Clear();
-        foreach (var saveFile in saveFiles)
+        foreach (var saveFile in sortedByValue)
         {
             var saveFileData = _saveFileData.CloneTree();
             saveFileData.Q<VisualElement>("FileImage").style.backgroundImage = DataPersistenceManager.Instance.LoadScreenshot(saveFile.Key);
