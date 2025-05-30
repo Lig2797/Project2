@@ -6,6 +6,7 @@ using System.Linq;
 using Unity.Netcode;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 using static UnityEngine.Rendering.Universal.PixelPerfectCamera;
 
@@ -79,8 +80,11 @@ public class CropManager : Singleton<CropManager>, IDataPersistence
             else
             {
                 var cropCurrentData = PlantedCropsNetwork[networkPos];
-                cropCurrentData.CurrentStage = stage; // update stage
-                PlantedCropsNetwork[networkPos] = cropCurrentData;
+                if (stage != cropCurrentData.CurrentStage)
+                {
+                    cropCurrentData.CurrentStage = stage; // update stage
+                    PlantedCropsNetwork[networkPos] = cropCurrentData;
+                }
             }
         }
 
@@ -113,11 +117,16 @@ public class CropManager : Singleton<CropManager>, IDataPersistence
             cropTilemap.SetTile(plantPosition, null);
         }
         else
-        cropTilemap.SetTile(plantPosition, crop.CropSetting.growthStages[stage-1]);
+        {
+            cropTilemap.SetTile(plantPosition, crop.CropSetting.growthStages[stage]);
+        }
     }
 
     public bool TryToHarverst(Vector3Int pos)
     {
+        var sceneName = SceneManager.GetActiveScene().name;
+        if (sceneName != "WorldScene" || sceneName != "GameplayScene") return false;
+
         var networkPos = new NetworkVector3Int(pos);
 
         if (PlantedCropsNetwork.ContainsKey(networkPos) && PlantedCropsNetwork[networkPos].IsFullyGrown())
@@ -143,8 +152,8 @@ public class CropManager : Singleton<CropManager>, IDataPersistence
                 else ratioArray[i] = 0f;
             }
 
-            UtilsClass.AdjustRatioByFertilizerLevel(ref ratioArray, cropCurrentData.QualityFertilizedLevel); // Adjust the ratio based on fertilizer level
-
+            // Adjust the level ratio based on fertilizer level
+            UtilsClass.AdjustRatioByFertilizerLevel(ref ratioArray, cropCurrentData.QualityFertilizedLevel);
             int level = UtilsClass.PickOneByRatio(levelArray, ratioArray);
 
             Item CropSeedInfo = ItemDatabase.Instance.GetItemByName(cropCurrentData.CropSeedName.ToString());
@@ -172,32 +181,34 @@ public class CropManager : Singleton<CropManager>, IDataPersistence
 
     public void UpdateCropsGrowthTime(int minute)
     {
+        var sceneName = SceneManager.GetActiveScene().name;
+        if (sceneName != "WorldScene" || sceneName != "GameplayScene") return;
         foreach (var crop in PlantedCropsNetwork)
         {
             var cropInfo = crop.Value;
+            Debug.Log("Current stage " + cropInfo.CurrentStage);
+            if (cropInfo.IsDead) continue;
+            
             bool isWatered = TileManager.Instance.WateredTilesNetwork.ContainsKey(crop.Key);
-            if (!cropInfo.IsFullyGrown())
+            var cropPos = crop.Key.ToVector3Int();
+            if (cropInfo.Season != EnviromentalStatusManager.Instance.eStarus.SeasonStatus)
             {
-                var cropPos = crop.Key.ToVector3Int();
-                if (cropInfo.Season != EnviromentalStatusManager.Instance.eStarus.SeasonStatus)
-                {
-                    TryModifyCrop(cropPos, cropInfo.CropSeedName.ToString(), 0); // this is change stage so dont need reassign the variable
-                }
-                if (isWatered)
-                {
-                    cropInfo.GrowthTimeUpdate(minute);
-                    PlantedCropsNetwork[crop.Key] = cropInfo;
-                }
-                if (cropInfo.NeedChangeStage)
-                {
-                    cropInfo.NeedChangeStage = false;
-                    TryModifyCrop(cropPos, cropInfo.CropSeedName.ToString(), cropInfo.CurrentStage); // this is change stage so dont need reassign the variable
-                }
+                cropInfo.CurrentStage = 0; // Crop is dead
+                cropInfo.NeedChangeStage = true;
             }
-            //else
-            //{
-            //    Debug.Log("crop fully grew");
-            //}
+            else
+            {
+                cropInfo.GrowthTimeUpdate(minute, isWatered);
+            }
+            PlantedCropsNetwork[crop.Key] = cropInfo;
+            Debug.Log("crop growth time: " + cropInfo.StageTimeCounter);
+
+            if (cropInfo.NeedChangeStage)
+            {
+                cropInfo.NeedChangeStage = false;
+                PlantedCropsNetwork[crop.Key] = cropInfo;
+                TryModifyCrop(cropPos, cropInfo.CropSeedName.ToString(), cropInfo.CurrentStage); // this is change stage so dont need reassign the variable
+            }
 
         }
     }

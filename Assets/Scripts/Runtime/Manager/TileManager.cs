@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public class TileManager : Singleton<TileManager>, IDataPersistence
@@ -91,7 +92,8 @@ public class TileManager : Singleton<TileManager>, IDataPersistence
     }
     public void UpdateAllTileStatus(int minute)
     {
-        if (!IsServer) return;
+        var sceneName = SceneManager.GetActiveScene().name;
+        if (sceneName != "WorldScene" || sceneName != "GameplayScene") return;
 
         List<NetworkVector3Int> hoedTilesToRemove = new();
         List<NetworkVector3Int> wateredTilesToRemove = new();
@@ -147,7 +149,8 @@ public class TileManager : Singleton<TileManager>, IDataPersistence
 
     public void ModifyTile(Vector3Int tilePos, string tilemapName, string ruleTileName = null)
     {
-
+        var sceneName = SceneManager.GetActiveScene().name;
+        if (sceneName != "WorldScene" || sceneName != "GameplayScene") return;
         RequestToModifyTileServerRpc(tilePos, tilemapName, ruleTileName);
 
         //HoedTileData newHoedTile = new HoedTileData();

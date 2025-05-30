@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2986477172446649099}
   - component: {fileID: 99882147283229194}
   - component: {fileID: 181672851930991639}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Maple Tree
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -181,21 +181,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98572c368dbbedb439adcb4826b1fa13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageableHit:
+  onHit:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2986477172446649099}
-        m_TargetAssemblyTypeName: EnvironmentalResource, Assembly-CSharp
-        m_MethodName: OnHit
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+  playerHealth: {fileID: 0}
+  playerMaxHealth: {fileID: 0}
   _maxHealth: 40
   _health: 40
   _isAlive: 1
@@ -236,7 +226,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8856739890972930036}
   - component: {fileID: 7025038354161402966}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: DamageableZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -305,7 +295,7 @@ GameObject:
   m_Component:
   - component: {fileID: 827737987392620383}
   - component: {fileID: 7866905426365233233}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Root_DamageableZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}

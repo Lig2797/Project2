@@ -12,6 +12,8 @@ public struct CropData : INetworkSerializable
     public int TimeToChangeStage;
     public int StageTimeCounter;
     public bool NeedChangeStage;
+    public int timeToDead;
+    public bool IsDead => CurrentStage == 0;
 
     // --- Metadata ---
     public int StagesCount;
@@ -39,6 +41,8 @@ public struct CropData : INetworkSerializable
         TimeToChangeStage = timeToChangeStage;
         StageTimeCounter = 0;
         NeedChangeStage = false;
+        timeToDead = 0;
+
 
         StagesCount = stagesCount;
         Season = season;
@@ -52,24 +56,36 @@ public struct CropData : INetworkSerializable
     }
 
     // --- Logic ---
-    public void GrowthTimeUpdate(int minutes)
+    public void GrowthTimeUpdate(int minutes, bool isWatered)
     {
-        if (IsFullyGrown()) return;
-
-        minutes *= FastGrowFertilizedLevel;
-        StageTimeCounter += minutes;
-
-        if (StageTimeCounter >= TimeToChangeStage)
+        if (isWatered)
         {
-            NeedChangeStage = true;
-            CurrentStage++;
-            StageTimeCounter = 0;
+            if (IsFullyGrown()) return;
+            minutes *= FastGrowFertilizedLevel;
+            StageTimeCounter += minutes;
+            timeToDead = 0;
+            if (StageTimeCounter >= TimeToChangeStage)
+            {
+                NeedChangeStage = true;
+                CurrentStage++;
+                StageTimeCounter = 0;
+            }
+        }
+        else
+        {
+            if (CurrentStage == 1) return;
+            timeToDead += minutes;
+            if (timeToDead >= 20000)
+            {
+                CurrentStage = 0; // Crop is dead
+                NeedChangeStage = true;
+            }
         }
     }
 
     public bool IsFullyGrown()
     {
-        return CurrentStage >= StagesCount;
+        return CurrentStage >= StagesCount-1;
     }
 
     // --- Network Serialization ---
@@ -79,6 +95,7 @@ public struct CropData : INetworkSerializable
         serializer.SerializeValue(ref TimeToChangeStage);
         serializer.SerializeValue(ref StageTimeCounter);
         serializer.SerializeValue(ref NeedChangeStage);
+        serializer.SerializeValue(ref timeToDead);
 
         serializer.SerializeValue(ref StagesCount);
         serializer.SerializeValue(ref Season);
