@@ -46,7 +46,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackDamage: 10
-  knockback: {x: 0, y: 0}
+  knockbackStrength: 0
+  hitAbleLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!58 &3808227476745265482
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -163,7 +166,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackDamage: 10
-  knockback: {x: 0, y: 0}
+  knockbackStrength: 0
+  hitAbleLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!58 &401889562024742841
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -347,7 +353,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackDamage: 10
-  knockback: {x: 0, y: 0}
+  knockbackStrength: 0
+  hitAbleLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!58 &1114714839434946193
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -891,7 +900,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackDamage: 10
-  knockback: {x: 0, y: 0}
+  knockbackStrength: 0
+  hitAbleLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!58 &8579856524712694883
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -974,7 +986,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackDamage: 10
-  knockback: {x: 0, y: 0}
+  knockbackStrength: 0
+  hitAbleLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!58 &81785516601716443
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1057,7 +1072,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackDamage: 10
-  knockback: {x: 0, y: 0}
+  knockbackStrength: 0
+  hitAbleLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!58 &5129886111007575071
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1140,7 +1158,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackDamage: 10
-  knockback: {x: 0, y: 0}
+  knockbackStrength: 0
+  hitAbleLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!60 &8212655262436372830
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -1273,7 +1294,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackDamage: 10
-  knockback: {x: 0, y: 0}
+  knockbackStrength: 0
+  hitAbleLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!60 &7868024154826002924
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -1406,7 +1430,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackDamage: 10
-  knockback: {x: 0, y: 0}
+  knockbackStrength: 0
+  hitAbleLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!60 &4572432374619233377
 PolygonCollider2D:
   m_ObjectHideFlags: 0

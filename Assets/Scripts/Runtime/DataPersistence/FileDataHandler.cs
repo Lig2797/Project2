@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -21,20 +21,18 @@ public class FileDataHandler
 
     public GameData Load(string profileId, bool allowRestoreFromBackup = true)
     {
-        // base case - if the profileId is null, return right away
         if (profileId == null)
         {
             return null;
         }
 
-        // use Path.Combine to account for different OS's having different path separators
         string fullPath = Path.Combine(dataDirPath, profileId, dataFileName);
         GameData loadedData = null;
+
         if (File.Exists(fullPath))
         {
             try
             {
-                // load the serialized data from the file
                 string dataToLoad = "";
                 using (FileStream stream = new FileStream(fullPath, FileMode.Open))
                 {
@@ -44,31 +42,24 @@ public class FileDataHandler
                     }
                 }
 
-                // optionally decrypt the data
                 if (useEncryption)
                 {
                     dataToLoad = EncryptDecrypt(dataToLoad);
                 }
 
-                // deserialize the data from Json back into the C# object
                 loadedData = JsonUtility.FromJson<GameData>(dataToLoad);
             }
             catch (Exception e)
             {
-                // since we're calling Load(..) recursively, we need to account for the case where
-                // the rollback succeeds, but data is still failing to load for some other reason,
-                // which without this check may cause an infinite recursion loop.
                 if (allowRestoreFromBackup)
                 {
                     Debug.LogWarning("Failed to load data file. Attempting to roll back.\n" + e);
                     bool rollbackSuccess = AttemptRollback(fullPath);
                     if (rollbackSuccess)
                     {
-                        // try to load again recursively
                         loadedData = Load(profileId, false);
                     }
                 }
-                // if we hit this else block, one possibility is that the backup file is also corrupt
                 else
                 {
                     Debug.LogError("Error occured when trying to load file at path: "
@@ -81,30 +72,24 @@ public class FileDataHandler
 
     public void Save(GameData data, string profileId)
     {
-        // base case - if the profileId is null, return right away
         if (profileId == null)
         {
             return;
         }
 
-        // use Path.Combine to account for different OS's having different path separators
         string fullPath = Path.Combine(dataDirPath, profileId, dataFileName);
         string backupFilePath = fullPath + backupExtension;
         try
         {
-            // create the directory the file will be written to if it doesn't already exist
             Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
 
-            // serialize the C# game data object into Json
             string dataToStore = JsonUtility.ToJson(data, true);
 
-            // optionally encrypt the data
             if (useEncryption)
             {
                 dataToStore = EncryptDecrypt(dataToStore);
             }
 
-            // write the serialized data to the file
             using (FileStream stream = new FileStream(fullPath, FileMode.Create))
             {
                 using (StreamWriter writer = new StreamWriter(stream))
@@ -113,21 +98,15 @@ public class FileDataHandler
                 }
             }
 
-            // verify the newly saved file can be loaded successfully
             GameData verifiedGameData = Load(profileId);
-            // if the data can be verified, back it up
             if (verifiedGameData != null)
             {
                 File.Copy(fullPath, backupFilePath, true);
             }
-            // otherwise, something went wrong and we should throw an exception
             else
             {
                 throw new Exception("Save file could not be verified and backup could not be created.");
             }
-
-            Debug.Log("Saved data to file: " + fullPath + " and created backup at: " + backupFilePath);
-
         }
         catch (Exception e)
         {
@@ -137,7 +116,6 @@ public class FileDataHandler
 
     public void Delete(string profileId)
     {
-        // base case - if the profileId is null, return right away
         if (profileId == null)
         {
             return;
@@ -275,5 +253,29 @@ public class FileDataHandler
         }
 
         return success;
+    }
+
+    public void SaveScreenshot(string profileId, Texture2D screenshot)
+    {
+        string fullPath = Path.Combine(dataDirPath, profileId, "_screenshot.png");
+        byte[] bytes = screenshot.EncodeToPNG();
+        File.WriteAllBytes(fullPath, bytes);
+    }
+
+    public Texture2D GetScreenshot(string profileId)
+    {
+        string fullPath = Path.Combine(dataDirPath, profileId, "_screenshot.png");
+        if (File.Exists(fullPath))
+        {
+            byte[] bytes = File.ReadAllBytes(fullPath);
+            Texture2D screenshot = new Texture2D(2, 2);
+            screenshot.LoadImage(bytes);
+            return screenshot;
+        }
+        else
+        {
+            Debug.LogWarning("No screenshot found for profileId: " + profileId);
+            return null;
+        }
     }
 }

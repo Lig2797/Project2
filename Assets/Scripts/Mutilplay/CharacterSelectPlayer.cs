@@ -45,7 +45,7 @@ public class CharacterSelectPlayer : MonoBehaviour {
         if (GameMultiplayer.Instance.IsPlayerIndexConnected(playerIndex)) {
             Show();
 
-            PlayerData playerData = GameMultiplayer.Instance.GetPlayerDataFromPlayerIndex(playerIndex);
+            PlayerDataNetwork playerData = GameMultiplayer.Instance.GetPlayerDataFromPlayerIndex(playerIndex);
 
             readyGameObject.SetActive(CharacterSelectReady.Instance.IsPlayerReady(playerData.clientId));
 

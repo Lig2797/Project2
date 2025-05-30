@@ -39,13 +39,13 @@ public class UISaveFilePanelController : MonoBehaviour
     private void Start()
     {
         _loadGameButton.SetEnabled(false);
+        PopulateSaveFiles();
     }
 
     private void OnEnable()
     {
         GameEventsManager.Instance.activeUIPanelEvents.onActiveSingleplayer += OnActive;
         GameEventsManager.Instance.activeUIPanelEvents.onDisActivateSingleplayer += OnDisableActive;
-        GameEventsManager.Instance.dataEvents.onGetListSaveFileData += PopulateSaveFiles;
         _newGameButton.clicked += OnNewGameButtonClicked;
         _loadGameButton.clicked += OnLoadGameButtonClicked;
         _saveFileBackButton.clicked += OnBackButtonClicked;
@@ -58,7 +58,6 @@ public class UISaveFilePanelController : MonoBehaviour
     {
         GameEventsManager.Instance.activeUIPanelEvents.onActiveSingleplayer -= OnActive;
         GameEventsManager.Instance.activeUIPanelEvents.onDisActivateSingleplayer -= OnDisableActive;
-        GameEventsManager.Instance.dataEvents.onGetListSaveFileData -= PopulateSaveFiles;
         _newGameButton.clicked -= OnNewGameButtonClicked;
         _loadGameButton.clicked -= OnLoadGameButtonClicked;
         _saveFileBackButton.clicked -= OnBackButtonClicked;
@@ -74,14 +73,11 @@ public class UISaveFilePanelController : MonoBehaviour
 
     private void OnLoadGameButtonClicked()
     {
-        //var selected = _saveFileList.selectedItem as string;
-        //if (!string.IsNullOrEmpty(selected))
-        //{
-        //    OnSaveFileSelected(_saveFileList.selectedItems);
-        //    Debug.Log("Load game: " + selected);
-        //    _saveFilePanel.style.display = DisplayStyle.None;
-        //    GameEventsManager.Instance.startGameEvents.OnLoadGameButtonClicked(selected);
-        //}
+        _initFileNamePanel.style.display = DisplayStyle.None;
+        _saveFilePanel.style.display = DisplayStyle.None;
+
+        GameMultiplayer.playMultiplayer = false;
+        Loader.Load(Loader.Scene.LobbyScene);
     }
 
     private void OnBackButtonClicked()
@@ -94,7 +90,7 @@ public class UISaveFilePanelController : MonoBehaviour
     {
         _initFileNamePanel.style.display = DisplayStyle.None;
         _saveFilePanel.style.display = DisplayStyle.None;
-        GameEventsManager.Instance.dataEvents.OnInitialized("data");
+        GameEventsManager.Instance.dataEvents.OnInitialized(_fileNameInput.value.ToString());
         
         GameMultiplayer.playMultiplayer = false;
         Loader.Load(Loader.Scene.LobbyScene);
@@ -106,20 +102,24 @@ public class UISaveFilePanelController : MonoBehaviour
         _initFileNamePanel.style.display = DisplayStyle.None;
     }
 
-    private void OnSaveFileSelected(IEnumerable<object> selectedItems)
+    private void OnSaveFileSelected(IEnumerable<object> selectedItems, string profileId)
     {
         _loadGameButton.SetEnabled(selectedItems != null && selectedItems.Any());
+        GameEventsManager.Instance.dataEvents.OnInitialized(profileId);
     }
 
-    private void PopulateSaveFiles(Dictionary<string, GameData> saveFiles)
+    private void PopulateSaveFiles()
     {
+        Dictionary<string, GameData> saveFiles = DataPersistenceManager.Instance.GetAllProfilesGameData();
+
         _saveFileList.Clear();
         foreach (var saveFile in saveFiles)
         {
             var saveFileData = _saveFileData.CloneTree();
+            saveFileData.Q<VisualElement>("FileImage").style.backgroundImage = DataPersistenceManager.Instance.LoadScreenshot(saveFile.Key);
             saveFileData.Q<Label>("FileName").text = saveFile.Key;
             saveFileData.Q<Label>("FileDate").text = saveFile.Value.LastUpdate.ToString("yyyy-MM-dd HH:mm:ss");
-            saveFileData.Q<Button>("FileDataButton").clicked += () => OnSaveFileSelected(new List<object> { saveFiles });
+            saveFileData.Q<Button>("FileDataButton").clicked += () => OnSaveFileSelected(new List<object> { saveFiles }, saveFile.Key);
             _saveFileList.Add(saveFileData);
         }
     }    

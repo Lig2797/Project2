@@ -190,7 +190,7 @@ public class PlayerController : Singleton<PlayerController>, IDataPersistence
     #region Dependencies Scripts
     [Header("Dependencies")]
     [SerializeField] private InputReader _inputReader;
-    private Player player;
+    private PlayerData player;
 
     private VehicleController _currentVehicle;
     public VehicleController CurrentVehicle
@@ -302,7 +302,9 @@ public class PlayerController : Singleton<PlayerController>, IDataPersistence
         if (IsOwner)
         {
             bool isHost = NetworkManager.Singleton.IsHost && IsServer; // true only on host machine
+            
             DataPersistenceManager.Instance.SaveGame();
+            DataPersistenceManager.Instance.CaptureScreenshot();
         }
     }
 
@@ -585,6 +587,11 @@ public class PlayerController : Singleton<PlayerController>, IDataPersistence
         {
             UseCurrentItem();
         }
+    }
+
+    public void DeactivateAttack2()
+    {
+        animator.SetBool("CanAttack2", false);
     }
 
     private void UseCurrentItem()

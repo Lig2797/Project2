@@ -38,13 +38,12 @@ public class DataPersistenceManager : Singleton<DataPersistenceManager>
         }
 
         this.dataHandler = new FileDataHandler(Application.persistentDataPath, fileName, useEncryption);
-
-        InitializeSelectedProfileId();
     }
 
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
+        GameEventsManager.Instance.dataEvents.onInitialized += InitializeSelectedProfileId;
     }
 
     private void OnDisable()
@@ -78,19 +77,20 @@ public class DataPersistenceManager : Singleton<DataPersistenceManager>
         // delete the data for this profile id
         dataHandler.Delete(profileId);
         // initialize the selected profile id
-        InitializeSelectedProfileId();
+        InitializeSelectedProfileId(null);
         // reload the game so that our data matches the newly selected profile id
         LoadGame();
     }
 
-    private void InitializeSelectedProfileId()
+    private void InitializeSelectedProfileId(string profileId)
     {
-        this.selectedProfileId = dataHandler.GetMostRecentlyUpdatedProfileId();
-        if (overrideSelectedProfileId)
+        if (overrideSelectedProfileId || profileId == "")
         {
             this.selectedProfileId = testSelectedProfileId;
-            Debug.LogWarning("Overrode selected profile id with test id: " + testSelectedProfileId);
+            return;
         }
+
+        this.selectedProfileId = profileId;
     }
 
     public void NewGame()
@@ -131,6 +131,11 @@ public class DataPersistenceManager : Singleton<DataPersistenceManager>
 
     public void SaveGame()
     {
+        if (SceneManager.GetActiveScene().name == Loader.Scene.MainMenu.ToString() ||
+            SceneManager.GetActiveScene().name == Loader.Scene.LoadingScene.ToString() ||
+            SceneManager.GetActiveScene().name == Loader.Scene.LobbyScene.ToString() ||
+            disableDataPersistence) return;
+
         // return right away if data persistence is disabled
         if (disableDataPersistence)
         {
@@ -174,6 +179,29 @@ public class DataPersistenceManager : Singleton<DataPersistenceManager>
     public Dictionary<string, GameData> GetAllProfilesGameData()
     {
         return dataHandler.LoadAllProfiles();
+    }
+
+    public void CaptureScreenshot()
+    {
+        RenderTexture renderTexture = new RenderTexture(Camera.main.pixelWidth, Camera.main.pixelHeight, -10);
+        Camera.main.targetTexture = renderTexture;
+        Camera.main.Render();
+
+        RenderTexture.active = renderTexture;
+        Texture2D screenshot = new Texture2D(Camera.main.pixelWidth, Camera.main.pixelHeight, TextureFormat.RGB24, false);
+        screenshot.ReadPixels(new Rect(0, 0, Camera.main.pixelWidth, Camera.main.pixelHeight), 0, 0);
+        screenshot.Apply();
+
+        Camera.main.targetTexture = null;
+        RenderTexture.active = null;
+        Destroy(renderTexture);
+
+        dataHandler.SaveScreenshot(selectedProfileId, screenshot);
+    }
+
+    public Texture2D LoadScreenshot(string profileId)
+    {
+        return dataHandler.GetScreenshot(profileId);
     }
 
     private IEnumerator AutoSave()

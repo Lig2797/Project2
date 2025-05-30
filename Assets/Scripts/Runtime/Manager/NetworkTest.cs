@@ -22,11 +22,10 @@ public class NetworkTest : MonoBehaviour
         });
         HostBtn.onClick.AddListener(() =>
         {
-            DataPersistenceManager.Instance.SaveGame();
-            //NetworkManager.Singleton.StartHost();
-            //ServerBtn.gameObject.SetActive(false);
-            //HostBtn.gameObject.SetActive(false);
-            //ClientBtn.gameObject.SetActive(false);
+            NetworkManager.Singleton.StartHost();
+            ServerBtn.gameObject.SetActive(false);
+            HostBtn.gameObject.SetActive(false);
+            ClientBtn.gameObject.SetActive(false);
         });
         ClientBtn.onClick.AddListener(() =>
         {

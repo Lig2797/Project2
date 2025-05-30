@@ -8,7 +8,7 @@ public class GameData
 {
     [SerializeField] private string _saveFileName;
     [SerializeField] private string _lastUpdate;
-    [SerializeField] private Player _playerData;
+    [SerializeField] private PlayerData _playerData;
     [SerializeField] private Inventory _inventoryData;
     [SerializeField] private EnvironmentalStatus _eStatus;
     [SerializeField] private ListItemWorld _listItemWold;
@@ -18,7 +18,7 @@ public class GameData
     { get { return _saveFileName; } }
     public DateTime LastUpdate
     { get { return Convert.ToDateTime(_lastUpdate); } }
-    public Player PlayerData
+    public PlayerData PlayerData
     { get { return _playerData; } }
 
     public Inventory InventoryData
@@ -39,7 +39,7 @@ public class GameData
     {
         this._saveFileName = string.Empty;
         this._lastUpdate = DateTime.Now.ToString("O");
-        this._playerData = new Player();
+        this._playerData = new PlayerData();
         this._inventoryData = new Inventory();
         this._eStatus = new EnvironmentalStatus();
         this._listItemWold = new ListItemWorld();
@@ -47,7 +47,7 @@ public class GameData
         this._cropsSaveData = new CropsSaveData();
     }
 
-    public void SetPlayerData(Player playerData)
+    public void SetPlayerData(PlayerData playerData)
     {
         this._playerData = playerData;
     }

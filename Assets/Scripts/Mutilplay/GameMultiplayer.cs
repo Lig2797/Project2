@@ -22,7 +22,7 @@ public class GameMultiplayer : Singleton<GameMultiplayer>
     [SerializeField] private List<Color> playerColorList;
 
 
-    private NetworkList<PlayerData> playerDataNetworkList;
+    private NetworkList<PlayerDataNetwork> playerDataNetworkList;
     private string playerName;
 
     protected override void Awake()
@@ -31,7 +31,7 @@ public class GameMultiplayer : Singleton<GameMultiplayer>
 
         playerName = PlayerPrefs.GetString(PLAYER_PREFS_PLAYER_NAME_MULTIPLAYER, "PlayerName" + UnityEngine.Random.Range(100, 1000));
 
-        playerDataNetworkList = new NetworkList<PlayerData>();
+        playerDataNetworkList = new NetworkList<PlayerDataNetwork>();
         playerDataNetworkList.OnListChanged += PlayerDataNetworkList_OnListChanged;
     }
 
@@ -57,7 +57,7 @@ public class GameMultiplayer : Singleton<GameMultiplayer>
         PlayerPrefs.SetString(PLAYER_PREFS_PLAYER_NAME_MULTIPLAYER, playerName);
     }
 
-    private void PlayerDataNetworkList_OnListChanged(NetworkListEvent<PlayerData> changeEvent)
+    private void PlayerDataNetworkList_OnListChanged(NetworkListEvent<PlayerDataNetwork> changeEvent)
     {
         OnPlayerDataNetworkListChanged?.Invoke(this, EventArgs.Empty);
     }
@@ -74,7 +74,7 @@ public class GameMultiplayer : Singleton<GameMultiplayer>
     {
         for (int i = 0; i < playerDataNetworkList.Count; i++)
         {
-            PlayerData playerData = playerDataNetworkList[i];
+            PlayerDataNetwork playerData = playerDataNetworkList[i];
             if (playerData.clientId == clientId)
             {
                 // Disconnected!
@@ -85,7 +85,7 @@ public class GameMultiplayer : Singleton<GameMultiplayer>
 
     private void NetworkManager_OnClientConnectedCallback(ulong clientId)
     {
-        playerDataNetworkList.Add(new PlayerData
+        playerDataNetworkList.Add(new PlayerDataNetwork
         {
             clientId = clientId,
             characterId = GetFirstUnusedColorId(),
@@ -133,7 +133,7 @@ public class GameMultiplayer : Singleton<GameMultiplayer>
     {
         int playerDataIndex = GetPlayerDataIndexFromClientId(serverRpcParams.Receive.SenderClientId);
 
-        PlayerData playerData = playerDataNetworkList[playerDataIndex];
+        PlayerDataNetwork playerData = playerDataNetworkList[playerDataIndex];
 
         playerData.playerName = playerName;
 
@@ -145,7 +145,7 @@ public class GameMultiplayer : Singleton<GameMultiplayer>
     {
         int playerDataIndex = GetPlayerDataIndexFromClientId(serverRpcParams.Receive.SenderClientId);
 
-        PlayerData playerData = playerDataNetworkList[playerDataIndex];
+        PlayerDataNetwork playerData = playerDataNetworkList[playerDataIndex];
 
         playerData.playerId = playerId;
 
@@ -248,9 +248,9 @@ public class GameMultiplayer : Singleton<GameMultiplayer>
         return -1;
     }
 
-    public PlayerData GetPlayerDataFromClientId(ulong clientId)
+    public PlayerDataNetwork GetPlayerDataFromClientId(ulong clientId)
     {
-        foreach (PlayerData playerData in playerDataNetworkList)
+        foreach (PlayerDataNetwork playerData in playerDataNetworkList)
         {
             if (playerData.clientId == clientId)
             {
@@ -260,12 +260,12 @@ public class GameMultiplayer : Singleton<GameMultiplayer>
         return default;
     }
 
-    public PlayerData GetPlayerData()
+    public PlayerDataNetwork GetPlayerData()
     {
         return GetPlayerDataFromClientId(NetworkManager.Singleton.LocalClientId);
     }
 
-    public PlayerData GetPlayerDataFromPlayerIndex(int playerIndex)
+    public PlayerDataNetwork GetPlayerDataFromPlayerIndex(int playerIndex)
     {
         return playerDataNetworkList[playerIndex];
     }
@@ -291,7 +291,7 @@ public class GameMultiplayer : Singleton<GameMultiplayer>
 
         int playerDataIndex = GetPlayerDataIndexFromClientId(serverRpcParams.Receive.SenderClientId);
 
-        PlayerData playerData = playerDataNetworkList[playerDataIndex];
+        PlayerDataNetwork playerData = playerDataNetworkList[playerDataIndex];
 
         playerData.characterId = colorId;
 
@@ -300,7 +300,7 @@ public class GameMultiplayer : Singleton<GameMultiplayer>
 
     private bool IsColorAvailable(int colorId)
     {
-        foreach (PlayerData playerData in playerDataNetworkList)
+        foreach (PlayerDataNetwork playerData in playerDataNetworkList)
         {
             if (playerData.characterId == colorId)
             {

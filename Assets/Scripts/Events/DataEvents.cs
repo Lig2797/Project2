@@ -25,10 +25,4 @@ public class DataEvents
     {
         onDataLoading?.Invoke(data);
     }
-
-    public event Action<Dictionary<string, GameData>> onGetListSaveFileData;
-    public void OnGetListSaveFileData(Dictionary<string, GameData> saveFiles)
-    {
-        onGetListSaveFileData?.Invoke(saveFiles);
-    }
 }

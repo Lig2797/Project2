@@ -80,6 +80,8 @@ public class EnviromentalStatusManager : Singleton<EnviromentalStatusManager>, I
 
     public void SaveData(ref GameData gameData)
     {
+        if (!IsHost) return;
+
         gameData.SetSeason(eStarus);
     }
 
