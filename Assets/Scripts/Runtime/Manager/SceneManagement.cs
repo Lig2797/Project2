@@ -2,14 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SceneManagement : Singleton<SceneManagement>
+public static class SceneManagement
 {
-    public string SceneName { get; private set; }
-    public string SceneTransitionName { get; private set; }
+    public static string SceneName { get; private set; }
+    public static string SceneTransitionName { get; private set; }
 
-    public void SetTransitionName(string sceneTransitionName) 
+    public static string GetCurrentSceneName()
     {
-        this.SceneTransitionName = sceneTransitionName;
+        return UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+    }
+
+    public static void SetTransitionName(string transitionName)
+    {
+        SceneTransitionName = transitionName;
     }
 }
-

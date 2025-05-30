@@ -10,8 +10,9 @@ public static class Loader
     {
         MainMenu,
         WorldScene,
-        LoadingScene,
+        Cutscene,
         LobbyScene,
+        LoadingScene,
         CharacterSelectScene,
     }
 
@@ -20,7 +21,6 @@ public static class Loader
     public static void Load(Scene targetScene)
     {
         Loader.targetScene = targetScene;
-
         SceneManager.LoadScene(Scene.LoadingScene.ToString());
     }
 
@@ -31,7 +31,7 @@ public static class Loader
 
     public static void LoaderCallback()
     {
-        SceneManager.LoadScene(targetScene.ToString());
+        GameEventsManager.Instance.dataEvents.OnDataLoading(targetScene.ToString());
     }
 
 }

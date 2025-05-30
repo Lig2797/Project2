@@ -90,7 +90,10 @@ public class TileTargeter : NetworkBehaviour
     #region Before Gameloop
     private void Awake()
     {
-        GetAllTilemaps();
+        if (SceneManagement.GetCurrentSceneName().Equals(Loader.Scene.WorldScene))
+        {
+            GetAllTilemaps();
+        }
         TargetTilemap = Tilemaps.LastOrDefault();
     }
     private void Start()
@@ -103,8 +106,12 @@ public class TileTargeter : NetworkBehaviour
 
     void Update()
     {
-        GetTargetTile();
+        if (SceneManagement.GetCurrentSceneName().Equals(Loader.Scene.WorldScene))
+        {
+            GetTargetTile();
+        }
     }
+
     void GetAllTilemaps()
     {
         GameObject gridObject = GameObject.Find("Grid");

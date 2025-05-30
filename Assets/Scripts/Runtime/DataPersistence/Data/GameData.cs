@@ -6,12 +6,18 @@ using UnityEngine;
 [System.Serializable]
 public class GameData
 {
+    [SerializeField] private string _saveFileName;
+    [SerializeField] private string _lastUpdate;
     [SerializeField] private Player _playerData;
     [SerializeField] private Inventory _inventoryData;
     [SerializeField] private EnvironmentalStatus _eStatus;
     [SerializeField] private ListItemWorld _listItemWold;
     [SerializeField] private TileSaveData _tileSaveData;
     [SerializeField] private CropsSaveData _cropsSaveData;
+    public string SaveFileName
+    { get { return _saveFileName; } }
+    public DateTime LastUpdate
+    { get { return Convert.ToDateTime(_lastUpdate); } }
     public Player PlayerData
     { get { return _playerData; } }
 
@@ -31,6 +37,8 @@ public class GameData
     { get { return _cropsSaveData; } }
     public GameData()
     {
+        this._saveFileName = string.Empty;
+        this._lastUpdate = DateTime.Now.ToString("O");
         this._playerData = new Player();
         this._inventoryData = new Inventory();
         this._eStatus = new EnvironmentalStatus();
@@ -67,5 +75,15 @@ public class GameData
     public void SetCropsData(CropsSaveData cropsSaveData)
     {
         this._cropsSaveData = cropsSaveData;
+    }
+
+    public void SetSaveFileName(string saveFileName)
+    {
+        this._saveFileName = saveFileName;
+    }
+
+    public void SetLastUpdate(DateTime lastUpdate)
+    {
+        this._lastUpdate = lastUpdate.ToString("O");
     }
 }

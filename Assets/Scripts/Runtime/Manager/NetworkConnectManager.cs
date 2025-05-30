@@ -7,7 +7,6 @@ public class NetworkConnectManager : Singleton<NetworkConnectManager>
 {
     private Dictionary<ulong, PlayerController> connectedPlayers;
 
-
     private void Start()
     {
         StartCoroutine(WaitAndSubscribe());

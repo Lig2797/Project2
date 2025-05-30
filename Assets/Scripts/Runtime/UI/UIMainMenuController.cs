@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
@@ -16,19 +18,6 @@ public class UIMainMenuController : MonoBehaviour
     private Button _creditsButton;
     private Button _quitButton;
 
-    //Save file panel
-    private VisualElement _saveFilePanel;
-    private ListView _saveFileList;
-    private Button _newGameButton;
-    private Button _loadGameButton;
-    private Button _saveFileBackButton;
-
-    //Option panel
-    private VisualElement _optionsPanel;
-    private Button _optionsBackButton;
-
-    private LoadingManager _loadingManager;
-
     private void Awake()
     {
         var root = GetComponent<UIDocument>().rootVisualElement;
@@ -40,17 +29,6 @@ public class UIMainMenuController : MonoBehaviour
         _optionsButton = root.Q<Button>("OptionsButton");
         _creditsButton = root.Q<Button>("CreditsButton");
         _quitButton = root.Q<Button>("QuitButton");
-
-        _saveFilePanel = root.Q<VisualElement>("SaveFilePanel");
-        _saveFileList = root.Q<ListView>("SaveFileList");
-        _newGameButton = root.Q<Button>("NewGameButton");
-        _loadGameButton = root.Q<Button>("LoadGameButton");
-        _saveFileBackButton = root.Q<Button>("SaveFileBackButton");
-
-        _optionsPanel = root.Q<VisualElement>("SettingPanel");
-        _optionsBackButton = root.Q<Button>("OptionsBackButton");
-        
-        _loadingManager = FindFirstObjectByType<LoadingManager>();
     }
 
     private void Start()
@@ -60,69 +38,48 @@ public class UIMainMenuController : MonoBehaviour
 
     private void OnEnable()
     {
+        GameEventsManager.Instance.activeUIPanelEvents.onActiveMainMenu += OnActive;
+        GameEventsManager.Instance.activeUIPanelEvents.onDisActivateMainMenu += OnDisableActive;
         _singleplayerButton.clicked += OnSingleplayerButtonClicked;
         _optionsButton.clicked += OnOptionsButtonClicked;
         _quitButton.clicked += () =>
         {
             Application.Quit();
         };
-
-        _newGameButton.clicked += OnNewGameButtonClicked;
-        
-        _saveFileBackButton.clicked += () =>
-        {
-            _mainMenuContainer.RemoveFromClassList("mainmenu-panel-moveleft");
-            _saveFilePanel.RemoveFromClassList("savefile-panel-moveleft");
-        };
-        
-        _optionsBackButton.clicked += () =>
-        {
-            _mainMenuContainer.RemoveFromClassList("mainmenu-panel-moveleft");
-            _optionsPanel.RemoveFromClassList("setting-panel-moveleft");
-        };
     }
 
     private void OnDisable()
     {
+        GameEventsManager.Instance.activeUIPanelEvents.onActiveMainMenu -= OnActive;
+        GameEventsManager.Instance.activeUIPanelEvents.onDisActivateMainMenu -= OnDisableActive;
         _singleplayerButton.clicked -= OnSingleplayerButtonClicked;
         _optionsButton.clicked -= OnOptionsButtonClicked;
         _quitButton.clicked -= () =>
         {
             Application.Quit();
         };
-
-        _newGameButton.clicked -= OnNewGameButtonClicked;
-        
-        _saveFileBackButton.clicked -= () =>
-        {
-            _mainMenuContainer.RemoveFromClassList("mainmenu-panel-moveleft");
-            _saveFilePanel.RemoveFromClassList("savefile-panel-moveleft");
-        };
-
-        _optionsBackButton.clicked -= () =>
-        {
-            _mainMenuContainer.RemoveFromClassList("mainmenu-panel-moveleft");
-            _optionsPanel.RemoveFromClassList("setting-panel-moveleft");
-        };
     }
 
     private void OnSingleplayerButtonClicked()
     {
-        _mainMenuContainer.AddToClassList("mainmenu-panel-moveleft");
-        _saveFilePanel.AddToClassList("savefile-panel-moveleft");
+        OnDisableActive();
+        GameEventsManager.Instance.activeUIPanelEvents.OnActiveSingleplayer();
     }
 
     private void OnOptionsButtonClicked()
     {
-        _mainMenuContainer.AddToClassList("mainmenu-panel-moveleft");
-        _optionsPanel.AddToClassList("setting-panel-moveleft");
+        OnDisableActive();
+        GameEventsManager.Instance.activeUIPanelEvents.OnActiveOptions();
     }
 
-    private void OnNewGameButtonClicked()
+    private void OnActive()
     {
-        _mainMenuContainer.style.display = DisplayStyle.None;
-        _saveFilePanel.style.display = DisplayStyle.None;
-        _loadingManager.LoadSceneWithLoading("WorldScene");
+        _mainMenuContainer.RemoveFromClassList("mainmenu-panel-moveleft");
+    }
+
+    private void OnDisableActive()
+    {
+        _mainMenuContainer.AddToClassList("mainmenu-panel-moveleft");
     }
 
     private IEnumerator AnimateTitleLoop()

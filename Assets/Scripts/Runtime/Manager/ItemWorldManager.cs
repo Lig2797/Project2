@@ -1,7 +1,9 @@
 using Unity.Netcode;
 using UnityEngine;
 using System.Collections;
+#if UNITY_EDITOR
 using static UnityEditor.Progress;
+#endif
 using Unity.VisualScripting;
 using System;
 using System.Collections.Generic;

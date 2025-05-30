@@ -17,9 +17,10 @@ public class UI_Inventory : MonoBehaviour
     private int maxToolBarSlot = 9;
     [SerializeField] private InventoryManagerSO _inventoryManagerSO;
 
-    // GameEvent
-
-    // UpdateUI
+    private void Start()
+    {
+        UpdateSlotUI(null, null);
+    }
 
     private void OnEnable()
     {

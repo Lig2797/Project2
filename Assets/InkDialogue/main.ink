@@ -3,6 +3,7 @@ EXTERNAL StartQuest(questId)
 EXTERNAL AdvanceQuest(questId)
 EXTERNAL FinishQuest(questId)
 EXTERNAL PlayEmote(emoteName)
+EXTERNAL AddItem(itemName)
 
 // quest ids (questId + "Id" for variable name)
 VAR CollectCoinsQuestId = "CollectCoinsQuest"

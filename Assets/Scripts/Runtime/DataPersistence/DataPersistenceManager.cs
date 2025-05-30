@@ -2,202 +2,187 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using Unity.VisualScripting;
-using System.IO;
+using UnityEngine.SceneManagement;
 using Unity.Netcode;
-using System;
-using System.Runtime.CompilerServices;
-
 
 public class DataPersistenceManager : Singleton<DataPersistenceManager>
 {
+    [Header("Debugging")]
+    [SerializeField] private bool disableDataPersistence = false;
+    [SerializeField] private bool initializeDataIfNull = false;
+    [SerializeField] private bool overrideSelectedProfileId = false;
+    [SerializeField] private string testSelectedProfileId = "test";
+
     [Header("File Storage Config")]
     [SerializeField] private string fileName;
+    [SerializeField] private bool useEncryption;
+
+    [Header("Auto Saving Configuration")]
+    [SerializeField] private float autoSaveTimeSeconds = 60f;
 
     private GameData gameData;
     private List<IDataPersistence> dataPersistenceObjects;
     private FileDataHandler dataHandler;
 
-    //private HashSet<IDataPersistence> readyObjects = new();
+    private string selectedProfileId = "";
 
-    private void Start()
+    private Coroutine autoSaveCoroutine;
+
+    protected override void Awake()
     {
-        InitializeDataHandler();
-        dataPersistenceObjects = FindAllDataPersistenceObjects();
+        base.Awake();
+
+        if (disableDataPersistence)
+        {
+            Debug.LogWarning("Data Persistence is currently disabled!");
+        }
+
+        this.dataHandler = new FileDataHandler(Application.persistentDataPath, fileName, useEncryption);
+
+        InitializeSelectedProfileId();
     }
 
-    
-
-
-    private void InitializeDataHandler()
+    private void OnEnable()
     {
-        dataHandler = new FileDataHandler(Application.persistentDataPath, fileName);
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    public void UpdateFileName(string newFileName)
+    private void OnDisable()
     {
-        fileName = newFileName;
-        InitializeDataHandler();
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        this.dataPersistenceObjects = FindAllDataPersistenceObjects();
+        LoadGame();
+
+        // start up the auto saving coroutine
+        if (autoSaveCoroutine != null)
+        {
+            StopCoroutine(autoSaveCoroutine);
+        }
+        autoSaveCoroutine = StartCoroutine(AutoSave());
+    }
+
+    public void ChangeSelectedProfileId(string newProfileId)
+    {
+        // update the profile to use for saving and loading
+        this.selectedProfileId = newProfileId;
+        // load the game, which will use that profile, updating our game data accordingly
+        LoadGame();
+    }
+
+    public void DeleteProfileData(string profileId)
+    {
+        // delete the data for this profile id
+        dataHandler.Delete(profileId);
+        // initialize the selected profile id
+        InitializeSelectedProfileId();
+        // reload the game so that our data matches the newly selected profile id
+        LoadGame();
+    }
+
+    private void InitializeSelectedProfileId()
+    {
+        this.selectedProfileId = dataHandler.GetMostRecentlyUpdatedProfileId();
+        if (overrideSelectedProfileId)
+        {
+            this.selectedProfileId = testSelectedProfileId;
+            Debug.LogWarning("Overrode selected profile id with test id: " + testSelectedProfileId);
+        }
     }
 
     public void NewGame()
     {
-        gameData = new GameData();
+        this.gameData = new GameData();
     }
 
-    public void LoadGame(bool isHostLoad, Action onFinished = null)
+    public void LoadGame()
     {
-        StartCoroutine(WaitAndLoad(isHostLoad, onFinished));
-    }
-
-    private IEnumerator WaitAndLoad(bool isHostLoad, Action onFinished)
-    {
-        // 🔁 Wait until the NetworkManager is fully initialized
-        yield return new WaitUntil(() => NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening);
-
-        // 🔁 Optional: wait an extra frame or two to ensure all NetworkObjects are spawned
-        yield return null;
-        gameData = dataHandler.Load();
-
-        if (gameData == null)
+        // return right away if data persistence is disabled
+        if (disableDataPersistence)
         {
-            Debug.Log("No data was found. Initializing data to defaults.");
+            return;
+        }
+
+        // load any saved data from a file using the data handler
+        this.gameData = dataHandler.Load(selectedProfileId);
+
+        // start a new game if the data is null and we're configured to initialize data for debugging purposes
+        if (this.gameData == null && initializeDataIfNull)
+        {
             NewGame();
-            yield break;
-        }
-        // 🔁 Wait until all IDataPersistence objects are found
-        yield return new WaitUntil(() => dataPersistenceObjects.All(obj => (obj as NetworkBehaviour)?.IsSpawned == true));
-        Debug.Log("All PersistentDataObjects are fully spawned.");
-        // ✅ Now all components are ready
-        if (isHostLoad)
-        {
-            foreach (IDataPersistence dataPersistenceObject in dataPersistenceObjects)
-            {
-                dataPersistenceObject.LoadData(gameData);
-            }
-        }
-        else
-        {
-            SyncWorldDataToPlayerServerRpc();
         }
 
-
-        onFinished?.Invoke();
-    }
-    [ServerRpc(RequireOwnership = false)]
-    private void SyncWorldDataToPlayerServerRpc(ServerRpcParams rpcParams = default)
-    {
-        var clientId = rpcParams.Receive.SenderClientId;
-
-        var rpcParamsForClient = new ClientRpcParams
+        // if no data can be loaded, don't continue
+        if (this.gameData == null)
         {
-            Send = new ClientRpcSendParams
-            {
-                TargetClientIds = new[] { clientId }
-            }
-        };
-        SyncWorldDataToPlayerClientRpc(rpcParamsForClient);
-    }
-    [ClientRpc]
-    private void SyncWorldDataToPlayerClientRpc(ClientRpcParams clientRpcParams = default)
-    {
-        TileManager.Instance.SyncTileOnLateJoin();
-        ItemWorldManager.Instance.SyncItemWorldOnLateJoin();
-        CropManager.Instance.SyncCropsOnLateJoin();
-
-    }
-    public void SaveGame(bool isServerSave) 
-    {
-        if (isServerSave)
-        {
-            foreach (IDataPersistence dataPersistenceObject in dataPersistenceObjects)
-            {
-                dataPersistenceObject.SaveData(ref gameData);
-            }
-        }
-        dataHandler.Save(gameData);
-
-        //CaptureScreenshot();
-    }
-
-    public void RemoveData()
-    {
-        dataHandler.DeleteData();
-
-        string screenshotPath = Path.Combine(Application.persistentDataPath, fileName + "_screenshot.png");
-        if (File.Exists(screenshotPath))
-        {
-            File.Delete(screenshotPath);
+            Debug.Log("No data was found. A New Game needs to be started before data can be loaded.");
+            return;
         }
 
-        NewGame();
-        Debug.Log("Data and screenshot removed.");
+        // push the loaded data to all other scripts that need it
+        foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects)
+        {
+            dataPersistenceObj.LoadData(gameData);
+        }
     }
 
-    public void OnApplicationQuit()
+    public void SaveGame()
     {
-        //SaveGame();
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-    Application.Quit();
-#endif
+        // return right away if data persistence is disabled
+        if (disableDataPersistence)
+        {
+            return;
+        }
+
+        // if we don't have any data to save, log a warning here
+        if (this.gameData == null)
+        {
+            Debug.LogWarning("No data was found. A New Game needs to be started before data can be saved.");
+            return;
+        }
+
+        foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects)
+        {
+            dataPersistenceObj.SaveData(ref gameData);
+        }
+
+        gameData.SetLastUpdate(System.DateTime.Now);
+
+        dataHandler.Save(gameData, selectedProfileId);
+    }
+
+    private void OnApplicationQuit()
+    {
+        SaveGame();
     }
 
     private List<IDataPersistence> FindAllDataPersistenceObjects()
     {
-        IEnumerable<IDataPersistence> dataPersistenceObjects = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None).OfType<IDataPersistence>();
+        IEnumerable<IDataPersistence> dataPersistenceObjects = FindObjectsOfType<NetworkBehaviour>().OfType<IDataPersistence>();
 
         return new List<IDataPersistence>(dataPersistenceObjects);
     }
 
-    public void OnPlayerLoad(Component sender, object data)
+    public bool HasGameData()
     {
-        var player = sender.GetComponent<PlayerController>();
-        if(player == null)
-        {
-            Debug.Log("PlayerController is null");
-            return;
-        }
-        LoadGame((bool)data, () => player.StartToLoad(gameData));
+        return gameData != null;
     }
-    public void OnPlayerSave(Component sender, object data)
+
+    public Dictionary<string, GameData> GetAllProfilesGameData()
     {
-        var player = sender.GetComponent<PlayerController>();
-        if (player == null)
-        {
-            Debug.Log("PlayerController is null");
-        }
-        else
-        {
-            player.StartToSave(ref gameData);
-        }
-
-
-        SaveGame((bool)data);
+        return dataHandler.LoadAllProfiles();
     }
-    //private void CaptureScreenshot()
-    //{
-    //    string screenshotPath = Path.Combine(Application.persistentDataPath, fileName + "_screenshot.png");
 
-    //    // Tạo RenderTexture với độ phân giải của màn hình
-    //    RenderTexture renderTexture = new RenderTexture(Screen.width, Screen.height, 24);
-    //    Camera.main.targetTexture = renderTexture;
-    //    Camera.main.Render();
-
-    //    // Chuyển RenderTexture thành Texture2D
-    //    RenderTexture.active = renderTexture;
-    //    Texture2D screenshot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
-    //    screenshot.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
-    //    screenshot.Apply();
-
-    //    // Gỡ RenderTexture và giải phóng tài nguyên
-    //    Camera.main.targetTexture = null;
-    //    RenderTexture.active = null;
-    //    Destroy(renderTexture);
-
-    //    // Lưu ảnh dưới dạng PNG
-    //    byte[] bytes = screenshot.EncodeToPNG();
-    //    File.WriteAllBytes(screenshotPath, bytes);
-    //}
+    private IEnumerator AutoSave()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(autoSaveTimeSeconds);
+            SaveGame();
+            Debug.Log("Auto Saved Game");
+        }
+    }
 }
