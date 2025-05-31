@@ -11,8 +11,10 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-public class PlayerController : Singleton<PlayerController>, IDataPersistence
+public class PlayerController : NetworkBehaviour, IDataPersistence
 {
+    public static PlayerController LocalInstance { get; private set; }
+
     #region Setup Everything
     #region Components
     [Header("Components")]
@@ -254,10 +256,8 @@ public class PlayerController : Singleton<PlayerController>, IDataPersistence
 
 
     #region Setup Before Game Start
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
-
         _inventoryController = GetComponent<InventoryController>();
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
@@ -290,6 +290,7 @@ public class PlayerController : Singleton<PlayerController>, IDataPersistence
     {
         if (IsOwner)
         {
+            LocalInstance = this;
             DontDestroyOnLoad(gameObject);
 
             bool isHost = NetworkManager.Singleton.IsHost && IsServer; // true only on host machine

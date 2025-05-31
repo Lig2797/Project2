@@ -43,10 +43,7 @@ public class UIMainMenuController : MonoBehaviour
         _singleplayerButton.clicked += OnSingleplayerButtonClicked;
         _multiplayerButton.clicked += OnMultiplayerButtonClicked;
         _optionsButton.clicked += OnOptionsButtonClicked;
-        _quitButton.clicked += () =>
-        {
-            Application.Quit();
-        };
+        _quitButton.clicked += OnQuitGame;
     }
 
     private void OnDisable()
@@ -56,10 +53,7 @@ public class UIMainMenuController : MonoBehaviour
         _singleplayerButton.clicked -= OnSingleplayerButtonClicked;
         _multiplayerButton.clicked -= OnMultiplayerButtonClicked;
         _optionsButton.clicked -= OnOptionsButtonClicked;
-        _quitButton.clicked -= () =>
-        {
-            Application.Quit();
-        };
+        _quitButton.clicked -= OnQuitGame;
     }
 
     private void OnSingleplayerButtonClicked()
@@ -89,6 +83,11 @@ public class UIMainMenuController : MonoBehaviour
     private void OnDisableActive()
     {
         _mainMenuContainer.AddToClassList("mainmenu-panel-moveleft");
+    }
+
+    private void OnQuitGame()
+    {
+        Application.Quit();
     }
 
     private IEnumerator AnimateTitleLoop()

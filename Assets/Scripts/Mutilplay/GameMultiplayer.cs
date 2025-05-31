@@ -43,6 +43,11 @@ public class GameMultiplayer : Singleton<GameMultiplayer>
             Loader.Load(Loader.Scene.WorldScene);
             NetworkManager.Singleton.StartHost();
         }
+        else
+        {
+            Loader.Load(Loader.Scene.WorldScene);
+            NetworkManager.Singleton.StartClient();
+        }
     }
 
     public string GetPlayerName()
