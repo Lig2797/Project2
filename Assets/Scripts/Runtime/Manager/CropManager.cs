@@ -224,12 +224,14 @@ public class CropManager : Singleton<CropManager>, IDataPersistence
     public void LoadData(GameData data)
     {
         PlantedCrops = data.CropsSaveData.CropTiles;
-        MoveLocalListToNetwork();
+        StartCoroutine(MoveLocalListToNetwork());
         StartCoroutine(ApplyCropTilesOnHostLoad());
         EnviromentalStatusManager.OnTimeIncrease += UpdateCropsGrowthTime;
     }
-    private void MoveLocalListToNetwork()
+    private IEnumerator MoveLocalListToNetwork()
     {
+
+        yield return new WaitUntil(() => IsSpawned);
         foreach (var item in PlantedCrops)
         {
             var networkPos = new NetworkVector3Int(item.Key);

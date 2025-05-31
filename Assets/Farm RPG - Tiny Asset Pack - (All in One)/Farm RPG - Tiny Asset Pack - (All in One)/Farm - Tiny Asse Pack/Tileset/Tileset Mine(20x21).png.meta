@@ -7097,7 +7097,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tileset Mine(20x21)_317
+      name: Stair_3
       rect:
         serializedVersion: 2
         x: 304
@@ -7339,7 +7339,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tileset Mine(20x21)_328
+      name: Stair_1
       rect:
         serializedVersion: 2
         x: 288
@@ -7361,7 +7361,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tileset Mine(20x21)_329
+      name: Stair_2
       rect:
         serializedVersion: 2
         x: 304
@@ -7658,6 +7658,9 @@ TextureImporter:
       Mine wall 7: -1938395131
       Mine wall 8: 333271127
       Mine wall 9: -1063940261
+      Stair_1: 539966099
+      Stair_2: -1126625973
+      Stair_3: -1048459328
       Tileset Mine(20x21)_10: 52364268
       Tileset Mine(20x21)_100: 1408634361
       Tileset Mine(20x21)_101: -1731736072
@@ -7890,7 +7893,6 @@ TextureImporter:
       Tileset Mine(20x21)_314: 1112915914
       Tileset Mine(20x21)_315: 1150921996
       Tileset Mine(20x21)_316: -226422000
-      Tileset Mine(20x21)_317: -1048459328
       Tileset Mine(20x21)_318: -1774113929
       Tileset Mine(20x21)_319: 1773134962
       Tileset Mine(20x21)_32: 529249702
@@ -7902,8 +7904,6 @@ TextureImporter:
       Tileset Mine(20x21)_325: 32106244
       Tileset Mine(20x21)_326: 204412155
       Tileset Mine(20x21)_327: -1037370313
-      Tileset Mine(20x21)_328: 539966099
-      Tileset Mine(20x21)_329: -1126625973
       Tileset Mine(20x21)_33: 1304756422
       Tileset Mine(20x21)_330: 1135728431
       Tileset Mine(20x21)_331: -1192261854

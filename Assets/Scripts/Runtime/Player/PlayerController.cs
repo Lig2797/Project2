@@ -314,8 +314,11 @@ public class PlayerController : Singleton<PlayerController>, IDataPersistence
         {
             enabled = false;
         }
-        else if (IsOwner && SceneManagement.GetCurrentSceneName().Equals(Loader.Scene.WorldScene.ToString()))
+        else
         {
+            string sceneName = SceneManagement.GetCurrentSceneName();
+            if(sceneName.Equals(Loader.Scene.WorldScene.ToString()) ||
+                sceneName.Equals(Loader.Scene.MineScene.ToString()))
             virtualCamera = GameObject.Find("Virtual Camera").GetComponent<CinemachineVirtualCamera>();
             virtualCamera.Follow = transform;
         }

@@ -227,8 +227,10 @@ public class TileManager : Singleton<TileManager>, IDataPersistence
         }
     }
 
-    private void SetAllTileDataToNetworkData()
+    private IEnumerator SetAllTileDataToNetworkData()
     {
+
+        yield return new WaitUntil(() => IsSpawned);
         foreach (var hoedTile in HoedTiles)
         {
             HoedTilesNetwork.Add(new NetworkVector3Int(hoedTile.Key), hoedTile.Value); // add to network data
@@ -261,7 +263,7 @@ public class TileManager : Singleton<TileManager>, IDataPersistence
         
         HoedTiles = data.TileSaveData.HoedTiles;
         WateredTiles = data.TileSaveData.WateredTiles;
-        SetAllTileDataToNetworkData();
+        StartCoroutine(SetAllTileDataToNetworkData());
         StartCoroutine(ApplyTileUpdatesOnLoadGame());
         EnviromentalStatusManager.OnTimeIncrease += UpdateAllTileStatus;
     }
