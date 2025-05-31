@@ -15,7 +15,7 @@ public class FileDataHandler
     public FileDataHandler(string dataDirPath, string dataFileName, bool useEncryption)
     {
         this.dataDirPath = dataDirPath;
-        this.dataFileName = dataFileName;
+        this.dataFileName = dataFileName + ".json";
         this.useEncryption = useEncryption;
     }
 

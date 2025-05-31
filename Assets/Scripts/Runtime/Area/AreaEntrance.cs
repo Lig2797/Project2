@@ -10,8 +10,8 @@ public class AreaEntrance : MonoBehaviour
     {
         if (transitionName == SceneManagement.SceneTransitionName)
         {
-            //PlayerController.Instance.transform.position = this.transform.position;
-            //PlayerController.Instance.CanMove = true;
+            PlayerController.LocalInstance.transform.position = this.transform.position;
+            PlayerController.LocalInstance.CanMove = true;
             UI_Fade.Instance.FadeToClear();
             UI_Fade.Instance.gameObject.SetActive(false);
         }
