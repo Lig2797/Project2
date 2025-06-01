@@ -10,7 +10,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 using static UnityEngine.Rendering.Universal.PixelPerfectCamera;
 
-public class CropManager : Singleton<CropManager>, IDataPersistence
+public class CropManager : NetworkSingleton<CropManager>, IDataPersistence
 {
     public Tilemap cropTilemap;
 

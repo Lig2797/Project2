@@ -77,7 +77,7 @@ public class UISaveFilePanelController : MonoBehaviour
         _saveFilePanel.style.display = DisplayStyle.None;
 
         GameMultiplayer.playMultiplayer = false;
-        Loader.Load(Loader.Scene.LobbyScene);
+        Loader.Load(Loader.Scene.Cutscene);
     }
 
     private void OnBackButtonClicked()
@@ -93,7 +93,7 @@ public class UISaveFilePanelController : MonoBehaviour
         GameEventsManager.Instance.dataEvents.OnInitialized(_fileNameInput.value.ToString());
         
         GameMultiplayer.playMultiplayer = false;
-        Loader.Load(Loader.Scene.LobbyScene);
+        Loader.Load(Loader.Scene.Cutscene);
     }
 
     private void OnCancelButtonClicked()

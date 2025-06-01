@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Rendering.Universal;
 
-public class EnviromentalStatusManager : Singleton<EnviromentalStatusManager>, IDataPersistence
+public class EnviromentalStatusManager : NetworkPersistentSingleton<EnviromentalStatusManager>, IDataPersistence
 {
     public EnvironmentalStatus eStarus;
     public UI_EnviromentStatus statusUI;
@@ -16,11 +16,11 @@ public class EnviromentalStatusManager : Singleton<EnviromentalStatusManager>, I
     public static event Action<int> OnTimeIncrease;
     public int minutesToIncrease;
 
-
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
     }
+
     private void Start()
     {
         

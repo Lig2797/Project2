@@ -288,35 +288,31 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
 
     public override void OnNetworkSpawn()
     {
-        if (IsOwner)
-        {
-            LocalInstance = this;
-            DontDestroyOnLoad(gameObject);
+        if (!IsOwner) return;
 
-            bool isHost = NetworkManager.Singleton.IsHost && IsServer; // true only on host machine
+        LocalInstance = this;
+        DontDestroyOnLoad(gameObject);
+
+        if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsClient)
+        {
+            string clientId = NetworkManager.Singleton.LocalClientId.ToString();
+            Debug.Log($"Client ID: {clientId}");
+            DataPersistenceManager.Instance.SetLocalClientId(clientId);
         }
+        DataPersistenceManager.Instance.LoadGame();
+
+        bool isHost = NetworkManager.Singleton.IsHost && IsServer; // true only on host machine
     }
 
     
     public override void OnNetworkDespawn()
     {
-        if (IsOwner)
-        {
-            bool isHost = NetworkManager.Singleton.IsHost && IsServer; // true only on host machine
-        }
-    }
+        if (!IsOwner) return;
 
-    private void Start()
-    {
-        if (!IsOwner)
-        {
-            enabled = false;
-        }
-        else if (IsOwner && SceneManagement.GetCurrentSceneName().Equals(Loader.Scene.WorldScene.ToString()))
-        {
-            virtualCamera = GameObject.Find("Virtual Camera").GetComponent<CinemachineVirtualCamera>();
-            virtualCamera.Follow = transform;
-        }
+        DataPersistenceManager.Instance.SaveGame();
+        DataPersistenceManager.Instance.CaptureScreenshot();
+
+        bool isHost = NetworkManager.Singleton.IsHost && IsServer; // true only on host machine
     }
 
     #endregion
