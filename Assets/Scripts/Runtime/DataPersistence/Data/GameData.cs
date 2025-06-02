@@ -14,6 +14,7 @@ public class GameData
     [SerializeField] private ListItemWorld _listItemWold;
     [SerializeField] private TileSaveData _tileSaveData;
     [SerializeField] private CropsSaveData _cropsSaveData;
+
     public string SaveFileName
     { get { return _saveFileName; } }
     public DateTime LastUpdate
@@ -35,6 +36,7 @@ public class GameData
 
     public CropsSaveData CropsSaveData
     { get { return _cropsSaveData; } }
+
     public GameData()
     {
         this._saveFileName = string.Empty;

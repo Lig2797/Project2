@@ -39,6 +39,15 @@ public class SettingsData
         private set => isFullScreen = value;
     }
 
+    public SettingsData()
+    {
+        overalVolume = 1f;
+        musicVolume = 1f;
+        sfxVolume = 1f;
+        resolutionIndex = 0;
+        isFullScreen = false;
+    }
+
     public SettingsData(float overalVolume, float musicVolume, float sfxVolume, int resolutionIndex, bool isFullScreen)
     {
         OveralVolume = overalVolume;
@@ -46,10 +55,5 @@ public class SettingsData
         SFXVolume = sfxVolume;
         ResolutionIndex = resolutionIndex;
         IsFullScreen = isFullScreen;
-    }
-
-    public void SetOveralVolume(float volume)
-    {
-        OveralVolume = volume;
     }
 }

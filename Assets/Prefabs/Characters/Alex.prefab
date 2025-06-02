@@ -702,6 +702,9 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   tileTargeter: {fileID: 621800067739870697}
   _inventoryController: {fileID: 566550412973088920}
+  rb: {fileID: 2706262993133320821}
+  animator: {fileID: 1480301862695094884}
+  col: {fileID: 8114054005754329752}
   _acceleration: 25
   walkSpeed: 2
   runSpeed: 3
@@ -1288,7 +1291,7 @@ CapsuleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6941288843611133770}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
