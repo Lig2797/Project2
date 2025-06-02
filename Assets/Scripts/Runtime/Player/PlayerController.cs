@@ -254,7 +254,6 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
     #endregion
     #endregion
 
-
     #region Setup Before Game Start
     private void Awake()
     {
@@ -294,6 +293,7 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
             DontDestroyOnLoad(gameObject);
 
             bool isHost = NetworkManager.Singleton.IsHost && IsServer; // true only on host machine
+
         }
     }
 
@@ -303,6 +303,7 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
         if (IsOwner)
         {
             bool isHost = NetworkManager.Singleton.IsHost && IsServer; // true only on host machine
+
         }
     }
 
@@ -317,12 +318,20 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
             string sceneName = SceneManagement.GetCurrentSceneName();
             if(sceneName.Equals(Loader.Scene.WorldScene.ToString()) ||
                 sceneName.Equals(Loader.Scene.MineScene.ToString()))
-            virtualCamera = GameObject.Find("Virtual Camera").GetComponent<CinemachineVirtualCamera>();
-            virtualCamera.Follow = transform;
+            {
+                GetCameraFollow();
+            }
+
         }
     }
 
     #endregion
+
+    public void GetCameraFollow()
+    {
+        virtualCamera = GameObject.Find("Virtual Camera").GetComponent<CinemachineVirtualCamera>();
+        virtualCamera.Follow = transform;
+    }
 
     #region Game Loop
     //void Update()

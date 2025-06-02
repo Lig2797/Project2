@@ -52,8 +52,6 @@ public class Damageable : MonoBehaviour
         set
         {
             _isAlive = value;
-            animator.SetBool("IsAlive", value);
-            Debug.Log("IsAlive set " + value);
         }
     }
 
@@ -83,6 +81,11 @@ public class Damageable : MonoBehaviour
 
     }
 
+    [ContextMenu("Test hit")]
+    public void TestHit()
+    {
+        Hit(10, Vector2.zero);
+    }
     public bool Hit(float damage, Vector2 knockbackVelocity)
     {
         if (IsAlive && !isInvincible)

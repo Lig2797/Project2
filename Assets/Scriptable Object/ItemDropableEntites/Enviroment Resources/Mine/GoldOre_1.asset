@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2962c5bcf9230f6418a39d9de2f65c7c, type: 3}
   m_Name: GoldOre_1
   m_EditorClassIdentifier: 
-  animators: {fileID: 0}
+  id: 1c4b69c3-c733-4f59-b285-f03b80b824ff
   mineBlockIdleSprite: {fileID: -1520257874, guid: 7eb771450e06c0e4092a9aff9b8e392f, type: 3}
   mineBlockHitSprite: {fileID: 1452269388, guid: 7eb771450e06c0e4092a9aff9b8e392f, type: 3}
   ItemToDrop: {fileID: 11400000, guid: fe178e4de73978047af09608bde079a2, type: 2}

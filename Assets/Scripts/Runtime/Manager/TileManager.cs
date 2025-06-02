@@ -284,6 +284,7 @@ public class TileManager : Singleton<TileManager>, IDataPersistence
     }
     public void SaveData(ref GameData data)
     {
+        
         SetAllTileNetworkDataToLocal();
         _tileSaveData.SetTilesData(HoedTiles, WateredTiles);
         data.SetTiles(_tileSaveData);

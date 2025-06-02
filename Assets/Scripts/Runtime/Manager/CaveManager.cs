@@ -1,52 +1,71 @@
 using System.Collections.Generic;
+using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 
 public class CaveManager : Singleton<CaveManager>
 {
     public NetworkDictionary<int, int> caveList;
-    public int CurrentLocalCaveLevel = 1;
 
-    public enum SpecialTileType { None, DownStair, UpStair, Exit }
-    public Dictionary<Vector3Int, SpecialTileType> localStairTiles = new Dictionary<Vector3Int, SpecialTileType>();
+    private int _currentLocalCaveLevel = 0;
+    public int CurrentLocalCaveLevel
+    {
+        get { return _currentLocalCaveLevel; }
+        set
+        {
+            _currentLocalCaveLevel = value;
+            _caveLevelText.text = _currentLocalCaveLevel.ToString();
+            _caveLevelBox.SetActive(_currentLocalCaveLevel > 0); 
+        }
+    }
+    [SerializeField] private TextMeshProUGUI _caveLevelText;
+    [SerializeField] private GameObject _caveLevelBox;
     private void OnEnable()
     {
         if(caveList == null)
         caveList = new NetworkDictionary<int, int>();
     }
 
+    public void GetUIElement()
+    {
+        _caveLevelBox = GameObject.Find("CaveLevelBox");
+        _caveLevelText = _caveLevelBox.GetComponentInChildren<TextMeshProUGUI>();
+    }
 
-
-    public int GetCaveLevelFromNetwork(int caveLevel)
+    public int GetCaveLevelFromNetwork()
     {
         if (caveList == null || caveList.Count == 0)
         {
-            Debug.Log("Cave list is empty or not initialized.");
-            return -1; // Return -1 if the cave list is empty or not initialized
+            Debug.Log("Cave list is empty.");
+            return -1; // Return -1 if the cave list is empty
         }
         foreach (var cave in caveList)
         {
-            if (cave.Key == caveLevel)
+            if (cave.Key == CurrentLocalCaveLevel)
             {
                 return cave.Value;
             }
         }
         return -1; // Return -1 if the cave number is not found
     }
-
-    public void AddCaveLevel(int caveLevel, int caveNumber)
+    public bool IsHavingOtherPlayerInCave()
+    {
+        if(CurrentLocalCaveLevel == caveList[caveList.Count - 1])
+        {
+            return true; 
+        }
+        return false;
+    }
+    [ServerRpc(RequireOwnership = false)]
+    public void CheckAndAddCaveLevelServerRpc(int caveLevel, int caveNumber)
     {
         if (!caveList.ContainsKey(caveLevel))
         caveList[caveLevel] = caveNumber;
     }
 
-    public void RefreshCurrentStairTile()
+    public void AdjustLocalCaveLevel(int amount)
     {
-        localStairTiles.Clear();
+        CurrentLocalCaveLevel += amount;
     }
-
-    public void AddStairTile(Vector3Int pos, SpecialTileType type)
-    {
-        localStairTiles[pos] = type;
-    }
+    
 }

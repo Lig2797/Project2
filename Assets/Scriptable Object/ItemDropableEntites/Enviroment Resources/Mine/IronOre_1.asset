@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2962c5bcf9230f6418a39d9de2f65c7c, type: 3}
   m_Name: IronOre_1
   m_EditorClassIdentifier: 
-  animators: {fileID: 0}
+  id: a2d60093-9c11-46f1-91c3-7ca2cfea7642
   mineBlockIdleSprite: {fileID: 1577423299, guid: 7eb771450e06c0e4092a9aff9b8e392f, type: 3}
   mineBlockHitSprite: {fileID: 1452269388, guid: 7eb771450e06c0e4092a9aff9b8e392f, type: 3}
   ItemToDrop: {fileID: 11400000, guid: d7abe7c699e65dd4f956e74a7b4e1712, type: 2}
