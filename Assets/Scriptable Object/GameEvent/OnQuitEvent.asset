@@ -9,11 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 967e4981ce46d954fa3b2404dc42db6c, type: 3}
-  m_Name: DefaultSettings
+  m_Script: {fileID: 11500000, guid: 3fc286fd68f1f6c4c819d3da5051d74a, type: 3}
+  m_Name: OnQuitEvent
   m_EditorClassIdentifier: 
-  overalVolume: 1
-  musicVolume: 1
-  sfxVolume: 1
-  resolutionIndex: 0
-  isFullScreen: 0
+  editorListeners: []

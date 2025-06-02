@@ -18,12 +18,10 @@ public class HostShutdown : MonoBehaviour
         }
     }
 
-    private async void OnButtonClick()
+    private void OnButtonClick()
     {
         DataPersistenceManager.Instance.SaveGame();
         DataPersistenceManager.Instance.CaptureScreenshot();
         NetworkManager.Singleton.Shutdown();
-
-        await CameraController.Instance.FindFollowObject();
     }
 }

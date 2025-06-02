@@ -1,40 +1,40 @@
 using Cinemachine;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public class CameraController : Singleton<CameraController>
 {
+    private bool hasFollowTarget = false;
     public CinemachineVirtualCamera followCamera;
-    
-    private async void Start()
+
+    private void OnEnable()
     {
-        await FindFollowObject();
+        GameEventsManager.Instance.playerEvents.onPlayerSpawned += SetFollowTarget;
     }
 
-    public async Task FindFollowObject()
+    private void OnDisable()
     {
-        float timeout = 5f;
-        float elapsed = 0f;
-        float delay = 0.1f;
+        GameEventsManager.Instance.playerEvents.onPlayerSpawned -= SetFollowTarget;
+    }
 
-        PlayerController playerController = null;
-
-        while (playerController == null && elapsed < timeout)
+    private void Start()
+    {
+        if (!hasFollowTarget)
         {
-            await Task.Delay((int)(delay * 1000));
-            playerController = FindAnyObjectByType<PlayerController>();
-            elapsed += delay;
-        }
-
-        if (playerController != null)
-        {
-            followCamera.Follow = playerController.transform;
-            Debug.Log("Camera is now following player.");
-        }
-        else
-        {
-            Debug.LogError("Timeout: PlayerController not found in the scene.");
+            PlayerController player = PlayerController.LocalInstance;
+            if (player != null)
+            {
+                SetFollowTarget(player);
+            }
+            else
+            {
+                Debug.LogWarning("No PlayerController found in the scene. Camera will not follow any target.");
+            }
         }
     }
 
+    private void SetFollowTarget(PlayerController player)
+    {
+        followCamera.Follow = player.transform;
+        hasFollowTarget = true;
+    }    
 }

@@ -41,7 +41,7 @@ public class GameMultiplayer : PersistentSingleton<GameMultiplayer>
         {
             //StartHost();
             //Loader.Load(Loader.Scene.WorldScene);
-            NetworkManager.Singleton.StartHost();
+            //NetworkManager.Singleton.StartHost();
         }
         else
         {

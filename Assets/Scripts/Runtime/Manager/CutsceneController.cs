@@ -6,48 +6,48 @@ using System.Collections;
 
 public class CutsceneController : MonoBehaviour
 {
+    private bool hasPlayerAssigned = false;
     [SerializeField] private PlayableDirector cutsceneDirector;
+
+    private void OnEnable()
+    {
+        GameEventsManager.Instance.playerEvents.onPlayerSpawned += AssignPlayer;
+    }
+
+    private void OnDisable()
+    {
+        GameEventsManager.Instance.playerEvents.onPlayerSpawned -= AssignPlayer;
+    }
 
     private void Start()
     {
-        //NetworkManager.Singleton.OnServerStarted += () =>
-        //{
-        //    StartCoroutine(WaitAndAssignPlayer());
-        //};
-
-        StartCoroutine(WaitAndAssignPlayer());
-    }
-
-    private IEnumerator WaitAndAssignPlayer()
-    {
-        yield return null;
-
-        GameObject player = FindLocalPlayer();
-
-        if (player != null)
+        if (!hasPlayerAssigned)
         {
-            foreach (var playableAssetOutput in cutsceneDirector.playableAsset.outputs)
+            PlayerController player = PlayerController.LocalInstance;
+            if (player != null)
             {
-                if (playableAssetOutput.streamName == "PlayerTrack")
-                {
-                    cutsceneDirector.SetGenericBinding(playableAssetOutput.sourceObject, player.GetComponent<Animator>());
-                }
+                AssignPlayer(player);
             }
-            player.gameObject.transform.position = new Vector3(4.371f, 1.154f, 0);
-            cutsceneDirector.Play();
+            else
+            {
+                Debug.LogWarning("No PlayableDirector found in the scene. Cutscene cannot be played.");
+            }
         }
     }
 
-    private GameObject FindLocalPlayer()
+    private void AssignPlayer(PlayerController player)
     {
-        foreach (var obj in GameObject.FindObjectsOfType<NetworkBehaviour>())
+        if (!NetworkManager.Singleton.IsHost) return;
+
+        foreach (var playableAssetOutput in cutsceneDirector.playableAsset.outputs)
         {
-            if (obj.IsOwner && obj.CompareTag("Player")) 
+            if (playableAssetOutput.streamName == "PlayerTrack")
             {
-                return obj.gameObject;
+                cutsceneDirector.SetGenericBinding(playableAssetOutput.sourceObject, player.GetComponent<Animator>());
             }
         }
-
-        return null;
+        player.gameObject.transform.position = new Vector3(4.371f, 1.154f, 0);
+        cutsceneDirector.Play();
+        hasPlayerAssigned = true;
     }
 }

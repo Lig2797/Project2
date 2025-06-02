@@ -38,4 +38,9 @@ public class GameEventsManager : MonoBehaviour
         optionsEvents = new OptionsEvents();
         dataEvents = new DataEvents();
     }
+
+    private void Start()
+    {
+        Loader.Load(Loader.Scene.MainMenu);
+    }
 }

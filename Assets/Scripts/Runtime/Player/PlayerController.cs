@@ -240,9 +240,6 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
 
     [SerializeField]
     private ItemOnHand _itemOnHand;
-    [SerializeField]
-    private CinemachineVirtualCamera virtualCamera;
-
 
     [SerializeField] private InventoryManagerSO _inventoryManagerSO;
     #endregion
@@ -264,8 +261,10 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
         col = GetComponent<Collider2D>();
     }
 
-    private void OnEnable()
+    public override void OnNetworkSpawn()
     {
+        if (!IsOwner) return;
+
         _inputReader.playerActions.moveEvent += OnMove;
         _inputReader.playerActions.attackEvent += OnAttack;
         _inputReader.playerActions.interactEvent += OnInteract;
@@ -273,10 +272,20 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
         _inputReader.playerActions.runEvent += OnRun;
         _inputReader.playerActions.submitEvent += OnSubmit;
         _inventoryManagerSO.onChangedSelectedSlot += CheckAnimation;
+
+        LocalInstance = this;
+        DontDestroyOnLoad(gameObject);
+
+        DataPersistenceManager.Instance.LoadGame();
+
+        bool isHost = NetworkManager.Singleton.IsHost && IsServer;
+        GameEventsManager.Instance.playerEvents.OnPlayerSpawned(this);
     }
 
-    private void OnDisable()
+    public override void OnNetworkDespawn()
     {
+        if (!IsOwner) return;
+
         _inputReader.playerActions.moveEvent -= OnMove;
         _inputReader.playerActions.attackEvent -= OnAttack;
         _inputReader.playerActions.interactEvent -= OnInteract;
@@ -284,35 +293,14 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
         _inputReader.playerActions.runEvent -= OnRun;
         _inputReader.playerActions.submitEvent -= OnSubmit;
         _inventoryManagerSO.onChangedSelectedSlot -= CheckAnimation;
-    }
-
-    public override void OnNetworkSpawn()
-    {
-        if (!IsOwner) return;
-
-        LocalInstance = this;
-        DontDestroyOnLoad(gameObject);
-
-        if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsClient)
-        {
-            string clientId = NetworkManager.Singleton.LocalClientId.ToString();
-            Debug.Log($"Client ID: {clientId}");
-            DataPersistenceManager.Instance.SetLocalClientId(clientId);
-        }
-        DataPersistenceManager.Instance.LoadGame();
-
-        bool isHost = NetworkManager.Singleton.IsHost && IsServer; // true only on host machine
-    }
-
-    
-    public override void OnNetworkDespawn()
-    {
-        if (!IsOwner) return;
 
         DataPersistenceManager.Instance.SaveGame();
-        DataPersistenceManager.Instance.CaptureScreenshot();
 
         bool isHost = NetworkManager.Singleton.IsHost && IsServer; // true only on host machine
+        if (isHost)
+        {
+            DataPersistenceManager.Instance.CaptureScreenshot();
+        }
     }
 
     #endregion
