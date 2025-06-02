@@ -1,21 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemDropableEntityDatabase : MonoBehaviour
+public class ItemDropableEntityDatabase : PersistentSingleton<ItemDropableEntityDatabase>
 {
-    public static ItemDropableEntityDatabase Instance { get; private set; }
-    private void Awake()
-    {
-        if(Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
 
     [SerializeField]
     private List<ItemDropableEntitySO> entityList = new List<ItemDropableEntitySO>();

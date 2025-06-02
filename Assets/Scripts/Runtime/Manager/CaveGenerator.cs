@@ -291,12 +291,13 @@ public class CaveGenerator : NetworkBehaviour
     }
     void DrawSelectedCave()
     {
+        Debug.Log("Draw");
         int caveNumber = CaveManager.Instance.GetCaveLevelFromNetwork();
         if (caveNumber == -1)
             caveNumber = Random.Range(0, CaveShapes.caves.Length);
 
-        _isHavingOtherPlayerInCave = CaveManager.Instance.IsHavingOtherPlayerInCave();
-        //CaveManager.Instance.CheckAndAddCaveLevelServerRpc(CaveManager.Instance.CurrentLocalCaveLevel, caveNumber);
+        //_isHavingOtherPlayerInCave = CaveManager.Instance.IsHavingOtherPlayerInCave();
+        CaveManager.Instance.CheckAndAddCaveLevelServerRpc(CaveManager.Instance.CurrentLocalCaveLevel, caveNumber);
 
         int[,] selected = CaveShapes.caves[caveNumber];
         int[,] padded = AddWallPadding(selected, wallThickness);

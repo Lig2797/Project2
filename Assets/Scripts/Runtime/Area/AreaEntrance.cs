@@ -27,7 +27,6 @@ public class AreaEntrance : MonoBehaviour
             else
                 PlayerController.LocalInstance.transform.position = this.transform.position;
 
-            PlayerController.LocalInstance.GetCameraFollow();
             PlayerController.LocalInstance.CanMove = true;
             UI_Fade.Instance.FadeToClear();
             UI_Fade.Instance.gameObject.SetActive(false);

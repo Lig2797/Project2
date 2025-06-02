@@ -3,7 +3,7 @@ using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 
-public class CaveManager : Singleton<CaveManager>
+public class CaveManager : NetworkPersistentSingleton<CaveManager>
 {
     public NetworkDictionary<int, int> caveList;
 
