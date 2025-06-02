@@ -1,7 +1,6 @@
-using Unity.Netcode;
 using UnityEngine;
 
-public class Singleton<T> : NetworkBehaviour where T : Singleton<T>
+public class Singleton<T> : MonoBehaviour where T : Singleton<T>
 {
     private static T instance;
     public static T Instance
@@ -22,14 +21,11 @@ public class Singleton<T> : NetworkBehaviour where T : Singleton<T>
 
     protected virtual void Awake()
     {
-        if (instance == null)
-        {
-            instance = (T)this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else if (instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
+            return;
         }
+        instance = (T)this;
     }
 }

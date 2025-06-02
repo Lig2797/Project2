@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -71,13 +72,14 @@ public class UISaveFilePanelController : MonoBehaviour
         _initFileNamePanel.style.display = DisplayStyle.Flex;
     }
 
-    private void OnLoadGameButtonClicked()
+    private async void OnLoadGameButtonClicked()
     {
         _initFileNamePanel.style.display = DisplayStyle.None;
         _saveFilePanel.style.display = DisplayStyle.None;
 
         GameMultiplayer.playMultiplayer = false;
-        Loader.Load(Loader.Scene.LobbyScene);
+        Loader.Load(Loader.Scene.Cutscene);
+        await SessionManager.Instance.StartSessionAsHost();
     }
 
     private void OnBackButtonClicked()
@@ -86,14 +88,15 @@ public class UISaveFilePanelController : MonoBehaviour
         GameEventsManager.Instance.activeUIPanelEvents.OnActiveMainMenu();
     }
 
-    private void OnConfirmButtonClicked()
+    private async void OnConfirmButtonClicked()
     {
         _initFileNamePanel.style.display = DisplayStyle.None;
         _saveFilePanel.style.display = DisplayStyle.None;
         GameEventsManager.Instance.dataEvents.OnInitialized(_fileNameInput.value.ToString());
         
         GameMultiplayer.playMultiplayer = false;
-        Loader.Load(Loader.Scene.LobbyScene);
+        Loader.Load(Loader.Scene.Cutscene);
+        await SessionManager.Instance.StartSessionAsHost();
     }
 
     private void OnCancelButtonClicked()
@@ -111,9 +114,9 @@ public class UISaveFilePanelController : MonoBehaviour
     private void PopulateSaveFiles()
     {
         Dictionary<string, GameData> saveFiles = DataPersistenceManager.Instance.GetAllProfilesGameData();
-
+        var sortedByValue = saveFiles.OrderBy(pair => pair.Value.LastUpdate);
         _saveFileList.Clear();
-        foreach (var saveFile in saveFiles)
+        foreach (var saveFile in sortedByValue)
         {
             var saveFileData = _saveFileData.CloneTree();
             saveFileData.Q<VisualElement>("FileImage").style.backgroundImage = DataPersistenceManager.Instance.LoadScreenshot(saveFile.Key);

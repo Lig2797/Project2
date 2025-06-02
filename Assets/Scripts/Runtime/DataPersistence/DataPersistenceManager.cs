@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine.SceneManagement;
 using Unity.Netcode;
 
-public class DataPersistenceManager : Singleton<DataPersistenceManager>
+public class DataPersistenceManager : PersistentSingleton<DataPersistenceManager>
 {
     [Header("Debugging")]
     [SerializeField] private bool disableDataPersistence = false;
@@ -14,7 +14,7 @@ public class DataPersistenceManager : Singleton<DataPersistenceManager>
     [SerializeField] private string testSelectedProfileId = "test";
 
     [Header("File Storage Config")]
-    [SerializeField] private string fileName;
+    [SerializeField] private string fileName = "data_0";
     [SerializeField] private bool useEncryption;
 
     [Header("Auto Saving Configuration")]
@@ -36,8 +36,12 @@ public class DataPersistenceManager : Singleton<DataPersistenceManager>
         {
             Debug.LogWarning("Data Persistence is currently disabled!");
         }
+    }
 
+    private void Start()
+    {
         this.dataHandler = new FileDataHandler(Application.persistentDataPath, fileName, useEncryption);
+        InitializeSelectedProfileId(null);
     }
 
     private void OnEnable()
@@ -53,6 +57,11 @@ public class DataPersistenceManager : Singleton<DataPersistenceManager>
 
     public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (SceneManager.GetActiveScene().name == Loader.Scene.MainMenu.ToString() ||
+            SceneManager.GetActiveScene().name == Loader.Scene.LoadingScene.ToString() ||
+            SceneManager.GetActiveScene().name == Loader.Scene.LobbyScene.ToString() ||
+            disableDataPersistence) return;
+
         this.dataPersistenceObjects = FindAllDataPersistenceObjects();
         LoadGame();
 
@@ -100,11 +109,12 @@ public class DataPersistenceManager : Singleton<DataPersistenceManager>
 
     public void LoadGame()
     {
-        // return right away if data persistence is disabled
-        if (disableDataPersistence)
-        {
-            return;
-        }
+        if (SceneManager.GetActiveScene().name == Loader.Scene.MainMenu.ToString() ||
+            SceneManager.GetActiveScene().name == Loader.Scene.LoadingScene.ToString() ||
+            SceneManager.GetActiveScene().name == Loader.Scene.LobbyScene.ToString() ||
+            disableDataPersistence) return;
+
+        this.dataHandler = new FileDataHandler(Application.persistentDataPath, fileName, useEncryption);
 
         // load any saved data from a file using the data handler
         this.gameData = dataHandler.Load(selectedProfileId);
@@ -127,6 +137,38 @@ public class DataPersistenceManager : Singleton<DataPersistenceManager>
         {
             dataPersistenceObj.LoadData(gameData);
         }
+
+        if (!NetworkManager.Singleton.IsServer)
+        {
+            SyncWorldDataToPlayerServerRpc();
+        }
+    }
+
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SyncWorldDataToPlayerServerRpc(ServerRpcParams rpcParams = default)
+    {
+        var clientId = rpcParams.Receive.SenderClientId;
+
+        var rpcParamsForClient = new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = new[] { clientId }
+            }
+        };
+        SyncWorldDataToPlayerClientRpc(rpcParamsForClient);
+    }
+
+    [ClientRpc]
+    private void SyncWorldDataToPlayerClientRpc(ClientRpcParams clientRpcParams = default)
+    {
+        if (SceneManager.GetActiveScene().name != Loader.Scene.WorldScene.ToString()) return;
+
+        TileManager.Instance.SyncTileOnLateJoin();
+        ItemWorldManager.Instance.SyncItemWorldOnLateJoin();
+        CropManager.Instance.SyncCropsOnLateJoin();
+
     }
 
     public void SaveGame()
@@ -136,13 +178,6 @@ public class DataPersistenceManager : Singleton<DataPersistenceManager>
             SceneManager.GetActiveScene().name == Loader.Scene.LobbyScene.ToString() ||
             disableDataPersistence) return;
 
-        // return right away if data persistence is disabled
-        if (disableDataPersistence)
-        {
-            return;
-        }
-
-        // if we don't have any data to save, log a warning here
         if (this.gameData == null)
         {
             Debug.LogWarning("No data was found. A New Game needs to be started before data can be saved.");
@@ -161,7 +196,7 @@ public class DataPersistenceManager : Singleton<DataPersistenceManager>
 
     private void OnApplicationQuit()
     {
-        SaveGame();
+        //SaveGame();
     }
 
     private List<IDataPersistence> FindAllDataPersistenceObjects()
@@ -184,6 +219,7 @@ public class DataPersistenceManager : Singleton<DataPersistenceManager>
     public void CaptureScreenshot()
     {
         RenderTexture renderTexture = new RenderTexture(Camera.main.pixelWidth, Camera.main.pixelHeight, -10);
+
         Camera.main.targetTexture = renderTexture;
         Camera.main.Render();
 
@@ -196,7 +232,9 @@ public class DataPersistenceManager : Singleton<DataPersistenceManager>
         RenderTexture.active = null;
         Destroy(renderTexture);
 
-        dataHandler.SaveScreenshot(selectedProfileId, screenshot);
+        string screenFileName = "_screenshot.png";
+
+        dataHandler.SaveScreenshot(selectedProfileId, screenshot, screenFileName);
     }
 
     public Texture2D LoadScreenshot(string profileId)

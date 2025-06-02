@@ -16,4 +16,4 @@ MonoBehaviour:
   musicVolume: 1
   sfxVolume: 1
   resolutionIndex: 0
-  isFullScreen: 1
+  isFullScreen: 0

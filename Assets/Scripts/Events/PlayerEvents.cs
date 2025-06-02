@@ -2,6 +2,15 @@ using System;
 
 public class PlayerEvents
 {
+    public event Action<PlayerController> onPlayerSpawned;
+    public void OnPlayerSpawned(PlayerController player)
+    {
+        if (onPlayerSpawned != null)
+        {
+            onPlayerSpawned(player);
+        }
+    }
+
     public event Action onDisablePlayerMovement;
     public void DisablePlayerMovement()
     {

@@ -13,7 +13,7 @@ public class AreaExit : MonoBehaviour
     {
         if (collision.CompareTag("Player")) 
         {
-            //PlayerController.Instance.CanMove = false;
+            PlayerController.LocalInstance.CanMove = false;
             UI_Fade.Instance.gameObject.SetActive(true);
             SceneManagement.SetTransitionName(sceneTransitionName);
             UI_Fade.Instance.FadeToBlack();

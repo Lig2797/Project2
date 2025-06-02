@@ -6,12 +6,12 @@ using Unity.Services.Authentication;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameMultiplayer : Singleton<GameMultiplayer>
+public class GameMultiplayer : PersistentSingleton<GameMultiplayer>
 {
     public const int MAX_PLAYER_AMOUNT = 4;
     private const string PLAYER_PREFS_PLAYER_NAME_MULTIPLAYER = "PlayerNameMultiplayer";
 
-    public static bool playMultiplayer = true;
+    public static bool playMultiplayer = false;
 
     public event EventHandler OnTryingToJoinGame;
     public event EventHandler OnFailedToJoinGame;
@@ -40,8 +40,13 @@ public class GameMultiplayer : Singleton<GameMultiplayer>
         if (!playMultiplayer)
         {
             //StartHost();
-            Loader.Load(Loader.Scene.WorldScene);
-            NetworkManager.Singleton.StartHost();
+            //Loader.Load(Loader.Scene.WorldScene);
+            //NetworkManager.Singleton.StartHost();
+        }
+        else
+        {
+            //Loader.Load(Loader.Scene.WorldScene);
+            //NetworkManager.Singleton.StartClient();
         }
     }
 

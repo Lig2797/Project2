@@ -11,8 +11,10 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-public class PlayerController : Singleton<PlayerController>, IDataPersistence
+public class PlayerController : NetworkBehaviour, IDataPersistence
 {
+    public static PlayerController LocalInstance { get; private set; }
+
     #region Setup Everything
     #region Components
     [Header("Components")]
@@ -238,9 +240,6 @@ public class PlayerController : Singleton<PlayerController>, IDataPersistence
 
     [SerializeField]
     private ItemOnHand _itemOnHand;
-    [SerializeField]
-    private CinemachineVirtualCamera virtualCamera;
-
 
     [SerializeField] private InventoryManagerSO _inventoryManagerSO;
     #endregion
@@ -254,18 +253,18 @@ public class PlayerController : Singleton<PlayerController>, IDataPersistence
 
 
     #region Setup Before Game Start
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
-
         _inventoryController = GetComponent<InventoryController>();
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         col = GetComponent<Collider2D>();
     }
 
-    private void OnEnable()
+    public override void OnNetworkSpawn()
     {
+        if (!IsOwner) return;
+
         _inputReader.playerActions.moveEvent += OnMove;
         _inputReader.playerActions.attackEvent += OnAttack;
         _inputReader.playerActions.interactEvent += OnInteract;
@@ -273,10 +272,20 @@ public class PlayerController : Singleton<PlayerController>, IDataPersistence
         _inputReader.playerActions.runEvent += OnRun;
         _inputReader.playerActions.submitEvent += OnSubmit;
         _inventoryManagerSO.onChangedSelectedSlot += CheckAnimation;
+
+        LocalInstance = this;
+        DontDestroyOnLoad(gameObject);
+
+        DataPersistenceManager.Instance.LoadGame();
+
+        bool isHost = NetworkManager.Singleton.IsHost && IsServer;
+        GameEventsManager.Instance.playerEvents.OnPlayerSpawned(this);
     }
 
-    private void OnDisable()
+    public override void OnNetworkDespawn()
     {
+        if (!IsOwner) return;
+
         _inputReader.playerActions.moveEvent -= OnMove;
         _inputReader.playerActions.attackEvent -= OnAttack;
         _inputReader.playerActions.interactEvent -= OnInteract;
@@ -284,40 +293,13 @@ public class PlayerController : Singleton<PlayerController>, IDataPersistence
         _inputReader.playerActions.runEvent -= OnRun;
         _inputReader.playerActions.submitEvent -= OnSubmit;
         _inventoryManagerSO.onChangedSelectedSlot -= CheckAnimation;
-    }
 
-    public override void OnNetworkSpawn()
-    {
-        if (IsOwner)
+        DataPersistenceManager.Instance.SaveGame();
+
+        bool isHost = NetworkManager.Singleton.IsHost && IsServer; // true only on host machine
+        if (isHost)
         {
-            DontDestroyOnLoad(gameObject);
-
-            bool isHost = NetworkManager.Singleton.IsHost && IsServer; // true only on host machine
-        }
-    }
-
-    
-    public override void OnNetworkDespawn()
-    {
-        if (IsOwner)
-        {
-            bool isHost = NetworkManager.Singleton.IsHost && IsServer; // true only on host machine
-            
-            DataPersistenceManager.Instance.SaveGame();
             DataPersistenceManager.Instance.CaptureScreenshot();
-        }
-    }
-
-    private void Start()
-    {
-        if (!IsOwner)
-        {
-            enabled = false;
-        }
-        else if (IsOwner && SceneManagement.GetCurrentSceneName().Equals(Loader.Scene.WorldScene.ToString()))
-        {
-            virtualCamera = GameObject.Find("Virtual Camera").GetComponent<CinemachineVirtualCamera>();
-            virtualCamera.Follow = transform;
         }
     }
 
