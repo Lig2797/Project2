@@ -1,20 +1,40 @@
 using Cinemachine;
 using UnityEngine;
 
-public class CameraController : MonoBehaviour
+public class CameraController : Singleton<CameraController>
 {
+    private bool hasFollowTarget = false;
     public CinemachineVirtualCamera followCamera;
-    
-    void Start()
+
+    private void OnEnable()
     {
-        GameObject player = FindAnyObjectByType<PlayerController>().gameObject;
-        if (player != null)
+        GameEventsManager.Instance.playerEvents.onPlayerSpawned += SetFollowTarget;
+    }
+
+    private void OnDisable()
+    {
+        GameEventsManager.Instance.playerEvents.onPlayerSpawned -= SetFollowTarget;
+    }
+
+    private void Start()
+    {
+        if (!hasFollowTarget)
         {
-            followCamera.Follow = player.transform;
-        }
-        else
-        {
-            Debug.LogError("PlayerController not found in the scene.");
+            PlayerController player = PlayerController.LocalInstance;
+            if (player != null)
+            {
+                SetFollowTarget(player);
+            }
+            else
+            {
+                Debug.LogWarning("No PlayerController found in the scene. Camera will not follow any target.");
+            }
         }
     }
+
+    private void SetFollowTarget(PlayerController player)
+    {
+        followCamera.Follow = player.transform;
+        hasFollowTarget = true;
+    }    
 }

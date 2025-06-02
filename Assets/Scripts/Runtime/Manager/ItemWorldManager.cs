@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Collections;
 
-public class ItemWorldManager : Singleton<ItemWorldManager>, IDataPersistence
+public class ItemWorldManager : NetworkPersistentSingleton<ItemWorldManager>, IDataPersistence
 {
     private ListItemWorld _listItemWorld;
     public NetworkList<ItemWorldNetworkData> networkItemWorldList;

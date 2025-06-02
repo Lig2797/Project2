@@ -48,6 +48,7 @@ public class FileDataHandler
                 }
 
                 loadedData = JsonUtility.FromJson<GameData>(dataToLoad);
+                Debug.Log("Loaded data for profileId: " + profileId + " from path: " + fullPath);
             }
             catch (Exception e)
             {
@@ -152,8 +153,6 @@ public class FileDataHandler
         {
             string profileId = dirInfo.Name;
 
-            // defensive programming - check if the data file exists
-            // if it doesn't, then this folder isn't a profile and should be skipped
             string fullPath = Path.Combine(dataDirPath, profileId, dataFileName);
             if (!File.Exists(fullPath))
             {
@@ -162,10 +161,8 @@ public class FileDataHandler
                 continue;
             }
 
-            // load the game data for this profile and put it in the dictionary
             GameData profileData = Load(profileId);
-            // defensive programming - ensure the profile data isn't null,
-            // because if it is then something went wrong and we should let ourselves know
+            
             if (profileData != null)
             {
                 profileDictionary.Add(profileId, profileData);
@@ -255,16 +252,16 @@ public class FileDataHandler
         return success;
     }
 
-    public void SaveScreenshot(string profileId, Texture2D screenshot)
+    public void SaveScreenshot(string profileId, Texture2D screenshot, string screenFileName)
     {
-        string fullPath = Path.Combine(dataDirPath, profileId, "_screenshot.png");
+        string fullPath = Path.Combine(dataDirPath, profileId, screenFileName);
         byte[] bytes = screenshot.EncodeToPNG();
         File.WriteAllBytes(fullPath, bytes);
     }
 
     public Texture2D GetScreenshot(string profileId)
     {
-        string fullPath = Path.Combine(dataDirPath, profileId, "_screenshot.png");
+        string fullPath = Path.Combine(dataDirPath, profileId, "_screenshot_0.png");
         if (File.Exists(fullPath))
         {
             byte[] bytes = File.ReadAllBytes(fullPath);
