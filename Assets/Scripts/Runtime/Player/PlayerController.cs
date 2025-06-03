@@ -20,9 +20,9 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
     [Header("Components")]
     [SerializeField] private TileTargeter tileTargeter;
     [SerializeField] private InventoryController _inventoryController;
-    private Rigidbody2D rb;
-    private Animator animator;
-    private Collider2D col;
+    [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private Animator animator;
+    [SerializeField] private Collider2D col;
     #endregion
 
     #region PlayerStatus
@@ -279,6 +279,10 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
         DataPersistenceManager.Instance.LoadGame();
 
         bool isHost = NetworkManager.Singleton.IsHost && IsServer;
+        if (isHost)
+        {
+            col.enabled = false;
+        }
         GameEventsManager.Instance.playerEvents.OnPlayerSpawned(this);
     }
 

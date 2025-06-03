@@ -197,6 +197,7 @@ public class DataPersistenceManager : PersistentSingleton<DataPersistenceManager
 
     private void OnApplicationQuit()
     {
+        SettingsManager.Instance.SaveData();
         //SaveGame();
     }
 
@@ -219,6 +220,8 @@ public class DataPersistenceManager : PersistentSingleton<DataPersistenceManager
 
     public void CaptureScreenshot()
     {
+        if (!NetworkManager.Singleton.IsHost) return;
+
         RenderTexture renderTexture = new RenderTexture(Camera.main.pixelWidth, Camera.main.pixelHeight, -10);
 
         Camera.main.targetTexture = renderTexture;

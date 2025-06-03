@@ -44,8 +44,8 @@ public class UISettingsController : MonoBehaviour
         };
 
         // Set initial values from SettingsManager
-        _resolutionScreenDropdown.index = SettingsManager.Instance.CurrentSettings.ResolutionIndex;
-        _fullScreenToggle.value = SettingsManager.Instance.CurrentSettings.IsFullScreen;
+        _resolutionScreenDropdown.index = SettingsManager.Instance.defaultSettings.resolutionIndex;
+        _fullScreenToggle.value = SettingsManager.Instance.defaultSettings.isFullScreen;
     }
 
     private void OnEnable()
@@ -56,6 +56,16 @@ public class UISettingsController : MonoBehaviour
         _soundSettingButton.clicked += OnSoundSettingClicked;
         _controlSettingButton.clicked += OnControlSettingClicked;
         _optionsBackButton.clicked += OnOptionsBackButtonClicked;
+
+        _resolutionScreenDropdown.RegisterValueChangedCallback(evt =>
+        {
+            int resolutionIndex = _resolutionScreenDropdown.index;
+            SettingsManager.Instance.SetResolution(resolutionIndex);
+        });
+        _fullScreenToggle.RegisterValueChangedCallback(evt =>
+        {
+            SettingsManager.Instance.SetFullScreen(evt.newValue);
+        });
     }
 
     private void OnDisable()
