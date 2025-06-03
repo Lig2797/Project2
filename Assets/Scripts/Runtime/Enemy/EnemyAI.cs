@@ -4,7 +4,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class EnemyAI : NetworkBehaviour
+public class EnemyAI : ItemDropableEntity
 {
     #region StateMachine Setup
     public StateMachine StateMachine { get; private set; }
@@ -23,6 +23,7 @@ public class EnemyAI : NetworkBehaviour
     #region Components
     [HideInInspector] public Rigidbody2D Rb;
     [HideInInspector] public Animator Animator;
+    [HideInInspector] public Damageable Damageable;
     #endregion
 
     #region Variables
@@ -126,11 +127,12 @@ public class EnemyAI : NetworkBehaviour
 
     #region Events
     #endregion
-    private void Awake()
+    protected override void Awake()
     {
 
         Rb = GetComponent<Rigidbody2D>();
         Animator = GetComponent<Animator>();
+        Damageable = GetComponent<Damageable>();
 
         StateMachine = new StateMachine();
 
@@ -262,11 +264,15 @@ public class EnemyAI : NetworkBehaviour
 
     public void EnemyOnHit(Vector2 knockBackDirection)
     {
-        Animator.SetTrigger(HurtParameter);
+        if(!Damageable.IsAlive) Animator.SetTrigger("Dead");
+        else
+        {
+            Animator.SetTrigger(HurtParameter);
 
-        LastMovement = -knockBackDirection.normalized;
+            LastMovement = -knockBackDirection.normalized;
 
-        StartCoroutine(ApplyKnockback(knockBackDirection));
+            StartCoroutine(ApplyKnockback(knockBackDirection));
+        }
     }
 
     private IEnumerator ApplyKnockback(Vector2 knockBackDirection)

@@ -88,6 +88,7 @@ public class UIMainMenuController : MonoBehaviour
 
     private void OnQuitGame()
     {
+        DataPersistenceManager.Instance.SaveGame();
         Application.Quit();
     }
 

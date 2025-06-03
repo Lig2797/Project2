@@ -61,6 +61,9 @@ TagManager:
   - name: Ground
     uniqueID: 3273337507
     locked: 0
+  - name: MineGround
+    uniqueID: 2734521259
+    locked: 0
   - name: Grass
     uniqueID: 2954708233
     locked: 0

@@ -2301,7 +2301,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tileset Mine(20x21)_99
+      name: MineGround
       rect:
         serializedVersion: 2
         x: 192
@@ -6459,15 +6459,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tileset Mine(20x21)_288
+      name: MineDoor
       rect:
         serializedVersion: 2
         x: 288
-        y: 64
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        y: 48
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -6476,28 +6476,6 @@ TextureImporter:
       bones: []
       spriteID: 08fca7914f4212e4a8ee825b1bee4e8f
       internalID: -1179338201
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Tileset Mine(20x21)_289
-      rect:
-        serializedVersion: 2
-        x: 304
-        y: 64
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a1ed16525452af24b944236eca75c3d1
-      internalID: -1210490916
       vertices: []
       indices: 
       edges: []
@@ -6789,50 +6767,6 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tileset Mine(20x21)_303
-      rect:
-        serializedVersion: 2
-        x: 288
-        y: 48
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9df6467e373d12f4d88772f6c37d2613
-      internalID: 195579627
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Tileset Mine(20x21)_304
-      rect:
-        serializedVersion: 2
-        x: 304
-        y: 48
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b1da56e6a9953e544804b61b324a4e38
-      internalID: 240305250
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Tileset Mine(20x21)_305
       rect:
         serializedVersion: 2
@@ -7097,15 +7031,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tileset Mine(20x21)_317
+      name: Stair_2
       rect:
         serializedVersion: 2
         x: 304
-        y: 32
+        y: 16
         width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -7339,7 +7273,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tileset Mine(20x21)_328
+      name: Stair_1
       rect:
         serializedVersion: 2
         x: 288
@@ -7356,28 +7290,6 @@ TextureImporter:
       bones: []
       spriteID: 5fbad326333adb044a60acbe5f40fbbe
       internalID: 539966099
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Tileset Mine(20x21)_329
-      rect:
-        serializedVersion: 2
-        x: 304
-        y: 16
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a1e7b8d8d27bcfa43a703e3eb5fda7ed
-      internalID: -1126625973
       vertices: []
       indices: 
       edges: []
@@ -7658,6 +7570,10 @@ TextureImporter:
       Mine wall 7: -1938395131
       Mine wall 8: 333271127
       Mine wall 9: -1063940261
+      MineDoor: -1179338201
+      MineGround: -1686022543
+      Stair_1: 539966099
+      Stair_2: -1048459328
       Tileset Mine(20x21)_10: 52364268
       Tileset Mine(20x21)_100: 1408634361
       Tileset Mine(20x21)_101: -1731736072
@@ -7858,7 +7774,6 @@ TextureImporter:
       Tileset Mine(20x21)_285: 1719477816
       Tileset Mine(20x21)_286: -1978943252
       Tileset Mine(20x21)_287: -1899279276
-      Tileset Mine(20x21)_288: -1179338201
       Tileset Mine(20x21)_289: -1210490916
       Tileset Mine(20x21)_29: -1251574499
       Tileset Mine(20x21)_290: 602526179
@@ -7890,7 +7805,6 @@ TextureImporter:
       Tileset Mine(20x21)_314: 1112915914
       Tileset Mine(20x21)_315: 1150921996
       Tileset Mine(20x21)_316: -226422000
-      Tileset Mine(20x21)_317: -1048459328
       Tileset Mine(20x21)_318: -1774113929
       Tileset Mine(20x21)_319: 1773134962
       Tileset Mine(20x21)_32: 529249702
@@ -7902,8 +7816,6 @@ TextureImporter:
       Tileset Mine(20x21)_325: 32106244
       Tileset Mine(20x21)_326: 204412155
       Tileset Mine(20x21)_327: -1037370313
-      Tileset Mine(20x21)_328: 539966099
-      Tileset Mine(20x21)_329: -1126625973
       Tileset Mine(20x21)_33: 1304756422
       Tileset Mine(20x21)_330: 1135728431
       Tileset Mine(20x21)_331: -1192261854
@@ -7956,7 +7868,6 @@ TextureImporter:
       Tileset Mine(20x21)_96: -416281574
       Tileset Mine(20x21)_97: -1285160172
       Tileset Mine(20x21)_98: 892006645
-      Tileset Mine(20x21)_99: -1686022543
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

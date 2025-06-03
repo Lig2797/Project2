@@ -261,7 +261,7 @@ public class FileDataHandler
 
     public Texture2D GetScreenshot(string profileId)
     {
-        string fullPath = Path.Combine(dataDirPath, profileId, "_screenshot_0.png");
+        string fullPath = Path.Combine(dataDirPath, profileId, "_screenshot.png");
         if (File.Exists(fullPath))
         {
             byte[] bytes = File.ReadAllBytes(fullPath);

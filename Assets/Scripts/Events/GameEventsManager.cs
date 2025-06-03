@@ -41,6 +41,6 @@ public class GameEventsManager : MonoBehaviour
 
     private void Start()
     {
-        Loader.Load(Loader.Scene.MainMenu);
+        //Loader.Load(Loader.Scene.MainMenu);
     }
 }

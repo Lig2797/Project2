@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2962c5bcf9230f6418a39d9de2f65c7c, type: 3}
   m_Name: Maple Tree
   m_EditorClassIdentifier: 
-  animators: {fileID: 9100000, guid: 6c0d8c8e13deb5d448d9798e85c1d8a3, type: 2}
+  id: a928eab8-e654-456b-a076-db9b8c0e888b
   mineBlockIdleSprite: {fileID: 0}
   mineBlockHitSprite: {fileID: 0}
   ItemToDrop: {fileID: 11400000, guid: d6b133717e4c1834ea613b6d51262c5d, type: 2}

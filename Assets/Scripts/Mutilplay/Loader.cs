@@ -10,6 +10,8 @@ public static class Loader
     {
         MainMenu,
         WorldScene,
+        MineCaveScene,
+        MineScene,
         Cutscene,
         LobbyScene,
         LoadingScene,

@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 6051902742516470440}
   - component: {fileID: 7104534038762311621}
   - component: {fileID: 4763312408438566351}
+  - component: {fileID: 181672851930991639}
   - component: {fileID: 2986477172446649099}
   - component: {fileID: 99882147283229194}
-  - component: {fileID: 181672851930991639}
+  - component: {fileID: -7570664073348368973}
   m_Layer: 3
   m_Name: Maple Tree
   m_TagString: Untagged
@@ -81,7 +82,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1449220059
-  m_SortingLayer: 15
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_Sprite: {fileID: -2111084553, guid: 621639a1c189b36479c1f0aeec13c06a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -153,6 +154,31 @@ CapsuleCollider2D:
   m_Offset: {x: 0.0046755797, y: -0.39773238}
   m_Size: {x: 0.7802341, y: 0.4294917}
   m_Direction: 1
+--- !u!114 &181672851930991639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1059118235141350529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 1249891198
+  InScenePlacedSourceGlobalObjectIdHash: 1249891198
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!114 &2986477172446649099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183,7 +209,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onHit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2986477172446649099}
+        m_TargetAssemblyTypeName: EnviromentTree, Assembly-CSharp
+        m_MethodName: OnHit
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: -7570664073348368973}
+        m_TargetAssemblyTypeName: ObjectShaker, Assembly-CSharp
+        m_MethodName: Shake
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   playerHealth: {fileID: 0}
   playerMaxHealth: {fileID: 0}
   _maxHealth: 40
@@ -191,7 +241,7 @@ MonoBehaviour:
   _isAlive: 1
   isInvincible: 0
   invincibilityTime: 0.1
---- !u!114 &181672851930991639
+--- !u!114 &-7570664073348368973
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -200,22 +250,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1059118235141350529}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Script: {fileID: 11500000, guid: 4b8aa0d6c483b984db48a99b5ba4ac64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3590504701
-  InScenePlacedSourceGlobalObjectIdHash: 1249891198
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 0
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
+  shakeDuration: 0.1
+  shakeStrength: 0.1
 --- !u!1 &3646881572690721612
 GameObject:
   m_ObjectHideFlags: 0

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 9106863495829209123}
   - component: {fileID: 6678653359568888805}
   - component: {fileID: 8769632812019555395}
+  - component: {fileID: 4830277166305885857}
   m_Layer: 6
   m_Name: SmallMineBlock
   m_TagString: Untagged
@@ -54,6 +55,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -76,7 +80,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1449220059
-  m_SortingLayer: 12
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -97,6 +101,7 @@ CapsuleCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2523420566443317121}
   m_Enabled: 1
+  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -120,7 +125,8 @@ CapsuleCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_UsedByComposite: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0.140625}
   m_Size: {x: 0.5625, y: 0.5625}
   m_Direction: 0
@@ -136,7 +142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98572c368dbbedb439adcb4826b1fa13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageableHit:
+  onHit:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8769632812019555395}
@@ -151,6 +157,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 4830277166305885857}
+        m_TargetAssemblyTypeName: ObjectShaker, Assembly-CSharp
+        m_MethodName: Shake
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  playerHealth: {fileID: 0}
+  playerMaxHealth: {fileID: 0}
   _maxHealth: 40
   _health: 40
   _isAlive: 1
@@ -158,7 +178,7 @@ MonoBehaviour:
   invincibilityTime: 0.25
 --- !u!95 &9106863495829209123
 Animator:
-  serializedVersion: 5
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -172,6 +192,7 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
@@ -191,6 +212,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GlobalObjectIdHash: 2146097825
   InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -198,6 +221,8 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!114 &8769632812019555395
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -210,7 +235,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e4fb6703a92c9e4899c8887356318ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   entityInfo: {fileID: 0}
   itemDropPrefab: {fileID: 1324879070572636304, guid: 758e550aad33f9247bb2707f07dfc14c, type: 3}
   _spriteRenderer: {fileID: 0}
   _onHitTime: 0.1
+  _onMineralsDestroy: {fileID: 11400000, guid: f998042ea12c066448bba0f8f6c07faf, type: 2}
+  stoneAndMineralType: 0
+--- !u!114 &4830277166305885857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2523420566443317121}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b8aa0d6c483b984db48a99b5ba4ac64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shakeDuration: 0.1
+  shakeStrength: 0.1

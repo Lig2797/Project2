@@ -132,6 +132,7 @@ public class DataPersistenceManager : PersistentSingleton<DataPersistenceManager
             return;
         }
 
+
         // push the loaded data to all other scripts that need it
         foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects)
         {
@@ -196,6 +197,7 @@ public class DataPersistenceManager : PersistentSingleton<DataPersistenceManager
 
     private void OnApplicationQuit()
     {
+        SettingsManager.Instance.SaveData();
         //SaveGame();
     }
 
@@ -218,6 +220,8 @@ public class DataPersistenceManager : PersistentSingleton<DataPersistenceManager
 
     public void CaptureScreenshot()
     {
+        if (!NetworkManager.Singleton.IsHost) return;
+
         RenderTexture renderTexture = new RenderTexture(Camera.main.pixelWidth, Camera.main.pixelHeight, -10);
 
         Camera.main.targetTexture = renderTexture;

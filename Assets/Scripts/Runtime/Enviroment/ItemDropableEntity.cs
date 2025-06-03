@@ -4,7 +4,6 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-[RequireComponent(typeof(CapsuleCollider2D))]
 [RequireComponent(typeof(Damageable))]
 [RequireComponent(typeof(NetworkObject))]
 public abstract class ItemDropableEntity : NetworkBehaviour
@@ -18,14 +17,17 @@ public abstract class ItemDropableEntity : NetworkBehaviour
         damageable = GetComponent<Damageable>();
     }
 
-    public virtual void OnHit(int damage, Vector2 knockback) { }
+    public virtual void OnHit(Vector2 knockback) { }
 
 
-    public void DropItem(bool makeLessDrop)
+    [ServerRpc(RequireOwnership = false)]
+    public void DropItemServerRpc(bool makeLessDrop)
     {
         if(!IsServer) return;
         int numItem = 0;
         numItem = UtilsClass.PickOneByRatio(entityInfo.numOfItemCouldDrop, entityInfo.ratioForEachNum);
+
+        Debug.Log("Drop item from entity: " + numItem);
         if (makeLessDrop) numItem /= 2;
         ItemWorld itemWorldDropInfo = new ItemWorld(System.Guid.NewGuid().ToString(), entityInfo.ItemToDrop, numItem, transform.position,1);
         ItemWorldManager.Instance.DropItemIntoWorld(itemWorldDropInfo, false, false);

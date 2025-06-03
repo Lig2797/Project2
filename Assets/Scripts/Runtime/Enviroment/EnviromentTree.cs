@@ -45,16 +45,16 @@ public class EnviromentTree : ItemDropableEntity
                 }
         }
     }
-    public override void OnHit(int damage, Vector2 knockback)
+    public override void OnHit(Vector2 knockback)
     {
         if (!damageable.IsAlive)
         {
-            DropItem(!damageable.IsAlive);
+            DropItemServerRpc(!damageable.IsAlive);
             Destroy(gameObject);
         }else if (damageable.Health == 20)
         {
             _animator.Play("Root_Idle");
-            DropItem(!damageable.IsAlive);
+            DropItemServerRpc(!damageable.IsAlive);
         }
         else _animator.SetTrigger("Hit");
     }
