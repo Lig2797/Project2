@@ -28,9 +28,12 @@ public class GameFlowManager : PersistentSingleton<GameFlowManager>, IDataPersis
 
     public void LoadData(GameData data)
     {
+        gameFlowSO.lastScene = data.GameFlowData.LastScene;
+
+        //if (gameFlowSO.hasChoosenCharacter) return;
+
         gameFlowSO.hasChoosenCharacter = data.GameFlowData.HasChoosenCharacter;
         gameFlowSO.completedFirstCutscene = data.GameFlowData.CompletedFirstCutscene;
-        gameFlowSO.lastScene = data.GameFlowData.LastScene;
     }
 
     public void SaveData(ref GameData data)
@@ -38,5 +41,7 @@ public class GameFlowManager : PersistentSingleton<GameFlowManager>, IDataPersis
         data.SetGameFlowData(new GameFlowData (gameFlowSO.hasChoosenCharacter,
                                                gameFlowSO.completedFirstCutscene,
                                                SceneManager.GetActiveScene().name));
+
+        gameFlowSO.ResetGameFlow();
     }
 }

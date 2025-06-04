@@ -48,26 +48,19 @@ public class UIInputNameConfirmButton : MonoBehaviour
 
         GameMultiplayerManager.Instance.SetPlayerName(inputField.text);
 
-        if (!GameFlowManager.Instance.gameFlowSO.completedFirstCutscene)
+        if (!GameMultiplayerManager.playMultiplayer)
         {
-            Loader.Load(Loader.Scene.CutScene);
-            NetworkManager.Singleton.StartHost();
+            if (!GameFlowManager.Instance.gameFlowSO.completedFirstCutscene)
+            {
+                Loader.Load(Loader.Scene.CutScene);
+                NetworkManager.Singleton.StartHost();
+            }
+            else Loader.Load(Loader.Scene.CutScene);
         }
-        else Loader.Load(Loader.Scene.CutScene);
-
-        //if (!GameMultiplayerManager.playMultiplayer)
-        //{
-        //    if (!GameFlowManager.Instance.gameFlowSO.completedFirstCutscene)
-        //    {
-        //        Loader.Load(Loader.Scene.CutScene);
-        //        NetworkManager.Singleton.StartHost();
-        //    }
-        //    else Loader.Load(Loader.Scene.CutScene);
-        //}
-        //else
-        //{
-        //    errorText.gameObject.SetActive(false);
-        //    joinPanel.SetActive(true);
-        //}
+        else
+        {
+            errorText.gameObject.SetActive(false);
+            joinPanel.SetActive(true);
+        }
     }
 }

@@ -10,7 +10,7 @@ using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameMultiplayerManager : NetworkSingleton<GameMultiplayerManager>, IDataPersistence
+public class GameMultiplayerManager : NetworkSingleton<GameMultiplayerManager>
 {
     public const int MAX_PLAYER_AMOUNT = 3;
     private const string PLAYER_PREFS_PLAYER_NAME_MULTIPLAYER = "PlayerNameMultiplayer";
@@ -341,21 +341,5 @@ public class GameMultiplayerManager : NetworkSingleton<GameMultiplayerManager>, 
     {
         NetworkManager.Singleton.DisconnectClient(clientId);
         NetworkManager_Server_OnClientDisconnectCallback(clientId);
-    }
-
-    public void LoadData(GameData data)
-    {
-        
-    }
-
-    public void SaveData(ref GameData data)
-    {
-        data.PlayerData.SetPlayerDataNetwork(new PlayerDataNetwork
-        {
-            playerName = playerDataSO.playerName,
-            characterId = playerDataSO.characterId,
-            playerId = AuthenticationService.Instance.PlayerId,
-            clientId = NetworkManager.Singleton.LocalClientId
-        });
     }
 }

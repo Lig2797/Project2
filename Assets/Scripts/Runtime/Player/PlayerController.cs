@@ -686,6 +686,8 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
 
     public void LoadData(GameData gameData)
     {
+        if (!gameData.GameFlowData.HasChoosenCharacter) return;
+
         playerDataSO.characterId = gameData.PlayerData.PlayerDataNetwork.characterId;
         playerDataSO.playerName = gameData.PlayerData.PlayerDataNetwork.playerName;
         playerDataSO.playerId = gameData.PlayerData.PlayerDataNetwork.playerId;
