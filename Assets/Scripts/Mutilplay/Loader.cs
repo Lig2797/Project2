@@ -12,7 +12,7 @@ public static class Loader
         WorldScene,
         MineCaveScene,
         MineScene,
-        Cutscene,
+        CutScene,
         LobbyScene,
         LoadingScene,
         CharacterSelectScene,
@@ -28,7 +28,10 @@ public static class Loader
     {
         Loader.targetScene = targetScene;
         Loader.isMultiSceneLoad = isMultiSceneLoad;
-        SceneManager.LoadSceneAsync(Scene.LoadingScene.ToString());
+        if(!isMultiSceneLoad)
+            SceneManager.LoadSceneAsync(Scene.LoadingScene.ToString());
+        else
+            SceneManager.LoadSceneAsync(Scene.LoadingScene.ToString(),LoadSceneMode.Additive);
     }
 
     public static void LoadNetwork(Scene targetScene)

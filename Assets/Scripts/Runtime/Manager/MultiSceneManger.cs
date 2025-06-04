@@ -13,8 +13,8 @@ public class MultiSceneManger : PersistentSingleton<MultiSceneManger>
 
     private List<AreaEntrance> allEntranceInWorldScene = new List<AreaEntrance>();
 
-    private GameObject _worldSceneMainCamera;
-    private GameObject _worldSceneVirtualCamera;
+    public GameObject _worldSceneMainCamera;
+    public GameObject _worldSceneVirtualCamera;
 
     //public void EnterSubScene(string sceneName)
     //{
@@ -46,7 +46,7 @@ public class MultiSceneManger : PersistentSingleton<MultiSceneManger>
     //        OnChangeScene(SceneManager.GetSceneByName(sceneName));
     //    }
 
-        
+
     //}
 
 
@@ -65,7 +65,15 @@ public class MultiSceneManger : PersistentSingleton<MultiSceneManger>
 
     //}
 
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
 
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
     private void SetGlobalLightActiveInScene(Scene scene, bool active)
     {
         if (!scene.IsValid() || !scene.isLoaded) return;
@@ -139,5 +147,17 @@ public class MultiSceneManger : PersistentSingleton<MultiSceneManger>
                 return;
         }
     }
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == _worldSceneName)
+        {
+            GameObject mainWorldSceneCamera = SceneUtils.FindGameObjectWithTagInScene("MainCamera", scene);
+            GameObject worldSceneVirtualCamera = SceneUtils.FindGameObjectByNameInScene("Virtual Camera", scene);
 
+            SetWorldSceneCameraObject(mainWorldSceneCamera, worldSceneVirtualCamera);
+            SaveWorldSceneRef(scene);
+
+            Debug.Log("World scene references saved after load.");
+        }
+    }
 }
