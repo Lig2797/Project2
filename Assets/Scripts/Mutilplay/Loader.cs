@@ -22,9 +22,12 @@ public static class Loader
 
     public static Scene TargetScene => targetScene;
 
-    public static void Load(Scene targetScene)
+    public static bool isMultiSceneLoad;
+
+    public static void Load(Scene targetScene, bool isMultiSceneLoad = false)
     {
         Loader.targetScene = targetScene;
+        Loader.isMultiSceneLoad = isMultiSceneLoad;
         SceneManager.LoadSceneAsync(Scene.LoadingScene.ToString());
     }
 

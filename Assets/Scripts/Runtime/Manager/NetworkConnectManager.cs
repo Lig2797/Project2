@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
-public class NetworkConnectManager : PersistentSingleton<NetworkConnectManager>
+public class NetworkConnectManager : NetworkPersistentSingleton<NetworkConnectManager>
 {
     private Dictionary<ulong, PlayerController> connectedPlayers;
 

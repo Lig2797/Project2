@@ -1,7 +1,7 @@
 using Cinemachine;
 using UnityEngine;
 
-public class CameraController : Singleton<CameraController>
+public class CameraController : PersistentSingleton<CameraController>
 {
     private bool hasFollowTarget = false;
     public CinemachineVirtualCamera followCamera;
@@ -32,9 +32,23 @@ public class CameraController : Singleton<CameraController>
         }
     }
 
-    private void SetFollowTarget(PlayerController player)
+    public void SetFollowTarget(PlayerController player = null)
     {
-        followCamera.Follow = player.transform;
-        hasFollowTarget = true;
+        if(player != null)
+        {
+            followCamera.Follow = player.transform;
+            hasFollowTarget = true;
+            return;
+        }
+
+        followCamera.Follow = null;
+        hasFollowTarget = false;
     }    
+
+    public void RefreshFollowCamera(CinemachineVirtualCamera newFollowCamera)
+    {
+        followCamera = newFollowCamera;
+        PlayerController player = PlayerController.LocalInstance;
+        SetFollowTarget(player);
+    }
 }

@@ -141,14 +141,13 @@ public static class CaveShapes
 }
 
 
-public class CaveGenerator : NetworkBehaviour
+public class CaveGenerator : NetworkSingleton<CaveGenerator>
 {
     [SerializeField]
     private int wallThickness;
 
     public List<Tilemap> tilemaps = new List<Tilemap>();
     public List<TileBase> tileBases = new List<TileBase>();
-
     public enum TilemapName
     {
         Ground,
@@ -169,7 +168,12 @@ public class CaveGenerator : NetworkBehaviour
     // Objects
     [SerializeField]
     private GameObject _torchPrefab;
-    NetworkList<NetworkVector3Int> torchPositions = new NetworkList<NetworkVector3Int>();
+    List<Vector3Int> torchPositions = new List<Vector3Int>();
+
+    [SerializeField]
+    private List<GameObject> _enemys = new List<GameObject>();
+    [SerializeField]
+    List<Vector3Int> _groundTilePositions = new List<Vector3Int>();
 
     #region Ratios
     // Minerals
@@ -232,7 +236,7 @@ public class CaveGenerator : NetworkBehaviour
         CaveManager.Instance.AdjustLocalCaveLevel(1);
         AdjustMineralsRatio();
         ChooseMineralToSpawn();
-
+        GetComponent<NetworkObject>().Spawn();
     }
 
     public override void OnNetworkSpawn()
@@ -291,7 +295,6 @@ public class CaveGenerator : NetworkBehaviour
     }
     void DrawSelectedCave()
     {
-        Debug.Log("Draw");
         int caveNumber = CaveManager.Instance.GetCaveLevelFromNetwork();
         if (caveNumber == -1)
             caveNumber = Random.Range(0, CaveShapes.caves.Length);
@@ -340,6 +343,7 @@ public class CaveGenerator : NetworkBehaviour
                     break;
                 case 1: // ground
                     ModifyTileServerRpc(TilemapName.Ground.ToString(), TilebaseName.Ground.ToString(), networkPos);
+                    _groundTilePositions.Add(networkPos.ToVector3Int()); // store for later enemy
                     CheckAndPlaceMineralsServerRpc(pos);
                     break;
                 case 2: // mine ground
@@ -353,7 +357,7 @@ public class CaveGenerator : NetworkBehaviour
                     break;
                 case 4: // torch
                     ModifyTileServerRpc(TilemapName.Ground.ToString(), TilebaseName.Ground.ToString(), networkPos);
-                    torchPositions.Add(new NetworkVector3Int(pos)); // store for later torch placement
+                    torchPositions.Add(pos); // store for later torch placement
                     break;
             }
         }
@@ -415,14 +419,13 @@ public class CaveGenerator : NetworkBehaviour
     private void AddInteriorForCaveServerRpc()
     {
         PlaceTorches();
-
+        AddEnemy();
     }
 
     private void PlaceTorches()
     {
-        foreach (var netPos in torchPositions)
+        foreach (var pos in torchPositions)
         {
-            var pos = netPos.ToVector3Int();
             GameObject torch = Instantiate(_torchPrefab, GetTilemapByName(TilemapName.Ground.ToString()).GetCellCenterWorld(pos), Quaternion.identity);
             torch.GetComponent<NetworkObject>().Spawn();
             Vector3Int[] directionToWall = new Vector3Int[]
@@ -439,13 +442,25 @@ public class CaveGenerator : NetworkBehaviour
                 if (GetTilemapByName(TilemapName.Wall.ToString()).GetTile(wallPos) != null)
                 {
 
-                    SetTorchPositionClientRpc(new NetworkVector3Int(pos), torch.GetComponent<NetworkObject>());
+                    SetTorchPositionClientRpc(new NetworkVector3Int(direction), torch.GetComponent<NetworkObject>());
                     
                     break;
                 }
 
 
             }
+        }
+    }
+
+    private void AddEnemy()
+    {
+        for(int i = 0; i < 4; i++)
+        {
+            Vector3Int groundPos = _groundTilePositions[Random.Range(0, _groundTilePositions.Count)];
+            Vector3 groundWorldPos = GetTilemapByName(TilemapName.Ground.ToString()).GetCellCenterWorld(groundPos);
+            Vector3 enemyPos = groundPos + new Vector3(0.5f, 0.5f, 0); // Offset to center the enemy on the tile
+            GameObject enemy = Instantiate(_enemys[Random.Range(0, _enemys.Count)], enemyPos, Quaternion.identity);
+            enemy.GetComponent<NetworkObject>().Spawn();
         }
     }
 
@@ -486,6 +501,7 @@ public class CaveGenerator : NetworkBehaviour
             if (Random.Range(0, 100) < _mineralFillPercent) // true = mineral, false = stone
             {
                 ItemDropableEntitySO smallMineralInfo = _chosenSmallMineralInfoArray[Random.Range(0, _chosenSmallMineralInfoArray.Length)];
+                Debug.Log(smallMineralInfo.id);
                 mineral.InitializeMineralClientRpc(smallMineralInfo.id);
             }
             else

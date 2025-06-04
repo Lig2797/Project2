@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: -1275534686229707652}
   - component: {fileID: -5150478161427860128}
   - component: {fileID: 4931434756416402080}
+  - component: {fileID: 1863786918112626065}
   m_Layer: 0
   m_Name: ItemToDrop
   m_TagString: Untagged
@@ -54,6 +55,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -76,7 +80,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1449220059
-  m_SortingLayer: 15
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_Sprite: {fileID: -790498180, guid: 82a56d660086c94439a932cf6e53cf3f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -97,6 +101,7 @@ CapsuleCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1324879070572636304}
   m_Enabled: 1
+  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -120,13 +125,14 @@ CapsuleCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_UsedByComposite: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
   m_Offset: {x: -0.07748306, y: 0.17716575}
   m_Size: {x: 0.51859593, y: 0.6642647}
   m_Direction: 0
 --- !u!50 &-1275534686229707652
 Rigidbody2D:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -137,8 +143,8 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -163,15 +169,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3093838206
+  GlobalObjectIdHash: 89726477
   InScenePlacedSourceGlobalObjectIdHash: 89726477
+  DeferredDespawnTick: 0
+  Ownership: 1
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
+  SceneMigrationSynchronization: 0
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!114 &4931434756416402080
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,7 +194,76 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e4174b1bf1b94e41b62a710631ebeb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 733a2349-9d2b-4a5d-8441-5830e12d6ab2
+  ShowTopMostFoldoutHeaderGroup: 1
+  id:
+    m_InternalValue:
+      utf8LengthInBytes: 0
+      bytes:
+        offset0000:
+          byte0000: 0
+          byte0001: 0
+          byte0002: 0
+          byte0003: 0
+          byte0004: 0
+          byte0005: 0
+          byte0006: 0
+          byte0007: 0
+          byte0008: 0
+          byte0009: 0
+          byte0010: 0
+          byte0011: 0
+          byte0012: 0
+          byte0013: 0
+          byte0014: 0
+          byte0015: 0
+        offset0016:
+          byte0000: 0
+          byte0001: 0
+          byte0002: 0
+          byte0003: 0
+          byte0004: 0
+          byte0005: 0
+          byte0006: 0
+          byte0007: 0
+          byte0008: 0
+          byte0009: 0
+          byte0010: 0
+          byte0011: 0
+          byte0012: 0
+          byte0013: 0
+          byte0014: 0
+          byte0015: 0
+        offset0032:
+          byte0000: 0
+          byte0001: 0
+          byte0002: 0
+          byte0003: 0
+          byte0004: 0
+          byte0005: 0
+          byte0006: 0
+          byte0007: 0
+          byte0008: 0
+          byte0009: 0
+          byte0010: 0
+          byte0011: 0
+          byte0012: 0
+          byte0013: 0
+          byte0014: 0
+          byte0015: 0
+        byte0048: 0
+        byte0049: 0
+        byte0050: 0
+        byte0051: 0
+        byte0052: 0
+        byte0053: 0
+        byte0054: 0
+        byte0055: 0
+        byte0056: 0
+        byte0057: 0
+        byte0058: 0
+        byte0059: 0
+        byte0060: 0
+        byte0061: 0
   item: {fileID: 11400000, guid: a8f74ae94e7dc48488cb5ad3f5251e14, type: 2}
   CanPickup:
     m_InternalValue: 0
@@ -192,6 +271,26 @@ MonoBehaviour:
   _acceleration: 0.5
   _maxSpeed: 0.5
   onItemWorldTouchPlayer: {fileID: 11400000, guid: 34231fe85d027f242ab91258d8e674d2, type: 2}
+--- !u!114 &1863786918112626065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1324879070572636304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b73f8ee2c53e8754e9af393f12141e94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  testdir: {x: 1, y: 0}
+  testDistance: 0.5
+  baseSpeed: 1
+  minSpeed: 1
+  maxSpeed: 1
+  heightFactor: 1
+  bounceDampening: 0.6
+  minBounceDistance: 0.08
 --- !u!1 &2086567148679051196
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,6 +333,7 @@ CircleCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2086567148679051196}
   m_Enabled: 1
+  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -257,9 +357,9 @@ CircleCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_UsedByComposite: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
   m_Offset: {x: -0.020367622, y: 0.23859477}
-  serializedVersion: 2
   m_Radius: 2
 --- !u!114 &9103251936241132996
 MonoBehaviour:
@@ -273,9 +373,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e58c1ccf02792264a8136bd455a9940d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!50 &574811391499198096
 Rigidbody2D:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -286,8 +387,8 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:

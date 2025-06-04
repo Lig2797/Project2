@@ -26,8 +26,7 @@ public class StoneAndMineral : ItemDropableEntity
     [ClientRpc]
     public void InitializeMineralClientRpc(string entityId)
     {
-        var entityInfo = ItemDropableEntityDatabase.Instance.GetEntity(entityId);
-        if (entityInfo == null)
+        if (ItemDropableEntityDatabase.Instance.GetEntity(entityId) == null)
         {
 
             Debug.LogError("Entity not found in database: " + entityId);
@@ -41,29 +40,9 @@ public class StoneAndMineral : ItemDropableEntity
     {
         if (!damageable.IsAlive)
         {
-            //DropItemServerRpc(false);
+            DropItem(false);
             _onMineralsDestroy.Raise(this,null);
         }
-        else
-        {
-            ChangeSpriteOnHit();
-        }
-    }
-    private void ChangeSpriteOnHit()
-    {
-        if (_hitCoroutine != null)
-        {
-            StopCoroutine(_hitCoroutine);  
-        }
-        Debug.Log("run change sprite");
-        _hitCoroutine = StartCoroutine(ChangeSpriteRoutine());
-    }
-    private IEnumerator ChangeSpriteRoutine()
-    {
-        _spriteRenderer.sprite = entityInfo.mineBlockHitSprite;
-        yield return new WaitForSeconds(_onHitTime);
-        _spriteRenderer.sprite = entityInfo.mineBlockIdleSprite;
-        _hitCoroutine = null;  
     }
 
 }

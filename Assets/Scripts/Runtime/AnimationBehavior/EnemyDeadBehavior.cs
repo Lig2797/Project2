@@ -7,7 +7,7 @@ public class EnemyDeadBehavior : StateMachineBehaviour
     {
         EnemyAI enemyAI = animator.GetComponent<EnemyAI>();
         enemyAI.StartCoroutine(DestroyAfter(animator, stateInfo.length));
-        enemyAI.CanMove = false;
+        enemyAI.CanMove.Value = false;
     }
 
     private IEnumerator DestroyAfter(Animator animator, float delay)

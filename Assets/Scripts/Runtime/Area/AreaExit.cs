@@ -23,7 +23,7 @@ public class AreaExit : MonoBehaviour
     }
     [SerializeField] private Loader.Scene sceneToLoad;
     [SerializeField] private string sceneTransitionName;
-    private float waitToLoadTime = 1f;
+    private float waitToLoadTime = 0f;
 
     private void Update()
     {
@@ -38,9 +38,9 @@ public class AreaExit : MonoBehaviour
             if (!UseClickToExit)
             {
                 PlayerController.LocalInstance.CanMove = false;
-                UI_Fade.Instance.gameObject.SetActive(true);
+                //UI_Fade.Instance.gameObject.SetActive(true);
                 SceneManagement.SetTransitionName(sceneTransitionName);
-                UI_Fade.Instance.FadeToBlack();
+                //UI_Fade.Instance.FadeToBlack();
                 StartCoroutine(LoadSceneRoutine());
             }
             
@@ -55,11 +55,15 @@ public class AreaExit : MonoBehaviour
             yield return null;
         }
         string currentSceneName = SceneManagement.GetCurrentSceneName();
-        if(sceneToLoad == Loader.Scene.MineCaveScene && currentSceneName == Loader.Scene.MineScene.ToString())
+        if (sceneToLoad == Loader.Scene.MineCaveScene && currentSceneName == Loader.Scene.MineScene.ToString())
         {
             CaveManager.Instance.CurrentLocalCaveLevel = 0; // Reset cave level when exiting to world scene
         }
-        Loader.Load(sceneToLoad);
+        //if (sceneToLoad == Loader.Scene.WorldScene)
+        //    MultiSceneManger.Instance.ExitToWorld();
+        //else
+        //MultiSceneManger.Instance.EnterSubScene(sceneToLoad.ToString());
+        Loader.Load(sceneToLoad,true);
     }
 
 

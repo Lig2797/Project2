@@ -16,20 +16,35 @@ public class AreaEntrance : MonoBehaviour
 
     private void Start() 
     {
+        CheckAndSpawnPlayer();
+        MultiSceneManger.Instance.SubscribeToEntranceList(this);
+    }
+
+    private void OnDisable()
+    {
+        MultiSceneManger.Instance.UnsubscribeFromEntranceList(this);
+    }
+
+    public bool CheckAndSpawnPlayer()
+    {
         if (transitionName == SceneManagement.SceneTransitionName)
         {
 
             if (entranceType == AreaEntranceType.Mine)
                 PlayerController.LocalInstance.transform.position = this.transform.position + Vector3.down;
-            else if(entranceType == AreaEntranceType.HouseDoor)
+            else if (entranceType == AreaEntranceType.HouseDoor)
                 PlayerController.LocalInstance.transform.position = this.transform.position + Vector3.up;
 
             else
                 PlayerController.LocalInstance.transform.position = this.transform.position;
 
             PlayerController.LocalInstance.CanMove = true;
-            UI_Fade.Instance.FadeToClear();
-            UI_Fade.Instance.gameObject.SetActive(false);
+            //UI_Fade.Instance.FadeToClear();
+            //UI_Fade.Instance.gameObject.SetActive(false);
+
+            return true;
         }
+
+        return false;
     }
 }

@@ -35,12 +35,58 @@ public class UILoadingController : MonoBehaviour
     private void LoadSceneWithLoading(string sceneName)
     {
         _progressFill.style.width = Length.Percent(0f);
-        StartCoroutine(LoadAsync(sceneName));
+        if(!Loader.isMultiSceneLoad)
+            StartCoroutine(LoadAsync(sceneName));
+        else
+            StartCoroutine(MultiSceneLoadAsync(sceneName));
+    }
+
+    private IEnumerator MultiSceneLoadAsync(string sceneName)
+    {
+        AsyncOperation operation;
+        if (sceneName == "WorldScene")
+        {
+            operation = SceneManager.UnloadSceneAsync(MultiSceneManger.Instance.ActiveSubScene);
+        }
+        else
+        {
+            MultiSceneManger.Instance.ActiveSubScene = SceneManager.GetSceneByName(sceneName);
+            operation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+        }
+
+        //operation.allowSceneActivation = false;
+
+        float displayedProgress = 0f;
+
+        while (!operation.isDone)
+        {
+            float progress = Mathf.Clamp01(operation.progress / 0.9f);
+            float easedProgress = Mathf.Pow(progress, 0.5f);
+            displayedProgress = Mathf.Lerp(displayedProgress, easedProgress, Time.deltaTime * 5f);
+            _progressFill.style.width = Length.Percent(displayedProgress * 100f);
+
+
+            if (operation.progress >= 0.9f && displayedProgress >= 0.98f)
+            {
+                yield return new WaitForSeconds(1f);
+            }
+
+            yield return null;
+        }
+
+        Scene loadedScene = SceneManager.GetSceneByName(sceneName);
+        SceneManager.SetActiveScene(loadedScene);
+        MultiSceneManger.Instance.OnChangeScene(loadedScene);
     }
 
     private IEnumerator LoadAsync(string sceneName)
     {
-        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName); 
+        // this is use to Load not main gameplay scenes
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
+        if (sceneName == "WorldScene")
+        {
+            SceneManager.LoadSceneAsync("UIScene", LoadSceneMode.Additive);
+        }
         operation.allowSceneActivation = false;
         
         float displayedProgress = 0f;
@@ -58,12 +104,12 @@ public class UILoadingController : MonoBehaviour
                 if (Loader.TargetScene == Loader.Scene.WorldScene || 
                     Loader.TargetScene == Loader.Scene.Cutscene)
                 {
-                    yield return new WaitUntil(() => NetworkManager.Singleton.IsListening);
+                    //yield return new WaitUntil(() => NetworkManager.Singleton.IsListening);
                 }
 
                 if (Loader.TargetScene == Loader.Scene.MainMenu)
                 {
-                    yield return new WaitUntil(() => !NetworkManager.Singleton.IsListening);
+                    //yield return new WaitUntil(() => !NetworkManager.Singleton.IsListening);
                 }
 
                 yield return new WaitForSeconds(1f);
@@ -72,5 +118,7 @@ public class UILoadingController : MonoBehaviour
 
             yield return null;
         }
+
+        
     }
 }
