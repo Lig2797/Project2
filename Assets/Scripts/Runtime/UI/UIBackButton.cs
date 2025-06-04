@@ -28,7 +28,7 @@ public class UIBackButton : MonoBehaviour
 
     private void OnBackButtonClicked()
     {
-        //SessionManager.Instance.DisInitAndSignOut();
+        SessionManager.Instance.DisInitAndSignOut();
         Loader.Load(Loader.Scene.MainMenu);
 
         //await SessionManager.Instance.LeaveSession();

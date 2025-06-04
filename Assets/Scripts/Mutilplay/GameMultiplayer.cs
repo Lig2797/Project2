@@ -1,14 +1,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using Unity.Netcode;
 using Unity.Services.Authentication;
+#if UNITY_EDITOR
+using UnityEditor.Animations;
+#endif
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameMultiplayer : PersistentSingleton<GameMultiplayer>
+public class GameMultiplayerManager : NetworkSingleton<GameMultiplayerManager>, IDataPersistence
 {
-    public const int MAX_PLAYER_AMOUNT = 4;
+    public const int MAX_PLAYER_AMOUNT = 3;
     private const string PLAYER_PREFS_PLAYER_NAME_MULTIPLAYER = "PlayerNameMultiplayer";
 
     public static bool playMultiplayer = false;
@@ -17,13 +21,13 @@ public class GameMultiplayer : PersistentSingleton<GameMultiplayer>
     public event EventHandler OnFailedToJoinGame;
     public event EventHandler OnPlayerDataNetworkListChanged;
 
-
-    //[SerializeField] private KitchenObjectListSO kitchenObjectListSO;
-    [SerializeField] private List<Color> playerColorList;
-
+    [SerializeField] private List<RuntimeAnimatorController> charactersAnimator;
 
     private NetworkList<PlayerDataNetwork> playerDataNetworkList;
+
     private string playerName;
+
+    public PlayerDataSO playerDataSO;
 
     protected override void Awake()
     {
@@ -58,7 +62,7 @@ public class GameMultiplayer : PersistentSingleton<GameMultiplayer>
     public void SetPlayerName(string playerName)
     {
         this.playerName = playerName;
-
+        playerDataSO.playerName = playerName;
         PlayerPrefs.SetString(PLAYER_PREFS_PLAYER_NAME_MULTIPLAYER, playerName);
     }
 
@@ -270,14 +274,19 @@ public class GameMultiplayer : PersistentSingleton<GameMultiplayer>
         return GetPlayerDataFromClientId(NetworkManager.Singleton.LocalClientId);
     }
 
+    public void SetCharacterId(int characterId)
+    {
+        playerDataSO.characterId = characterId;
+    }
+
     public PlayerDataNetwork GetPlayerDataFromPlayerIndex(int playerIndex)
     {
         return playerDataNetworkList[playerIndex];
     }
 
-    public Color GetPlayerColor(int colorId)
+    public RuntimeAnimatorController GetCharactersAnimator(int characterId)
     {
-        return playerColorList[colorId];
+        return charactersAnimator[characterId];
     }
 
     public void ChangePlayerColor(int colorId)
@@ -318,7 +327,7 @@ public class GameMultiplayer : PersistentSingleton<GameMultiplayer>
 
     private int GetFirstUnusedColorId()
     {
-        for (int i = 0; i < playerColorList.Count; i++)
+        for (int i = 0; i < charactersAnimator.Count; i++)
         {
             if (IsColorAvailable(i))
             {
@@ -332,5 +341,21 @@ public class GameMultiplayer : PersistentSingleton<GameMultiplayer>
     {
         NetworkManager.Singleton.DisconnectClient(clientId);
         NetworkManager_Server_OnClientDisconnectCallback(clientId);
+    }
+
+    public void LoadData(GameData data)
+    {
+        
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        data.PlayerData.SetPlayerDataNetwork(new PlayerDataNetwork
+        {
+            playerName = playerDataSO.playerName,
+            characterId = playerDataSO.characterId,
+            playerId = AuthenticationService.Instance.PlayerId,
+            clientId = NetworkManager.Singleton.LocalClientId
+        });
     }
 }

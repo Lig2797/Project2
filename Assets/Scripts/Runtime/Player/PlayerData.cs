@@ -5,12 +5,21 @@ using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
+[System.Serializable]
 public struct PlayerDataNetwork : IEquatable<PlayerDataNetwork>, INetworkSerializable
 {
-    public ulong clientId;
-    public int characterId;
-    public FixedString64Bytes playerName;
-    public FixedString64Bytes playerId;
+    [NonSerialized] public ulong clientId;
+    [SerializeField] public int characterId;
+    [SerializeField] public FixedString64Bytes playerName;
+    [SerializeField] public FixedString64Bytes playerId;
+
+    public PlayerDataNetwork(ulong clientId, int characterId, FixedString64Bytes playerName, FixedString64Bytes playerId)
+    {
+        this.clientId = clientId;
+        this.characterId = characterId;
+        this.playerName = playerName;
+        this.playerId = playerId;
+    }
 
     public bool Equals(PlayerDataNetwork other)
     {
@@ -43,6 +52,9 @@ public class PlayerData
     [SerializeField] private float _money;
     [SerializeField] private Vector3 _position;
 
+    public PlayerDataNetwork PlayerDataNetwork
+    { get { return _playerDataNetwork; } }
+
     public float MaxHealth
     { get { return _maxHealth; } } 
 
@@ -67,8 +79,15 @@ public class PlayerData
     public Vector3 Position
     { get { return _position; } }
 
-    public PlayerData() // Create default Player state and stats when open game
+    public PlayerData()
     {
+        this._playerDataNetwork = new PlayerDataNetwork
+        {
+            clientId = 0,
+            characterId = 0,
+            playerName = "Player",
+            playerId = "PlayerID"
+        };
         this._maxHealth = 100;
         this._currentHealth = 100;
         this._maxMana = 100;
@@ -77,6 +96,19 @@ public class PlayerData
         this._currentStamina = 100;
         this._money = 0;
         this._position = new Vector3(4.371f, 1.154f, 0);
+    }
+
+    public PlayerData(PlayerDataNetwork playerDataNetwork, float maxHealth, float currentHealth, float maxMana, float currentMana, float maxStamina, float currentStamina, float money, Vector3 position)
+    {
+        this._playerDataNetwork = playerDataNetwork;
+        this._maxHealth = maxHealth;
+        this._currentHealth = currentHealth;
+        this._maxMana = maxMana;
+        this._currentMana = currentMana;
+        this._maxStamina = maxStamina;
+        this._currentStamina = currentStamina;
+        this._money = money;
+        this._position = position;
     }
 
     // Health
@@ -100,5 +132,10 @@ public class PlayerData
     public void SetPosition(Vector3 position)
     {
         this._position = position;
+    }
+
+    public void SetPlayerDataNetwork(PlayerDataNetwork playerDataNetwork)
+    {
+        this._playerDataNetwork = playerDataNetwork;
     }
 }

@@ -11,16 +11,20 @@ public class DataPersistenceManager : PersistentSingleton<DataPersistenceManager
     [SerializeField] private bool disableDataPersistence = false;
     [SerializeField] private bool initializeDataIfNull = false;
     [SerializeField] private bool overrideSelectedProfileId = false;
-    [SerializeField] private string testSelectedProfileId = "test";
+    [SerializeField] private string testSelectedProfileId = "New World";
 
     [Header("File Storage Config")]
-    [SerializeField] private string fileName = "data_0";
+    [SerializeField] private string fileName = "data";
     [SerializeField] private bool useEncryption;
 
     [Header("Auto Saving Configuration")]
     [SerializeField] private float autoSaveTimeSeconds = 60f;
 
     private GameData gameData;
+    public GameData GameData
+    {
+        get { return gameData; }
+    }
     private List<IDataPersistence> dataPersistenceObjects;
     private FileDataHandler dataHandler;
 
@@ -57,11 +61,6 @@ public class DataPersistenceManager : PersistentSingleton<DataPersistenceManager
 
     public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (SceneManager.GetActiveScene().name == Loader.Scene.MainMenu.ToString() ||
-            SceneManager.GetActiveScene().name == Loader.Scene.LoadingScene.ToString() ||
-            SceneManager.GetActiveScene().name == Loader.Scene.LobbyScene.ToString() ||
-            disableDataPersistence) return;
-
         this.dataPersistenceObjects = FindAllDataPersistenceObjects();
         LoadGame();
 
@@ -77,17 +76,16 @@ public class DataPersistenceManager : PersistentSingleton<DataPersistenceManager
     {
         // update the profile to use for saving and loading
         this.selectedProfileId = newProfileId;
-        // load the game, which will use that profile, updating our game data accordingly
+        
         LoadGame();
     }
 
     public void DeleteProfileData(string profileId)
     {
-        // delete the data for this profile id
         dataHandler.Delete(profileId);
-        // initialize the selected profile id
+        
         InitializeSelectedProfileId(null);
-        // reload the game so that our data matches the newly selected profile id
+        
         LoadGame();
     }
 
@@ -100,6 +98,7 @@ public class DataPersistenceManager : PersistentSingleton<DataPersistenceManager
         }
 
         this.selectedProfileId = profileId;
+        Debug.Log($"Selected Profile ID: {selectedProfileId}");
     }
 
     public void NewGame()
@@ -109,10 +108,7 @@ public class DataPersistenceManager : PersistentSingleton<DataPersistenceManager
 
     public void LoadGame()
     {
-        if (SceneManager.GetActiveScene().name == Loader.Scene.MainMenu.ToString() ||
-            SceneManager.GetActiveScene().name == Loader.Scene.LoadingScene.ToString() ||
-            SceneManager.GetActiveScene().name == Loader.Scene.LobbyScene.ToString() ||
-            disableDataPersistence) return;
+        this.dataPersistenceObjects = FindAllDataPersistenceObjects();
 
         this.dataHandler = new FileDataHandler(Application.persistentDataPath, fileName, useEncryption);
 
@@ -202,7 +198,7 @@ public class DataPersistenceManager : PersistentSingleton<DataPersistenceManager
 
     private List<IDataPersistence> FindAllDataPersistenceObjects()
     {
-        IEnumerable<IDataPersistence> dataPersistenceObjects = FindObjectsOfType<NetworkBehaviour>().OfType<IDataPersistence>();
+        IEnumerable<IDataPersistence> dataPersistenceObjects = FindObjectsOfType<MonoBehaviour>(true).OfType<IDataPersistence>();
 
         return new List<IDataPersistence>(dataPersistenceObjects);
     }

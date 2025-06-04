@@ -10,18 +10,37 @@ public static class Loader
     {
         MainMenu,
         WorldScene,
-        Cutscene,
+        CutScene,
         LobbyScene,
         LoadingScene,
         CharacterSelectScene,
     }
 
+    private static Scene lastScene;
+
+    public static Scene LastScene => lastScene;
+
     private static Scene targetScene;
 
     public static Scene TargetScene => targetScene;
 
+    private static Scene ConvertSceneNameToEnum(string sceneName)
+    {
+        foreach (Scene scene in Scene.GetValues(typeof(Scene)))
+        {
+            if (scene.ToString() == sceneName)
+            {
+                return scene;
+            }
+        }
+
+        Debug.LogWarning($"Scene name '{sceneName}' is not defined in Loader.Scene enum. Defaulting to MainMenu.");
+        return Scene.MainMenu;
+    }
+
     public static void Load(Scene targetScene)
     {
+        Loader.lastScene = ConvertSceneNameToEnum(SceneManager.GetActiveScene().name);
         Loader.targetScene = targetScene;
         SceneManager.LoadSceneAsync(Scene.LoadingScene.ToString());
     }

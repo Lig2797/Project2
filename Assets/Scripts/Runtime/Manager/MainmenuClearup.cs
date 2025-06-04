@@ -8,7 +8,7 @@ public class MainMenuClearUp : MonoBehaviour
         if (Loader.TargetScene == Loader.Scene.MainMenu)
         {
             if (NetworkManager.Singleton != null) Destroy(NetworkManager.Singleton.gameObject);
-            if (GameMultiplayer.Instance != null) Destroy(GameMultiplayer.Instance.gameObject);
+            if (GameMultiplayerManager.Instance != null) Destroy(GameMultiplayerManager.Instance.gameObject);
             if (SessionManager.Instance != null) Destroy(SessionManager.Instance.gameObject);
             if (NetworkConnectManager.Instance != null) Destroy(NetworkConnectManager.Instance.gameObject);
         } 

@@ -36,14 +36,6 @@ public class UISettingsController : MonoBehaviour
 
     private void Start()
     {
-        _resolutionScreenDropdown.choices = new System.Collections.Generic.List<string>
-        {
-            "1920x1080",
-            "1280x720",
-            "800x600"
-        };
-
-        // Set initial values from SettingsManager
         _resolutionScreenDropdown.index = SettingsManager.Instance.defaultSettings.resolutionIndex;
         _fullScreenToggle.value = SettingsManager.Instance.defaultSettings.isFullScreen;
     }

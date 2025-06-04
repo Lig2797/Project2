@@ -14,6 +14,7 @@ public class GameData
     [SerializeField] private ListItemWorld _listItemWold;
     [SerializeField] private TileSaveData _tileSaveData;
     [SerializeField] private CropsSaveData _cropsSaveData;
+    [SerializeField] private GameFlowData _gameFlowData;
 
     public string SaveFileName
     { get { return _saveFileName; } }
@@ -37,6 +38,9 @@ public class GameData
     public CropsSaveData CropsSaveData
     { get { return _cropsSaveData; } }
 
+    public GameFlowData GameFlowData
+    { get { return _gameFlowData; } }
+
     public GameData()
     {
         this._saveFileName = string.Empty;
@@ -47,6 +51,7 @@ public class GameData
         this._listItemWold = new ListItemWorld();
         this._tileSaveData = new TileSaveData();
         this._cropsSaveData = new CropsSaveData();
+        this._gameFlowData = new GameFlowData();
     }
 
     public void SetPlayerData(PlayerData playerData)
@@ -87,5 +92,10 @@ public class GameData
     public void SetLastUpdate(DateTime lastUpdate)
     {
         this._lastUpdate = lastUpdate.ToString("O");
+    }
+
+    public void SetGameFlowData(GameFlowData gameFlowData)
+    {
+        this._gameFlowData = gameFlowData;
     }
 }

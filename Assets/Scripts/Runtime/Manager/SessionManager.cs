@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Netcode;
@@ -25,11 +26,11 @@ public class SessionManager : PersistentSingleton<SessionManager>
 
     const string playerNamePropertyKey = "playerName";
 
-    private async void Start()
+    public async Task InitializeAndSignIn()
     {
         try
         {
-            if (!GameMultiplayer.playMultiplayer)
+            if (!GameMultiplayerManager.playMultiplayer)
             {
                 await UnityServices.InitializeAsync(); // Initialize Unity Gaming Services SDKs.
                 await AuthenticationService.Instance.SignInAnonymouslyAsync(); // Anonymously authenticate the player
@@ -56,7 +57,6 @@ public class SessionManager : PersistentSingleton<SessionManager>
 
         var options = new SessionOptions
         {
-            Name = $"Session_{playerProperties.Values}",
             MaxPlayers = 3,
             IsLocked = false,
             IsPrivate = false,
@@ -67,14 +67,16 @@ public class SessionManager : PersistentSingleton<SessionManager>
         Debug.Log($"Session {ActiveSession.Id} created! Join code: {ActiveSession.Code}");
     }
 
-    async Task JoinSessionById(string sessionId)
+    public async Task JoinSessionById(string sessionId)
     {
         ActiveSession = await MultiplayerService.Instance.JoinSessionByIdAsync(sessionId);
         Debug.Log($"Session {ActiveSession.Id} joined!");
     }
 
-    async Task JoinSessionByCode(string sessionCode)
+    public async Task JoinSessionByCode(string sessionCode)
     {
+        await InitializeAndSignIn(); // Ensure the player is signed in before joining a session
+        StartCoroutine(WaitForInitAndSignIn());
         ActiveSession = await MultiplayerService.Instance.JoinSessionByCodeAsync(sessionCode);
         Debug.Log($"Session {ActiveSession.Id} joined!");
     }
@@ -115,5 +117,10 @@ public class SessionManager : PersistentSingleton<SessionManager>
     public void DisInitAndSignOut()
     {
         AuthenticationService.Instance.SignOut(); // Sign out the player
+    }
+
+    private IEnumerator WaitForInitAndSignIn()
+    {        
+        yield return new WaitUntil(() => UnityServices.State == ServicesInitializationState.Initialized);
     }
 }

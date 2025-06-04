@@ -59,15 +59,15 @@ public class UIMainMenuController : MonoBehaviour
     private void OnSingleplayerButtonClicked()
     {
         OnDisableActive();
-        GameMultiplayer.playMultiplayer = false;
+        GameMultiplayerManager.playMultiplayer = false;
         GameEventsManager.Instance.activeUIPanelEvents.OnActiveSingleplayer();
     }
 
     public void OnMultiplayerButtonClicked()
     {
         OnDisableActive();
-        GameMultiplayer.playMultiplayer = true;
-        Loader.Load(Loader.Scene.LobbyScene);
+        GameMultiplayerManager.playMultiplayer = true;
+        Loader.Load(Loader.Scene.CharacterSelectScene);
     }
 
     private void OnOptionsButtonClicked()

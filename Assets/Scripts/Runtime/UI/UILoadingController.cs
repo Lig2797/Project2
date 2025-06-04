@@ -55,16 +55,20 @@ public class UILoadingController : MonoBehaviour
 
             if (operation.progress >= 0.9f && displayedProgress >= 0.98f)
             {
-                if (Loader.TargetScene == Loader.Scene.WorldScene || 
-                    Loader.TargetScene == Loader.Scene.Cutscene)
+                if (NetworkManager.Singleton.IsHost)
                 {
-                    yield return new WaitUntil(() => NetworkManager.Singleton.IsListening);
-                }
+                    if (Loader.TargetScene == Loader.Scene.WorldScene ||
+                    Loader.TargetScene == Loader.Scene.CutScene)
+                    {
+                        yield return new WaitUntil(() => NetworkManager.Singleton.IsListening);
+                    }
 
-                if (Loader.TargetScene == Loader.Scene.MainMenu)
-                {
-                    yield return new WaitUntil(() => !NetworkManager.Singleton.IsListening);
+                    if (Loader.TargetScene == Loader.Scene.MainMenu)
+                    {
+                        yield return new WaitUntil(() => !NetworkManager.Singleton.IsListening);
+                    }
                 }
+                
 
                 yield return new WaitForSeconds(1f);
                 operation.allowSceneActivation = true;
