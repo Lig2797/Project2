@@ -14,6 +14,8 @@ public static class Loader
         LobbyScene,
         LoadingScene,
         CharacterSelectScene,
+        MineCaveScene,
+        MineScene,
     }
 
     private static Scene lastScene;
