@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: GameFlowSO
   m_EditorClassIdentifier: 
   hasChoosenCharacter: 0
+  completedFirstCutscene: 0
   lastScene: 5
