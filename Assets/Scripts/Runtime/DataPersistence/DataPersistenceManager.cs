@@ -61,6 +61,7 @@ public class DataPersistenceManager : PersistentSingleton<DataPersistenceManager
 
     public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        GameEventsManager.Instance.inputReader.EnableControl();
         this.dataPersistenceObjects = FindAllDataPersistenceObjects();
         LoadGame();
 

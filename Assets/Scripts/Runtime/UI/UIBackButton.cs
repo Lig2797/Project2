@@ -24,12 +24,13 @@ public class UIBackButton : MonoBehaviour
     {
         ShowButton();
 
-        leaveButton.onClick.AddListener(OnBackButtonClicked);
-        leaveNetworkButton.onClick.AddListener(OnBackButtonClicked);
+        if (leaveButton != null) leaveButton.onClick.AddListener(OnBackButtonClicked);
+        if (leaveButton != null) leaveNetworkButton.onClick.AddListener(OnBackButtonClicked);
     }
 
     private void ShowButton()
     {
+        if (leaveButton == null || leaveNetworkButton == null) return;
         if (SessionManager.Instance.ActiveSession == null)
         {
             leaveButton.gameObject.SetActive(true);
