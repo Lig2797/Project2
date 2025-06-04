@@ -4,7 +4,7 @@ using Unity.Collections.LowLevel.Unsafe;
 using Unity.Netcode;
 using UnityEngine;
 
-public class InventoryController : NetworkBehaviour
+public class InventoryController : NetworkBehaviour, IDataPersistence
 {
     [SerializeField] private InputReader _inputReader;
     [SerializeField] private InventoryManagerSO _inventoryManagerSO;
@@ -85,5 +85,15 @@ public class InventoryController : NetworkBehaviour
         _inputReader.playerActions.changeInventorySlotEvent -= GetInputValueToChangeSlot;
         _inputReader.playerActions.openInventoryEvent -= OpenInventory;
         _inputReader.uiActions.closeInventoryEvent -= CloseInventory;
+    }
+
+    public void LoadData(GameData data)
+    {
+
+    }   
+    
+    public void SaveData(ref GameData gameData)
+    {
+        
     }
 }

@@ -4,24 +4,15 @@ using UnityEngine.UI;
 
 public class HostShutdown : MonoBehaviour
 {
-    [SerializeField] private Button button;
-
-    private void Start()
+    public async void OnShutDownHost()
     {
-        if (button != null)
+        if (NetworkManager.Singleton == null || !NetworkManager.Singleton.IsListening)
         {
-            button.onClick.AddListener(OnButtonClick);
+            Debug.LogWarning("NetworkManager is not initialized or not listening.");
+            return;
         }
-        else
-        {
-            Debug.LogError("Button is not assigned in the inspector.");
-        }
-    }
-
-    private void OnButtonClick()
-    {
-        DataPersistenceManager.Instance.SaveGame();
-        DataPersistenceManager.Instance.CaptureScreenshot();
+        await SessionManager.Instance.InitializeAndSignIn();
         NetworkManager.Singleton.Shutdown();
+        GameEventsManager.Instance.networkEvents.OnSessionCreate();
     }
 }

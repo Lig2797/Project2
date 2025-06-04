@@ -5,7 +5,9 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem.EnhancedTouch;
 using UnityEngine.Tilemaps;
+#if UNITY_EDITOR
 using static UnityEditor.PlayerSettings;
+#endif
 
 public static class CaveShapes
 {

@@ -14,7 +14,6 @@ public class OnFirstBecameBaby : StateMachineBehaviour
             chicken.IncreaseGrowStage();
             
         }
-        
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
