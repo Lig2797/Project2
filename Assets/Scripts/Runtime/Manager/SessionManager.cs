@@ -32,9 +32,15 @@ public class SessionManager : PersistentSingleton<SessionManager>
         {
             if (!GameMultiplayerManager.playMultiplayer)
             {
-                await UnityServices.InitializeAsync(); // Initialize Unity Gaming Services SDKs.
-                await AuthenticationService.Instance.SignInAnonymouslyAsync(); // Anonymously authenticate the player
-                Debug.Log($"Sign in anonymously succeeded! PlayerID: {AuthenticationService.Instance.PlayerId}");
+                if (UnityServices.State != ServicesInitializationState.Initialized)
+                {
+                    await UnityServices.InitializeAsync(); // Initialize Unity Gaming Services SDKs.
+                }
+                if (!AuthenticationService.Instance.IsSignedIn)
+                {
+                    await AuthenticationService.Instance.SignInAnonymouslyAsync(); // Anonymously authenticate the player
+                    Debug.Log($"Sign in anonymously succeeded! PlayerID: {AuthenticationService.Instance.PlayerId}");
+                }
             }
         }
         catch (Exception e)
@@ -116,6 +122,18 @@ public class SessionManager : PersistentSingleton<SessionManager>
 
     public void DisInitAndSignOut()
     {
+        if (UnityServices.State != ServicesInitializationState.Initialized) return;
+        if (ActiveSession != null)
+        {
+            try
+            {
+                ActiveSession.LeaveAsync().Wait(); // Wait for the leave operation to complete
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Error leaving session: {e.Message}");
+            }
+        }
         AuthenticationService.Instance.SignOut(); // Sign out the player
     }
 

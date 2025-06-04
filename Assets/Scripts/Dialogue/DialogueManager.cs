@@ -4,7 +4,7 @@ using UnityEngine;
 using Ink.Runtime;
 using Unity.VisualScripting;
 
-public class DialogueManager : MonoBehaviour
+public class DialogueManager : PersistentSingleton<DialogueManager>
 {
     [Header("Ink Story")]
     [SerializeField] private TextAsset inkJson;
