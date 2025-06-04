@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 
-public class QuestLogUI : MonoBehaviour
+public class QuestLogUI : PersistentSingleton<QuestLogUI>
 {
     [Header("Components")]
     [SerializeField] private GameObject contentParent;

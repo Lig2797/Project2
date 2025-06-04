@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QuestManager : MonoBehaviour
+public class QuestManager : PersistentSingleton<QuestManager>
 {
     [Header("Config")]
     [SerializeField] private bool loadQuestState = true;
