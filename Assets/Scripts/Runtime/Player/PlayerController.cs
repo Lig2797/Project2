@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using Unity.Netcode;
 using Unity.VisualScripting;
 #if UNITY_EDITOR
@@ -23,6 +24,12 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Animator animator;
     [SerializeField] private Collider2D col;
+    [SerializeField] private TextMeshPro playerNameText;
+    #endregion
+
+    #region Reference
+    [Header("Reference")]
+    public PlayerDataSO playerDataSO;
     #endregion
 
     #region PlayerStatus
@@ -192,7 +199,7 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
     #region Dependencies Scripts
     [Header("Dependencies")]
     [SerializeField] private InputReader _inputReader;
-    private PlayerData player;
+    //private PlayerData player;
 
     private VehicleController _currentVehicle;
     public VehicleController CurrentVehicle
@@ -236,8 +243,6 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
         }
     }
 
-
-
     [SerializeField]
     private ItemOnHand _itemOnHand;
 
@@ -258,13 +263,11 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
         _inventoryController = GetComponent<InventoryController>();
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        col = GetComponent<Collider2D>();
     }
 
     public override void OnNetworkSpawn()
     {
         if (!IsOwner) return;
-
         _inputReader.playerActions.moveEvent += OnMove;
         _inputReader.playerActions.attackEvent += OnAttack;
         _inputReader.playerActions.interactEvent += OnInteract;
@@ -278,17 +281,23 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
 
         DataPersistenceManager.Instance.LoadGame();
 
+        this.transform.position = playerDataSO.position;
+
+        playerNameText.text = playerDataSO.playerName.ToString();
+        animator.runtimeAnimatorController = GameMultiplayerManager.Instance.GetCharactersAnimator(playerDataSO.characterId);
+
         bool isHost = NetworkManager.Singleton.IsHost && IsServer;
-        if (isHost)
-        {
-            col.enabled = false;
-        }
+        if (isHost) col.enabled = false;
+        else col.enabled = true;
         GameEventsManager.Instance.playerEvents.OnPlayerSpawned(this);
     }
 
     public override void OnNetworkDespawn()
     {
         if (!IsOwner) return;
+
+        NetworkManager.Singleton.SceneManager.ActiveSceneSynchronizationEnabled = false;
+        NetworkManager.Singleton.SceneManager.SetClientSynchronizationMode(UnityEngine.SceneManagement.LoadSceneMode.Single);
 
         _inputReader.playerActions.moveEvent -= OnMove;
         _inputReader.playerActions.attackEvent -= OnAttack;
@@ -677,14 +686,35 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
 
     public void LoadData(GameData gameData)
     {
-        player = gameData.PlayerData;
-        this.gameObject.transform.position = player.Position;
+        playerDataSO.characterId = gameData.PlayerData.PlayerDataNetwork.characterId;
+        playerDataSO.playerName = gameData.PlayerData.PlayerDataNetwork.playerName;
+        playerDataSO.playerId = gameData.PlayerData.PlayerDataNetwork.playerId;
+        playerDataSO.maxHealth = gameData.PlayerData.MaxHealth;
+        playerDataSO.currentHealth = gameData.PlayerData.CurrentHealth;
+        playerDataSO.maxMana = gameData.PlayerData.MaxMana;
+        playerDataSO.currentMana = gameData.PlayerData.CurrentMana;
+        playerDataSO.maxStamina = gameData.PlayerData.MaxStamina;
+        playerDataSO.currentStamina = gameData.PlayerData.CurrentStamina;
+        playerDataSO.money = gameData.PlayerData.Money;
+        playerDataSO.position = gameData.PlayerData.Position;
     }
 
     public void SaveData(ref GameData gameData)
     {
-        player.SetPosition(transform.position);
-        gameData.SetPlayerData(player);
+        gameData.SetPlayerData(new PlayerData(
+            new PlayerDataNetwork(
+                                  NetworkManager.Singleton.LocalClientId,
+                                  playerDataSO.characterId,
+                                  playerDataSO.playerName,
+                                  playerDataSO.playerId),                        
+            playerDataSO.maxHealth,
+            playerDataSO.currentHealth,
+            playerDataSO.maxMana,
+            playerDataSO.currentMana,
+            playerDataSO.maxStamina,
+            playerDataSO.currentStamina,
+            playerDataSO.money,
+            this.transform.position));
     }
     #endregion
 }

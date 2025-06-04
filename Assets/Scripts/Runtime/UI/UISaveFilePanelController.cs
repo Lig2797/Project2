@@ -72,14 +72,15 @@ public class UISaveFilePanelController : MonoBehaviour
         _initFileNamePanel.style.display = DisplayStyle.Flex;
     }
 
-    private async void OnLoadGameButtonClicked()
+    private void OnLoadGameButtonClicked()
     {
         _initFileNamePanel.style.display = DisplayStyle.None;
         _saveFilePanel.style.display = DisplayStyle.None;
 
-        GameMultiplayer.playMultiplayer = false;
-        Loader.Load(Loader.Scene.Cutscene);
-        await SessionManager.Instance.StartSessionAsHost();
+        GameMultiplayerManager.playMultiplayer = false;
+        GameFlowManager.Instance.LoadLastSceneFlow();
+        NetworkManager.Singleton.StartHost();
+        DataPersistenceManager.Instance.LoadGame();
     }
 
     private void OnBackButtonClicked()
@@ -88,15 +89,14 @@ public class UISaveFilePanelController : MonoBehaviour
         GameEventsManager.Instance.activeUIPanelEvents.OnActiveMainMenu();
     }
 
-    private async void OnConfirmButtonClicked()
+    private void OnConfirmButtonClicked()
     {
         _initFileNamePanel.style.display = DisplayStyle.None;
         _saveFilePanel.style.display = DisplayStyle.None;
         GameEventsManager.Instance.dataEvents.OnInitialized(_fileNameInput.value.ToString());
         
-        GameMultiplayer.playMultiplayer = false;
-        Loader.Load(Loader.Scene.Cutscene);
-        await SessionManager.Instance.StartSessionAsHost();
+        GameMultiplayerManager.playMultiplayer = false;
+        Loader.Load(Loader.Scene.CharacterSelectScene);
     }
 
     private void OnCancelButtonClicked()
@@ -109,6 +109,7 @@ public class UISaveFilePanelController : MonoBehaviour
     {
         _loadGameButton.SetEnabled(selectedItems != null && selectedItems.Any());
         GameEventsManager.Instance.dataEvents.OnInitialized(profileId);
+        DataPersistenceManager.Instance.LoadGame();
     }
 
     private void PopulateSaveFiles()

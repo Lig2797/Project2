@@ -5,67 +5,50 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CharacterSelectPlayer : MonoBehaviour {
-
-
+public class CharacterSelectPlayer : MonoBehaviour 
+{
     [SerializeField] private int playerIndex;
-    [SerializeField] private GameObject readyGameObject;
-    [SerializeField] private PlayerVisual playerVisual;
-    [SerializeField] private Button kickButton;
-    [SerializeField] private TextMeshPro playerNameText;
+    [SerializeField] private Animator playerAnimator;
+    [SerializeField] private Button selectButton;
 
-
-    private void Awake() {
-        //kickButton.onClick.AddListener(() => 
-        //{
-        //    PlayerData playerData = GameMultiplayer.Instance.GetPlayerDataFromPlayerIndex(playerIndex);
-        //    KitchenGameLobby.Instance.KickPlayer(playerData.playerId.ToString());
-        //    GameMultiplayer.Instance.KickPlayer(playerData.clientId);
-        //});
+    private void Awake() 
+    {
+        playerAnimator = GetComponent<Animator>();
+        selectButton = GetComponent<Button>();
     }
 
-    private void Start() {
-        GameMultiplayer.Instance.OnPlayerDataNetworkListChanged += KitchenGameMultiplayer_OnPlayerDataNetworkListChanged;
-        CharacterSelectReady.Instance.OnReadyChanged += CharacterSelectReady_OnReadyChanged;
+    private void Start() 
+    {
+        ApplyCharacter();
 
-        kickButton.gameObject.SetActive(NetworkManager.Singleton.IsServer);
-
-        UpdatePlayer();
+        selectButton.onClick.AddListener(SetCharacterId);
     }
 
-    private void CharacterSelectReady_OnReadyChanged(object sender, System.EventArgs e) {
-        UpdatePlayer();
-    }
-
-    private void KitchenGameMultiplayer_OnPlayerDataNetworkListChanged(object sender, System.EventArgs e) {
-        UpdatePlayer();
-    }
-
-    private void UpdatePlayer() {
-        if (GameMultiplayer.Instance.IsPlayerIndexConnected(playerIndex)) {
-            Show();
-
-            PlayerDataNetwork playerData = GameMultiplayer.Instance.GetPlayerDataFromPlayerIndex(playerIndex);
-
-            readyGameObject.SetActive(CharacterSelectReady.Instance.IsPlayerReady(playerData.clientId));
-
-            playerNameText.text = playerData.playerName.ToString();
-
-            playerVisual.SetPlayerColor(GameMultiplayer.Instance.GetPlayerColor(playerData.characterId));
-        } else {
-            Hide();
+    private void ApplyCharacter()
+    {
+        switch (playerIndex)
+        {
+            case 0:
+                playerAnimator.Play("Idle");
+                break;
+            case 1:
+                playerAnimator.Play("Idle_red");
+                break;
+            case 2:
+                playerAnimator.Play("Idle_green");
+                break;
+            case 3:
+                playerAnimator.Play("Idle_blue");
+                break;
+            default:
+                Debug.LogWarning("Invalid player index: " + playerIndex);
+                break;
         }
     }
 
-    private void Show() {
-        gameObject.SetActive(true);
-    }
-
-    private void Hide() {
-        gameObject.SetActive(false);
-    }
-
-    private void OnDestroy() {
-        GameMultiplayer.Instance.OnPlayerDataNetworkListChanged -= KitchenGameMultiplayer_OnPlayerDataNetworkListChanged;
+    private void SetCharacterId()
+    {
+        GameMultiplayerManager.Instance.SetCharacterId(playerIndex);
+        GameFlowManager.Instance.HasChoosenCharacte(true);
     }
 }

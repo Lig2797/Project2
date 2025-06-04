@@ -13,6 +13,7 @@ public class GameEventsManager : MonoBehaviour
     public ActiveUIPanelEvents activeUIPanelEvents;
     public OptionsEvents optionsEvents;
     public DataEvents dataEvents;
+    public GameFlowEvents gameFlowEvents;
 
     public InputReader inputReader;
 
@@ -37,10 +38,6 @@ public class GameEventsManager : MonoBehaviour
         activeUIPanelEvents = new ActiveUIPanelEvents();
         optionsEvents = new OptionsEvents();
         dataEvents = new DataEvents();
-    }
-
-    private void Start()
-    {
-        //Loader.Load(Loader.Scene.MainMenu);
+        gameFlowEvents = new GameFlowEvents();
     }
 }

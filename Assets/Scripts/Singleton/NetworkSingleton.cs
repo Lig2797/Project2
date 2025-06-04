@@ -21,7 +21,7 @@ public class NetworkSingleton<T> : NetworkBehaviour where T : NetworkSingleton<T
         }
     }
 
-    private void Awake()
+    protected virtual void Awake()
     {
         if (Instance != null && Instance != this)
         {
