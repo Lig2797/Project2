@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2962c5bcf9230f6418a39d9de2f65c7c, type: 3}
   m_Name: AmethystQuartz_1
   m_EditorClassIdentifier: 
-  animators: {fileID: 0}
+  id: 0258512a-28e0-416b-bb87-4ab998dab814
   mineBlockIdleSprite: {fileID: 192998908, guid: 7eb771450e06c0e4092a9aff9b8e392f, type: 3}
   mineBlockHitSprite: {fileID: 1400253748, guid: 7eb771450e06c0e4092a9aff9b8e392f, type: 3}
   ItemToDrop: {fileID: 11400000, guid: ff0a16c100afe2d47b196a6fc605c276, type: 2}

@@ -128,6 +128,7 @@ public class DataPersistenceManager : PersistentSingleton<DataPersistenceManager
             return;
         }
 
+
         // push the loaded data to all other scripts that need it
         foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects)
         {

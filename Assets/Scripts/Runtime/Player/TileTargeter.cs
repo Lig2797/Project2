@@ -90,7 +90,8 @@ public class TileTargeter : NetworkBehaviour
     #region Before Gameloop
     private void Awake()
     {
-        if (SceneManagement.GetCurrentSceneName().Equals(Loader.Scene.WorldScene))
+        string currentSceneName = SceneManagement.GetCurrentSceneName();
+        if (currentSceneName.Equals(Loader.Scene.WorldScene) && currentSceneName.Equals(Loader.Scene.MineScene))
         {
             GetAllTilemaps();
         }

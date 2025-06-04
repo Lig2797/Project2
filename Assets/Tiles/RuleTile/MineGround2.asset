@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4c779848d9dd029409ca676b49e10a18, type: 3}
-  m_Name: Mine Ground 2
+  m_Name: MineGround2
   m_EditorClassIdentifier: 
   m_Tile: {fileID: -1198564135137985669, guid: eaf51fe6eeb2bc84e89fd5b12b0ee304, type: 2}
   m_Sprites:
