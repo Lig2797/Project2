@@ -11,6 +11,7 @@ using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.TextCore.Text;
 
 public class PlayerController : NetworkBehaviour, IDataPersistence
 {
@@ -30,6 +31,11 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
     #region Reference
     [Header("Reference")]
     public PlayerDataSO playerDataSO;
+    public PlayerDataNetwork playerDataNetwork;
+
+    [Header("Other Data")]
+    public string otherPlayerName;
+    public int otherCharacterId;
     #endregion
 
     #region PlayerStatus
@@ -267,29 +273,42 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
 
     public override void OnNetworkSpawn()
     {
-        if (!IsOwner) return;
-        _inputReader.playerActions.moveEvent += OnMove;
-        _inputReader.playerActions.attackEvent += OnAttack;
-        _inputReader.playerActions.interactEvent += OnInteract;
-        _inputReader.playerActions.secondInteractEvent += OnSecondInteract;
-        _inputReader.playerActions.runEvent += OnRun;
-        _inputReader.playerActions.submitEvent += OnSubmit;
-        _inventoryManagerSO.onChangedSelectedSlot += CheckAnimation;
+        if (IsOwner)
+        {
+            _inputReader.playerActions.moveEvent += OnMove;
+            _inputReader.playerActions.attackEvent += OnAttack;
+            _inputReader.playerActions.interactEvent += OnInteract;
+            _inputReader.playerActions.secondInteractEvent += OnSecondInteract;
+            _inputReader.playerActions.runEvent += OnRun;
+            _inputReader.playerActions.submitEvent += OnSubmit;
+            _inventoryManagerSO.onChangedSelectedSlot += CheckAnimation;
 
-        LocalInstance = this;
-        DontDestroyOnLoad(gameObject);
+            LocalInstance = this;
+            DontDestroyOnLoad(gameObject);
 
-        DataPersistenceManager.Instance.LoadGame();
+            DataPersistenceManager.Instance.LoadGame();
 
-        this.transform.position = playerDataSO.position;
+            playerDataNetwork = new PlayerDataNetwork(NetworkManager.Singleton.LocalClientId,
+                                                      playerDataSO.characterId,
+                                                      playerDataSO.playerName,
+                                                      playerDataSO.playerId);
+            this.transform.position = playerDataSO.position;
+            playerNameText.text = playerDataSO.playerName.ToString();
+            animator.runtimeAnimatorController = GameMultiplayerManager.Instance.GetCharactersAnimator(playerDataSO.characterId);
 
-        playerNameText.text = playerDataSO.playerName.ToString();
-        animator.runtimeAnimatorController = GameMultiplayerManager.Instance.GetCharactersAnimator(playerDataSO.characterId);
-
-        bool isHost = NetworkManager.Singleton.IsHost && IsServer;
-        if (isHost) col.enabled = false;
-        else col.enabled = true;
-        GameEventsManager.Instance.playerEvents.OnPlayerSpawned(this);
+            if (NetworkManager.Singleton.IsHost && IsServer) col.enabled = false;
+            else if (NetworkManager.Singleton.IsClient)
+            {
+                col.enabled = true;
+                
+            }
+            GameEventsManager.Instance.playerEvents.OnPlayerSpawned(this);
+        }
+        else
+        {
+            playerNameText.text = otherPlayerName;
+            animator.runtimeAnimatorController = GameMultiplayerManager.Instance.GetCharactersAnimator(otherCharacterId);
+        }    
     }
 
     public override void OnNetworkDespawn()
@@ -314,6 +333,13 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
         {
             DataPersistenceManager.Instance.CaptureScreenshot();
         }
+    }
+
+    [ServerRpc]
+    public void SetCharacterIdServerRpc(int id)
+    {
+        playerDataNetwork.characterId = id;
+        animator.runtimeAnimatorController = GameMultiplayerManager.Instance.GetCharactersAnimator(id);
     }
 
     #endregion
@@ -686,6 +712,8 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
 
     public void LoadData(GameData gameData)
     {
+        this.transform.position = gameData.PlayerData.Position;
+
         if (!gameData.GameFlowData.HasChoosenCharacter) return;
 
         playerDataSO.characterId = gameData.PlayerData.PlayerDataNetwork.characterId;

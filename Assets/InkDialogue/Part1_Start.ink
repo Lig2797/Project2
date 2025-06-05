@@ -45,6 +45,7 @@ Quyết định đã được đưa ra, mình cần chuẩn bị lên đường 
 
 + [Đi ngay lập tức, không chờ đợi]
     Không chần chừ thêm nữa, lên đường thôi. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+
     -> DONE
     
 === eloria_village ===
