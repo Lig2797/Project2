@@ -12,8 +12,10 @@ public class QuestManager : PersistentSingleton<QuestManager>
     // quest start requirements
     private int currentPlayerLevel;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         questMap = CreateQuestMap();
     }
 

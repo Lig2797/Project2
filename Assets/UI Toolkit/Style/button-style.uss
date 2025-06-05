@@ -4,13 +4,13 @@
     width: 600px;
     height: 120px;
     transform-origin: center;
-    background-image: url("project://database/Assets/Farm%20RPG%20-%20Tiny%20Asset%20Pack%20-%20(All%20in%20One)/Farm%20RPG%20-%20Tiny%20Asset%20Pack%20-%20(All%20in%20One)/UI%20-%20Tiny%20Asset%20Pack/button.png?fileID=323141436&guid=45bb0416b11523a49bd131d10df5c07f&type=3#button_87");
+    background-image: url("project://database/Assets/Farm%20RPG%20-%20Tiny%20Asset%20Pack%20-%20(All%20in%20One)/Farm%20RPG%20-%20Tiny%20Asset%20Pack%20-%20(All%20in%20One)/UI%20-%20Tiny%20Asset%20Pack/button.png?fileID=-982555679&guid=45bb0416b11523a49bd131d10df5c07f&type=3#button_51");
     font-size: 64px;
     -unity-text-align: middle-center;
     white-space: nowrap;
     text-overflow: clip;
     text-shadow: 0 0 0 rgba(0, 0, 0, 0);
-    color: rgb(255, 103, 0);
+    color: rgb(103, 42, 0);
     -unity-font: url("project://database/Assets/Fonts/Jersey10-Regular.ttf?fileID=12800000&guid=e2131143879406447bc4171be4019b36&type=3#Jersey10-Regular");
     -unity-font-style: normal;
     margin-top: 5px;
@@ -127,30 +127,6 @@
     translate: 0 0;
 }
 
-.button-style2 {
-    border-left-color: rgb(255, 255, 255);
-    border-right-color: rgb(255, 255, 255);
-    border-top-color: rgb(255, 255, 255);
-    border-bottom-color: rgb(255, 255, 255);
-    border-top-width: 0;
-    border-right-width: 0;
-    border-bottom-width: 0;
-    border-left-width: 0;
-    background-color: rgba(255, 255, 255, 0);
-    font-size: 80px;
-    -unity-font: url("project://database/Assets/Fonts/Jersey10-Regular.ttf?fileID=12800000&guid=e2131143879406447bc4171be4019b36&type=3#Jersey10-Regular");
-    -unity-font-definition: initial;
-    color: rgb(255, 255, 255);
-    margin-top: 10px;
-    margin-right: 10px;
-    margin-bottom: 10px;
-    margin-left: 10px;
-    padding-right: 10px;
-    padding-left: 10px;
-    transition-duration: 0.2s;
-    transition-timing-function: ease-out-elastic;
-}
-
 .button-style2:hover {
     scale: 1.1 1.1;
     background-color: rgba(205, 205, 205, 0.2);
@@ -184,6 +160,31 @@
 .dropdown-style > .unity-popup-field__input {
     background-image: url("project://database/Assets/Farm%20RPG%20-%20Tiny%20Asset%20Pack%20-%20(All%20in%20One)/Farm%20RPG%20-%20Tiny%20Asset%20Pack%20-%20(All%20in%20One)/UI%20-%20Tiny%20Asset%20Pack/0.2.png?fileID=815281488&guid=d9833c41400bd4b47912eb1ba4eb85e6&type=3#0.2_6");
     -unity-slice-scale: 0.3px;
+}
+
+.button-style2 {
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    background-color: rgba(255, 255, 255, 0);
+    font-size: 80px;
+    -unity-font: url("project://database/Assets/Fonts/Jersey10-Regular.ttf?fileID=12800000&guid=e2131143879406447bc4171be4019b36&type=3#Jersey10-Regular");
+    -unity-font-definition: initial;
+    color: rgb(255, 255, 255);
+    margin-top: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    padding-right: 10px;
+    padding-left: 10px;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-out-elastic;
+    text-shadow: 5px 5px 4px rgb(0, 0, 0);
 }
 
 .dropdown-style > .unity-popup-field__input > .unity-base-popup-field__arrow {

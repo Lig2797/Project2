@@ -12,7 +12,6 @@ public class InkExternalFunctions
         story.BindExternalFunction("FinishQuest", (string questId) => FinishQuest(questId));
         story.BindExternalFunction("AddItem", (string itemId) => AddItem(itemId));
         story.BindExternalFunction("LoadScene", (string sceneName) => LoadScene(sceneName));
-        story.BindExternalFunction("EnableMove", () => EnableMove());
     }
 
     public void Unbind(Story story)
@@ -22,7 +21,6 @@ public class InkExternalFunctions
         story.UnbindExternalFunction("FinishQuest");
         story.UnbindExternalFunction("AddItem");
         story.UnbindExternalFunction("LoadScene");
-        story.UnbindExternalFunction("EnableMove");
     }
 
     private void StartQuest(string questId)
@@ -48,12 +46,7 @@ public class InkExternalFunctions
     private void LoadScene(string sceneName)
     {
         Loader.Scene scene = ConvertToScene(sceneName);
-        Loader.Load(scene);
-    }
-
-    private void EnableMove()
-    {
-        GameEventsManager.Instance.inputReader.EnableControl();
+        DialogueManager.Instance.ExitDialogueAndLoadScene(scene);
     }
 
     private Loader.Scene ConvertToScene(string sceneName)
