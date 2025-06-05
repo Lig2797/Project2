@@ -14,7 +14,7 @@ public class PlayerEvents
     public event Action onDisablePlayerMovement;
     public void DisablePlayerMovement()
     {
-        if (onDisablePlayerMovement != null) 
+        if (onDisablePlayerMovement != null)
         {
             onDisablePlayerMovement();
         }
@@ -23,7 +23,7 @@ public class PlayerEvents
     public event Action onEnablePlayerMovement;
     public void EnablePlayerMovement()
     {
-        if (onEnablePlayerMovement != null) 
+        if (onEnablePlayerMovement != null)
         {
             onEnablePlayerMovement();
         }

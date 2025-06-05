@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
+[RequireComponent(typeof(BoxCollider2D))]
 public class AreaExit : MonoBehaviour
 {
 
@@ -38,9 +39,9 @@ public class AreaExit : MonoBehaviour
             if (!UseClickToExit)
             {
                 PlayerController.LocalInstance.CanMove = false;
-                UI_Fade.Instance.gameObject.SetActive(true);
+                //UI_Fade.Instance.gameObject.SetActive(true);
                 SceneManagement.SetTransitionName(sceneTransitionName);
-                UI_Fade.Instance.FadeToBlack();
+                //UI_Fade.Instance.FadeToBlack();
                 StartCoroutine(LoadSceneRoutine());
             }
             
@@ -77,9 +78,9 @@ public class AreaExit : MonoBehaviour
                 {
                     CanClick = false;
                     PlayerController.LocalInstance.CanMove = false;
-                    UI_Fade.Instance.gameObject.SetActive(true);
+                    //UI_Fade.Instance.gameObject.SetActive(true);
                     SceneManagement.SetTransitionName(sceneTransitionName.ToString());
-                    UI_Fade.Instance.FadeToBlack();
+                    //UI_Fade.Instance.FadeToBlack();
                     StartCoroutine(LoadSceneRoutine());
                 }
             }

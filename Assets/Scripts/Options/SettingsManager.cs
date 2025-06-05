@@ -6,10 +6,11 @@ public class SettingsManager : PersistentSingleton<SettingsManager>
     [Header("Reference")]
     public DefaultSettingsSO defaultSettings;
 
+    private SettingsData settingsData;
+
     private void Start()
     {
         LoadData();
-        ApplySettings();
     }
 
     public void ApplySettings()
@@ -54,7 +55,13 @@ public class SettingsManager : PersistentSingleton<SettingsManager>
 
     public void LoadData()
     {
-        SettingsFileHandler.Load(defaultSettings);
+        settingsData = SettingsFileHandler.Load(defaultSettings);
+        defaultSettings.overalVolume = settingsData.OveralVolume;
+        defaultSettings.musicVolume = settingsData.MusicVolume;
+        defaultSettings.sfxVolume = settingsData.SFXVolume;
+        defaultSettings.resolutionIndex = settingsData.ResolutionIndex;
+        defaultSettings.isFullScreen = settingsData.IsFullScreen;
+        ApplySettings();
     }
 
     public void SaveData()

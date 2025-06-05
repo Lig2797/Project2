@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QuestManager : MonoBehaviour
+public class QuestManager : PersistentSingleton<QuestManager>
 {
     [Header("Config")]
     [SerializeField] private bool loadQuestState = true;
@@ -12,8 +12,10 @@ public class QuestManager : MonoBehaviour
     // quest start requirements
     private int currentPlayerLevel;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         questMap = CreateQuestMap();
     }
 

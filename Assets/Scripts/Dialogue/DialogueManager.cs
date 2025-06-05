@@ -4,7 +4,7 @@ using UnityEngine;
 using Ink.Runtime;
 using Unity.VisualScripting;
 
-public class DialogueManager : MonoBehaviour
+public class DialogueManager : Singleton<DialogueManager>
 {
     [Header("Ink Story")]
     [SerializeField] private TextAsset inkJson;
@@ -13,12 +13,15 @@ public class DialogueManager : MonoBehaviour
     private int currentChoiceIndex = -1;
 
     private bool dialoguePlaying = false;
+    private bool dialogueFinish = false;
 
     private InkExternalFunctions inkExternalFunctions;
     private InkDialogueVariables inkDialogueVariables;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         story = new Story(inkJson.text);
         inkExternalFunctions = new InkExternalFunctions();
         inkDialogueVariables = new InkDialogueVariables(story);
@@ -67,7 +70,6 @@ public class DialogueManager : MonoBehaviour
 
     private void SubmitPressed(InputEventContext inputEventContext)
     {
-        // if the context isn't dialogue, we never want to register input here
         if (!inputEventContext.Equals(InputEventContext.DIALOGUE))
         {
             return;
@@ -172,6 +174,18 @@ public class DialogueManager : MonoBehaviour
 
         // reset story state
         story.ResetState();
+
+        dialogueFinish = true;
+    }
+
+    public void ExitDialogueAndLoadScene(Loader.Scene sceneToLoad)
+    {
+        StartCoroutine(ExitDialogue());
+        if (dialogueFinish == true)
+        {
+            Loader.Load(sceneToLoad);
+            dialogueFinish = false;
+        }
     }
 
     private bool IsLineBlank(string dialogueLine)

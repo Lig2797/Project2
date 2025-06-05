@@ -12,6 +12,7 @@ public class CutsceneController : MonoBehaviour
     private void OnEnable()
     {
         GameEventsManager.Instance.playerEvents.onPlayerSpawned += AssignPlayer;
+        GameEventsManager.Instance.cutsceneEvents.onResumeCutscene += ResumeCutscene;
     }
 
     private void OnDisable()
@@ -49,5 +50,54 @@ public class CutsceneController : MonoBehaviour
         player.gameObject.transform.position = new Vector3(4.371f, 1.154f, 0);
         cutsceneDirector.Play();
         hasPlayerAssigned = true;
+    }
+
+    public void PlayCutscene()
+    {
+        if (cutsceneDirector.state == PlayState.Playing || cutsceneDirector.state == PlayState.Paused)
+        {
+            Debug.LogWarning("Cutscene is already playing or paused.");
+            return;
+        }
+
+        if (!hasPlayerAssigned)
+        {
+            PlayerController player = PlayerController.LocalInstance;
+            if (player != null)
+            {
+                AssignPlayer(player);
+            }
+            else
+            {
+                Debug.LogWarning("No PlayerController found. Cutscene cannot be played.");
+                return;
+            }
+        }
+
+        cutsceneDirector.Play();
+    }
+
+    public void StopCutscene()
+    {
+        if (cutsceneDirector.state == PlayState.Playing || cutsceneDirector.state == PlayState.Paused)
+        {
+            cutsceneDirector.Stop();
+        }
+    }
+
+    public void PauseCutscene()
+    {
+        if (cutsceneDirector.state == PlayState.Playing)
+        {
+            cutsceneDirector.Pause();
+        }
+    }
+
+    public void ResumeCutscene()
+    {
+        if (cutsceneDirector.state == PlayState.Paused)
+        {
+            cutsceneDirector.Resume();
+        }
     }
 }

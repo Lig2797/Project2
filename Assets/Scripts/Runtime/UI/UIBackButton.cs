@@ -7,43 +7,51 @@ using UnityEngine.UI;
 
 public class UIBackButton : MonoBehaviour
 {
-    public Button backButton;
+    public Button leaveButton;
+    public Button leaveNetworkButton;
+
+    private void OnEnable()
+    {
+        GameEventsManager.Instance.networkEvents.onSessionCreate += ShowButton;
+    }
+
+    private void OnDisable()
+    {
+        GameEventsManager.Instance.networkEvents.onSessionCreate -= ShowButton;
+    }
 
     private void Start()
     {
-        if (backButton == null)
-        {
-            backButton = GetComponent<Button>();
-        }
+        ShowButton();
 
-        if (backButton != null)
+        if (leaveButton != null) leaveButton.onClick.AddListener(OnBackButtonClicked);
+        if (leaveButton != null) leaveNetworkButton.onClick.AddListener(OnBackButtonClicked);
+    }
+
+    private void ShowButton()
+    {
+        if (leaveButton == null || leaveNetworkButton == null) return;
+        if (SessionManager.Instance.ActiveSession == null)
         {
-            backButton.onClick.AddListener(OnBackButtonClicked);
+            leaveButton.gameObject.SetActive(true);
+            leaveNetworkButton.gameObject.SetActive(false);
         }
         else
         {
-            Debug.LogError("Back button is not assigned or found on the GameObject.");
+            leaveButton.gameObject.SetActive(false);
+            leaveNetworkButton.gameObject.SetActive(true);
         }
     }
 
     private void OnBackButtonClicked()
     {
         SessionManager.Instance.DisInitAndSignOut();
-        Loader.Load(Loader.Scene.MainMenu);
-
-        //await SessionManager.Instance.LeaveSession();
-
-        //StartCoroutine(WaitForLeaveSession());
-    }
-
-    private IEnumerator WaitForLeaveSession()
-    {
-        while (SessionManager.Instance.ActiveSession != null)
+        if (NetworkManager.Singleton.IsListening)
         {
-            yield return null; // Wait until the session is null
+            NetworkManager.Singleton.Shutdown();
         }
-        
-        yield return new WaitUntil(() => !NetworkManager.Singleton.IsListening);
         Loader.Load(Loader.Scene.MainMenu);
+
+        GameEventsManager.Instance.networkEvents.OnSessionCreate();
     }
 }

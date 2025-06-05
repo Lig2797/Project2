@@ -10,7 +10,8 @@ public class InkExternalFunctions
         story.BindExternalFunction("StartQuest", (string questId) => StartQuest(questId));
         story.BindExternalFunction("AdvanceQuest", (string questId) => AdvanceQuest(questId));
         story.BindExternalFunction("FinishQuest", (string questId) => FinishQuest(questId));
-        story.BindExternalFunction("Load", (string sceneName) => Load(sceneName));
+        story.BindExternalFunction("AddItem", (string itemId) => AddItem(itemId));
+        story.BindExternalFunction("LoadScene", (string sceneName) => LoadScene(sceneName));
     }
 
     public void Unbind(Story story)
@@ -18,6 +19,8 @@ public class InkExternalFunctions
         story.UnbindExternalFunction("StartQuest");
         story.UnbindExternalFunction("AdvanceQuest");
         story.UnbindExternalFunction("FinishQuest");
+        story.UnbindExternalFunction("AddItem");
+        story.UnbindExternalFunction("LoadScene");
     }
 
     private void StartQuest(string questId)
@@ -35,10 +38,15 @@ public class InkExternalFunctions
         GameEventsManager.Instance.questEvents.FinishQuest(questId);
     }
 
-    private void Load(string sceneName)
+    private void AddItem(string itemId)
+    {
+        
+    }
+
+    private void LoadScene(string sceneName)
     {
         Loader.Scene scene = ConvertToScene(sceneName);
-        Loader.Load(scene);
+        DialogueManager.Instance.ExitDialogueAndLoadScene(scene);
     }
 
     private Loader.Scene ConvertToScene(string sceneName)
@@ -50,7 +58,7 @@ public class InkExternalFunctions
         else
         {
             Debug.LogError($"Invalid scene name: {sceneName}");
-            return Loader.Scene.CharacterSelectScene; // Default value
+            return Loader.Scene.WorldScene; // Default value
         }
     }
 }

@@ -5,7 +5,7 @@ using TMPro;
 using Ink.Runtime;
 using UnityEngine.EventSystems;
 
-public class DialoguePanelUI : MonoBehaviour
+public class DialoguePanelUI : Singleton<DialoguePanelUI>
 {
     [Header("Params")]
     [SerializeField] private float typingSpeed = 0.04f;
