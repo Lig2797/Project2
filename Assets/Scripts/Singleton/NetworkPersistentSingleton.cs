@@ -20,7 +20,6 @@ public class NetworkPersistentSingleton<T> : NetworkBehaviour where T : NetworkP
             return instance;
         }
     }
-
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();

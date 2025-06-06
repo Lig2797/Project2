@@ -23,8 +23,7 @@ public class CaveManager : NetworkPersistentSingleton<CaveManager>
     [SerializeField] private GameObject _caveLevelBox;
     private void OnEnable()
     {
-        if(caveList == null)
-        caveList = new NetworkDictionary<int, int>();
+
     }
 
     public void GetUIElement()
@@ -49,14 +48,7 @@ public class CaveManager : NetworkPersistentSingleton<CaveManager>
         }
         return -1; // Return -1 if the cave number is not found
     }
-    public bool IsHavingOtherPlayerInCave()
-    {
-        if(CurrentLocalCaveLevel == caveList[caveList.Count - 1])
-        {
-            return true; 
-        }
-        return false;
-    }
+    
     [ServerRpc(RequireOwnership = false)]
     public void CheckAndAddCaveLevelServerRpc(int caveLevel, int caveNumber)
     {

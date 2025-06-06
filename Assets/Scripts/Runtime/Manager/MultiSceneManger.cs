@@ -6,10 +6,10 @@ using Cinemachine;
 
 public class MultiSceneManger : PersistentSingleton<MultiSceneManger>
 {
-    [SerializeField]
-    private string _worldSceneName = "WorldScene";
     private Scene WorldScene;
     public Scene ActiveSubScene;
+    [property: SerializeField]
+    public string ActiveSubSceneName => ActiveSubScene.name;
 
     private List<AreaEntrance> allEntranceInWorldScene = new List<AreaEntrance>();
 
@@ -91,27 +91,43 @@ public class MultiSceneManger : PersistentSingleton<MultiSceneManger>
         }
     }
 
-    public void OnChangeScene(Scene SceneToLoad)
+    public void OnExitToWorldScene(Scene SceneToLoad)
     {
-        Scene WorldScene = SceneManager.GetSceneByName(_worldSceneName);
-        if (SceneToLoad == WorldScene) // back to world
+        SetWorldSceneCameraStatus(true);
+        FindEntranceToSpawn();
+        SetGlobalLightActiveInScene(WorldScene, true);
+        CameraController.Instance.RefreshFollowCamera(_worldSceneVirtualCamera.GetComponent<CinemachineVirtualCamera>());
+
+    }
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+
+        if (scene.name == Loader.Scene.MainMenu.ToString() ||
+            scene.name == Loader.Scene.CutScene.ToString() ||
+            scene.name == Loader.Scene.CharacterSelectScene.ToString() ||
+            scene.name == Loader.Scene.LobbyScene.ToString() ||
+            scene.name == Loader.Scene.UIScene.ToString() ||
+            scene.name == Loader.Scene.LoadingScene.ToString())
+            return;
+        if (scene.name == Loader.Scene.WorldScene.ToString())
         {
-            SetWorldSceneCameraStatus(true);
-            FindEntranceToSpawn();
-            SetGlobalLightActiveInScene(WorldScene, true);
-            CameraController.Instance.RefreshFollowCamera(_worldSceneVirtualCamera.GetComponent<CinemachineVirtualCamera>());
+            GameObject mainWorldSceneCamera = SceneUtils.FindGameObjectWithTagInScene("MainCamera", scene);
+            GameObject worldSceneVirtualCamera = SceneUtils.FindGameObjectByNameInScene("Virtual Camera", scene);
+            
+            SetWorldSceneCameraObject(mainWorldSceneCamera, worldSceneVirtualCamera);
+            SaveWorldSceneRef(scene);
+
+            Debug.Log("World scene references saved after load.");
         }
-        else
+        else // load to subscene
         {
+            Debug.Log("Did OnSwitchSceneWhileGameplay");
             SetWorldSceneCameraStatus(false);
-            CameraController.Instance.SetFollowTarget(); // remove current follow target of current camera
-            var newFollowCamera = SceneUtils.FindGameObjectByNameInScene("Virtual Camera", SceneToLoad).GetComponent<CinemachineVirtualCamera>();
+            SetGlobalLightActiveInScene(WorldScene, false);
+            var newFollowCamera = SceneUtils.FindGameObjectByNameInScene("Virtual Camera", scene).GetComponent<CinemachineVirtualCamera>();
             CameraController.Instance.RefreshFollowCamera(newFollowCamera);
         }
-
-        
     }
-
     public void SetWorldSceneCameraObject(GameObject cameraObject, GameObject virtualCameraObject)
     {
         _worldSceneMainCamera = cameraObject;
@@ -125,7 +141,9 @@ public class MultiSceneManger : PersistentSingleton<MultiSceneManger>
 
     public void SetWorldSceneCameraStatus(bool active)
     {
+        if(_worldSceneMainCamera != null)
         _worldSceneMainCamera.SetActive(active);
+        if(_worldSceneVirtualCamera != null)
         _worldSceneVirtualCamera.SetActive(active);
     }
 
@@ -141,23 +159,16 @@ public class MultiSceneManger : PersistentSingleton<MultiSceneManger>
 
     private void FindEntranceToSpawn()
     {
+        if(allEntranceInWorldScene == null)
+        {
+            Debug.Log("No entrance registered");
+            return;
+        }
         foreach (AreaEntrance entrance in allEntranceInWorldScene)
         {
             if (entrance.CheckAndSpawnPlayer())
                 return;
         }
     }
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        if (scene.name == _worldSceneName)
-        {
-            GameObject mainWorldSceneCamera = SceneUtils.FindGameObjectWithTagInScene("MainCamera", scene);
-            GameObject worldSceneVirtualCamera = SceneUtils.FindGameObjectByNameInScene("Virtual Camera", scene);
-
-            SetWorldSceneCameraObject(mainWorldSceneCamera, worldSceneVirtualCamera);
-            SaveWorldSceneRef(scene);
-
-            Debug.Log("World scene references saved after load.");
-        }
-    }
+    
 }

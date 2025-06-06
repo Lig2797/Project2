@@ -10,6 +10,7 @@ public static class Loader
     {
         MainMenu,
         WorldScene,
+        UIScene,
         MineCaveScene,
         MineScene,
         CutScene,
@@ -22,7 +23,7 @@ public static class Loader
 
     public static Scene TargetScene => targetScene;
 
-    public static bool isMultiSceneLoad;
+    public static bool isMultiSceneLoad = false;
 
     public static void Load(Scene targetScene, bool isMultiSceneLoad = false)
     {

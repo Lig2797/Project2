@@ -6,7 +6,8 @@ public enum AreaEntranceType
 {
     Mine,
     Town,
-    HouseDoor,
+    HouseInDoor,
+    HouseOutDoor,
     Other
 }
 public class AreaEntrance : MonoBehaviour
@@ -17,6 +18,10 @@ public class AreaEntrance : MonoBehaviour
     private void Start() 
     {
         CheckAndSpawnPlayer();
+    }
+
+    private void OnEnable()
+    {
         MultiSceneManger.Instance.SubscribeToEntranceList(this);
     }
 
@@ -29,14 +34,23 @@ public class AreaEntrance : MonoBehaviour
     {
         if (transitionName == SceneManagement.SceneTransitionName)
         {
-
+            Debug.Log("found entrance and start to set position: " + transform.position + Vector3.up);
             if (entranceType == AreaEntranceType.Mine)
+            {
                 PlayerController.LocalInstance.transform.position = this.transform.position + Vector3.down;
-            else if (entranceType == AreaEntranceType.HouseDoor)
+            }
+            else if (entranceType == AreaEntranceType.HouseInDoor)
+            {
                 PlayerController.LocalInstance.transform.position = this.transform.position + Vector3.up;
-
+            }
+            else if (entranceType == AreaEntranceType.HouseOutDoor)
+            {
+                PlayerController.LocalInstance.transform.position = this.transform.position + Vector3.down;
+            }
             else
+            {
                 PlayerController.LocalInstance.transform.position = this.transform.position;
+            }
 
             PlayerController.LocalInstance.CanMove = true;
             //UI_Fade.Instance.FadeToClear();

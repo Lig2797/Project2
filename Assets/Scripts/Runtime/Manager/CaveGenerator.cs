@@ -232,13 +232,13 @@ public class CaveGenerator : NetworkSingleton<CaveGenerator>
 
     private bool _isHavingOtherPlayerInCave = false;
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         CaveManager.Instance.GetUIElement();
         CaveManager.Instance.AdjustLocalCaveLevel(1);
         AdjustMineralsRatio();
         ChooseMineralToSpawn();
-        GetComponent<NetworkObject>().Spawn();
     }
 
     public override void OnNetworkSpawn()

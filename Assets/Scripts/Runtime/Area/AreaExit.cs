@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 [RequireComponent(typeof(BoxCollider2D))]
 public class AreaExit : MonoBehaviour
 {
+    [SerializeField] private bool _isMultiSceneLoad = true;
 
     [SerializeField] private bool _useClickToExit;
     public bool UseClickToExit
@@ -60,11 +61,8 @@ public class AreaExit : MonoBehaviour
         {
             CaveManager.Instance.CurrentLocalCaveLevel = 0; // Reset cave level when exiting to world scene
         }
-        //if (sceneToLoad == Loader.Scene.WorldScene)
-        //    MultiSceneManger.Instance.ExitToWorld();
-        //else
-        //MultiSceneManger.Instance.EnterSubScene(sceneToLoad.ToString());
-        Loader.Load(sceneToLoad,true);
+        
+        Loader.Load(sceneToLoad, _isMultiSceneLoad);
     }
 
 
