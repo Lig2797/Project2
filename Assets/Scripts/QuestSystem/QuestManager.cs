@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QuestManager : PersistentSingleton<QuestManager>
+public class QuestManager : MonoBehaviour
 {
     [Header("Config")]
     [SerializeField] private bool loadQuestState = true;
@@ -12,10 +12,8 @@ public class QuestManager : PersistentSingleton<QuestManager>
     // quest start requirements
     private int currentPlayerLevel;
 
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
-
         questMap = CreateQuestMap();
     }
 
@@ -46,10 +44,12 @@ public class QuestManager : PersistentSingleton<QuestManager>
 
         foreach (Quest quest in questMap.Values)
         {
+            // initialize any loaded quest steps
             if (quest.state == QuestState.IN_PROGRESS)
             {
                 quest.InstantiateCurrentQuestStep(this.transform);
             }
+            // broadcast the initial state of all quests on startup
             GameEventsManager.Instance.questEvents.QuestStateChange(quest);
         }
     }
@@ -68,15 +68,20 @@ public class QuestManager : PersistentSingleton<QuestManager>
 
     private bool CheckRequirementsMet(Quest quest)
     {
+        // start true and prove to be false
         bool meetsRequirements = true;
 
+        // check player level requirements
         if (currentPlayerLevel < quest.info.levelRequirement)
         {
             meetsRequirements = false;
         }
 
+        // check quest prerequisites for completion
         foreach (QuestInfoSO prerequisiteQuestInfo in quest.info.questPrerequisites)
         {
+            if (prerequisiteQuestInfo == null) continue;
+
             if (GetQuestById(prerequisiteQuestInfo.id).state != QuestState.FINISHED)
             {
                 meetsRequirements = false;
@@ -88,8 +93,10 @@ public class QuestManager : PersistentSingleton<QuestManager>
 
     private void Update()
     {
+        // loop through ALL quests
         foreach (Quest quest in questMap.Values)
         {
+            // if we're now meeting the requirements, switch over to the CAN_START state
             if (quest.state == QuestState.REQUIREMENTS_NOT_MET && CheckRequirementsMet(quest))
             {
                 ChangeQuestState(quest.info.id, QuestState.CAN_START);
@@ -108,12 +115,15 @@ public class QuestManager : PersistentSingleton<QuestManager>
     {
         Quest quest = GetQuestById(id);
 
+        // move on to the next step
         quest.MoveToNextStep();
 
+        // if there are more steps, instantiate the next one
         if (quest.CurrentStepExists())
         {
             quest.InstantiateCurrentQuestStep(this.transform);
         }
+        // if there are no more steps, then we've finished all of them for this quest
         else
         {
             ChangeQuestState(quest.info.id, QuestState.CAN_FINISH);
@@ -144,7 +154,7 @@ public class QuestManager : PersistentSingleton<QuestManager>
     {
         // loads all QuestInfoSO Scriptable Objects under the Assets/Resources/Quests folder
         QuestInfoSO[] allQuests = Resources.LoadAll<QuestInfoSO>("Quests");
-        
+        // Create the quest map
         Dictionary<string, Quest> idToQuestMap = new Dictionary<string, Quest>();
         foreach (QuestInfoSO questInfo in allQuests)
         {
@@ -180,7 +190,11 @@ public class QuestManager : PersistentSingleton<QuestManager>
         try
         {
             QuestData questData = quest.GetQuestData();
+            // serialize using JsonUtility, but use whatever you want here (like JSON.NET)
             string serializedData = JsonUtility.ToJson(questData);
+            // saving to PlayerPrefs is just a quick example for this tutorial video,
+            // you probably don't want to save this info there long-term.
+            // instead, use an actual Save & Load system and write to a file, the cloud, etc..
             PlayerPrefs.SetString(quest.info.id, serializedData);
         }
         catch (System.Exception e)
@@ -194,6 +208,7 @@ public class QuestManager : PersistentSingleton<QuestManager>
         Quest quest = null;
         try
         {
+            // load quest from saved data
             if (PlayerPrefs.HasKey(questInfo.id) && loadQuestState)
             {
                 string serializedData = PlayerPrefs.GetString(questInfo.id);

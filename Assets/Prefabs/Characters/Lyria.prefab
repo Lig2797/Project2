@@ -64,6 +64,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Lyria
       objectReference: {fileID: 0}
+    - target: {fileID: 3069992538054791838, guid: 1bee62c1640c1da47ab3b0303eda31dd, type: 3}
+      propertyPath: m_TagString
+      value: Villager
+      objectReference: {fileID: 0}
+    - target: {fileID: 8114054005754329752, guid: 1bee62c1640c1da47ab3b0303eda31dd, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

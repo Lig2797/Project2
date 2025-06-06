@@ -9,7 +9,6 @@ using UnityEngine.Rendering.Universal;
 public class EnviromentalStatusManager : NetworkPersistentSingleton<EnviromentalStatusManager>, IDataPersistence
 {
     public EnvironmentalStatus eStarus;
-    public UI_EnviromentStatus statusUI;
 
     public static event Action<ESeason> ChangeSeasonEvent;
 
@@ -57,14 +56,42 @@ public class EnviromentalStatusManager : NetworkPersistentSingleton<Enviromental
         }
     }
 
+    public bool Startday()
+    {
+        if (eStarus.DateTime.Hour == 6 && eStarus.DateTime.Minute == 0)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public bool EndDay()
+    {
+        if (eStarus.DateTime.Hour == 18 && eStarus.DateTime.Minute == 0)
+        {
+            return true;
+        }
+        return false;
+    }
+
     IEnumerator WaitToIncreaseDay()
     {
         do
         {
-            statusUI.UpdateDateText(eStarus.DateTime);
+            UI_EnviromentStatus.Instance.UpdateDateText(eStarus.DateTime);
+            DayCycleHandler.Instance.MoveSunAndMoon();
+            DayCycleHandler.Instance.UpdateLight();
             if (ChangeSeason())
             {
                 ChangeSeasonEvent?.Invoke(eStarus.SeasonStatus);
+            }
+            if (Startday())
+            {
+                GameEventsManager.Instance.npcEvents.SpawnNpc();
+            }
+            if (EndDay())
+            {
+                GameEventsManager.Instance.npcEvents.CallNpcHome();
             }
             yield return new WaitForSeconds(1);
             eStarus.IncreaseDate(minutesToIncrease);

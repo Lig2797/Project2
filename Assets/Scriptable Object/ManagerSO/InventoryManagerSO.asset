@@ -15,11 +15,4 @@ MonoBehaviour:
   inventory:
     _maxSlotInventory: 44
     _inventoryItemList: []
-  middleInventoryItem:
-    _id: 
-    _itemName: 
-    _quantity: 0
-    _maxStack: 0
-    _slotIndex: 0
-  middleManItemInfo: {fileID: 0}
-  uI_InventorySlot: {fileID: 0}
+  currentDraggingItem: {fileID: 0}

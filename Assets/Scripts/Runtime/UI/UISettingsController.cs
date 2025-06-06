@@ -15,6 +15,9 @@ public class UISettingsController : MonoBehaviour
 
     private DropdownField _resolutionScreenDropdown;
     private Toggle _fullScreenToggle;
+    private Slider _overalVolumeSlider;
+    private Slider _musicVolumeSlider;
+    private Slider _sfxVolumeSlider;
 
     private void Awake()
     {
