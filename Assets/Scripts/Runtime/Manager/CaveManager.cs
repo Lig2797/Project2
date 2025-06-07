@@ -23,7 +23,10 @@ public class CaveManager : NetworkPersistentSingleton<CaveManager>
     [SerializeField] private GameObject _caveLevelBox;
     private void OnEnable()
     {
-
+        if (caveList == null)
+        {
+            caveList = new NetworkDictionary<int, int>();
+        }
     }
 
     public void GetUIElement()

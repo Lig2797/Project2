@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using Unity.Netcode;
 
 public class MultiSceneManger : PersistentSingleton<MultiSceneManger>
 {
@@ -126,6 +127,20 @@ public class MultiSceneManger : PersistentSingleton<MultiSceneManger>
             SetGlobalLightActiveInScene(WorldScene, false);
             var newFollowCamera = SceneUtils.FindGameObjectByNameInScene("Virtual Camera", scene).GetComponent<CinemachineVirtualCamera>();
             CameraController.Instance.RefreshFollowCamera(newFollowCamera);
+        }
+
+        FindAllNetworkSingletonAndSpawnOnSceneLoad(scene);
+    }
+
+    public void FindAllNetworkSingletonAndSpawnOnSceneLoad(Scene scene)
+    {
+        List<NetworkObject> netObjs = SceneUtils.FindAllOfTypeInScene<NetworkObject>(scene);
+
+        foreach (var netObj in netObjs)
+        {
+            Debug.Log("Found: " + netObj.name);
+            if (!netObj.IsSpawned)
+                netObj.Spawn();
         }
     }
     public void SetWorldSceneCameraObject(GameObject cameraObject, GameObject virtualCameraObject)
