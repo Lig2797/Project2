@@ -167,7 +167,7 @@ public class ItemWorldManager : NetworkSingleton<ItemWorldManager>, IDataPersist
         newItemNetworkObject.Spawn();
 
         var itemWorldControl = newItemNetworkObject.GetComponent<ItemWorldControl>();
-        itemWorldControl.StartWaitForPickup(2f);
+        itemWorldControl.StartWaitForPickup(1f);
 
         AddItemWorld(itemWorldNetworkData);
         SetItemDropStatusClientRpc(itemWorldNetworkData, newItemNetworkObject, randomDir);
@@ -185,8 +185,8 @@ public class ItemWorldManager : NetworkSingleton<ItemWorldManager>, IDataPersist
             var itemWorld = NetworkVariableConverter.ItemWorldFromNetwork(itemWorldNetworkData);
 
             var itemWorldControl = obj.GetComponent<ItemWorldControl>();
-            itemWorldControl.GetComponent<Rigidbody2D>().AddForce(randomDir * 1f, ForceMode2D.Impulse);
             itemWorldControl.InitialItemWorld(itemWorld);
+            itemWorldControl.GetComponent<SimpleBounceObject>().Bounce(randomDir, 0.5f); // bounce item when drop into world
 
         }
     }

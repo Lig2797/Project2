@@ -131,6 +131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 911ce8e5fe8fd214f958397dcf5a3ac9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isMultiSceneLoad: 1
   _useClickToExit: 0
   sceneToLoad: 1
   sceneTransitionName: MineCaveEntry

@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   transitionName: MineCaveEntry
-  entranceType: 2
+  entranceType: 3
 --- !u!114 &4418056755642546797
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61,8 +61,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 911ce8e5fe8fd214f958397dcf5a3ac9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isMultiSceneLoad: 1
   _useClickToExit: 0
-  sceneToLoad: 2
+  sceneToLoad: 3
   sceneTransitionName: MineCaveExit
 --- !u!61 &3083434467414042802
 BoxCollider2D:

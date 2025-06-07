@@ -4,7 +4,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class EnemyAI : ItemDropableEntity
+public class EnemyAI : NetworkBehaviour
 {
     #region StateMachine Setup
     public StateMachine StateMachine { get; private set; }
@@ -24,12 +24,25 @@ public class EnemyAI : ItemDropableEntity
     [HideInInspector] public Rigidbody2D Rb;
     [HideInInspector] public Animator Animator;
     [HideInInspector] public Damageable Damageable;
+    [HideInInspector] public Collider2D Collider;
     #endregion
 
     #region Variables
+    [SerializeField]
+    private Item[] _itemsToDrop;
+
+    [SerializeField]
+    private int[] _itemDropNum;
+    [SerializeField]
+    private float[] _itemDropNumRatios;
+
+    [SerializeField]
+    private GameObject itemDropPrefab;
+
     public string playerTag = "Player";
     public LayerMask playerLayer;
-    public LayerMask obstacleLayer;
+    public LayerMask patrollingObstacleLayer;
+    public LayerMask visionCheckableLayer;
 
     // Current target player transform (null if none)
     public Transform TargetPlayer { get; private set; }
@@ -44,18 +57,8 @@ public class EnemyAI : ItemDropableEntity
 
     public float Acceleration;
 
-    [SerializeField]
-    private bool _canMove = true; // Flag to control movement
-    public bool CanMove
-    {
-        get => _canMove;
-        set
-        {
-            _canMove = value;
-            if(!_canMove)
-                Rb.linearVelocity = Vector2.zero; // Stop movement when CanMove is false
-        }
-    }
+    public NetworkVariable<bool> CanMove = new NetworkVariable<bool>(true); // Flag to control movement
+    
     public bool CanAttack = true; // Flag to control attacking
     
     #endregion
@@ -127,12 +130,13 @@ public class EnemyAI : ItemDropableEntity
 
     #region Events
     #endregion
-    protected override void Awake()
+    private void Awake()
     {
 
         Rb = GetComponent<Rigidbody2D>();
         Animator = GetComponent<Animator>();
         Damageable = GetComponent<Damageable>();
+        Collider = GetComponent<Collider2D>();
 
         StateMachine = new StateMachine();
 
@@ -141,6 +145,19 @@ public class EnemyAI : ItemDropableEntity
         ChasingState = new EnemyChasingState(this, ChasingStateData);
     }
 
+    public override void OnNetworkSpawn()
+    {
+        CanMove.OnValueChanged += OnCanMoveChanged;
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        CanMove.OnValueChanged -= OnCanMoveChanged;
+    }
+    private void OnCanMoveChanged(bool previousValue, bool newValue)
+    {
+        if (!newValue) Rb.linearVelocity = Vector2.zero;
+    }
     private void Start()
     {
         StateMachine.ChangeState(IdleState);
@@ -157,7 +174,7 @@ public class EnemyAI : ItemDropableEntity
 
     public void ApplyMovement(Vector2 direction, float speed, float acceleration)
     {
-        if (!CanMove)
+        if (!CanMove.Value)
         {
             if (Rb.linearVelocity.magnitude > 0.1f)
                 Rb.AddForce(Rb.linearVelocity * -acceleration, ForceMode2D.Force);
@@ -203,7 +220,7 @@ public class EnemyAI : ItemDropableEntity
             float currentAngle = startAngle + angleStep * i;
             Vector2 dir = Quaternion.Euler(0, 0, currentAngle) * forward;
 
-            RaycastHit2D hit = Physics2D.Raycast(origin, dir, range, obstacleLayer | playerLayer);
+            RaycastHit2D hit = Physics2D.Raycast(origin, dir, range, visionCheckableLayer | playerLayer);
 
             if (hit.collider != null && hit.collider.CompareTag(playerTag))
             {
@@ -252,13 +269,13 @@ public class EnemyAI : ItemDropableEntity
 
     public void StopAllAction()
     {
-        CanMove = false;
+        CanMove.Value = false;
         CanAttack = false;
     }
 
     public void StartAllAction()
     {
-        CanMove = true;
+        CanMove.Value = true;
         CanAttack = true;
     }
 
@@ -277,11 +294,32 @@ public class EnemyAI : ItemDropableEntity
 
     private IEnumerator ApplyKnockback(Vector2 knockBackDirection)
     {
-        yield return new WaitUntil(() => CanMove == false);
+        yield return new WaitUntil(() => CanMove.Value == false);
 
         Rb.AddForce(knockBackDirection, ForceMode2D.Impulse);
     }
+
+    public void DropItem()
+    {
+        if (!IsServer) return;
+        int numItem = 0;
+        numItem = UtilsClass.PickOneByRatio(_itemDropNum, _itemDropNumRatios);
+        Item itemGotPicked = _itemsToDrop[Random.Range(0, _itemsToDrop.Length)];
+        ItemWorld itemWorldDropInfo = new ItemWorld(System.Guid.NewGuid().ToString(), itemGotPicked, numItem, transform.position, 1);
+        ItemWorldManager.Instance.DropItemIntoWorld(itemWorldDropInfo, false, false);
+    }
+
+    //private void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    if(StateMachine.CurrentState == PatrollingState && collision.gameObject.layer == patrollingObstacleLayer)
+    //    {
+    //        StateMachine.ChangeState(IdleState);
+    //    }
+    //}
+
+
     // Draw the fan rays in the editor for debugging
+
     private void OnDrawGizmos()
     {
         if (GizmoFanRayCount <= 1 || GizmoFanRange <= 0f)
@@ -297,7 +335,7 @@ public class EnemyAI : ItemDropableEntity
             Vector2 dir = Quaternion.Euler(0, 0, currentAngle) * GizmoFanDirection;
 
             // Perform a raycast to check for obstacle or player
-            RaycastHit2D hit = Physics2D.Raycast(GizmoFanOrigin, dir, GizmoFanRange, obstacleLayer | playerLayer);
+            RaycastHit2D hit = Physics2D.Raycast(GizmoFanOrigin, dir, GizmoFanRange, visionCheckableLayer | playerLayer);
 
             if (hit.collider != null)
             {

@@ -63,8 +63,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 911ce8e5fe8fd214f958397dcf5a3ac9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isMultiSceneLoad: 1
   _useClickToExit: 1
-  sceneToLoad: 2
+  sceneToLoad: 3
   sceneTransitionName: MineStairEntry
 --- !u!61 &2636237174738991784
 BoxCollider2D:
@@ -179,7 +180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 0
+  GlobalObjectIdHash: 373368854
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1

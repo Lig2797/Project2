@@ -54,14 +54,14 @@ public class EnemyChasingState : IState
 
     public void StateUpdate()
     {
-        if (!_enemyAI.CanMove) return;
+        if (!_enemyAI.CanMove.Value) return;
         DetectPlayerHandler();
         AttackHandler();
     }
 
     public void StateFixedUpdate()
     {
-        if (_enemyAI.TargetPlayer == null || !_enemyAI.CanMove) return;
+        if (_enemyAI.TargetPlayer == null || !_enemyAI.CanMove.Value) return;
         ChasingHandler();
 
     }
@@ -129,7 +129,7 @@ public class EnemyChasingState : IState
             Vector2 dir = Quaternion.Euler(0, 0, angle) * Vector2.right;
             _rayDirections[i] = dir;
 
-            RaycastHit2D hit = Physics2D.Raycast(origin + _data.rayOriginOffset, dir, _data.checkRadius, _enemyAI.obstacleLayer);
+            RaycastHit2D hit = Physics2D.Raycast(origin + _data.rayOriginOffset, dir, _data.checkRadius, _enemyAI.patrollingObstacleLayer);
             _rayHits[i] = hit.collider != null;
 
             if (_rayHits[i])

@@ -8,6 +8,10 @@ public class FakeHeightObject : MonoBehaviour
     [SerializeField] private float _minSpeed;
     [SerializeField] private float _maxSpeed;
 
+    [Header("Bounce Settings")]
+    [SerializeField] private float _minimumBounceDistance = 1.2f;
+    [SerializeField] private float _bounceDrag = 0.25f;
+
     [Header("References")]
     [SerializeField] private Transform _shadowObject;
     [SerializeField] private float _minShadowScale;
@@ -105,7 +109,7 @@ public class FakeHeightObject : MonoBehaviour
         _canMove = false;
 
         // Trigger bounce or explosion
-        if (_travelDistance > 1.2f)
+        if (_travelDistance > _minimumBounceDistance)
         {
             OnArrivedDestination?.Invoke(); // Do bounce
         }
@@ -118,7 +122,7 @@ public class FakeHeightObject : MonoBehaviour
     public void Bounce()
     {
         // Halfway to last direction for bounce
-        Vector2 bounceTarget = _lastDestination + _direction * 0.25f;
+        Vector2 bounceTarget = _lastDestination + _direction * _bounceDrag;
         Initialize(bounceTarget);
     }
 }

@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
-public class TileManager : NetworkSingleton<TileManager>, IDataPersistence
+public class TileManager : NetworkPersistentSingleton<TileManager>, IDataPersistence
 {
     [SerializeField] private List<Tilemap> tilemaps = new List<Tilemap>();
     [SerializeField] private List<RuleTile> ruleTiles = new List<RuleTile>();
