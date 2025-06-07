@@ -88,7 +88,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -102,7 +102,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 16
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -126,7 +126,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -168,9 +168,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 97
-        width: 45
-        height: 47
+        y: 96
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -190,9 +190,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 48
-        y: 97
-        width: 45
-        height: 47
+        y: 96
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -212,9 +212,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 96
-        y: 97
-        width: 45
-        height: 47
+        y: 96
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -234,9 +234,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 144
-        y: 97
-        width: 45
-        height: 47
+        y: 96
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -256,9 +256,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 192
-        y: 97
-        width: 45
-        height: 47
+        y: 96
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -278,9 +278,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 240
-        y: 97
-        width: 45
-        height: 47
+        y: 96
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -299,10 +299,10 @@ TextureImporter:
       name: Altar_6
       rect:
         serializedVersion: 2
-        x: 2
-        y: 49
-        width: 43
-        height: 47
+        x: 0
+        y: 48
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -321,10 +321,10 @@ TextureImporter:
       name: Altar_7
       rect:
         serializedVersion: 2
-        x: 50
-        y: 49
-        width: 43
-        height: 47
+        x: 48
+        y: 48
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -343,10 +343,10 @@ TextureImporter:
       name: Altar_8
       rect:
         serializedVersion: 2
-        x: 98
-        y: 49
-        width: 43
-        height: 47
+        x: 96
+        y: 48
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -365,10 +365,10 @@ TextureImporter:
       name: Altar_9
       rect:
         serializedVersion: 2
-        x: 146
-        y: 49
-        width: 43
-        height: 47
+        x: 144
+        y: 48
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -387,10 +387,10 @@ TextureImporter:
       name: Altar_10
       rect:
         serializedVersion: 2
-        x: 194
-        y: 49
-        width: 43
-        height: 47
+        x: 192
+        y: 48
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -409,10 +409,10 @@ TextureImporter:
       name: Altar_11
       rect:
         serializedVersion: 2
-        x: 242
-        y: 49
-        width: 43
-        height: 47
+        x: 240
+        y: 48
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -431,10 +431,10 @@ TextureImporter:
       name: Altar_12
       rect:
         serializedVersion: 2
-        x: 1
-        y: 1
-        width: 44
-        height: 47
+        x: 0
+        y: 0
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -453,10 +453,10 @@ TextureImporter:
       name: Altar_13
       rect:
         serializedVersion: 2
-        x: 49
-        y: 1
-        width: 44
-        height: 47
+        x: 48
+        y: 0
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -475,10 +475,10 @@ TextureImporter:
       name: Altar_14
       rect:
         serializedVersion: 2
-        x: 97
-        y: 1
-        width: 44
-        height: 47
+        x: 96
+        y: 0
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -497,10 +497,10 @@ TextureImporter:
       name: Altar_15
       rect:
         serializedVersion: 2
-        x: 145
-        y: 1
-        width: 44
-        height: 47
+        x: 144
+        y: 0
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -519,10 +519,10 @@ TextureImporter:
       name: Altar_16
       rect:
         serializedVersion: 2
-        x: 193
-        y: 1
-        width: 44
-        height: 47
+        x: 192
+        y: 0
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -541,10 +541,10 @@ TextureImporter:
       name: Altar_17
       rect:
         serializedVersion: 2
-        x: 241
-        y: 1
-        width: 44
-        height: 47
+        x: 240
+        y: 0
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -563,7 +563,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: f582514540bd52947a5a9e79466a07d9
     internalID: 0
     vertices: []
     indices: 
@@ -571,7 +571,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":6.0,"y":3.0},"gridSpriteSize":{"x":48.0,"y":48.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       Altar_0: -8527002166660407860
       Altar_1: 6550881039822351248

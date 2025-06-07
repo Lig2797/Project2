@@ -7,7 +7,7 @@ public enum ELayerSorting
     Rimlit,
 }
 
-[RequireComponent(typeof(BoxCollider2D))]
+[RequireComponent(typeof(SpriteRenderer),typeof(BoxCollider2D))]
 public class DoorTrigger : MonoBehaviour
 {
     public enum ETagTrigger
@@ -26,7 +26,7 @@ public class DoorTrigger : MonoBehaviour
 
     private BoxCollider2D boxCollider;
 
-    public BoxCollider2D areDestroy;
+    public BoxCollider2D areaDestroy;
 
     private bool isOpen = false;
 
@@ -49,7 +49,7 @@ public class DoorTrigger : MonoBehaviour
         if (other.CompareTag(tagTrigger.ToString()) && isOpen)
         {
             CloseDoor();
-            if (areDestroy != null) areDestroy.enabled = true;
+            if (areaDestroy != null) areaDestroy.enabled = true;
         }
     }
 
