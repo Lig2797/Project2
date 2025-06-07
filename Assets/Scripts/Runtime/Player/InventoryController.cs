@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class InventoryController : NetworkBehaviour, IDataPersistence
 {
@@ -77,6 +78,7 @@ public class InventoryController : NetworkBehaviour, IDataPersistence
 
     public void LoadData(GameData data)
     {
+        if (!SceneManager.GetActiveScene().Equals(Loader.Scene.WorldScene)) return;
         _inputReader.playerActions.changeInventorySlotEvent += GetInputValueToChangeSlot;
         _inputReader.playerActions.openInventoryEvent += OpenInventory;
         _inputReader.uiActions.closeInventoryEvent += CloseInventory;
