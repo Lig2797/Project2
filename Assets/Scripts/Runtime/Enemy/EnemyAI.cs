@@ -156,6 +156,7 @@ public class EnemyAI : NetworkBehaviour
     }
     private void OnCanMoveChanged(bool previousValue, bool newValue)
     {
+        Debug.Log("run on can moved changed");
         if (!newValue) Rb.linearVelocity = Vector2.zero;
     }
     private void Start()
@@ -297,11 +298,18 @@ public class EnemyAI : NetworkBehaviour
         yield return new WaitUntil(() => CanMove.Value == false);
 
         Rb.AddForce(knockBackDirection, ForceMode2D.Impulse);
+        Debug.Log("knockBack apply: " + knockBackDirection);
     }
 
+    public IEnumerator DestroyAfter(float delay)
+    {
+        if (!IsServer) yield break;
+        yield return new WaitForSeconds(delay);
+        DropItem();
+        GetComponent<NetworkObject>().Despawn(true);
+    }
     public void DropItem()
     {
-        if (!IsServer) return;
         int numItem = 0;
         numItem = UtilsClass.PickOneByRatio(_itemDropNum, _itemDropNumRatios);
         Item itemGotPicked = _itemsToDrop[Random.Range(0, _itemsToDrop.Length)];

@@ -177,6 +177,9 @@ public class CaveGenerator : NetworkSingleton<CaveGenerator>
     [SerializeField]
     List<Vector3Int> _groundTilePositions = new List<Vector3Int>();
 
+    // Spawn Objects Parent
+    public Transform MineralsParent;
+
     #region Ratios
     // Minerals
     [SerializeField]
@@ -230,7 +233,8 @@ public class CaveGenerator : NetworkSingleton<CaveGenerator>
     private ItemDropableEntitySO[] _chosenBigMineralInfoArray;
     #endregion
 
-    private bool _isHavingOtherPlayerInCave = false;
+    private bool _isHavingOtherPlayerInCave = true;
+
 
     protected override void Awake()
     {
@@ -243,10 +247,23 @@ public class CaveGenerator : NetworkSingleton<CaveGenerator>
 
     public override void OnNetworkSpawn()
     {
-        DrawSelectedCave();
-        AddInteriorForCaveServerRpc();
+        StartCoroutine(WaitForCaveSceneLoaded());
     }
 
+    private IEnumerator WaitForCaveSceneLoaded()
+    {
+        yield return new WaitUntil(() => SceneManagement.GetCurrentSceneName() == Loader.Scene.MineScene.ToString());
+        PlayerController.LocalInstance.GetComponent<PlayerRoomController>().UpdateRoom(new RoomId { Type = RoomType.Cave, Id = CaveManager.Instance.CurrentLocalCaveLevel });
+        RoomManager.Instance.RefreshCheckOnAllVisibilityObjectsServerRpc();
+        GetSpawnParentForObjects();
+        DrawSelectedCave();
+        AddInteriorForCaveServerRpc();
+
+    }
+    private void GetSpawnParentForObjects()
+    {
+        MineralsParent = GameObject.Find("MineralsParent").GetComponent<Transform>();
+    }
     private Tilemap GetTilemapByName(string tilemapName)
     {
         foreach (Tilemap tilemap in tilemaps)
@@ -258,6 +275,7 @@ public class CaveGenerator : NetworkSingleton<CaveGenerator>
         }
         return null;
     }
+
     private TileBase GetTileBaseByName(string tilebaseName)
     {
         foreach (TileBase tileBase in tileBases)
@@ -270,7 +288,6 @@ public class CaveGenerator : NetworkSingleton<CaveGenerator>
         return null;
 
     }
-
 
     private void ChooseMineralToSpawn()
     {
@@ -297,12 +314,17 @@ public class CaveGenerator : NetworkSingleton<CaveGenerator>
     }
     void DrawSelectedCave()
     {
-        int caveNumber = CaveManager.Instance.GetCaveLevelFromNetwork();
-        if (caveNumber == -1)
+        int caveNumber = 0;
+        bool isInHighestCaveLevel = CaveManager.Instance.highestCaveLevel.Value == CaveManager.Instance.CurrentLocalCaveLevel;
+        if (!isInHighestCaveLevel)
+        {
+            _isHavingOtherPlayerInCave = false;
             caveNumber = Random.Range(0, CaveShapes.caves.Length);
+        }
+        else
+            caveNumber = CaveManager.Instance.highestCaveLevel.Value;
 
-        //_isHavingOtherPlayerInCave = CaveManager.Instance.IsHavingOtherPlayerInCave();
-        CaveManager.Instance.CheckAndAddCaveLevelServerRpc(CaveManager.Instance.CurrentLocalCaveLevel, caveNumber);
+        CaveManager.Instance.CheckAndUpdateHighestLevelServerRpc(CaveManager.Instance.CurrentLocalCaveLevel, caveNumber);
 
         int[,] selected = CaveShapes.caves[caveNumber];
         int[,] padded = AddWallPadding(selected, wallThickness);
@@ -333,59 +355,75 @@ public class CaveGenerator : NetworkSingleton<CaveGenerator>
 
     private void CreateAllTileAndObject(int val, int[,] padded,int x,int y,Vector3Int pos, bool isHavingPlayerInCave)
     {
-        if (!isHavingPlayerInCave)
+        NetworkVector3Int networkPos = new NetworkVector3Int(pos);
+        switch (val)
         {
-            NetworkVector3Int networkPos = new NetworkVector3Int(pos);
-            switch (val)
-            {
-                case 0: // wall
-                    ModifyTileServerRpc(TilemapName.Wall.ToString(), TilebaseName.MineWall.ToString(), networkPos);
-                        if (HasAdjacentGround(padded, y, x)) // also update this
-                        ModifyTileServerRpc(TilemapName.Ground.ToString(), TilebaseName.Ground.ToString(), networkPos);
-                    break;
-                case 1: // ground
-                    ModifyTileServerRpc(TilemapName.Ground.ToString(), TilebaseName.Ground.ToString(), networkPos);
-                    _groundTilePositions.Add(networkPos.ToVector3Int()); // store for later enemy
+            case 0: // wall
+                ModifyTileServerRpc(TilemapName.Wall.ToString(), TilebaseName.MineWall.ToString(), networkPos, false, PlayerController.LocalInstance.OwnerClientId, true);
+                if (HasAdjacentGround(padded, y, x)) // also update this
+                    ModifyTileServerRpc(TilemapName.Ground.ToString(), TilebaseName.Ground.ToString(), networkPos, false, PlayerController.LocalInstance.OwnerClientId, true);
+                break;
+            case 1: // ground
+                ModifyTileServerRpc(TilemapName.Ground.ToString(), TilebaseName.Ground.ToString(), networkPos, false, PlayerController.LocalInstance.OwnerClientId, true);
+                if (!isHavingPlayerInCave)
+                {
+                    _groundTilePositions.Add(pos); // store for later enemy
                     CheckAndPlaceMineralsServerRpc(pos);
-                    break;
-                case 2: // mine ground
-                    ModifyTileServerRpc(TilemapName.Ground.ToString(), TilebaseName.Ground.ToString(), networkPos);
-                    ModifyTileServerRpc(TilemapName.MineGround.ToString(), TilebaseName.MineGround2.ToString(), networkPos);
-                    break;
-                case 3: // stair up
-                    ModifyTileServerRpc(TilemapName.Wall.ToString(), TilebaseName.MineWall.ToString(), networkPos);                
-                    ModifyTileServerRpc(TilemapName.Ground.ToString(), TilebaseName.Ground.ToString(), networkPos);
-                    CreateStairServerRpc(pos);
-                    break;
-                case 4: // torch
-                    ModifyTileServerRpc(TilemapName.Ground.ToString(), TilebaseName.Ground.ToString(), networkPos);
-                    torchPositions.Add(pos); // store for later torch placement
-                    break;
-            }
-        }
-        else
-        {
+                }
+                break;
+            case 2: // mine ground
+                ModifyTileServerRpc(TilemapName.Ground.ToString(), TilebaseName.Ground.ToString(), networkPos, false, PlayerController.LocalInstance.OwnerClientId, true);
+                ModifyTileServerRpc(TilemapName.MineGround.ToString(), TilebaseName.MineGround2.ToString(), networkPos, false, PlayerController.LocalInstance.OwnerClientId, true);
+                break;
+            case 3: // stair up
 
+                ModifyTileServerRpc(TilemapName.Wall.ToString(), TilebaseName.MineWall.ToString(), networkPos, false, PlayerController.LocalInstance.OwnerClientId, true);
+                ModifyTileServerRpc(TilemapName.Ground.ToString(), TilebaseName.Ground.ToString(), networkPos, false, PlayerController.LocalInstance.OwnerClientId, true);
+                if (!isHavingPlayerInCave)
+                {
+                    CreateStairServerRpc(pos);
+                }
+                break;
+            case 4: // torch
+                ModifyTileServerRpc(TilemapName.Ground.ToString(), TilebaseName.Ground.ToString(), networkPos, false, PlayerController.LocalInstance.OwnerClientId, true);
+                if (!isHavingPlayerInCave)
+                    torchPositions.Add(pos); // store for later torch placement
+                break;
         }
-        
+
     }
 
     [ServerRpc(RequireOwnership = false)]
     private void CreateStairServerRpc(Vector3Int pos)
     {
         GameObject stairObject = Instantiate(_stairUpPrefab, GetTilemapByName(TilemapName.Wall.ToString()).GetCellCenterWorld(pos), Quaternion.identity);
-        stairObject.GetComponent<NetworkObject>().Spawn();
+        stairObject.GetComponent<NetworkObject>().Spawn(true);
+        stairObject.GetComponent<NetworkVisibilityRoom>().InitializeRoomInfo(CaveManager.Instance.CurrentLocalCaveLevel);
 
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void ModifyTileServerRpc(string targetTilemapName, string tileName, NetworkVector3Int netPos, bool clearAllTile = false)
+    private void ModifyTileServerRpc(string targetTilemapName, string tileName, NetworkVector3Int netPos, bool clearAllTile = false, ulong targetClientId = 0, bool isClientOnly = false)
     {
-        ApplyTileClientRpc(targetTilemapName, tileName, netPos, clearAllTile);
+        if (isClientOnly)
+        {
+            var clientParams = new ClientRpcParams
+            {
+                Send = new ClientRpcSendParams
+                {
+                    TargetClientIds = new List<ulong> { targetClientId }
+                }
+            };
+            ApplyTileClientRpc(targetTilemapName, tileName, netPos, clearAllTile, clientParams);
+        }
+        else
+        {
+            ApplyTileClientRpc(targetTilemapName, tileName, netPos, clearAllTile);
+        }
     }
 
     [ClientRpc]
-    private void ApplyTileClientRpc(string targetTilemapName, string tileName, NetworkVector3Int netPos, bool clearAllTile)
+    private void ApplyTileClientRpc(string targetTilemapName, string tileName, NetworkVector3Int netPos, bool clearAllTile, ClientRpcParams clientRpcParams = default)
     {
         if (clearAllTile)
         {
@@ -429,7 +467,8 @@ public class CaveGenerator : NetworkSingleton<CaveGenerator>
         foreach (var pos in torchPositions)
         {
             GameObject torch = Instantiate(_torchPrefab, GetTilemapByName(TilemapName.Ground.ToString()).GetCellCenterWorld(pos), Quaternion.identity);
-            torch.GetComponent<NetworkObject>().Spawn();
+            torch.GetComponent<NetworkObject>().Spawn(true);
+            torch.GetComponent<NetworkVisibilityRoom>().InitializeRoomInfo(CaveManager.Instance.CurrentLocalCaveLevel);
             Vector3Int[] directionToWall = new Vector3Int[]
             {
                 Vector3Int.left,
@@ -459,10 +498,11 @@ public class CaveGenerator : NetworkSingleton<CaveGenerator>
         for(int i = 0; i < 4; i++)
         {
             Vector3Int groundPos = _groundTilePositions[Random.Range(0, _groundTilePositions.Count)];
-            Vector3 groundWorldPos = GetTilemapByName(TilemapName.Ground.ToString()).GetCellCenterWorld(groundPos);
-            Vector3 enemyPos = groundPos + new Vector3(0.5f, 0.5f, 0); // Offset to center the enemy on the tile
+            Vector3 groundWorldPos = GetTilemapByName(TilemapName.Ground.ToString()).CellToWorld(groundPos);
+            Vector3 enemyPos = groundWorldPos + new Vector3(0.5f, 0.5f, 0); // Offset to center the enemy on the tile
             GameObject enemy = Instantiate(_enemys[Random.Range(0, _enemys.Count)], enemyPos, Quaternion.identity);
-            enemy.GetComponent<NetworkObject>().Spawn();
+            enemy.GetComponent<NetworkObject>().Spawn(true);
+            enemy.GetComponent<NetworkVisibilityRoom>().InitializeRoomInfo(CaveManager.Instance.CurrentLocalCaveLevel);
         }
     }
 
@@ -488,14 +528,16 @@ public class CaveGenerator : NetworkSingleton<CaveGenerator>
             torch.GetComponent<Animator>().Play("Front");
         }
     }
+
     [ServerRpc(RequireOwnership = false)]
     private void CheckAndPlaceMineralsServerRpc(Vector3Int pos)
     {
         if (Random.Range(0, 100) > _stoneAndMineralFillPercent) return;
         GameObject stoneAndMineralPrefab = UtilsClass.PickOneByRatio(_stonesAndMineralsPrefab, _stonesAndMineralsPrefabChoosePercent);
         Vector3 worldPos = GetTilemapByName(TilemapName.Ground.ToString()).CellToWorld(pos) + new Vector3(0.5f, 0.5f, 0f);
-        GameObject mineralObject = Instantiate(stoneAndMineralPrefab, worldPos, Quaternion.identity);
+        GameObject mineralObject = Instantiate(stoneAndMineralPrefab, worldPos, Quaternion.identity, MineralsParent);
         mineralObject.GetComponent<NetworkObject>().Spawn();
+        mineralObject.GetComponent<NetworkVisibilityRoom>().InitializeRoomInfo(CaveManager.Instance.CurrentLocalCaveLevel);
 
         StoneAndMineral mineral = mineralObject.GetComponent<StoneAndMineral>();
         if (mineral.stoneAndMineralType == StoneAndMineral.StoneAndMineralType.Small)
@@ -522,7 +564,7 @@ public class CaveGenerator : NetworkSingleton<CaveGenerator>
             }
             else
             {
-                Destroy(mineralObject.gameObject);
+                mineralObject.GetComponent<NetworkObject>().Despawn(true);
             }
         }
     }
@@ -570,17 +612,20 @@ public class CaveGenerator : NetworkSingleton<CaveGenerator>
 
     public void OnMineralDestroy(Component sender, object data)
     {
+        if (!IsServer) return; // Ensure this only runs on the server
         if (Random.Range(0, 100) < _stairAppearRatio)
         {
             Vector2 mineralPosition = sender.transform.position;
-            Instantiate(_stairDownPrefab, mineralPosition, Quaternion.identity);
+            GameObject stair = Instantiate(_stairDownPrefab, mineralPosition, Quaternion.identity);
+            var stairNetObj = stair.GetComponent<NetworkObject>();
+            stairNetObj.Spawn();
         }
         else
         {
             _stairAppearRatio++;
         }
 
-        Destroy(sender.gameObject);
+        sender.GetComponent<NetworkObject>().Despawn(true);
     }
 }
 

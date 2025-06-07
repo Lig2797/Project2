@@ -34,18 +34,13 @@ public class AreaEntrance : MonoBehaviour
     {
         if (transitionName == SceneManagement.SceneTransitionName)
         {
-            Debug.Log("found entrance and start to set position: " + transform.position + Vector3.up);
-            if (entranceType == AreaEntranceType.Mine)
+            if (entranceType == AreaEntranceType.Mine || entranceType == AreaEntranceType.HouseOutDoor)
             {
-                PlayerController.LocalInstance.transform.position = this.transform.position + Vector3.down;
+                PlayerController.LocalInstance.transform.position = this.transform.position + Vector3.down * 2;
             }
             else if (entranceType == AreaEntranceType.HouseInDoor)
             {
                 PlayerController.LocalInstance.transform.position = this.transform.position + Vector3.up;
-            }
-            else if (entranceType == AreaEntranceType.HouseOutDoor)
-            {
-                PlayerController.LocalInstance.transform.position = this.transform.position + Vector3.down;
             }
             else
             {

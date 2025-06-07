@@ -14,57 +14,10 @@ public class MultiSceneManger : PersistentSingleton<MultiSceneManger>
 
     private List<AreaEntrance> allEntranceInWorldScene = new List<AreaEntrance>();
 
-    public GameObject _worldSceneMainCamera;
-    public GameObject _worldSceneVirtualCamera;
+    private GameObject _worldSceneMainCamera;
+    private GameObject _worldSceneVirtualCamera;
 
-    //public void EnterSubScene(string sceneName)
-    //{
-    //    StartCoroutine(LoadSubScene(sceneName));
-    //}
-
-    //public void ExitToWorld()
-    //{
-    //    StartCoroutine(UnloadSubScene());
-    //}
-
-    //private IEnumerator LoadSubScene(string sceneName)
-    //{
-    //    if (_activeSubScene.IsValid())
-    //    {
-    //        yield return UnloadSubScene();
-    //    }
-    //    // Load the subscene
-
-    //    SetGlobalLightActiveInScene(WorldScene, false); // disable global light in world scene if entering subscene
-    //    AsyncOperation loadOp = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-    //    yield return new WaitUntil(() => loadOp.isDone);
-
-    //    Scene loadedScene = SceneManager.GetSceneByName(sceneName);
-    //    if (loadedScene.IsValid())
-    //    {
-    //        _activeSubScene = loadedScene;
-    //        SceneManager.SetActiveScene(loadedScene);
-    //        OnChangeScene(SceneManager.GetSceneByName(sceneName));
-    //    }
-
-
-    //}
-
-
-    //private IEnumerator UnloadSubScene()
-    //{
-    //    if (!_activeSubScene.IsValid()) yield break;
-
-    //    AsyncOperation unloadOp = SceneManager.UnloadSceneAsync(_activeSubScene);
-    //    yield return new WaitUntil(() => unloadOp.isDone);
-
-    //    _activeSubScene = new Scene();
-
-    //    Scene worldScene = SceneManager.GetSceneByName(_worldSceneName);
-    //    SceneManager.SetActiveScene(worldScene);
-    //    OnChangeScene(worldScene);
-
-    //}
+    
 
     private void OnEnable()
     {
@@ -110,6 +63,7 @@ public class MultiSceneManger : PersistentSingleton<MultiSceneManger>
             scene.name == Loader.Scene.UIScene.ToString() ||
             scene.name == Loader.Scene.LoadingScene.ToString())
             return;
+
         if (scene.name == Loader.Scene.WorldScene.ToString())
         {
             GameObject mainWorldSceneCamera = SceneUtils.FindGameObjectWithTagInScene("MainCamera", scene);
@@ -132,17 +86,20 @@ public class MultiSceneManger : PersistentSingleton<MultiSceneManger>
         FindAllNetworkSingletonAndSpawnOnSceneLoad(scene);
     }
 
-    public void FindAllNetworkSingletonAndSpawnOnSceneLoad(Scene scene)
+    private void FindAllNetworkSingletonAndSpawnOnSceneLoad(Scene scene)
     {
         List<NetworkObject> netObjs = SceneUtils.FindAllOfTypeInScene<NetworkObject>(scene);
 
         foreach (var netObj in netObjs)
         {
             Debug.Log("Found: " + netObj.name);
-            if (!netObj.IsSpawned)
+            if(!netObj.IsSpawned)
                 netObj.Spawn();
         }
     }
+
+
+    #region WorldScene Gameobject Referrences
     public void SetWorldSceneCameraObject(GameObject cameraObject, GameObject virtualCameraObject)
     {
         _worldSceneMainCamera = cameraObject;
@@ -161,7 +118,9 @@ public class MultiSceneManger : PersistentSingleton<MultiSceneManger>
         if(_worldSceneVirtualCamera != null)
         _worldSceneVirtualCamera.SetActive(active);
     }
+    #endregion
 
+    #region Entrances
     public void SubscribeToEntranceList(AreaEntrance entrance)
     {
         allEntranceInWorldScene.Add(entrance);
@@ -185,5 +144,5 @@ public class MultiSceneManger : PersistentSingleton<MultiSceneManger>
                 return;
         }
     }
-    
+    #endregion
 }
