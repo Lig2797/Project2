@@ -178,7 +178,15 @@ public class TileTargeter : NetworkBehaviour
         // Check if tile is valid to do something
         CanHoe = CheckCanHoe(_clampedTilePosition);
         CanWater = TileManager.Instance.HoedTilesNetwork.ContainsKey(new NetworkVector3Int(_clampedTilePosition)) && !TileManager.Instance.WateredTilesNetwork.ContainsKey(new NetworkVector3Int(_clampedTilePosition));
-        CanPlantGround = (tilemapCheck[tilemapCheck.Count - 1].name == "FarmGround" || tilemapCheck[tilemapCheck.Count - 1].name == "WateredGround");
+        if (tilemapCheck.Count > 0)
+        {
+            string tilemapName = tilemapCheck[tilemapCheck.Count - 1].name;
+            CanPlantGround = (tilemapName == "FarmGround" || tilemapName == "WateredGround");
+        }
+        else
+        {
+            CanPlantGround = false;
+        }
     }
 
     private bool CheckCanHoe(Vector3Int pos)

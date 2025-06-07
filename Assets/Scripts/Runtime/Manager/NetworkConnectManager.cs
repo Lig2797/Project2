@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
-public class NetworkConnectManager : NetworkPersistentSingleton<NetworkConnectManager>
+public class NetworkConnectManager : NetworkSingleton<NetworkConnectManager>
 {
-    private NetworkList<PlayerDataNetwork> connectedPlayers;
+    private NetworkList<PlayerDataNetwork> connectedPlayers = new NetworkList<PlayerDataNetwork>();
 
-    private void Start()
+    public override void OnNetworkSpawn()
     {
         StartCoroutine(WaitAndSubscribe());
     }

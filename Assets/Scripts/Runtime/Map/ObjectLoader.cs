@@ -1,39 +1,32 @@
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.SceneManagement;
 
 public class ObjectLoader : MonoBehaviour
 {
     public Camera cam;
     public int buffer = 5;
+    public TaggedObjectList objectData;
 
-    public List<string> tagFilters = new List<string>();
-
-    [HideInInspector]
-    public List<GameObject> allObjects = new();
-    private Dictionary<Vector3Int, List<GameObject>> objectsByCell = new();
-
+    private Dictionary<Vector3Int, List<TaggedObjectList.TaggedObjectData>> cellToData = new();
+    private Dictionary<Vector3, GameObject> spawnedObjects = new();
     private Vector3Int lastMin, lastMax;
     private int cellSize = 1;
 
-    public void ScanAndBuildGrid()
-    {
-        objectsByCell.Clear();
-
-        foreach (var obj in allObjects)
-        {
-            Vector3Int cell = WorldToCell(obj.transform.position);
-            if (!objectsByCell.ContainsKey(cell))
-                objectsByCell[cell] = new List<GameObject>();
-
-            objectsByCell[cell].Add(obj);
-            obj.SetActive(false);
-        }
-    }
-
     void Start()
     {
-        ScanAndBuildGrid();
+        BuildGrid();
+    }
+
+    void BuildGrid()
+    {
+        foreach (var data in objectData.allObjects)
+        {
+            Vector3Int cell = WorldToCell(data.position);
+            if (!cellToData.ContainsKey(cell))
+                cellToData[cell] = new List<TaggedObjectList.TaggedObjectData>();
+
+            cellToData[cell].Add(data);
+        }
     }
 
     void Update()
@@ -46,30 +39,29 @@ public class ObjectLoader : MonoBehaviour
 
         if (minCell != lastMin || maxCell != lastMax)
         {
-            HashSet<GameObject> visible = new();
-
             for (int x = minCell.x; x <= maxCell.x; x++)
             {
                 for (int y = minCell.y; y <= maxCell.y; y++)
                 {
                     Vector3Int cell = new(x, y);
-                    if (objectsByCell.TryGetValue(cell, out var objList))
+                    if (cellToData.TryGetValue(cell, out var list))
                     {
-                        foreach (var obj in objList)
+                        foreach (var objData in list)
                         {
-                            obj.SetActive(true);
-                            visible.Add(obj);
+                            if (spawnedObjects.ContainsKey(objData.position)) continue;
+
+                            if (objData.prefab != null)
+                            {
+                                GameObject obj = Instantiate(objData.prefab, objData.position, Quaternion.identity);
+                                obj.tag = objData.tag;
+                                spawnedObjects[objData.position] = obj;
+                            }
+                            else
+                            {
+                                Debug.LogWarning($"Missing prefab for object at {objData.position}");
+                            }
                         }
                     }
-                }
-            }
-
-            foreach (var kv in objectsByCell)
-            {
-                foreach (var obj in kv.Value)
-                {
-                    if (!visible.Contains(obj))
-                        obj.SetActive(false);
                 }
             }
 

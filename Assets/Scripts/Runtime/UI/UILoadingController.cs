@@ -209,6 +209,5 @@ public class UILoadingController : MonoBehaviour
                 Debug.Log("First scene is not world scene, start to set active subscene: " + MultiSceneManger.Instance.ActiveSubSceneName);
             }
         }
-
     }
 }
