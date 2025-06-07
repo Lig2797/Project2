@@ -3,10 +3,12 @@ using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 public class CaveManager : NetworkPersistentSingleton<CaveManager>
 {
-    public NetworkDictionary<int, int> caveList;
+    public NetworkVariable<int> highestCaveLevel = new NetworkVariable<int>(-1);
+    public NetworkVariable<int> highestCaveShape = new NetworkVariable<int>(-1);
 
     private int _currentLocalCaveLevel = 0;
     public int CurrentLocalCaveLevel
@@ -21,44 +23,35 @@ public class CaveManager : NetworkPersistentSingleton<CaveManager>
     }
     [SerializeField] private TextMeshProUGUI _caveLevelText;
     [SerializeField] private GameObject _caveLevelBox;
-    private void OnEnable()
-    {
-
-    }
+    
 
     public void GetUIElement()
     {
         _caveLevelBox = GameObject.Find("CaveLevelBox");
         _caveLevelText = _caveLevelBox.GetComponentInChildren<TextMeshProUGUI>();
     }
-
-    public int GetCaveLevelFromNetwork()
-    {
-        if (caveList == null || caveList.Count == 0)
-        {
-            Debug.Log("Cave list is empty.");
-            return -1; // Return -1 if the cave list is empty
-        }
-        foreach (var cave in caveList)
-        {
-            if (cave.Key == CurrentLocalCaveLevel)
-            {
-                return cave.Value;
-            }
-        }
-        return -1; // Return -1 if the cave number is not found
-    }
     
-    [ServerRpc(RequireOwnership = false)]
-    public void CheckAndAddCaveLevelServerRpc(int caveLevel, int caveNumber)
-    {
-        if (!caveList.ContainsKey(caveLevel))
-        caveList[caveLevel] = caveNumber;
-    }
-
     public void AdjustLocalCaveLevel(int amount)
     {
         CurrentLocalCaveLevel += amount;
     }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void CheckAndUpdateHighestLevelServerRpc(int currentCaveLevel, int caveShape)
+    {
+        if(highestCaveLevel.Value == -1)
+        {
+            highestCaveLevel.Value = currentCaveLevel;
+            highestCaveShape.Value = caveShape;
+            return;
+        }
+            
+        if(currentCaveLevel > highestCaveLevel.Value)
+        {
+            highestCaveLevel.Value = currentCaveLevel;
+            highestCaveShape.Value = caveShape;
+        }
+    }
+
     
 }

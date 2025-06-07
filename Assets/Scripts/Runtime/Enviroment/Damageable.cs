@@ -84,7 +84,7 @@ public class Damageable : MonoBehaviour
     [ContextMenu("Test hit")]
     public void TestHit()
     {
-        Hit(10, Vector2.right);
+        Hit(20, Vector2.right * 3);
     }
     public bool Hit(float damage, Vector2 knockbackVelocity)
     {

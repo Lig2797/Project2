@@ -10,7 +10,7 @@ public class ObjectShaker : MonoBehaviour
 
     private void Awake()
     {
-        originalPosition = transform.localPosition;
+        originalPosition = transform.position;
     }
 
     public void Shake()
@@ -25,11 +25,11 @@ public class ObjectShaker : MonoBehaviour
         while (elapsed < shakeDuration)
         {
             Vector2 offset = Random.insideUnitCircle * shakeStrength;
-            transform.localPosition = originalPosition + new Vector3(offset.x, offset.y, 0);
+            transform.position = originalPosition + new Vector3(offset.x, offset.y, 0);
             elapsed += Time.deltaTime;
             yield return null;
         }
 
-        transform.localPosition = originalPosition;
+        transform.position = originalPosition;
     }
 }

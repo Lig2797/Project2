@@ -602,6 +602,8 @@ GameObject:
   - component: {fileID: 8285066285643473853}
   - component: {fileID: 621800067739870697}
   - component: {fileID: 566550412973088920}
+  - component: {fileID: 170929856402172894}
+  - component: {fileID: 7103883091122523786}
   - component: {fileID: 4614420684280623787}
   - component: {fileID: 1566556555428459181}
   - component: {fileID: 708533948276630876}
@@ -1106,6 +1108,33 @@ MonoBehaviour:
   onCloseInventory: {fileID: 11400000, guid: 7424e7b02d0fa744cb65eff3f7094fbb, type: 2}
   onChangeSelectedSlot: {fileID: 11400000, guid: c20612576d1523447bf3b05b1b432950, type: 2}
   onInventoryLoad: {fileID: 11400000, guid: 956238ba4a4dc724c98d4c10596c8317, type: 2}
+--- !u!114 &170929856402172894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3069992538054791838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 768c572388eb6c349a20ea65b7f4fb1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &7103883091122523786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3069992538054791838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bbb77d7b5604754199e00991b7fe301, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  RoomType: 0
 --- !u!114 &4614420684280623787
 MonoBehaviour:
   m_ObjectHideFlags: 0

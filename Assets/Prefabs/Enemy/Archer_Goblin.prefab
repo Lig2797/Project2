@@ -88,6 +88,7 @@ GameObject:
   - component: {fileID: 8016201154110748339}
   - component: {fileID: 2577541456110375268}
   - component: {fileID: 447543423326718684}
+  - component: {fileID: -8334712378627531826}
   m_Layer: 7
   m_Name: Archer_Goblin
   m_TagString: Enemy
@@ -388,7 +389,8 @@ MonoBehaviour:
   GizmoFanAngle: 0
   GizmoFanRayCount: 0
   Acceleration: 50
-  _canMove: 1
+  CanMove:
+    m_InternalValue: 1
   CanAttack: 1
   projectilePrefab: {fileID: 861314114235552467, guid: 86fbe83f264c51b4d819e4dddb5212fd, type: 3}
   projectileSpeed: 15
@@ -463,3 +465,17 @@ MonoBehaviour:
   _isAlive: 1
   isInvincible: 0
   invincibilityTime: 0.25
+--- !u!114 &-8334712378627531826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5077854521655654177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bbb77d7b5604754199e00991b7fe301, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  RoomType: 2

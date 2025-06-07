@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2636237174738991784}
   - component: {fileID: 8157821238927863634}
   - component: {fileID: 5314551238201927628}
+  - component: {fileID: -9088257396950249892}
   m_Layer: 0
   m_Name: MineStairUp
   m_TagString: Untagged
@@ -193,6 +194,20 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+--- !u!114 &-9088257396950249892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5517850333521771251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bbb77d7b5604754199e00991b7fe301, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  RoomType: 2
 --- !u!1 &6139453696266710604
 GameObject:
   m_ObjectHideFlags: 0

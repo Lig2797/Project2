@@ -5,8 +5,13 @@ using Unity.Netcode;
 
 public class NetworkConnectManager : NetworkPersistentSingleton<NetworkConnectManager>
 {
-    private NetworkList<PlayerDataNetwork> connectedPlayers;
+    private NetworkList<PlayerDataNetwork> connectedPlayers = new();
 
+    //private void OnEnable()
+    //{
+    //    if (connectedPlayers != null)
+    //        connectedPlayers = new();
+    //}
     private void Start()
     {
         StartCoroutine(WaitAndSubscribe());

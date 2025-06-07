@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -57,6 +58,24 @@ public static class SceneUtils
         }
 
         return null;
+    }
+
+    public static List<T> FindAllOfTypeInScene<T>(Scene scene) where T : Component
+    {
+        var results = new List<T>();
+
+        if (!scene.IsValid() || !scene.isLoaded)
+        {
+            Debug.LogWarning("Scene is not valid or not loaded.");
+            return results;
+        }
+
+        foreach (GameObject rootObj in scene.GetRootGameObjects())
+        {
+            results.AddRange(rootObj.GetComponentsInChildren<T>(true)); // true = include inactive
+        }
+
+        return results;
     }
 }
 

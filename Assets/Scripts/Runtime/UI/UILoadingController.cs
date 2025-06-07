@@ -113,10 +113,13 @@ public class UILoadingController : MonoBehaviour
         {
             MultiSceneManger.Instance.ActiveSubScene = SceneManager.GetSceneByName(sceneName);
             Debug.Log("Added subscene: " + MultiSceneManger.Instance.ActiveSubSceneName);
+
+            
         }
         else
         {
             MultiSceneManger.Instance.OnExitToWorldScene(loadedScene);
+            PlayerController.LocalInstance.GetComponent<PlayerRoomController>().UpdateRoom(new RoomId { Type = RoomType.None, Id = -1 });
             Debug.Log("Exit to world scene");
         }
     }
