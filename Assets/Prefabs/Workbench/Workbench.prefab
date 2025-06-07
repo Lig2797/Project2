@@ -157,7 +157,7 @@ MeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1449220059
-  m_SortingLayer: 18
+  m_SortingLayer: 26
   m_SortingOrder: 1
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &4635958372521672562
@@ -330,7 +330,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1449220059
-  m_SortingLayer: 18
+  m_SortingLayer: 26
   m_SortingOrder: 0
   m_Sprite: {fileID: 1575125754, guid: 45bb0416b11523a49bd131d10df5c07f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -444,7 +444,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1449220059
-  m_SortingLayer: 18
+  m_SortingLayer: 26
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: d1b58c95202a5744bb1a378985a14d11, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -491,8 +491,8 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Radius: 1
+  m_Offset: {x: 0.002609253, y: -0.0208745}
+  m_Radius: 0.6686058
 --- !u!114 &763540157898876085
 MonoBehaviour:
   m_ObjectHideFlags: 0

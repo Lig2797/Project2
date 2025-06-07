@@ -6,7 +6,8 @@ public class WorkbenchHandler : MonoBehaviour
     {
         Crafting,
         Smelting,
-        Enchanting
+        Enchanting,
+        ArmorMaking,
     }
 
     [SerializeField] private WorkbenchType workbenchType;
