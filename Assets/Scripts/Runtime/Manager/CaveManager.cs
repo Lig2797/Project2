@@ -11,7 +11,7 @@ public class CaveManager : NetworkPersistentSingleton<CaveManager>
     public NetworkVariable<int> highestCaveShape = new NetworkVariable<int>(-1);
 
     private int _currentLocalCaveLevel = 0;
-    public int CurrentLocalCaveLevel
+    public int CurrentLocalCaveLevel 
     {
         get { return _currentLocalCaveLevel; }
         set
