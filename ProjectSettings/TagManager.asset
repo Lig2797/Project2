@@ -9,6 +9,7 @@ TagManager:
   - Bed
   - House
   - Enemy
+  - CameraController
   layers:
   - Default
   - TransparentFX

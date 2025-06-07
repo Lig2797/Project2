@@ -84,6 +84,12 @@ MonoBehaviour:
   _stairUpPrefab: {fileID: 5517850333521771251, guid: 5bd718133178a854ea3af6b39078ad98, type: 3}
   _stairDownPrefab: {fileID: 6450824732001164983, guid: 03eba96d58b9d9e41abb348353804516, type: 3}
   _torchPrefab: {fileID: 2676223231114564590, guid: 64139fd6c256c1445ad116b384d27cc2, type: 3}
+  _enemys:
+  - {fileID: 5077854521655654177, guid: 5bacb55fe68bac64abbf970ff2a95448, type: 3}
+  - {fileID: 4009958294216649274, guid: 59406958146fd294f9c0fee6f6b2abb2, type: 3}
+  - {fileID: 4009958294216649274, guid: d20928157fc7a234e800be464b12ad6c, type: 3}
+  - {fileID: 4009958294216649274, guid: 92ead399c1f3b814d8c40888a7ead25e, type: 3}
+  _groundTilePositions: []
   _stoneAndMineralFillPercent: 30
   _mineralFillPercent: 7
   _stairAppearRatio: 20

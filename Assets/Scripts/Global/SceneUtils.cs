@@ -1,0 +1,62 @@
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public static class SceneUtils
+{
+    public static GameObject FindGameObjectWithTagInScene(string tag, Scene scene)
+    {
+        if (!scene.IsValid() || !scene.isLoaded)
+            return null;
+
+        foreach (GameObject root in scene.GetRootGameObjects())
+        {
+            GameObject result = FindTaggedInHierarchy(root.transform, tag);
+            if (result != null) return result;
+        }
+
+        return null;
+    }
+
+    private static GameObject FindTaggedInHierarchy(Transform parent, string tag)
+    {
+        if (parent.CompareTag(tag))
+            return parent.gameObject;
+
+        foreach (Transform child in parent)
+        {
+            GameObject result = FindTaggedInHierarchy(child, tag);
+            if (result != null) return result;
+        }
+
+        return null;
+    }
+
+    public static GameObject FindGameObjectByNameInScene(string name, Scene scene)
+    {
+        if (!scene.IsValid() || !scene.isLoaded)
+            return null;
+
+        foreach (GameObject root in scene.GetRootGameObjects())
+        {
+            GameObject result = FindNamedInHierarchy(root.transform, name);
+            if (result != null) return result;
+        }
+
+        return null;
+    }
+
+    private static GameObject FindNamedInHierarchy(Transform parent, string name)
+    {
+        if (parent.name == name)
+            return parent.gameObject;
+
+        foreach (Transform child in parent)
+        {
+            GameObject result = FindNamedInHierarchy(child, name);
+            if (result != null) return result;
+        }
+
+        return null;
+    }
+}
+

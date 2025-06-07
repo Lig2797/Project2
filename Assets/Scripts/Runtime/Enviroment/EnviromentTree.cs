@@ -49,12 +49,12 @@ public class EnviromentTree : ItemDropableEntity
     {
         if (!damageable.IsAlive)
         {
-            DropItemServerRpc(!damageable.IsAlive);
+            DropItem(!damageable.IsAlive);
             Destroy(gameObject);
         }else if (damageable.Health == 20)
         {
             _animator.Play("Root_Idle");
-            DropItemServerRpc(!damageable.IsAlive);
+            DropItem(!damageable.IsAlive);
         }
         else _animator.SetTrigger("Hit");
     }

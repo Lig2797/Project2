@@ -10,41 +10,29 @@ public static class Loader
     {
         MainMenu,
         WorldScene,
+        UIScene,
+        MineCaveScene,
+        MineScene,
         CutScene,
         LobbyScene,
         LoadingScene,
         CharacterSelectScene,
-        MineCaveScene,
-        MineScene,
     }
-
-    private static Scene lastScene;
-
-    public static Scene LastScene => lastScene;
 
     private static Scene targetScene;
 
     public static Scene TargetScene => targetScene;
 
-    private static Scene ConvertSceneNameToEnum(string sceneName)
-    {
-        foreach (Scene scene in Scene.GetValues(typeof(Scene)))
-        {
-            if (scene.ToString() == sceneName)
-            {
-                return scene;
-            }
-        }
+    public static bool isMultiSceneLoad = false;
 
-        Debug.LogWarning($"Scene name '{sceneName}' is not defined in Loader.Scene enum. Defaulting to MainMenu.");
-        return Scene.MainMenu;
-    }
-
-    public static void Load(Scene targetScene)
+    public static void Load(Scene targetScene, bool isMultiSceneLoad = false)
     {
-        Loader.lastScene = ConvertSceneNameToEnum(SceneManager.GetActiveScene().name);
         Loader.targetScene = targetScene;
-        SceneManager.LoadSceneAsync(Scene.LoadingScene.ToString());
+        Loader.isMultiSceneLoad = isMultiSceneLoad;
+        if(!isMultiSceneLoad)
+            SceneManager.LoadSceneAsync(Scene.LoadingScene.ToString());
+        else
+            SceneManager.LoadSceneAsync(Scene.LoadingScene.ToString(),LoadSceneMode.Additive);
     }
 
     public static void LoadNetwork(Scene targetScene)

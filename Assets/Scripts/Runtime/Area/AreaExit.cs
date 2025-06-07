@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 [RequireComponent(typeof(BoxCollider2D))]
 public class AreaExit : MonoBehaviour
 {
+    [SerializeField] private bool _isMultiSceneLoad = true;
 
     [SerializeField] private bool _useClickToExit;
     public bool UseClickToExit
@@ -24,7 +25,7 @@ public class AreaExit : MonoBehaviour
     }
     [SerializeField] private Loader.Scene sceneToLoad;
     [SerializeField] private string sceneTransitionName;
-    private float waitToLoadTime = 1f;
+    private float waitToLoadTime = 0f;
 
     private void Update()
     {
@@ -56,11 +57,12 @@ public class AreaExit : MonoBehaviour
             yield return null;
         }
         string currentSceneName = SceneManagement.GetCurrentSceneName();
-        if(sceneToLoad == Loader.Scene.MineCaveScene && currentSceneName == Loader.Scene.MineScene.ToString())
+        if (sceneToLoad == Loader.Scene.MineCaveScene && currentSceneName == Loader.Scene.MineScene.ToString())
         {
             CaveManager.Instance.CurrentLocalCaveLevel = 0; // Reset cave level when exiting to world scene
         }
-        Loader.Load(sceneToLoad);
+        
+        Loader.Load(sceneToLoad, _isMultiSceneLoad);
     }
 
 

@@ -153,7 +153,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1449220059
-  m_SortingLayer: 15
+  m_SortingLayer: 16
   m_SortingOrder: 0
   m_Sprite: {fileID: 890786053, guid: 280e0adce7e54c843a6e98a1f8d04bb5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -200,7 +200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3704112378
+  GlobalObjectIdHash: 832988623
   InScenePlacedSourceGlobalObjectIdHash: 832988623
   DeferredDespawnTick: 0
   Ownership: 1
@@ -358,13 +358,29 @@ MonoBehaviour:
     AttackRange: 10
   Rb: {fileID: 0}
   Animator: {fileID: 0}
+  Damageable: {fileID: 0}
+  Collider: {fileID: 0}
+  _itemsToDrop:
+  - {fileID: 11400000, guid: 1b7f52968bd6d2740997354bfed12b9c, type: 2}
+  - {fileID: 11400000, guid: fe178e4de73978047af09608bde079a2, type: 2}
+  - {fileID: 11400000, guid: d7abe7c699e65dd4f956e74a7b4e1712, type: 2}
+  - {fileID: 11400000, guid: b370ffd3737c21a45915c945f2a896c1, type: 2}
+  _itemDropNum: 010000000200000003000000
+  _itemDropNumRatios:
+  - 60
+  - 30
+  - 10
+  itemDropPrefab: {fileID: 1324879070572636304, guid: 758e550aad33f9247bb2707f07dfc14c, type: 3}
   playerTag: Player
   playerLayer:
     serializedVersion: 2
     m_Bits: 256
-  obstacleLayer:
+  patrollingObstacleLayer:
     serializedVersion: 2
-    m_Bits: 584
+    m_Bits: 576
+  visionCheckableLayer:
+    serializedVersion: 2
+    m_Bits: 776
   DetectorOriginOffset: {x: 0, y: 0.6}
   GizmoFanOrigin: {x: 0, y: 0}
   GizmoFanDirection: {x: 0, y: 0}

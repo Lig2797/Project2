@@ -50,14 +50,14 @@ public class EnemyPatrollingState : IState
 
     public void StateUpdate()
     {
-        if (!_enemyAI.CanMove) return;
+        if (!_enemyAI.CanMove.Value) return;
         DetectPlayerHandler();
         
     }
 
     public void StateFixedUpdate()
     {
-        if (!_hasTarget || !_enemyAI.CanMove) return;
+        if (!_hasTarget || !_enemyAI.CanMove.Value) return;
         PatrollingHandler();
         
     }
@@ -97,25 +97,36 @@ public class EnemyPatrollingState : IState
         Vector2 currentPos = _enemyAI.Rb.position;
         Vector2 direction = (_targetPosition - currentPos).normalized;
 
-        // Obstacle detection
-        float rayLength = _data.walkSpeed * Time.fixedDeltaTime + _data.rayOffsetLength;
-        _rayOrigin = currentPos;
-        _rayDirection = direction;
-        _rayLength = rayLength;
+        // Fan-shaped obstacle detection
+        float rayLength = 1;
+        float halfAngle = _data.fanAngle / 4f;
+        int rayCount = 3;
 
-        RaycastHit2D hit = Physics2D.Raycast(currentPos, direction, rayLength, _enemyAI.obstacleLayer);
-
-        if (hit.collider != null)
+        for (int i = 0; i < rayCount; i++)
         {
-            Debug.Log("Obstacle detected: " + hit.collider.name);
-            _enemyAI.StateMachine.ChangeState(_enemyAI.IdleState);
-            return;
+            float t = rayCount == 1 ? 0.5f : (float)i / (rayCount - 1); // Normalize between 0 and 1
+            float angleOffset = Mathf.Lerp(-halfAngle, halfAngle, t);
+            Vector2 rayDir = Quaternion.Euler(0, 0, angleOffset) * direction;
+
+            RaycastHit2D hit = Physics2D.Raycast(currentPos, rayDir, rayLength, _enemyAI.patrollingObstacleLayer);
+
+            // Optional: draw rays in editor
+            Debug.DrawRay(currentPos, rayDir * rayLength, hit.collider ? Color.red : Color.green);
+
+            if (hit.collider != null)
+            {
+                Debug.Log("Obstacle detected in fan: " + hit.collider.name);
+                _enemyAI.StateMachine.ChangeState(_enemyAI.IdleState);
+                return;
+            }
         }
 
-        _enemyAI.ApplyMovement(direction, _data.walkSpeed, _enemyAI.Acceleration); // Tune accel value
+        _enemyAI.ApplyMovement(direction, _data.walkSpeed, _enemyAI.Acceleration);
+
         if (Vector2.Distance(currentPos, _targetPosition) <= _data.arrivalThreshold)
         {
             _enemyAI.StateMachine.ChangeState(_enemyAI.IdleState);
         }
     }
+
 }

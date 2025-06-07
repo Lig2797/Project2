@@ -20,8 +20,7 @@ public abstract class ItemDropableEntity : NetworkBehaviour
     public virtual void OnHit(Vector2 knockback) { }
 
 
-    [ServerRpc(RequireOwnership = false)]
-    public void DropItemServerRpc(bool makeLessDrop)
+    public void DropItem(bool makeLessDrop)
     {
         if(!IsServer) return;
         int numItem = 0;
