@@ -422,7 +422,19 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Bridge Wood 1_0: 1034721094214344097
+      Bridge Wood 1_1: -4766677290509584491
+      Bridge Wood 1_10: -1232158865881686364
+      Bridge Wood 1_11: 8704522383380127770
+      Bridge Wood 1_2: -252815725532936882
+      Bridge Wood 1_3: -900809498433155161
+      Bridge Wood 1_4: 2437843574842569164
+      Bridge Wood 1_5: -4660387920454114741
+      Bridge Wood 1_6: 3138038440241437699
+      Bridge Wood 1_7: 7068928983435856439
+      Bridge Wood 1_8: 9057272986958974361
+      Bridge Wood 1_9: -2724478939336763265
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

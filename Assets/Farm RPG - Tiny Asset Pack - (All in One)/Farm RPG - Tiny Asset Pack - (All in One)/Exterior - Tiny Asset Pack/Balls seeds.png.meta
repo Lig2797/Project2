@@ -647,7 +647,28 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Balls seeds_0: -7033287675513756562
+      Balls seeds_1: 8242111943039505222
+      Balls seeds_10: 3522975301466037539
+      Balls seeds_11: 2611185849876081187
+      Balls seeds_12: -1651073408294498001
+      Balls seeds_13: 7431510652785623001
+      Balls seeds_14: 4250492106189255537
+      Balls seeds_15: -1917795078830629503
+      Balls seeds_16: -8866029178175984406
+      Balls seeds_17: -7613252709035073510
+      Balls seeds_18: 7112550061036960504
+      Balls seeds_19: 2238136459595428274
+      Balls seeds_2: -3596746371236833270
+      Balls seeds_20: 1032406418114961315
+      Balls seeds_3: 7189875048220020058
+      Balls seeds_4: -1410089521670745399
+      Balls seeds_5: 9002947769139114163
+      Balls seeds_6: -823614894433806943
+      Balls seeds_7: -4301823226852181859
+      Balls seeds_8: 143312507838901204
+      Balls seeds_9: 5791419270728072063
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
