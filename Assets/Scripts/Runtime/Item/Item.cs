@@ -52,7 +52,9 @@ public enum ItemType
     Tool,
     Material,
     Crop,
-    Workbench
+    Workbench,
+    Seed,
+    Usable
 }
 
 public enum ActionType

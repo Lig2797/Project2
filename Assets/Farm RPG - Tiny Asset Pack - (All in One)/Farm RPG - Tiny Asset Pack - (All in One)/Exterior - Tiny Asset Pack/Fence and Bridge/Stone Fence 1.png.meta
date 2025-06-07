@@ -1,7 +1,22 @@
 fileFormatVersion: 2
-guid: aa5594b734766cc4d807ef5f3d6f69cc
+guid: 2189aee346ed39f47bcdbd1f3ea835f3
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: 1215370170385097023
+    second: Stone Fence 1_0
+  - first:
+      213: 4074251836767951728
+    second: Stone Fence 1_1
+  - first:
+      213: -6746179408223706422
+    second: Stone Fence 1_2
+  - first:
+      213: 7787386180280112420
+    second: Stone Fence 1_3
+  - first:
+      213: 8307783350646652018
+    second: Stone Fence 1_4
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -72,7 +87,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -93,68 +108,11 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Fence Iron_0
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 80
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0c38724104d7dd04b82a4df098fc1e89
-      internalID: 188749190
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fence Iron_1
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 80
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ab558de48b2bdc343b7eee1f66619024
-      internalID: -1466497317
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fence Iron_2
+      name: Stone Fence 1_0
       rect:
         serializedVersion: 2
         x: 0
@@ -162,21 +120,43 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 8876e579c7bd83d45b5f3779eb98378a
-      internalID: -1682046909
+      spriteID: f31e86c0bbcddd010800000000000000
+      internalID: 1215370170385097023
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fence Iron_3
+      name: Stone Fence 1_1
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 64
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 07b59009576aa8830800000000000000
+      internalID: 4074251836767951728
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Stone Fence 1_2
       rect:
         serializedVersion: 2
         x: 32
@@ -184,21 +164,21 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: b2c745bda55a0ec449b86f1527577479
-      internalID: 555171027
+      spriteID: ac265cd2291c062a0800000000000000
+      internalID: -6746179408223706422
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fence Iron_4
+      name: Stone Fence 1_3
       rect:
         serializedVersion: 2
         x: 0
@@ -206,21 +186,21 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: f62966b59984bf5458959fc1eafcbab9
-      internalID: -2105967195
+      spriteID: 425d16cb87a521c60800000000000000
+      internalID: 7787386180280112420
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fence Iron_5
+      name: Stone Fence 1_4
       rect:
         serializedVersion: 2
         x: 16
@@ -228,21 +208,21 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 792ebc50251d1ab418284468dbd0b181
-      internalID: -1489878935
+      spriteID: 27cb23ed0fc2b4370800000000000000
+      internalID: 8307783350646652018
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fence Iron_6
+      name: Stone Fence 1_5
       rect:
         serializedVersion: 2
         x: 32
@@ -250,21 +230,43 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 490691a7d6dd0d9499db1c3b58843d25
-      internalID: -1470963495
+      spriteID: 39b03ee34e3edbf418617f541fd1fa25
+      internalID: -2098469745
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fence Iron_7
+      name: Stone Fence 1_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 32
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 10474f0eeeebfdf43963dbde3ef3eadb
+      internalID: 1172990695
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Stone Fence 1_7
       rect:
         serializedVersion: 2
         x: 16
@@ -272,21 +274,21 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 89c8ba94df0aa7b4ca75231c65319edc
-      internalID: 846993951
+      spriteID: 84a391b1e0f44284ea78b4b02c3400a4
+      internalID: 643824130
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fence Iron_8
+      name: Stone Fence 1_8
       rect:
         serializedVersion: 2
         x: 32
@@ -294,65 +296,65 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ae56e5813519c324ba92acb6841672a3
-      internalID: 1705989526
+      spriteID: 56710b347b51cb7488dc9f83b51d8249
+      internalID: 512107717
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fence Iron_10
+      name: Stone Fence 1_9
       rect:
         serializedVersion: 2
-        x: 32
-        y: 0
+        x: 48
+        y: 32
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b1fef77dc4b92b44ca7036f0b90e28ad
-      internalID: -2053660028
+      spriteID: 657ff11533fd35e4fa7161f8d3a05244
+      internalID: 1753713235
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fence Iron_9
+      name: Stone Fence 1_10
       rect:
         serializedVersion: 2
-        x: 32
-        y: 16
+        x: 64
+        y: 32
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4b1a2bb67e5aa8a47b778d15bcfbca8b
-      internalID: 1792220391
+      spriteID: f68ae3df137d4094e83c1225a3cf1877
+      internalID: -2015988690
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fence Iron_11
+      name: Stone Fence 1_11
       rect:
         serializedVersion: 2
         x: 0
@@ -367,14 +369,58 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 75bb0f06a171625448da1c6353e2064f
-      internalID: -409007024
+      spriteID: b0e48d5e57324a24e97220c9828c812b
+      internalID: 850559124
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fence Iron_12
+      name: Stone Fence 1_12
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1e81a4b91b90d72459b54f11d4a831a5
+      internalID: -1235251672
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Stone Fence 1_13
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d4e381cd3e09ed4db339d024bb79122
+      internalID: 330525994
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Stone Fence 1_14
       rect:
         serializedVersion: 2
         x: 0
@@ -389,8 +435,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1db6f073c06f29040b86c750d672b8d7
-      internalID: 2116051428
+      spriteID: 4045ba642254a8441bf5d7065805d03c
+      internalID: 1975996902
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Stone Fence 1_15
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9e1c036572b6f46459b6c764d461a8ee
+      internalID: 784841502
       vertices: []
       indices: 
       edges: []
@@ -399,7 +467,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: ea2798139249c4742a4480adb29f8f6e
     internalID: 0
     vertices: []
     indices: 
@@ -407,21 +475,26 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":16.0,"y":16.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Fence Iron_0: 188749190
-      Fence Iron_1: -1466497317
-      Fence Iron_10: -2053660028
-      Fence Iron_11: -409007024
-      Fence Iron_12: 2116051428
-      Fence Iron_2: -1682046909
-      Fence Iron_3: 555171027
-      Fence Iron_4: -2105967195
-      Fence Iron_5: -1489878935
-      Fence Iron_6: -1470963495
-      Fence Iron_7: 846993951
-      Fence Iron_8: 1705989526
-      Fence Iron_9: 1792220391
+      Stone Fence 1_0: 1215370170385097023
+      Stone Fence 1_1: 4074251836767951728
+      Stone Fence 1_10: -2015988690
+      Stone Fence 1_11: 850559124
+      Stone Fence 1_12: -1235251672
+      Stone Fence 1_13: 330525994
+      Stone Fence 1_14: 1975996902
+      Stone Fence 1_15: 784841502
+      Stone Fence 1_2: -6746179408223706422
+      Stone Fence 1_3: 7787386180280112420
+      Stone Fence 1_4: 8307783350646652018
+      Stone Fence 1_5: -2098469745
+      Stone Fence 1_6: 1172990695
+      Stone Fence 1_7: 643824130
+      Stone Fence 1_8: 512107717
+      Stone Fence 1_9: 1753713235
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
