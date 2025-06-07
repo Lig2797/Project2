@@ -21,10 +21,8 @@ public class NetworkPersistentSingleton<T> : NetworkBehaviour where T : NetworkP
         }
     }
 
-    public override void OnNetworkSpawn()
+    protected virtual void Awake()
     {
-        base.OnNetworkSpawn();
-
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);

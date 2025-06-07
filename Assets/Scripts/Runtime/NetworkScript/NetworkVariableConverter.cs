@@ -12,8 +12,8 @@ public static class NetworkVariableConverter
     {
         return new ItemWorldNetworkData
         {
-            Id = itemWorld.Id,
-            ItemName = itemWorld.ItemName,
+            Id = new FixedString64Bytes(itemWorld.Id),
+            ItemName = new FixedString64Bytes(itemWorld.ItemName),
             Quantity = itemWorld.Quantity,
             Position = itemWorld.Position,
             Level = itemWorld.Level

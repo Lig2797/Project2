@@ -17,9 +17,9 @@ public class UI_Inventory : MonoBehaviour
     private int maxToolBarSlot = 9;
     [SerializeField] private InventoryManagerSO _inventoryManagerSO;
 
-    private void Start()
+    private void Awake()
     {
-        UpdateSlotUI(null, null);
+        Debug.Log("UI_Inventory Awake called");
     }
 
     private void OnEnable()
@@ -35,6 +35,7 @@ public class UI_Inventory : MonoBehaviour
     }
     public void UpdateSlotUI(Component sender, object data)
     {
+        Debug.Log("UpdateSlotUI called");
         var inventory = _inventoryManagerSO.inventory;
         ClearSlotUI();
         int totalSlots = inventory.MaxSlotInventory;

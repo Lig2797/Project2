@@ -22,7 +22,6 @@ public class NpcHouse : MonoBehaviour
     {
         if (npcPrefab == null || npcSpawnPoint == null)
         {
-            Debug.LogError("NPC Prefab or Spawn Point is not assigned.");
             return;
         }
 

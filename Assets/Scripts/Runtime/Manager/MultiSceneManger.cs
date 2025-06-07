@@ -86,8 +86,9 @@ public class MultiSceneManger : PersistentSingleton<MultiSceneManger>
         FindAllNetworkSingletonAndSpawnOnSceneLoad(scene);
     }
 
-    private void FindAllNetworkSingletonAndSpawnOnSceneLoad(Scene scene)
+    public void FindAllNetworkSingletonAndSpawnOnSceneLoad(Scene scene)
     {
+        if (!NetworkManager.Singleton.IsServer) return;
         List<NetworkObject> netObjs = SceneUtils.FindAllOfTypeInScene<NetworkObject>(scene);
 
         foreach (var netObj in netObjs)

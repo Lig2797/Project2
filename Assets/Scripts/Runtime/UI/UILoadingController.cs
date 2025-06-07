@@ -155,32 +155,26 @@ public class UILoadingController : MonoBehaviour
             displayedProgress = Mathf.Lerp(displayedProgress, easedProgress, Time.deltaTime * 5f);
             _progressFill.style.width = Length.Percent(displayedProgress * 100f);
 
+            Debug.Log("Operation progress: " + operation.progress);
+            Debug.Log("Loading progress: " + displayedProgress);
 
             if (operation.progress >= 0.9f && displayedProgress >= 0.98f)
             {
+                
                 if (NetworkManager.Singleton.IsHost)
                 {
-
-                    //yield return new WaitUntil(() => NetworkManager.Singleton.IsListening);
-                }
-
-                if (Loader.TargetScene == Loader.Scene.MainMenu)
-                {
-                    //yield return new WaitUntil(() => !NetworkManager.Singleton.IsListening);
-
                     if (Loader.TargetScene == Loader.Scene.WorldScene ||
                     Loader.TargetScene == Loader.Scene.CutScene)
                     {
                         yield return new WaitUntil(() => NetworkManager.Singleton.IsListening);
                     }
-
-                    if (Loader.TargetScene == Loader.Scene.MainMenu)
-                    {
-                        yield return new WaitUntil(() => !NetworkManager.Singleton.IsListening);
-                    }
-
                 }
-                
+
+                if (Loader.TargetScene == Loader.Scene.MainMenu)
+                {
+                    yield return new WaitUntil(() => !NetworkManager.Singleton.IsListening);
+                }
+
 
                 yield return new WaitForSeconds(1f);
                 operation.allowSceneActivation = true;
@@ -189,6 +183,7 @@ public class UILoadingController : MonoBehaviour
             yield return null;
         }
 
+        Debug.Log("Scene " + sceneName + " loaded successfully");
         if(sceneName != Loader.Scene.MainMenu.ToString() &&
             sceneName != Loader.Scene.CutScene.ToString() &&
             sceneName != Loader.Scene.CharacterSelectScene.ToString() &&
@@ -205,6 +200,7 @@ public class UILoadingController : MonoBehaviour
             SceneManager.SetActiveScene(loadedScene);
             CinemachineVirtualCamera newFollowCamera = SceneUtils.FindGameObjectByNameInScene("Virtual Camera",loadedScene).GetComponent<CinemachineVirtualCamera>();
             CameraController.Instance.RefreshFollowCamera(newFollowCamera);
+
 
             if(sceneName != Loader.Scene.WorldScene.ToString())
             {

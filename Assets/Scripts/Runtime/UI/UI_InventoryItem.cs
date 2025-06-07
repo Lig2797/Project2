@@ -64,11 +64,13 @@ public class UI_InventoryItem : MonoBehaviour, IPointerDownHandler
     }
     public void SetItemImage()
     {
-        if (_inventoryItem.Item.cropLevelImage != null && // check if this is crop
+        if (_inventoryItem.Item.cropLevelImage.Length != 0 && // check if this is crop
             _inventoryItem.Item.cropLevelImage.Length > _inventoryItem.Level)
         {
+            Debug.Log("Setting crop level image for item: " + _inventoryItem.Item.name + " at level: " + _inventoryItem.Level);
             _inventoryItem.Item.image = _inventoryItem.Item.cropLevelImage[_inventoryItem.Level];
         }
+        Debug.Log("cai nay moi dung)");
         image.sprite = _inventoryItem.Item.image;
     }
     public void RefreshCount() 

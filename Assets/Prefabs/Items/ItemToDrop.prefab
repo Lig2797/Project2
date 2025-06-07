@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: -1275534686229707652}
   - component: {fileID: -5150478161427860128}
   - component: {fileID: 4931434756416402080}
+  - component: {fileID: 7770635386707830275}
   m_Layer: 0
   m_Name: ItemToDrop
   m_TagString: Untagged
@@ -79,7 +80,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1449220059
-  m_SortingLayer: 18
+  m_SortingLayer: 26
   m_SortingOrder: 0
   m_Sprite: {fileID: -790498180, guid: 82a56d660086c94439a932cf6e53cf3f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -168,7 +169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3570963771
+  GlobalObjectIdHash: 89726477
   InScenePlacedSourceGlobalObjectIdHash: 89726477
   DeferredDespawnTick: 0
   Ownership: 1
@@ -270,6 +271,26 @@ MonoBehaviour:
   _acceleration: 0.5
   _maxSpeed: 0.5
   onItemWorldTouchPlayer: {fileID: 11400000, guid: 34231fe85d027f242ab91258d8e674d2, type: 2}
+--- !u!114 &7770635386707830275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1324879070572636304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b73f8ee2c53e8754e9af393f12141e94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  testdir: {x: 1, y: 0}
+  testDistance: 3
+  baseSpeed: 5
+  minSpeed: 3
+  maxSpeed: 10
+  heightFactor: 0.33
+  bounceDampening: 0.6
+  minBounceDistance: 0.1
 --- !u!1 &2086567148679051196
 GameObject:
   m_ObjectHideFlags: 0

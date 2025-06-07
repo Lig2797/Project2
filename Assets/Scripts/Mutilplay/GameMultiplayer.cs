@@ -10,7 +10,7 @@ using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameMultiplayerManager : NetworkSingleton<GameMultiplayerManager>
+public class GameMultiplayerManager : NetworkPersistentSingleton<GameMultiplayerManager>
 {
     public static bool playMultiplayer = false;
 
@@ -20,6 +20,10 @@ public class GameMultiplayerManager : NetworkSingleton<GameMultiplayerManager>
 
     public PlayerDataSO playerDataSO;
 
+    public override void OnNetworkSpawn()
+    {
+        Debug.Log("GameMultiplayerManager OnNetworkSpawn called");
+    }
 
     public string GetPlayerName()
     {

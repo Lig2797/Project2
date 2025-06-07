@@ -1,4 +1,4 @@
-using Unity.Netcode;
+﻿using Unity.Netcode;
 using UnityEngine;
 using System.Collections;
 #if UNITY_EDITOR
@@ -9,27 +9,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Collections;
+using UnityEngine.SceneManagement;
 
-public class ItemWorldManager : NetworkSingleton<ItemWorldManager>, IDataPersistence
+public class ItemWorldManager : NetworkPersistentSingleton<ItemWorldManager>, IDataPersistence
 {
     private ListItemWorld _listItemWorld;
-    public NetworkList<ItemWorldNetworkData> networkItemWorldList;
+    public NetworkList<ItemWorldNetworkData> networkItemWorldList = new NetworkList<ItemWorldNetworkData>(
+                writePerm: NetworkVariableWritePermission.Server,
+                readPerm: NetworkVariableReadPermission.Everyone);
     public GameObject itemDropPrefab;
     public List<ItemWorldControl> itemsOnMap;
     public bool IsReadyToInitialize = false;
-    public void OnEnable()
-    {
-        // Always construct your NetworkList before spawning
-        if (networkItemWorldList == null)
-        {
-            networkItemWorldList = new NetworkList<ItemWorldNetworkData>(
-                writePerm: NetworkVariableWritePermission.Server,
-                readPerm: NetworkVariableReadPermission.Everyone);
-        }
-    }
+    
     #region OnLoadStuff
     public void SpawnItemOnHostLoad()
     {
+        if (!IsServer) return; // Only the server should spawn items
         foreach (var item in _listItemWorld.Items)
         {
             GameObject itemGO = Instantiate(itemDropPrefab, item.Position, Quaternion.identity);
@@ -53,8 +48,10 @@ public class ItemWorldManager : NetworkSingleton<ItemWorldManager>, IDataPersist
     }
     private void AddItemWorldIntoNetworkList()
     {
+        if (networkItemWorldList == null) return;
         foreach (var item in _listItemWorld.Items)
         {
+            Debug.Log($"Adding item to network list: {item.Id} - {item.ItemName}");
             networkItemWorldList.Add(NetworkVariableConverter.ItemWorldToNetwork(item));
         }
         _listItemWorld.Items.Clear();
@@ -197,6 +194,13 @@ public class ItemWorldManager : NetworkSingleton<ItemWorldManager>, IDataPersist
     
     public void LoadData(GameData gameData)
     {
+        if (SceneManager.GetActiveScene().name == Loader.Scene.MainMenu.ToString() ||
+            SceneManager.GetActiveScene().name == Loader.Scene.LoadingScene.ToString() ||
+            SceneManager.GetActiveScene().name == Loader.Scene.LobbyScene.ToString()||
+            SceneManager.GetActiveScene().name == Loader.Scene.CharacterSelectScene.ToString() ||
+            SceneManager.GetActiveScene().name == Loader.Scene.UIScene.ToString()
+            ) return;
+
         _listItemWorld = gameData.ListItemWold;
         itemsOnMap = FindObjectsByType<ItemWorldControl>(FindObjectsSortMode.None).ToList();
 

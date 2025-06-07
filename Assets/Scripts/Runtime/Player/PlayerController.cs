@@ -303,6 +303,7 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
                 
             }
             GameEventsManager.Instance.playerEvents.OnPlayerSpawned(this);
+            StartCoroutine(WaitForNetworkControllerSpawn());
         }
         else
         {
@@ -333,6 +334,12 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
         {
             DataPersistenceManager.Instance.CaptureScreenshot();
         }
+    }
+
+    private IEnumerator WaitForNetworkControllerSpawn()
+    {
+        yield return new WaitUntil(() => NetworkConnectManager.Instance.IsSpawned);
+        NetworkConnectManager.Instance.OnClientConnectedServerRpc(NetworkManager.Singleton.LocalClientId);
     }
 
     [ServerRpc]

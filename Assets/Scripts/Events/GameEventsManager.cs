@@ -17,6 +17,7 @@ public class GameEventsManager : MonoBehaviour
     public NetworkEvents networkEvents;
     public CutsceneEvents cutsceneEvents;
     public NpcEvents npcEvents;
+    public DateTimeEvents dateTimeEvents;
 
     public InputReader inputReader;
 
@@ -45,5 +46,6 @@ public class GameEventsManager : MonoBehaviour
         networkEvents = new NetworkEvents();
         cutsceneEvents = new CutsceneEvents();
         npcEvents = new NpcEvents();
+        dateTimeEvents = new DateTimeEvents();
     }
 }
