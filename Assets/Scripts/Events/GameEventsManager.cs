@@ -16,6 +16,7 @@ public class GameEventsManager : MonoBehaviour
     public GameFlowEvents gameFlowEvents;
     public NetworkEvents networkEvents;
     public CutsceneEvents cutsceneEvents;
+    public NpcEvents npcEvents;
 
     public InputReader inputReader;
 
@@ -43,5 +44,6 @@ public class GameEventsManager : MonoBehaviour
         gameFlowEvents = new GameFlowEvents();
         networkEvents = new NetworkEvents();
         cutsceneEvents = new CutsceneEvents();
+        npcEvents = new NpcEvents();
     }
 }

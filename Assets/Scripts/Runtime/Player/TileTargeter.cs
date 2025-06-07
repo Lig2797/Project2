@@ -21,19 +21,13 @@ public class TileTargeter : NetworkBehaviour
 
     [SerializeField]
     private Tilemap _targetTilemap;
-    public Tilemap TargetTilemap
-    {
-        get { return _targetTilemap; }
-        set { _targetTilemap = value; }
-    }
 
     [Header("TARGET TILE SETTINGS")]
-    [SerializeField]
     private AnimatedTile _targetTile;
     public AnimatedTile TargetTile
     {
         get { return _targetTile; }
-        set { _targetTile = value; }
+        private set { _targetTile = value; }
     }
 
     [SerializeField]
@@ -90,12 +84,7 @@ public class TileTargeter : NetworkBehaviour
     #region Before Gameloop
     private void Awake()
     {
-        string currentSceneName = SceneManagement.GetCurrentSceneName();
-        if (currentSceneName.Equals(Loader.Scene.WorldScene) && currentSceneName.Equals(Loader.Scene.MineScene))
-        {
-            GetAllTilemaps();
-        }
-        TargetTilemap = Tilemaps.LastOrDefault();
+        
     }
     private void Start()
     {
@@ -107,6 +96,16 @@ public class TileTargeter : NetworkBehaviour
 
     void Update()
     {
+        if (!SceneManagement.GetCurrentSceneName().Equals(Loader.Scene.WorldScene) ||
+            SceneManagement.GetCurrentSceneName().Equals(Loader.Scene.LoadingScene)) return;
+
+        string currentSceneName = SceneManagement.GetCurrentSceneName();
+        if (currentSceneName.Equals(Loader.Scene.WorldScene) || currentSceneName.Equals(Loader.Scene.MineScene))
+        {
+            GetAllTilemaps();
+        }
+        _targetTilemap = Tilemaps.LastOrDefault();
+
         if (SceneManagement.GetCurrentSceneName().Equals(Loader.Scene.WorldScene))
         {
             GetTargetTile();
@@ -137,10 +136,10 @@ public class TileTargeter : NetworkBehaviour
         _mouseWorldPosition.z = 0; // Ensure it's on the correct plane
 
         // Convert mouse world position to tile position
-        _mouseTilePosition = TargetTilemap.WorldToCell(_mouseWorldPosition);
+        _mouseTilePosition = _targetTilemap.WorldToCell(_mouseWorldPosition);
 
         // Get player position in tile coordinates
-        _playerTilePosition = TargetTilemap.WorldToCell(transform.position);
+        _playerTilePosition = _targetTilemap.WorldToCell(transform.position);
 
         // Ensure the highlight stays within 1 tile range of the player
         _clampedTilePosition = new Vector3Int(
@@ -160,7 +159,7 @@ public class TileTargeter : NetworkBehaviour
     public void RefreshTilemapCheck(bool showTarget)
     {
         tilemapCheck.Clear();
-        TargetTilemap.SetTile(_previousTilePos, null); // Remove previous highlight
+        _targetTilemap.SetTile(_previousTilePos, null); // Remove previous highlight
 
         foreach (Tilemap tilemap in Tilemaps)
         {
@@ -172,7 +171,7 @@ public class TileTargeter : NetworkBehaviour
 
         if (showTarget)
         {
-            TargetTilemap.SetTile(_clampedTilePosition, TargetTile); 
+            _targetTilemap.SetTile(_clampedTilePosition, TargetTile); 
         }
         _previousTilePos = _clampedTilePosition;
 

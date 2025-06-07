@@ -56,9 +56,21 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2883913539188681266, guid: 1bee62c1640c1da47ab3b0303eda31dd, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 3237839526
+      objectReference: {fileID: 0}
     - target: {fileID: 3069992538054791838, guid: 1bee62c1640c1da47ab3b0303eda31dd, type: 3}
       propertyPath: m_Name
       value: Manu
+      objectReference: {fileID: 0}
+    - target: {fileID: 3069992538054791838, guid: 1bee62c1640c1da47ab3b0303eda31dd, type: 3}
+      propertyPath: m_TagString
+      value: Villager
+      objectReference: {fileID: 0}
+    - target: {fileID: 8114054005754329752, guid: 1bee62c1640c1da47ab3b0303eda31dd, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

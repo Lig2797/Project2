@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Collections;
 
-public class ItemWorldManager : NetworkPersistentSingleton<ItemWorldManager>, IDataPersistence
+public class ItemWorldManager : NetworkSingleton<ItemWorldManager>, IDataPersistence
 {
     private ListItemWorld _listItemWorld;
     public NetworkList<ItemWorldNetworkData> networkItemWorldList;
@@ -39,7 +39,6 @@ public class ItemWorldManager : NetworkPersistentSingleton<ItemWorldManager>, ID
             itemNetworkObject.GetComponent<ItemWorldControl>().CanPickup.Value = true; // set to true when spawn item in world
             InitializeItemWorldOnHostLoadClientRpc(itemNetworkObject, NetworkVariableConverter.ItemWorldToNetwork(item));
         }
-
     }
 
     [ClientRpc]

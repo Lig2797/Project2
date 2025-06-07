@@ -67,33 +67,33 @@ public class InventoryController : NetworkBehaviour, IDataPersistence
 
     public void StartToLoad(GameData gameData)
     {
+        
+    }
+
+    public void StartToSave(ref GameData gameData)
+    {
+       
+    }
+
+    public void LoadData(GameData data)
+    {
         _inputReader.playerActions.changeInventorySlotEvent += GetInputValueToChangeSlot;
         _inputReader.playerActions.openInventoryEvent += OpenInventory;
         _inputReader.uiActions.closeInventoryEvent += CloseInventory;
 
-        _inventoryManagerSO.inventory = gameData.InventoryData;
+        _inventoryManagerSO.inventory = data.InventoryData;
         ItemDatabase.Instance.SetItem(_inventoryManagerSO.inventory.InventoryItemList);
         onInventoryLoad.Raise(this, null);
         _inventoryManagerSO.RefreshCurrentHoldingItem();
         onChangeSelectedSlot.Raise(this, _inventoryManagerSO.selectedSlot);
-    }
-
-    public void StartToSave(ref GameData gameData)
+    }   
+    
+    public void SaveData(ref GameData gameData)
     {
         gameData.SetInventoryData(_inventoryManagerSO.inventory);
 
         _inputReader.playerActions.changeInventorySlotEvent -= GetInputValueToChangeSlot;
         _inputReader.playerActions.openInventoryEvent -= OpenInventory;
         _inputReader.uiActions.closeInventoryEvent -= CloseInventory;
-    }
-
-    public void LoadData(GameData data)
-    {
-
-    }   
-    
-    public void SaveData(ref GameData gameData)
-    {
-        
     }
 }

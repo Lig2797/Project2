@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class UI_EnviromentStatus : MonoBehaviour
+public class UI_EnviromentStatus : Singleton<UI_EnviromentStatus>
 {
     public TextMeshProUGUI dateText;
     public TextMeshProUGUI timeText;

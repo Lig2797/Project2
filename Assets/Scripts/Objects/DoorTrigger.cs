@@ -10,6 +10,13 @@ public enum ELayerSorting
 [RequireComponent(typeof(BoxCollider2D))]
 public class DoorTrigger : MonoBehaviour
 {
+    public enum ETagTrigger
+    {
+        Player,
+        Villager,
+    }
+
+    public ETagTrigger tagTrigger;
     public SpriteRenderer doorSprite;
     public Sprite openDoorSprite;
     public Sprite closedDoorSprite;
@@ -18,6 +25,8 @@ public class DoorTrigger : MonoBehaviour
     public ELayerSorting lowerLayer;
 
     private BoxCollider2D boxCollider;
+
+    public BoxCollider2D areDestroy;
 
     private bool isOpen = false;
 
@@ -29,7 +38,7 @@ public class DoorTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player") && !isOpen)
+        if (other.CompareTag(tagTrigger.ToString()) && !isOpen)
         {
             OpenDoor();
         }
@@ -37,9 +46,10 @@ public class DoorTrigger : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag("Player") && isOpen)
+        if (other.CompareTag(tagTrigger.ToString()) && isOpen)
         {
             CloseDoor();
+            if (areDestroy != null) areDestroy.enabled = true;
         }
     }
 

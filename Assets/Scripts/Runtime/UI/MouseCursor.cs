@@ -3,20 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MouseCursor : Singleton<MouseCursor>
+public class CursorManager : PersistentSingleton<CursorManager>
 {
-    public Image rend;
-    public Sprite sprite;
+    [SerializeField] private Texture2D[] cursorTextures;
 
-    void Start()
-    {
-        Cursor.visible = false;
-        rend = GetComponent<Image>();
-    }
+    private Vector2 cursorHotspot;
 
-    void Update()
+    private void ChangeCursor()
     {
-        Vector2 cursorPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        transform.position = cursorPos;
+        
     }
 }

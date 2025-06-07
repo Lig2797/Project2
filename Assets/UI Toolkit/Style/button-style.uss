@@ -4,7 +4,7 @@
     width: 600px;
     height: 120px;
     transform-origin: center;
-    background-image: url("project://database/Assets/Farm%20RPG%20-%20Tiny%20Asset%20Pack%20-%20(All%20in%20One)/Farm%20RPG%20-%20Tiny%20Asset%20Pack%20-%20(All%20in%20One)/UI%20-%20Tiny%20Asset%20Pack/button.png?fileID=-982555679&guid=45bb0416b11523a49bd131d10df5c07f&type=3#button_51");
+    background-image: url("project://database/Assets/Farm%20RPG%20-%20Tiny%20Asset%20Pack%20-%20(All%20in%20One)/Farm%20RPG%20-%20Tiny%20Asset%20Pack%20-%20(All%20in%20One)/UI%20-%20Tiny%20Asset%20Pack/button.png?fileID=323141436&guid=45bb0416b11523a49bd131d10df5c07f&type=3#button_87");
     font-size: 64px;
     -unity-text-align: middle-center;
     white-space: nowrap;
