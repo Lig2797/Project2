@@ -7,7 +7,7 @@ public interface IItemHolder
     void SetItem(Item item);
 }
 
-public class ItemDatabase : Singleton<ItemDatabase>
+public class ItemDatabase : PersistentSingleton<ItemDatabase>
 {
     public List<Item> items;
 

@@ -1,12 +1,12 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class ObjectLoader : MonoBehaviour
 {
     public Camera cam;
     public int buffer = 5;
 
-    [Tooltip("Ch? l?y object có tag này (?? tr?ng s? l?y t?t c?)")]
     public List<string> tagFilters = new List<string>();
 
     [HideInInspector]

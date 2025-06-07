@@ -11,6 +11,7 @@ TagManager:
   - Enemy
   - Villager
   - Tree
+  - Object
   layers:
   - Default
   - TransparentFX
@@ -25,7 +26,7 @@ TagManager:
   - Villager
   - House
   - NavMesh
-  - 
+  - Object
   - 
   - 
   - 
@@ -53,6 +54,9 @@ TagManager:
     locked: 0
   - name: NavmeshNotWalkable
     uniqueID: 2526847785
+    locked: 0
+  - name: UnderWaterlevel-1
+    uniqueID: 903295847
     locked: 0
   - name: UnderWater
     uniqueID: 843848987
@@ -87,14 +91,35 @@ TagManager:
   - name: Road
     uniqueID: 3951715049
     locked: 0
+  - name: Water Level 1
+    uniqueID: 2393832241
+    locked: 0
   - name: Collision
     uniqueID: 900298989
+    locked: 0
+  - name: GroundLevel1
+    uniqueID: 1146795589
+    locked: 0
+  - name: Water Level 2
+    uniqueID: 732897187
     locked: 0
   - name: Collision Level 2
     uniqueID: 3379069103
     locked: 0
+  - name: GroundLevel2
+    uniqueID: 1949477181
+    locked: 0
+  - name: Water Level 3
+    uniqueID: 2065872109
+    locked: 0
   - name: Collision Level 3
     uniqueID: 3296710997
+    locked: 0
+  - name: GroundLevel3
+    uniqueID: 1038516509
+    locked: 0
+  - name: UnderDecor
+    uniqueID: 1898658259
     locked: 0
   - name: Decor
     uniqueID: 1195580027
