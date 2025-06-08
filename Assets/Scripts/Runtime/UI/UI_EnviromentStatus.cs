@@ -4,13 +4,23 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class UI_EnviromentStatus : Singleton<UI_EnviromentStatus>
+public class UI_EnviromentStatus : MonoBehaviour
 {
     public TextMeshProUGUI dateText;
     public TextMeshProUGUI timeText;
     public RectTransform clockHand;
 
-    public void UpdateDateText(DateTime dateTime)
+    private void OnEnable()
+    {
+        GameEventsManager.Instance.dateTimeEvents.onDateChanged += UpdateDateText;
+    }
+
+    private void OnDisable()
+    {
+        GameEventsManager.Instance.dateTimeEvents.onDateChanged -= UpdateDateText;
+    }
+
+    private void UpdateDateText(DateTime dateTime)
     {
         float hourAngle = -(float)(dateTime.Hour * 360f) / 24f -(float)(dateTime.Minute * 360f) / 1440f - 180f;
         if (clockHand != null) clockHand.localRotation = Quaternion.Euler(0, 0, hourAngle);

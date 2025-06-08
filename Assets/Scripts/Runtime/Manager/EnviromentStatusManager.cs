@@ -78,7 +78,7 @@ public class EnviromentalStatusManager : NetworkPersistentSingleton<Enviromental
     {
         do
         {
-            UI_EnviromentStatus.Instance.UpdateDateText(eStarus.DateTime);
+            GameEventsManager.Instance.dateTimeEvents.DateChanged(eStarus.DateTime);
             DayCycleHandler.Instance.MoveSunAndMoon();
             DayCycleHandler.Instance.UpdateLight();
             if (ChangeSeason())

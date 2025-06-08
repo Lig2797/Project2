@@ -78,12 +78,14 @@ public class InventoryController : NetworkBehaviour, IDataPersistence
 
     public void LoadData(GameData data)
     {
-        if (!SceneManager.GetActiveScene().Equals(Loader.Scene.WorldScene)) return;
+        Debug.Log("current scene: " + SceneManager.GetActiveScene().name);
+        if (!SceneManager.GetActiveScene().name.Equals(Loader.Scene.WorldScene.ToString())) return;
         _inputReader.playerActions.changeInventorySlotEvent += GetInputValueToChangeSlot;
         _inputReader.playerActions.openInventoryEvent += OpenInventory;
         _inputReader.uiActions.closeInventoryEvent += CloseInventory;
 
         _inventoryManagerSO.inventory = data.InventoryData;
+        Debug.Log("Load Inventory Data: " + _inventoryManagerSO.inventory.InventoryItemList.Count);
         ItemDatabase.Instance.SetItem(_inventoryManagerSO.inventory.InventoryItemList);
         onInventoryLoad.Raise(this, null);
         _inventoryManagerSO.RefreshCurrentHoldingItem();

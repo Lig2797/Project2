@@ -1,5 +1,6 @@
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerRoomController : NetworkBehaviour
 {
@@ -16,6 +17,12 @@ public class PlayerRoomController : NetworkBehaviour
             enabled = false;
             return;
         }
+        var sceneName = SceneManager.GetActiveScene().name;
+        if (sceneName != Loader.Scene.MainMenu.ToString() &&
+            sceneName != Loader.Scene.CutScene.ToString() &&
+            sceneName != Loader.Scene.CharacterSelectScene.ToString() &&
+            sceneName != Loader.Scene.LobbyScene.ToString() &&
+            sceneName != Loader.Scene.UIScene.ToString()) 
         UpdateRoom(new RoomId { Type = RoomType.None, Id = -1 });
     }
 

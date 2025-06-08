@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
-public class NetworkConnectManager : NetworkSingleton<NetworkConnectManager>
+public class NetworkConnectManager : NetworkPersistentSingleton<NetworkConnectManager>
 {
     private NetworkList<PlayerDataNetwork> connectedPlayers = new NetworkList<PlayerDataNetwork>();
 
@@ -21,10 +21,13 @@ public class NetworkConnectManager : NetworkSingleton<NetworkConnectManager>
 
         NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
         NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
+
+        Debug.Log("NetworkConnectManager initialized and callbacks subscribed.");
     }
 
     // Runs only on the server
-    void OnClientConnected(ulong clientId)
+    [ServerRpc(RequireOwnership = false)]
+    public void OnClientConnectedServerRpc(ulong clientId)
     {
         if (!NetworkManager.Singleton.IsServer) return;
 
@@ -44,19 +47,34 @@ public class NetworkConnectManager : NetworkSingleton<NetworkConnectManager>
 
         bool isHost = clientId == NetworkManager.ServerClientId;
 
-        if (isHost)
+        //if (isHost)
+        //{
+        //    connectedPlayers = new NetworkList<PlayerDataNetwork>();
+        //    NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
+        //    NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnected;
+        //}
+        if (connectedPlayers.Contains(playerController.playerDataNetwork))
         {
-            connectedPlayers = new NetworkList<PlayerDataNetwork>();
-            NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
-            NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnected;
+            Debug.Log($"PlayerController already exists for clientId {clientId} or max players reached. Skipping connection.");
+            return;
         }
 
         connectedPlayers.Add(playerController.playerDataNetwork);
-
+        Debug.Log($"Client {clientId} connected. PlayerController: {playerController.playerDataNetwork.playerName}, Character ID: {playerController.playerDataNetwork.characterId}");
         SetPlayerNameServerRpc(playerController.playerDataSO.playerName.ToString());
         SetCharactersAnimatorServerRpc(playerController.playerDataSO.characterId);
     }
 
+    public void OnClientConnected(ulong clientId)
+    {
+        if (IsHost) LoadSceneClientRpc();
+    }
+
+    [ClientRpc]
+    public void LoadSceneClientRpc()
+    {
+        if (!IsHost) Loader.Load(Loader.Scene.WorldScene); 
+    }
 
     void OnClientDisconnected(ulong clientId)
     {   

@@ -20,20 +20,37 @@ public class NetworkVisibilityRoom : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        if (IsServer)
+        var sceneName = SceneManager.GetActiveScene().name;
+        if (sceneName != Loader.Scene.MainMenu.ToString() &&
+        sceneName != Loader.Scene.CutScene.ToString() &&
+        sceneName != Loader.Scene.CharacterSelectScene.ToString() &&
+        sceneName != Loader.Scene.LobbyScene.ToString() &&
+        sceneName != Loader.Scene.UIScene.ToString())
         {
-            // The server handles visibility checks and should subscribe when spawned locally on the server-side.
-            NetworkObject.CheckObjectVisibility += CheckVisibility;
-            RoomManager.Instance.RegisterVisibilityRoomToList(this);
+            if (IsServer)
+            {
+                // The server handles visibility checks and should subscribe when spawned locally on the server-side.
+                NetworkObject.CheckObjectVisibility += CheckVisibility;
+
+                RoomManager.Instance.RegisterVisibilityRoomToList(this);
+            }
         }
 
     }
     public override void OnNetworkDespawn()
     {
-        if (IsServer)
+        var sceneName = SceneManager.GetActiveScene().name;
+        if (sceneName != Loader.Scene.MainMenu.ToString() &&
+        sceneName != Loader.Scene.CutScene.ToString() &&
+        sceneName != Loader.Scene.CharacterSelectScene.ToString() &&
+        sceneName != Loader.Scene.LobbyScene.ToString() &&
+        sceneName != Loader.Scene.UIScene.ToString())
         {
-            NetworkObject.CheckObjectVisibility -= CheckVisibility;
-            RoomManager.Instance.UnRegisterVisibilityRoomToList(this);
+            if (IsServer)
+            {
+                NetworkObject.CheckObjectVisibility -= CheckVisibility;
+                RoomManager.Instance.UnRegisterVisibilityRoomToList(this);
+            }
         }
     }
 
