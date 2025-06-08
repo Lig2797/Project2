@@ -206,6 +206,9 @@ public class UILoadingController : MonoBehaviour
             }
 
             MultiSceneManger.Instance.FindAllNetworkSingletonAndSpawnOnSceneLoad(loadedScene);
+
+            if (sceneName == Loader.Scene.WorldScene.ToString())
+                DataPersistenceManager.Instance.StartLoadGameAndAutoSave();
         }
     }
 }

@@ -9720,7 +9720,7 @@ GameObject:
   - component: {fileID: 3691566397934413236}
   - component: {fileID: 5800384373848182073}
   m_Layer: 5
-  m_Name: OuputItemSlot
+  m_Name: OutputItemSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17642,7 +17642,7 @@ GameObject:
   - component: {fileID: 1013740874607927701}
   - component: {fileID: 5638003644225083209}
   m_Layer: 5
-  m_Name: OuputItemSlot
+  m_Name: OutputItemSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25016,7 +25016,7 @@ GameObject:
   - component: {fileID: 6952420703052581014}
   - component: {fileID: 6991774223503264826}
   m_Layer: 5
-  m_Name: CraptingBox
+  m_Name: CraftingBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26075,7 +26075,7 @@ GameObject:
   - component: {fileID: 7668961725425584994}
   - component: {fileID: 836899841277793260}
   m_Layer: 5
-  m_Name: CraptingBox
+  m_Name: CraftingBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

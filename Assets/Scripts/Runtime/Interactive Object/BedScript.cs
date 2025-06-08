@@ -28,16 +28,6 @@ public class BedScript : MonoBehaviour
             _isBeingUsed = value;
         }
     }
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void SetSleep(bool toUse)
     {

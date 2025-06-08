@@ -261,3 +261,37 @@
     transition-duration: 0.5s;
     transition-timing-function: ease-in-out;
 }
+
+.icon_button-style {
+    width: 50px;
+    height: 50px;
+    background-image: url("project://database/Assets/Farm%20RPG%20-%20Tiny%20Asset%20Pack%20-%20(All%20in%20One)/Farm%20RPG%20-%20Tiny%20Asset%20Pack%20-%20(All%20in%20One)/UI%20-%20Tiny%20Asset%20Pack/social%20network%20logos.png?fileID=-1222833864&guid=37a56c030b49b0e468b423dce1612a9f&type=3#social network logos_2");
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    background-color: rgba(0, 0, 0, 0);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    transition-timing-function: ease-out-elastic;
+    transition-duration: 0.2s;
+}
+
+.icon_button-style:hover {
+    scale: 1.1 1.1;
+    transition-timing-function: ease-out-elastic;
+    transition-duration: 0.2s;
+}
+
+.icon_button-style {
+    width: 50px;
+    height: 50px;
+    background-image: url("project://database/Assets/Farm%20RPG%20-%20Tiny%20Asset%20Pack%20-%20(All%20in%20One)/Farm%20RPG%20-%20Tiny%20Asset%20Pack%20-%20(All%20in%20One)/UI%20-%20Tiny%20Asset%20Pack/social%20network%20logos.png?fileID=-1222833864&guid=37a56c030b49b0e468b423dce1612a9f&type=3#social network logos_2");
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    background-color: rgba(0, 0, 0, 0);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    transition-timing-function: ease-out-elastic;
+    transition-duration: 0.2s;
+}

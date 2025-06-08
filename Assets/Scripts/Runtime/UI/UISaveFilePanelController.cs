@@ -78,7 +78,7 @@ public class UISaveFilePanelController : MonoBehaviour
         _saveFilePanel.style.display = DisplayStyle.None;
 
         GameMultiplayerManager.playMultiplayer = false;
-        GameFlowManager.Instance.LoadLastSceneFlow();
+        Loader.Load(Loader.Scene.WorldScene);
         NetworkManager.Singleton.StartHost();
         DataPersistenceManager.Instance.LoadGame();
     }

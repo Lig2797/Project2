@@ -5785,6 +5785,50 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Walls and Floors_258
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 352
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a75b6de296a660347add4091e010af97
+      internalID: 268145097
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walls and Floors_259
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 352
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f9a29212f5517ef4dabadff78c4c0ef3
+      internalID: -289919115
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -5977,6 +6021,7 @@ TextureImporter:
       Walls and Floors_256: 1379832782
       Walls and Floors_257: -1197156404
       Walls and Floors_258: 268145097
+      Walls and Floors_259: -289919115
       Walls and Floors_26: 924767837
       Walls and Floors_27: -824611695
       Walls and Floors_28: -663050647

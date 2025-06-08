@@ -10,4 +10,12 @@ public class PlayCutsceneTrigger : MonoBehaviour
             GameEventsManager.Instance.cutsceneEvents.ResumeCutscene();
         }
     }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            Destroy(gameObject);
+        }
+    }
 }
