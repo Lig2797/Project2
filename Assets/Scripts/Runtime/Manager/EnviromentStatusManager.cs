@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Rendering.Universal;
+using Unity.Netcode;
 
 public class EnviromentalStatusManager : NetworkPersistentSingleton<EnviromentalStatusManager>, IDataPersistence
 {
@@ -76,6 +77,8 @@ public class EnviromentalStatusManager : NetworkPersistentSingleton<Enviromental
 
     IEnumerator WaitToIncreaseDay()
     {
+        if (NetworkManager.Singleton == null || !NetworkManager.Singleton.IsListening) yield return null;
+
         do
         {
             GameEventsManager.Instance.dateTimeEvents.DateChanged(eStarus.DateTime);

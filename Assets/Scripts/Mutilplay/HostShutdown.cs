@@ -11,8 +11,10 @@ public class HostShutdown : MonoBehaviour
             Debug.LogWarning("NetworkManager is not initialized or not listening.");
             return;
         }
+
         await SessionManager.Instance.InitializeAndSignIn();
         NetworkManager.Singleton.Shutdown();
+
         GameEventsManager.Instance.networkEvents.OnSessionCreate();
     }
 }

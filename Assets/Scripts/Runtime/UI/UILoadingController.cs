@@ -155,7 +155,6 @@ public class UILoadingController : MonoBehaviour
             displayedProgress = Mathf.Lerp(displayedProgress, easedProgress, Time.deltaTime * 5f);
             _progressFill.style.width = Length.Percent(displayedProgress * 100f);
 
-
             if (operation.progress >= 0.9f && displayedProgress >= 0.98f)
             {
                 

@@ -6,11 +6,11 @@ Ngày nào mình cũng phải đối mặt với hàng đống công việc kể
 
 "~~~ Ping pong" #speaker:??? #background: Say #portrait:Alex_Surprise #layout:Left #audio:animal_crossing_mid
 
-"Xin chào Alex, tôi là người vận chuyển, bạn có bưu kiện mới, xin mời ra nhận hàng." #speaker:??? #background: Say #portrait:Alex_Surprise #layout:Left #audio:animal_crossing_mid
+"Giao thư đây!!!" #speaker:??? #background: Say #portrait:Alex_Surprise #layout:Left #audio:animal_crossing_mid
 
-Hửm? Lạ nhỉ, mình đâu có đặt hàng của ai đâu? #speaker:Alex #background: Think #portrait:Alex_Surprise2 #layout:Right #audio:animal_crossing_mid
+Hửm? Lạ nhỉ, ai lại đi gửi thư vào thời này chứ? #speaker:Alex #background: Think #portrait:Alex_Surprise2 #layout:Right #audio:animal_crossing_mid
 
-Nếu là thư của bố mẹ thì chắc chắn họ đã liên lạc trước với mình rồi. Thôi để ra xem thử. #speaker:Alex #background: Think #portrait:Alex_Surprise2 #layout:Right #audio:animal_crossing_mid
+Nếu là thư của bố mẹ thì chắc chắn họ đã liên lạc trước với mình rồi qua điện thoại rồi. Thôi để ra xem thử. #speaker:Alex #background: Think #portrait:Alex_Surprise2 #layout:Right #audio:animal_crossing_mid
 
 -> DONE
 
@@ -47,6 +47,20 @@ Quyết định đã được đưa ra, mình cần chuẩn bị lên đường 
     Không chần chừ thêm nữa, lên đường thôi. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
 
     -> DONE
+
+=== to_eloria ===
+
+Thật là một chuyến đi dài mệt mỏi, phải nhanh chóng về nhà nghỉ ngơi mới được.
+#speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+
+-> DONE
+
+=== read_instructions ===
+
+Theo như bảng thì bên phải là làng Eloria, vậy bên trái chắc chắn là nhà ông nội rồi.
+#speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+
+-> DONE
     
 === eloria_village ===
 

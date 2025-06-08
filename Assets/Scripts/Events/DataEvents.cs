@@ -25,4 +25,10 @@ public class DataEvents
     {
         onDataLoading?.Invoke(data);
     }
+
+    public event Action<string> onSceneLoaded;
+    public void OnSceneLoaded(string sceneName)
+    {
+        onSceneLoaded?.Invoke(sceneName);
+    }
 }

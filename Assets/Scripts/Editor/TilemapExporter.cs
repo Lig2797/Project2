@@ -1,4 +1,4 @@
-using UnityEngine;
+Ôªøusing UnityEngine;
 using UnityEditor;
 using UnityEngine.Tilemaps;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ public class TilemapExporter : MonoBehaviour
         Tilemap tilemap = Selection.activeGameObject?.GetComponent<Tilemap>();
         if (tilemap == null)
         {
-            EditorUtility.DisplayDialog("L?i", "Vui lÚng ch?n m?t GameObject cÛ Tilemap trong Scene.", "OK");
+            EditorUtility.DisplayDialog("L?i", "Vui l√≤ng ch?n m?t GameObject c√≥ Tilemap trong Scene.", "OK");
             return;
         }
 
@@ -49,6 +49,6 @@ public class TilemapExporter : MonoBehaviour
 
         AssetDatabase.CreateAsset(mapLayer, path);
         AssetDatabase.SaveAssets();
-        EditorUtility.DisplayDialog("Ho‡n t?t", "Export th‡nh cÙng " + tileList.Count + " tiles.", "OK");
+        EditorUtility.DisplayDialog("Ho√†n t?t", "Export th√†nh c√¥ng " + tileList.Count + " tiles.", "OK");
     }
 }

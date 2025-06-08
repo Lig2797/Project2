@@ -12,23 +12,14 @@ public class TileTargeter : NetworkBehaviour
     #region Setup variables
     [SerializeField] PlayerController playerController;
     [SerializeField]
-    private List<Tilemap> _tilemaps; 
-    public List<Tilemap> Tilemaps
-    {
-        get { return _tilemaps; }
-        set { _tilemaps = value; }
-    }
-
+    private List<Tilemap> _tilemaps;
+    
     [SerializeField]
     private Tilemap _targetTilemap;
 
     [Header("TARGET TILE SETTINGS")]
+    [SerializeField]
     private AnimatedTile _targetTile;
-    public AnimatedTile TargetTile
-    {
-        get { return _targetTile; }
-        private set { _targetTile = value; }
-    }
 
     [SerializeField]
     private int TargetRange = 1;
@@ -40,7 +31,7 @@ public class TileTargeter : NetworkBehaviour
     private Vector3Int _clampedTilePosition;
     private Vector3Int _lockedTilePosition;
 
-    [SerializeField] private List<Tilemap> tilemapCheck = new List<Tilemap>();
+    [SerializeField] private List<Tilemap> tilemapCheck = new();
     [Header("HOE ON TILES SETTINGS")]
     [SerializeField] private bool _canHoe = false;
     public bool CanHoe
@@ -86,28 +77,69 @@ public class TileTargeter : NetworkBehaviour
     {
         
     }
-    private void Start()
+    public override void OnNetworkSpawn()
     {
         if (!IsOwner) enabled = false;
     }
 
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        GameEventsManager.Instance.dataEvents.onSceneLoaded += LoadedScene;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        GameEventsManager.Instance.dataEvents.onSceneLoaded -= LoadedScene;
+    }
+   
+
+    private void Update()
+    {
+        if (SceneManager.GetActiveScene().name.Equals(Loader.Scene.MainMenu.ToString()) ||
+            SceneManager.GetActiveScene().name.Equals(Loader.Scene.LoadingScene.ToString()) ||
+            SceneManager.GetActiveScene().name.Equals(Loader.Scene.LobbyScene.ToString()) ||
+            SceneManager.GetActiveScene().name.Equals(Loader.Scene.CharacterSelectScene.ToString()) ||
+            SceneManager.GetActiveScene().name.Equals(Loader.Scene.CutScene.ToString()) ||
+            SceneManager.GetActiveScene().name.Equals(Loader.Scene.UIScene.ToString())) return;
+        GetTargetTile();
+    }
+
+    public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Debug.Log("day la scene loaded: " + scene.name);
+        if (scene.name.Equals(Loader.Scene.MainMenu.ToString()) ||
+            scene.name.Equals(Loader.Scene.LobbyScene.ToString()) ||
+            scene.name.Equals(Loader.Scene.LoadingScene.ToString()) ||
+            scene.name.Equals(Loader.Scene.CharacterSelectScene.ToString()) ||
+            scene.name.Equals(Loader.Scene.UIScene.ToString()) ||
+            scene.name.Equals(Loader.Scene.CutScene.ToString())) return;
+
+
+        LoadedScene(scene.name);
+    }
     #endregion
 
-
-    void Update()
+    private void LoadedScene(string sceneName)
     {
-        if (!SceneManagement.GetCurrentSceneName().Equals(Loader.Scene.WorldScene) ||
-            SceneManagement.GetCurrentSceneName().Equals(Loader.Scene.LoadingScene)) return;
+        StartCoroutine(WaitForSceneLoaded(sceneName));
 
-        string currentSceneName = SceneManagement.GetCurrentSceneName();
-        if (currentSceneName.Equals(Loader.Scene.WorldScene) || currentSceneName.Equals(Loader.Scene.MineScene))
-        {
-            GetAllTilemaps();
-        }
-        _targetTilemap = Tilemaps.LastOrDefault();
+    }
 
-        if (SceneManagement.GetCurrentSceneName().Equals(Loader.Scene.WorldScene))
+    IEnumerator WaitForSceneLoaded(string scene)
+    {
+        yield return new WaitUntil(() => SceneManager.GetSceneByName(scene).isLoaded);
+        string currentSceneName = SceneManager.GetActiveScene().name;
+
+        Debug.Log($"getalltiles");
+        
+        GetAllTilemaps();
+
+        if (SceneManager.GetActiveScene().name.Equals(Loader.Scene.WorldScene.ToString()))
         {
+            _targetTilemap = _tilemaps.LastOrDefault();
             GetTargetTile();
         }
     }
@@ -118,19 +150,22 @@ public class TileTargeter : NetworkBehaviour
 
         if (gridObject == null)
         {
-            Debug.LogError("No Grid found in the scene!");
+            UnityEngine.Debug.LogError("No Grid found in the scene!");
             return;
         }
 
-        Tilemaps.Clear();
+        _tilemaps.Clear();
         Tilemap[] foundTilemaps = gridObject.GetComponentsInChildren<Tilemap>();
 
-        Tilemaps.AddRange(foundTilemaps);
-
+        _tilemaps.AddRange(foundTilemaps);
+        foreach (Tilemap tilemap in _tilemaps)
+        {
+            UnityEngine.Debug.Log($"Found Tilemap: {tilemap.name}");
+        }
     }
+
     void GetTargetTile()
     {
-
         // Get mouse position in world coordinates
         _mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         _mouseWorldPosition.z = 0; // Ensure it's on the correct plane
@@ -153,7 +188,6 @@ public class TileTargeter : NetworkBehaviour
         {
             RefreshTilemapCheck(playerController.noTargetStates.Contains(playerController.CurrentState) ? false : true);
         }
-
     }
 
     public void RefreshTilemapCheck(bool showTarget)
@@ -161,7 +195,7 @@ public class TileTargeter : NetworkBehaviour
         tilemapCheck.Clear();
         _targetTilemap.SetTile(_previousTilePos, null); // Remove previous highlight
 
-        foreach (Tilemap tilemap in Tilemaps)
+        foreach (Tilemap tilemap in _tilemaps)
         {
             if (tilemap.HasTile(_clampedTilePosition)) 
             {
@@ -171,7 +205,7 @@ public class TileTargeter : NetworkBehaviour
 
         if (showTarget)
         {
-            _targetTilemap.SetTile(_clampedTilePosition, TargetTile); 
+            _targetTilemap.SetTile(_clampedTilePosition, _targetTile); 
         }
         _previousTilePos = _clampedTilePosition;
 
@@ -191,10 +225,10 @@ public class TileTargeter : NetworkBehaviour
 
     private bool CheckCanHoe(Vector3Int pos)
     {
-        Tilemap walkFrontTilemap = Tilemaps.Find(x => x.name == "Walkfront");
+        Tilemap walkFrontTilemap = _tilemaps.Find(x => x.name == "CropGround");
         if (walkFrontTilemap == null)
         {
-            Debug.LogWarning("WalkFront tilemap not found.");
+            UnityEngine.Debug.LogWarning("WalkFront tilemap not found.");
             return false;
         }
 
@@ -284,12 +318,13 @@ public class TileTargeter : NetworkBehaviour
             playerController.LastMovement = Vector2.down;
         }
     }
+
     private void UseHoe(Item item)
     {
         if (LockedCanHoe)
         {
             Tilemap targetTilemap = null;
-            foreach (Tilemap tilemap in Tilemaps)
+            foreach (Tilemap tilemap in _tilemaps)
             {
                 if(tilemap.name == item.tilemap.name)
                 {
@@ -316,7 +351,7 @@ public class TileTargeter : NetworkBehaviour
         if (LockedCanWater)
         {
             Tilemap targetTilemap = null;
-            foreach (Tilemap tilemap in Tilemaps)
+            foreach (Tilemap tilemap in _tilemaps)
             {
                 if (tilemap.name == item.tilemap.name)
                 {
@@ -355,6 +390,4 @@ public class TileTargeter : NetworkBehaviour
                 }        
         }
     }
-
-
 }

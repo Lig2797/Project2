@@ -36,6 +36,7 @@ public class DialogueTrigger : MonoBehaviour
         if (collider.gameObject.tag == "Player")
         {
             playerInRange = false;
+            Destroy(gameObject);
         }
     }
 }

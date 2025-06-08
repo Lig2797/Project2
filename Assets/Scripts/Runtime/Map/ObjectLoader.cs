@@ -1,31 +1,61 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
 
 public class ObjectLoader : MonoBehaviour
 {
     public Camera cam;
     public int buffer = 5;
-    public TaggedObjectList objectData;
 
-    private Dictionary<Vector3Int, List<TaggedObjectList.TaggedObjectData>> cellToData = new();
-    private Dictionary<Vector3, GameObject> spawnedObjects = new();
-    private Vector3Int lastMin, lastMax;
+    private List<string> tagFilters = new List<string> { "Tree", "House" , "Object"};
+
+    private List<GameObject> allObjects = new();
+    private Dictionary<Vector2Int, List<GameObject>> objectsByCell = new();
+
+    private Vector2Int lastMin, lastMax;
     private int cellSize = 1;
+    bool initialized = false;
 
-    void Start()
+    private void OnEnable()
     {
-        BuildGrid();
+        GameEventsManager.Instance.networkObjectEvents.onNetworkObjectSpawned += OnNetworkObjectsReady;
     }
 
-    void BuildGrid()
+    private void OnDisable()
     {
-        foreach (var data in objectData.allObjects)
-        {
-            Vector3Int cell = WorldToCell(data.position);
-            if (!cellToData.ContainsKey(cell))
-                cellToData[cell] = new List<TaggedObjectList.TaggedObjectData>();
+        GameEventsManager.Instance.networkObjectEvents.onNetworkObjectSpawned -= OnNetworkObjectsReady;
+    }
 
-            cellToData[cell].Add(data);
+    private void OnNetworkObjectsReady()
+    {
+        if (tagFilters.Count > 0)
+        {
+            foreach (var tag in tagFilters)
+            {
+                allObjects.AddRange(GameObject.FindGameObjectsWithTag(tag));
+            }
+        }
+        else
+        {
+            allObjects.AddRange(GameObject.FindGameObjectsWithTag("Tree"));
+        }
+
+        ScanAndBuildGrid();
+        initialized = true;
+        Debug.Log("ObjectLoader initialized after spawn.");
+    }
+
+    public void ScanAndBuildGrid()
+    {
+        objectsByCell.Clear();
+
+        foreach (var obj in allObjects)
+        {
+            Vector2Int cell = WorldToCell(obj.transform.position);
+            if (!objectsByCell.ContainsKey(cell))
+                objectsByCell[cell] = new List<GameObject>();
+
+            objectsByCell[cell].Add(obj);
+            obj.SetActive(false);
         }
     }
 
@@ -34,34 +64,35 @@ public class ObjectLoader : MonoBehaviour
         Vector3 min = cam.ViewportToWorldPoint(new Vector3(0, 0));
         Vector3 max = cam.ViewportToWorldPoint(new Vector3(1, 1));
 
-        Vector3Int minCell = WorldToCell(min) - Vector3Int.one * buffer;
-        Vector3Int maxCell = WorldToCell(max) + Vector3Int.one * buffer;
+        Vector2Int minCell = WorldToCell(min) - Vector2Int.one * buffer;
+        Vector2Int maxCell = WorldToCell(max) + Vector2Int.one * buffer;
 
         if (minCell != lastMin || maxCell != lastMax)
         {
+            HashSet<GameObject> visible = new();
+
             for (int x = minCell.x; x <= maxCell.x; x++)
             {
                 for (int y = minCell.y; y <= maxCell.y; y++)
                 {
-                    Vector3Int cell = new(x, y);
-                    if (cellToData.TryGetValue(cell, out var list))
+                    Vector2Int cell = new(x, y);
+                    if (objectsByCell.TryGetValue(cell, out var objList))
                     {
-                        foreach (var objData in list)
+                        foreach (var obj in objList)
                         {
-                            if (spawnedObjects.ContainsKey(objData.position)) continue;
-
-                            if (objData.prefab != null)
-                            {
-                                GameObject obj = Instantiate(objData.prefab, objData.position, Quaternion.identity);
-                                obj.tag = objData.tag;
-                                spawnedObjects[objData.position] = obj;
-                            }
-                            else
-                            {
-                                Debug.LogWarning($"Missing prefab for object at {objData.position}");
-                            }
+                            obj.SetActive(true);
+                            visible.Add(obj);
                         }
                     }
+                }
+            }
+
+            foreach (var kv in objectsByCell)
+            {
+                foreach (var obj in kv.Value)
+                {
+                    if (!visible.Contains(obj))
+                        obj.SetActive(false);
                 }
             }
 
@@ -70,8 +101,8 @@ public class ObjectLoader : MonoBehaviour
         }
     }
 
-    Vector3Int WorldToCell(Vector3 pos)
+    Vector2Int WorldToCell(Vector3 pos)
     {
-        return new Vector3Int(Mathf.FloorToInt(pos.x / cellSize), Mathf.FloorToInt(pos.y / cellSize));
+        return new Vector2Int(Mathf.FloorToInt(pos.x / cellSize), Mathf.FloorToInt(pos.y / cellSize));
     }
 }

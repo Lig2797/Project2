@@ -6,11 +6,6 @@ public class GameFlowManager : PersistentSingleton<GameFlowManager>, IDataPersis
     [Header("Reference")]
     public GameFlowSO gameFlowSO;
 
-    public void LoadLastSceneFlow()
-    {
-        Loader.Load(gameFlowSO.lastScene);
-    }
-
     public void HasChoosenCharacte(bool hasChoosenCharacter)
     {
         gameFlowSO.hasChoosenCharacter = hasChoosenCharacter;
@@ -21,15 +16,8 @@ public class GameFlowManager : PersistentSingleton<GameFlowManager>, IDataPersis
         gameFlowSO.completedFirstCutscene = completed;
     }
 
-    public void SetLastScene(Loader.Scene scene)
-    {
-        gameFlowSO.lastScene = scene;
-    }
-
     public void LoadData(GameData data)
     {
-        gameFlowSO.lastScene = data.GameFlowData.LastScene;
-
         //if (gameFlowSO.hasChoosenCharacter) return;
 
         gameFlowSO.hasChoosenCharacter = data.GameFlowData.HasChoosenCharacter;

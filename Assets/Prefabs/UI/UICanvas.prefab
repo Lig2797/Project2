@@ -3963,7 +3963,7 @@ GameObject:
   - component: {fileID: 9097105895125486356}
   - component: {fileID: 1842873243259770969}
   - component: {fileID: 7198140467233816669}
-  - component: {fileID: 7319962628394993724}
+  - component: {fileID: 1756017511343076125}
   m_Layer: 5
   m_Name: UI_Inventory
   m_TagString: Untagged
@@ -4009,51 +4009,7 @@ MonoBehaviour:
   inventoryContainer: {fileID: 1007048950508519156}
   slotPrefab: {fileID: 337070696895825947, guid: 15c3b3de6f165b1448556a76641e27c5, type: 3}
   UI_inventoryItemPrefab: {fileID: 3572487163319565601, guid: 6996f5b75be5d7746bf83c1184d2b889, type: 3}
-  inventorySlotsUI:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  inventorySlotsUI: []
   _inventoryManagerSO: {fileID: 11400000, guid: 80487e6faf0fa794284f8125827666cd, type: 2}
 --- !u!114 &1842873243259770969
 MonoBehaviour:
@@ -4111,7 +4067,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &7319962628394993724
+--- !u!114 &1756017511343076125
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -7209,7 +7165,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 8168353797808803877}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.77916664
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -8144,9 +8100,9 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2350170550810821900}
   m_Enabled: 1
-  m_Alpha: 0
-  m_Interactable: 0
-  m_BlocksRaycasts: 0
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
 --- !u!1 &2369228509752685533
 GameObject:
@@ -9764,7 +9720,7 @@ GameObject:
   - component: {fileID: 3691566397934413236}
   - component: {fileID: 5800384373848182073}
   m_Layer: 5
-  m_Name: OuputItemSlot
+  m_Name: OutputItemSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13859,7 +13815,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 5, y: -0.0000076293945}
+  m_AnchoredPosition: {x: 5, y: -0.000022888184}
   m_SizeDelta: {x: 390, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &6147744256568916634
@@ -17165,6 +17121,7 @@ GameObject:
   - component: {fileID: 6015907628661695932}
   - component: {fileID: 4975086278068676089}
   - component: {fileID: 6549288778303288086}
+  - component: {fileID: 948402809777517277}
   m_Layer: 5
   m_Name: Create Session
   m_TagString: Untagged
@@ -17235,7 +17192,7 @@ MonoBehaviour:
   JoiningSession:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 948402809777517277}
         m_TargetAssemblyTypeName: HostShutdown, Assembly-CSharp
         m_MethodName: OnShutDownHost
         m_Mode: 1
@@ -17264,6 +17221,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 75fedd7803f469e4db6756a6dec11a48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &948402809777517277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5770401366620641908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d284c15584b072c4fba84062d6b09239, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &5831836170052309385
@@ -17673,7 +17642,7 @@ GameObject:
   - component: {fileID: 1013740874607927701}
   - component: {fileID: 5638003644225083209}
   m_Layer: 5
-  m_Name: OuputItemSlot
+  m_Name: OutputItemSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25047,7 +25016,7 @@ GameObject:
   - component: {fileID: 6952420703052581014}
   - component: {fileID: 6991774223503264826}
   m_Layer: 5
-  m_Name: CraptingBox
+  m_Name: CraftingBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26106,7 +26075,7 @@ GameObject:
   - component: {fileID: 7668961725425584994}
   - component: {fileID: 836899841277793260}
   m_Layer: 5
-  m_Name: CraptingBox
+  m_Name: CraftingBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28562,4 +28531,16 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4356312895423774474}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6549288778303288086}
+        m_TargetAssemblyTypeName: HostCreate, Assembly-CSharp
+        m_MethodName: OnHostCreateClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
