@@ -4,6 +4,34 @@ using UnityEngine.SceneManagement;
 
 public static class SceneUtils
 {
+
+    public static bool ThisSceneIsNotGameplayScene(string sceneName)
+    {
+        if(sceneName == Loader.Scene.UIScene.ToString() ||
+            sceneName == Loader.Scene.LoadingScene.ToString() ||
+            sceneName == Loader.Scene.MainMenu.ToString() ||
+            sceneName == Loader.Scene.CharacterSelectScene.ToString() ||
+            sceneName == Loader.Scene.LobbyScene.ToString() ||
+            sceneName == Loader.Scene.CutScene.ToString())
+            return true;
+
+        return false;
+    }
+
+    public static bool ThisSceneIsGameplayScene(string sceneName)
+    {
+        if (sceneName != Loader.Scene.UIScene.ToString() &&
+            sceneName != Loader.Scene.LoadingScene.ToString() &&
+            sceneName != Loader.Scene.MainMenu.ToString() &&
+            sceneName != Loader.Scene.CharacterSelectScene.ToString() &&
+            sceneName != Loader.Scene.LobbyScene.ToString() &&
+            sceneName != Loader.Scene.CutScene.ToString())
+            return true;
+
+        return false;
+    }
+
+
     public static GameObject FindGameObjectWithTagInScene(string tag, Scene scene)
     {
         if (!scene.IsValid() || !scene.isLoaded)
