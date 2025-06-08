@@ -29,6 +29,5 @@ public class NetworkSingleton<T> : NetworkBehaviour where T : NetworkSingleton<T
             return;
         }
         instance = (T)this;
-        DontDestroyOnLoad(gameObject);
     }
 }

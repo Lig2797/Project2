@@ -1,68 +1,36 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FarmAnimalManager : Singleton<FarmAnimalManager>
+public class FarmAnimalManager : PersistentSingleton<FarmAnimalManager>
 {
     [SerializeField]
-    private List<FarmAnimal> farmAnimals = new List<FarmAnimal>();
-    private List<Chicken> eggs = new List<Chicken>();
+    private List<FarmAnimal> _farmAnimals = new List<FarmAnimal>();
 
     private void OnEnable()
     {
-        EnviromentalStatusManager.OnTimeIncrease += UpdateChickenEggTime;
+        EnviromentalStatusManager.OnTimeIncrease += IncreaseFedTime;
     }
 
-    private void OnDisable()
+    private void IncreaseFedTime(int minute)
     {
-        EnviromentalStatusManager.OnTimeIncrease -= UpdateChickenEggTime;
-    }
-
-    private void UpdateChickenEggTime(int minute)
-    {
-        if(eggs.Count > 0)
+        foreach (var animal in _farmAnimals)
         {
-            foreach (var egg in eggs)
-            {
-                egg.UpdateEggTime(minute);
-            }
+            animal.FedTimeHandler(minute);
         }
     }
-
 
     public void RegisterAnimal(FarmAnimal animal)
     {
-        if (!farmAnimals.Contains(animal))
-            farmAnimals.Add(animal);
-        if(animal.CurrentStage == "Egg")
-        {
-            RegisterEgg(animal as Chicken);
-        }
-
+        if (!_farmAnimals.Contains(animal))
+            _farmAnimals.Add(animal);
     }
 
     public void UnregisterAnimal(FarmAnimal animal)
     {
-        if (farmAnimals.Contains(animal))
-            farmAnimals.Remove(animal);
-
-        if (animal.CurrentStage == "Egg")
-        {
-            UnregisterEgg(animal as Chicken);
-        }
+        if (_farmAnimals.Contains(animal))
+            _farmAnimals.Remove(animal);
     }
 
-    public void RegisterEgg(Chicken chicken)
-    {
-        eggs.Add(chicken);
-
-    }
-
-    public void UnregisterEgg(Chicken chicken)
-    {
-        if (chicken.CurrentStage == "Egg")
-        {
-            eggs.Remove(chicken);
-        }
-    }
 }

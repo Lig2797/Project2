@@ -5,41 +5,80 @@ using UnityEngine;
 public class Chicken : FarmAnimal
 {
     [SerializeField] private GameObject chickenPrefab;
-    [SerializeField] private int _timesNeededToBecomeBaby = 15;
-    [SerializeField] private int _currentTime;
-  
-    public void UpdateEggTime(int minute)
-    {
-        
-        _currentTime += minute;
-        if(_currentTime >= _timesNeededToBecomeBaby)
-        {
-            _currentTime = 0;
-            _animator.Play("AboutToHatch");
-        }
-    }
-    protected override void MakeProduct()
-    {
-        var newAnimal = Instantiate(chickenPrefab, transform.position, Quaternion.identity);
-        //newAnimal.GetComponent<Chicken>().Initial();
-    }
+    private ChickenGrowthStage _currentGrowthStage;
 
-    protected override void ApplyStage()
+    protected override void Initial()
     {
-
-        isMoving = false;
-        if(CurrentStage == "Egg")
+        _currentGrowthStage = 0;
+        base.Initial();
+        ApplyStage(_currentGrowthStage.ToString());
+        CanMove.Value = false;
+    }
+    public override void FedTimeHandler(int minute)
+    {
+        if (_currentGrowthStage == 0)
         {
-            canMove = false;
-            GetComponent<CapsuleCollider2D>().isTrigger = true;
+            fedTimeCounter += minute;
+            if (fedTimeCounter > _animalInfo.FedTimesNeededToGrow)
+            {
+                fedTimeCounter = 0;
+                _animator.Play("AboutToHatch");
+            }
         }
         else
         {
-            GetComponent<CapsuleCollider2D>().isTrigger = false;
-            canMove = true;
+            if (!isFed) return;
+            fedTimeCounter += minute;
+            if (_currentGrowthStage != ChickenGrowthStage.Mature)
+            {
+                if (fedTimeCounter > _animalInfo.FedTimesNeededToGrow)
+                {
+                    fedTimeCounter = 0;
+                    IncreaseGrowStage();
+                }
+            }
+            else
+            {
+                if (fedTimeCounter > _animalInfo.FedTimesNeededToMakeProduct)
+                {
+                    fedTimeCounter = 0;
+                    MakeProduct();
+                }
+            }
         }
+        
+    }
 
-        _animator.SetTrigger(CurrentStage);
+    protected override void Eat()
+    {
+        if (_currentGrowthStage == ChickenGrowthStage.Egg)
+            return;
+
+        base.Eat();
+
+    }
+
+    public override void IncreaseGrowStage()
+    {
+        int next = (int)_currentGrowthStage + 1;
+        int max = System.Enum.GetValues(typeof(ChickenGrowthStage)).Length - 1;
+        _currentGrowthStage = (ChickenGrowthStage)Mathf.Min(next, max);
+
+        if((int)_currentGrowthStage == 1)
+            CanMove.Value = true;
+
+        ApplyStage(_currentGrowthStage.ToString());
+    }
+
+    protected override void ApplyStage(string stage)
+    {
+        base.ApplyStage(stage);
+    }
+
+    protected override void MakeProduct()
+    {
+        var newAnimal = Instantiate(chickenPrefab, transform.position, Quaternion.identity);
+        newAnimal.GetComponent<Chicken>().Initial();
     }
 
 }

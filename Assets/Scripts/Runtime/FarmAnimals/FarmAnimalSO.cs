@@ -5,10 +5,9 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "ScriptableObject/FarmAnimal")]
 public class FarmAnimalSO : ScriptableObject
 {
-    public int EatTimesNeededToGrow;
-    public int EatTimesNeededToMakeProduct;
-    public string[] GrowStages;
-    public Gender Gender;   
+    public int FedTimesNeededToGrow;
+    public int FedTimesNeededToMakeProduct;
+    public Gender Gender;
 }
 public enum Gender
 {
@@ -16,3 +15,25 @@ public enum Gender
     Male,
     Female
 }
+
+public enum ChickenGrowthStage 
+{
+    Egg,
+    Baby,
+    Mature
+}
+
+public enum CowGrowthStage 
+{
+    Baby,
+    Mature
+}
+
+public enum SheepGrowthStage
+{
+    Baby,
+    Haired,
+    Shaved
+}
+
+

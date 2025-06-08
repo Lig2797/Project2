@@ -1,64 +1,50 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Analytics;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(CapsuleCollider2D))]
 [RequireComponent(typeof(Animator))]
-public abstract class FarmAnimal : MonoBehaviour
+public abstract class FarmAnimal : NetworkBehaviour
 {
-    [SerializeField] private Gender _gender;
+    #region Components
+    [SerializeField] protected Rigidbody2D _body;
+    [SerializeField] protected Animator _animator;
+    [SerializeField] protected FarmAnimalSO _animalInfo;
+    #endregion
+
+    #region Variables
+
     [SerializeField] protected string id;
     [ContextMenu("Generate guid for id")]
-    private void GenerateGuid()
+    protected void GenerateGuid()
     {
         id = System.Guid.NewGuid().ToString();
     }
 
-    [SerializeField] protected Rigidbody2D _body;
-    [SerializeField] protected Animator _animator;
-    [SerializeField] protected FarmAnimalSO _animalInfo;
+    protected FarmAnimalSO farmAnimalSO;
 
-    [SerializeField]
-    private bool _isFacingRight = true;
-    public bool IsFacingRight
-    {
-        get { return _isFacingRight; }
-        set
-        {
-            if (_isFacingRight != value)
-            {
-                transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
-            }
+    [SerializeField] protected Gender gender;
+    [SerializeField] protected bool canMakeProduct;
 
-            _isFacingRight = value;
-        }
-    }
-
-    [SerializeField] protected int _currentEatCount;
-    [SerializeField] protected int _eatTimesNeededToGrow;
-    [SerializeField] protected int _eatTimesNeededToMakeProduct;
-    [SerializeField] protected bool _canMakeProduct;
-    [SerializeField] protected string[] _growStages;
-    [SerializeField] protected int _stageIndex;
-    [SerializeField] protected string _currentStage;
-    public string CurrentStage
-    {
-        get { return _currentStage; }
-        private set { _currentStage = value; }
-    }
-    public bool IsMature => _stageIndex == _growStages.Length-1;
+    protected int fedTimeCounter = 0;
+    protected bool isFed = false;
 
     protected float maxRadius = 5f; // Maximum movement radius
     protected float speed = 2f; // Movement speed
-
-
     protected Vector2 targetPosition;
 
     [SerializeField] protected bool isMoving = false;
-    [SerializeField] protected bool canMove = true;
 
+    public NetworkVariable<bool> CanMove = new(true);
+
+
+    #endregion
+
+    #region Animation variables
     protected Vector2 _lastMovement;
     public Vector2 LastMovement
     {
@@ -66,25 +52,75 @@ public abstract class FarmAnimal : MonoBehaviour
         set
         {
             _lastMovement = value;
-            _animator.SetFloat("Horizontal", Mathf.Abs(_lastMovement.x));
-            _animator.SetFloat("Vertical", _lastMovement.y);
+            // Clamp or round to -1, 0, or 1 to snap to a single direction
+            float clampedX = Mathf.Abs(Mathf.Round(_lastMovement.x));
+            float clampedY = Mathf.Round(_lastMovement.y);
+
+            _animator.SetFloat(HorizontalParameter, clampedX);
+            _animator.SetFloat(VerticalParameter, clampedY);
+            if (_lastMovement.x > 0 && !IsFacingRight)
+            {
+                IsFacingRight = true;
+            }
+            else if (_lastMovement.x < 0 && IsFacingRight)
+            {
+                IsFacingRight = false;
+            }
         }
 
     }
+    private bool _isFacingRight = true;
+    public bool IsFacingRight
+    {
+        get { return _isFacingRight; }
+        set
+        {
+            _isFacingRight = value;
+            transform.localScale = _isFacingRight ? new Vector3(1, 1, 1) : new Vector3(-1, 1, 1);
+        }
+    }
+    public string HorizontalParameter
+    {
+        get => "Horizontal";
+    }
 
-    private Coroutine stopMovingCoroutine; 
+    public string VerticalParameter
+    {
+        get => "Vertical";
+    }
+    #endregion
+
+    private Coroutine stopMovingCoroutine;
 
     protected void Start()
     {
-
         Initial();
     }
 
+    public override void OnNetworkSpawn()
+    {
+        CanMove.OnValueChanged += onValueChange;
+        if (!IsServer) return;
+        FarmAnimalManager.Instance.RegisterAnimal(this);
+    }
+    public override void OnNetworkDespawn()
+    {
+        CanMove.OnValueChanged -= onValueChange;
+        if (!IsServer) return;
+
+        FarmAnimalManager.Instance.UnregisterAnimal(this);
+    }
+    private void onValueChange(bool previousValue, bool newValue)
+    {
+        if (!newValue)
+            _body.linearVelocity = Vector2.zero;
+        Debug.Log("Did run on can move changed");
+    }
     protected void Update()
     {
-        if (canMove)
+        if (CanMove.Value)
         {
-            if(!isMoving)
+            if (!isMoving)
             {
                 ChooseNewTarget();
             }
@@ -94,84 +130,18 @@ public abstract class FarmAnimal : MonoBehaviour
             }
         }
         SetAnimator();
-        CheckFacing();
     }
 
-    private void FixedUpdate()
-    {
-        //if (canMove)
-        //{
-        //    if (isMoving)
-        //    {
-        //        MoveToTarget();
-        //    }
-        //}
-        
-    }
+
+
+
     [ContextMenu("Eat")]
-    protected void Eat()
+    protected virtual void Eat()
     {
-        if(CurrentStage != "Egg")
-        {
-            _animator.SetTrigger("Eat");
-            Debug.Log("Eat");
-            StartCoroutine(WaitForEatAnimation());  
-            
-        }
+        if(isFed) return;
+        _animator.SetTrigger("Eat");
+        isFed = true;
 
-    }
-
-    private IEnumerator WaitForEatAnimation()
-    {
-        // Wait until the Blend Tree tagged "Eat" is active
-        yield return new WaitUntil(() => _animator.GetCurrentAnimatorStateInfo(0).IsTag("Eat"));
-
-        float animationDuration = _animator.GetCurrentAnimatorStateInfo(0).length;
-        StartStopMoving((int)animationDuration + 1);
-    }
-
-    public virtual void EndOfEat()
-    {
-        _currentEatCount++;
-        if (!IsMature)
-        {
-            if (_currentEatCount >= _eatTimesNeededToGrow)
-            {
-                IncreaseGrowStage();
-            }
-        }
-        else
-        {
-            if (_currentEatCount >= _eatTimesNeededToMakeProduct && !_canMakeProduct)
-            {
-                _currentEatCount = 0;
-                MakeProduct();
-
-            }
-        }
-        
-    }
-
-    public void IncreaseGrowStage()
-    {
-        _currentEatCount = 0;
-        _stageIndex++;
-        _currentStage = _growStages[_stageIndex];
-        ApplyStage();
-    }
-
-    protected void Initial()
-    {
-        GenerateGuid();
-        _currentEatCount = 0;
-        _eatTimesNeededToGrow = _animalInfo.EatTimesNeededToGrow;
-        _eatTimesNeededToMakeProduct = _animalInfo.EatTimesNeededToMakeProduct;
-        _growStages = _animalInfo.GrowStages;
-        _stageIndex = 0;
-        _currentStage = _growStages[_stageIndex];
-        _gender = _animalInfo.Gender;
-        FarmAnimalManager.Instance.RegisterAnimal(this);
-        ApplyStage();
     }
     private void ChooseNewTarget()
     {
@@ -187,7 +157,7 @@ public abstract class FarmAnimal : MonoBehaviour
 
     private void MoveToTarget()
     {
-        if (!canMove) return;
+        if (!CanMove.Value) return;
 
         Vector2 currentPosition = _body.position;
         Vector2 direction = (targetPosition - currentPosition).normalized;
@@ -206,13 +176,11 @@ public abstract class FarmAnimal : MonoBehaviour
 
     private IEnumerator StopMoving(int minute)
     {
-        _body.linearVelocity = Vector2.zero; 
-        canMove = false; 
+        CanMove.Value = false; 
 
         yield return new WaitForSeconds(minute); 
 
-        canMove = true; 
-        stopMovingCoroutine = null; 
+        CanMove.Value = true; 
     }
 
     private void StartStopMoving(int minute)
@@ -224,6 +192,7 @@ public abstract class FarmAnimal : MonoBehaviour
 
         stopMovingCoroutine = StartCoroutine(StopMoving(minute));
     }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.name == "Collision")
@@ -232,22 +201,26 @@ public abstract class FarmAnimal : MonoBehaviour
         }
         
     }
-    protected void CheckFacing()
-    {
-        if (IsFacingRight && _lastMovement.x < 0)
-            IsFacingRight = !IsFacingRight;
-        else if(!IsFacingRight && _lastMovement.x > 0)
-            IsFacingRight = !IsFacingRight;
-    }
 
     public void SetAnimator()
     {
         _animator.SetFloat("Speed", _body.linearVelocity.magnitude);
 
     }
-    protected virtual void ApplyStage() { }
+    public abstract void FedTimeHandler(int minute);
     protected virtual void MakeProduct() { } // each animal will have different way to product
     protected virtual void GetProduct() { }
     protected virtual void InteractWithAnimal() { }
+    public abstract void IncreaseGrowStage();
+    protected virtual void ApplyStage(string stage)
+    {
+        _animator.SetTrigger(stage);
+    }
+    protected virtual void Initial() 
+    {
+        gender = _animalInfo.Gender;
+
+        GenerateGuid();
+    }
 
 }
