@@ -545,7 +545,6 @@ public class CaveGenerator : NetworkSingleton<CaveGenerator>
             if (Random.Range(0, 100) < _mineralFillPercent) // true = mineral, false = stone
             {
                 ItemDropableEntitySO smallMineralInfo = _chosenSmallMineralInfoArray[Random.Range(0, _chosenSmallMineralInfoArray.Length)];
-                Debug.Log(smallMineralInfo.id);
                 mineral.InitializeMineralClientRpc(smallMineralInfo.id);
             }
             else

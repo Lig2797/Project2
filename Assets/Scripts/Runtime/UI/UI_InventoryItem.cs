@@ -47,14 +47,36 @@ public class UI_InventoryItem : MonoBehaviour, IPointerDownHandler
     [SerializeField] private GameEvent onItemBeginDrag;
     [SerializeField] private GameEvent onCraftingWindowClose;
 
-    private void Update() // for minecraft rightclick interaction
+    public RectTransform rectTransform; // UI element to move
+    public Canvas canvas;                // Your overlay canvas
+    private void Awake()
     {
-        if (IsDragging)
+        canvas = GetComponentInParent<Canvas>();
+        rectTransform = GetComponent<RectTransform>();
+
+        if (canvas == null)
         {
-            Vector2 mouseScreenPos = Input.mousePosition;
-            Vector2 mouseWorldPos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
-            transform.position = mouseWorldPos;
+            Debug.LogError("No Canvas found in parent hierarchy. Dragging will not work.");
         }
+
+        
+    }
+    private void Update()
+    {
+        if (!IsDragging || canvas == null) return;
+
+        Vector2 localPoint;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            canvas.transform as RectTransform,
+            Input.mousePosition,
+            canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera,
+            out localPoint
+        );
+
+        rectTransform.anchoredPosition = localPoint;
+        rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
+        rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+        rectTransform.pivot = new Vector2(0.5f, 0.5f);
     }
     public void InitialiseItem(InventoryItem newItem)
     {

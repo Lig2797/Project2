@@ -17,6 +17,8 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
 {
     public static PlayerController LocalInstance { get; private set; }
 
+    private bool isPlayerLoadedData = false;
+
     #region Setup Everything
     #region Components
     [Header("Components")]
@@ -286,30 +288,36 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
             LocalInstance = this;
             DontDestroyOnLoad(gameObject);
 
-            DataPersistenceManager.Instance.LoadGame();
+            //DataPersistenceManager.Instance.LoadGame();
 
-            playerDataNetwork = new PlayerDataNetwork(NetworkManager.Singleton.LocalClientId,
-                                                      playerDataSO.characterId,
-                                                      playerDataSO.playerName,
-                                                      playerDataSO.playerId);
-            this.transform.position = playerDataSO.position;
-            playerNameText.text = playerDataSO.playerName.ToString();
-            animator.runtimeAnimatorController = GameMultiplayerManager.Instance.GetCharactersAnimator(playerDataSO.characterId);
-
-            if (NetworkManager.Singleton.IsHost && IsServer) col.enabled = false;
-            else if (NetworkManager.Singleton.IsClient)
-            {
-                col.enabled = true;
-                
-            }
-            GameEventsManager.Instance.playerEvents.OnPlayerSpawned(this);
-            StartCoroutine(WaitForNetworkControllerSpawn());
+            StartCoroutine(WaitForLoadedData());
         }
         else
         {
             playerNameText.text = otherPlayerName;
             animator.runtimeAnimatorController = GameMultiplayerManager.Instance.GetCharactersAnimator(otherCharacterId);
         }    
+    }
+
+    private IEnumerator WaitForLoadedData()
+    {
+        yield return new WaitUntil(() => isPlayerLoadedData);
+        playerDataNetwork = new PlayerDataNetwork(NetworkManager.Singleton.LocalClientId,
+                                                      playerDataSO.characterId,
+                                                      playerDataSO.playerName,
+                                                      playerDataSO.playerId);
+        this.transform.position = playerDataSO.position;
+        playerNameText.text = playerDataSO.playerName.ToString();
+        animator.runtimeAnimatorController = GameMultiplayerManager.Instance.GetCharactersAnimator(playerDataSO.characterId);
+
+        if (NetworkManager.Singleton.IsHost && IsServer) col.enabled = false;
+        else if (NetworkManager.Singleton.IsClient)
+        {
+            col.enabled = true;
+
+        }
+        GameEventsManager.Instance.playerEvents.OnPlayerSpawned(this);
+        StartCoroutine(WaitForNetworkControllerSpawn());
     }
 
     public override void OnNetworkDespawn()
@@ -734,6 +742,8 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
         playerDataSO.currentStamina = gameData.PlayerData.CurrentStamina;
         playerDataSO.money = gameData.PlayerData.Money;
         playerDataSO.position = gameData.PlayerData.Position;
+
+        isPlayerLoadedData = true;
     }
 
     public void SaveData(ref GameData gameData)

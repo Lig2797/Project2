@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class CraftingSystemManager : Singleton<CraftingSystemManager>
+public class CraftingSystemManager : PersistentSingleton<CraftingSystemManager>
 {
     public List<GameObject> listOutputSlot;
     public GameObject outputSlot;
@@ -27,6 +28,19 @@ public class CraftingSystemManager : Singleton<CraftingSystemManager>
         UI_InventoryItem.OnNewItemCreatedBeginDrag -= TakeOffItem;
     }
 
+    protected override void Awake()
+    {
+        base.Awake();
+        StartCoroutine(WaitForUISceneIsLoaded());
+    }
+
+    private IEnumerator WaitForUISceneIsLoaded()
+    {
+        yield return new WaitUntil(() => SceneManager.GetSceneByName("UIScene").isLoaded);
+
+        listOutputSlot = SceneUtils.FindAllGameObjectsByNameInScene("OutputItemSlot", SceneManager.GetSceneByName("UIScene"));
+
+    }
     public void AddItemToGrid(int i, int j, UI_InventoryItem item)
     {
         grid[i, j] = item;

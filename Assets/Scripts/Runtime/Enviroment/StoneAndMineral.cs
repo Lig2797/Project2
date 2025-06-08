@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class StoneAndMineral : ItemDropableEntity
 {
@@ -41,6 +42,7 @@ public class StoneAndMineral : ItemDropableEntity
         if (!damageable.IsAlive)
         {
             DropItem(false);
+            if(SceneManager.GetActiveScene().name == Loader.Scene.MineScene.ToString())
             _onMineralsDestroy.Raise(this,null);
         }
     }

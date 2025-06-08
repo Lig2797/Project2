@@ -21,7 +21,7 @@ public class InventoryManagerSO : ScriptableObject
     }
 
     public UI_InventoryItem currentDraggingItem = null;
-    private bool _isOpeningInventory;
+    private bool _isOpeningInventory = false;
     public bool isOpeningInventory
     {
         get => _isOpeningInventory;

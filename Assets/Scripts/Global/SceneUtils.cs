@@ -4,6 +4,34 @@ using UnityEngine.SceneManagement;
 
 public static class SceneUtils
 {
+
+    public static bool ThisSceneIsNotGameplayScene(string sceneName)
+    {
+        if(sceneName == Loader.Scene.UIScene.ToString() ||
+            sceneName == Loader.Scene.LoadingScene.ToString() ||
+            sceneName == Loader.Scene.MainMenu.ToString() ||
+            sceneName == Loader.Scene.CharacterSelectScene.ToString() ||
+            sceneName == Loader.Scene.LobbyScene.ToString() ||
+            sceneName == Loader.Scene.CutScene.ToString())
+            return true;
+
+        return false;
+    }
+
+    public static bool ThisSceneIsGameplayScene(string sceneName)
+    {
+        if (sceneName != Loader.Scene.UIScene.ToString() &&
+            sceneName != Loader.Scene.LoadingScene.ToString() &&
+            sceneName != Loader.Scene.MainMenu.ToString() &&
+            sceneName != Loader.Scene.CharacterSelectScene.ToString() &&
+            sceneName != Loader.Scene.LobbyScene.ToString() &&
+            sceneName != Loader.Scene.CutScene.ToString())
+            return true;
+
+        return false;
+    }
+
+
     public static GameObject FindGameObjectWithTagInScene(string tag, Scene scene)
     {
         if (!scene.IsValid() || !scene.isLoaded)
@@ -45,7 +73,30 @@ public static class SceneUtils
 
         return null;
     }
+    public static List<GameObject> FindAllGameObjectsByNameInScene(string name, Scene scene)
+    {
+        List<GameObject> results = new();
 
+        if (!scene.IsValid() || !scene.isLoaded)
+            return results;
+
+        foreach (GameObject root in scene.GetRootGameObjects())
+        {
+            FindAllNamedInHierarchy(root.transform, name, results);
+        }
+
+        return results;
+    }
+    private static void FindAllNamedInHierarchy(Transform parent, string name, List<GameObject> results)
+    {
+        if (parent.name == name)
+            results.Add(parent.gameObject);
+
+        foreach (Transform child in parent)
+        {
+            FindAllNamedInHierarchy(child, name, results);
+        }
+    }
     private static GameObject FindNamedInHierarchy(Transform parent, string name)
     {
         if (parent.name == name)

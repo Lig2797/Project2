@@ -194,12 +194,13 @@ public class ItemWorldManager : NetworkPersistentSingleton<ItemWorldManager>, ID
     
     public void LoadData(GameData gameData)
     {
-        if (SceneManager.GetActiveScene().name == Loader.Scene.MainMenu.ToString() ||
-            SceneManager.GetActiveScene().name == Loader.Scene.LoadingScene.ToString() ||
-            SceneManager.GetActiveScene().name == Loader.Scene.LobbyScene.ToString()||
-            SceneManager.GetActiveScene().name == Loader.Scene.CharacterSelectScene.ToString() ||
-            SceneManager.GetActiveScene().name == Loader.Scene.UIScene.ToString()
-            ) return;
+        if (!IsHost) return;
+        //if (SceneManager.GetActiveScene().name == Loader.Scene.MainMenu.ToString() ||
+        //    SceneManager.GetActiveScene().name == Loader.Scene.LoadingScene.ToString() ||
+        //    SceneManager.GetActiveScene().name == Loader.Scene.LobbyScene.ToString()||
+        //    SceneManager.GetActiveScene().name == Loader.Scene.CharacterSelectScene.ToString() ||
+        //    SceneManager.GetActiveScene().name == Loader.Scene.UIScene.ToString()) 
+        //    return;
 
         _listItemWorld = gameData.ListItemWold;
         itemsOnMap = FindObjectsByType<ItemWorldControl>(FindObjectsSortMode.None).ToList();
@@ -251,6 +252,7 @@ public class ItemWorldManager : NetworkPersistentSingleton<ItemWorldManager>, ID
     }
     public void SaveData(ref GameData gameData)
     {
+        if (!IsHost) return;
         MoveItemWorldFromNetworkToLocalList();
         gameData.SetListItemWorld(_listItemWorld);
     }

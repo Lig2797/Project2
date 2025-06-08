@@ -70,6 +70,7 @@ public class InputReader : ScriptableObject
                 input.UI.Enable(); 
                 break;
         }
+        Debug.Log("switched action map to: " + map.ToString());
     }
 
 }

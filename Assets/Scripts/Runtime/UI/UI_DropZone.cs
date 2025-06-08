@@ -57,6 +57,7 @@ public class UI_DropZone : MonoBehaviour, IPointerDownHandler
 
     public void CloseInventory()
     {
+        if(_inventoryManagerSO.isOpeningInventory)
         onCloseInventory.Raise(this, ActionMap.Player);
     }
 

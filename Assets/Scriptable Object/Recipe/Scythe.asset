@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62be6fcc09cf4254e96f55392a919036, type: 3}
-  m_Name: Axe 2
+  m_Name: Scythe
   m_EditorClassIdentifier: 
-  itemOutput: {fileID: 11400000, guid: a8f74ae94e7dc48488cb5ad3f5251e14, type: 2}
+  itemOutput: {fileID: 11400000, guid: 598ad6ceb51d1dc47828b3cb009435de, type: 2}
   item_00: {fileID: 11400000, guid: fbc8579203665c84a8d7f02be8a154a4, type: 2}
   item_01: {fileID: 11400000, guid: fbc8579203665c84a8d7f02be8a154a4, type: 2}
   item_02: {fileID: 0}
   item_10: {fileID: 11400000, guid: fbc8579203665c84a8d7f02be8a154a4, type: 2}
-  item_11: {fileID: 11400000, guid: d6b133717e4c1834ea613b6d51262c5d, type: 2}
+  item_11: {fileID: 11400000, guid: 229319382dbcb5f4d80b2a5465c6be64, type: 2}
   item_12: {fileID: 0}
   item_20: {fileID: 0}
-  item_21: {fileID: 11400000, guid: d6b133717e4c1834ea613b6d51262c5d, type: 2}
+  item_21: {fileID: 11400000, guid: 229319382dbcb5f4d80b2a5465c6be64, type: 2}
   item_22: {fileID: 0}

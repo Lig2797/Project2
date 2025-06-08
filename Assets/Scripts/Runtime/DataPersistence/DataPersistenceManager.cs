@@ -61,11 +61,31 @@ public class DataPersistenceManager : PersistentSingleton<DataPersistenceManager
 
     public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        //GameEventsManager.Instance.inputReader.EnableControl();
+        //this.dataPersistenceObjects = FindAllDataPersistenceObjects();
+        //LoadGame();
+
+        //if (scene.name == Loader.Scene.MainMenu.ToString() ||
+        //    scene.name == Loader.Scene.CutScene.ToString() ||
+        //    scene.name == Loader.Scene.CharacterSelectScene.ToString() ||
+        //    scene.name == Loader.Scene.LobbyScene.ToString() ||
+        //    scene.name == Loader.Scene.UIScene.ToString() ||
+        //    scene.name == Loader.Scene.LoadingScene.ToString())
+        //    return;
+        //    // start up the auto saving coroutine
+        //if (autoSaveCoroutine != null)
+        //{
+        //    StopCoroutine(autoSaveCoroutine);
+        //}
+        //autoSaveCoroutine = StartCoroutine(AutoSave());
+    }
+
+    public void StartLoadGameAndAutoSave()
+    {
         GameEventsManager.Instance.inputReader.EnableControl();
         this.dataPersistenceObjects = FindAllDataPersistenceObjects();
         LoadGame();
 
-        // start up the auto saving coroutine
         if (autoSaveCoroutine != null)
         {
             StopCoroutine(autoSaveCoroutine);
@@ -78,7 +98,7 @@ public class DataPersistenceManager : PersistentSingleton<DataPersistenceManager
         // update the profile to use for saving and loading
         this.selectedProfileId = newProfileId;
         
-        LoadGame();
+        //LoadGame();
     }
 
     public void DeleteProfileData(string profileId)
@@ -129,7 +149,6 @@ public class DataPersistenceManager : PersistentSingleton<DataPersistenceManager
             return;
         }
 
-
         // push the loaded data to all other scripts that need it
         foreach (IDataPersistence dataPersistenceObj in dataPersistenceObjects)
         {
@@ -171,9 +190,11 @@ public class DataPersistenceManager : PersistentSingleton<DataPersistenceManager
 
     public void SaveGame()
     {
-        if (SceneManager.GetActiveScene().name == Loader.Scene.MainMenu.ToString() ||
-            SceneManager.GetActiveScene().name == Loader.Scene.LoadingScene.ToString() ||
-            SceneManager.GetActiveScene().name == Loader.Scene.LobbyScene.ToString() ||
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        if (currentSceneName == Loader.Scene.MainMenu.ToString() ||
+            currentSceneName == Loader.Scene.LoadingScene.ToString() ||
+            currentSceneName == Loader.Scene.LobbyScene.ToString() ||
+            currentSceneName == Loader.Scene.CharacterSelectScene.ToString() ||
             disableDataPersistence) return;
 
         if (this.gameData == null)
