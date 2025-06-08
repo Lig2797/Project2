@@ -101,6 +101,7 @@ public class EnviromentalStatusManager : NetworkPersistentSingleton<Enviromental
 
     public void LoadData(GameData gameData)
     {
+        if(!IsHost) return;
         eStarus = gameData.EnviromentData;
         StartCoroutine(WaitToIncreaseDay());
     }

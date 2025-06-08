@@ -155,8 +155,6 @@ public class UILoadingController : MonoBehaviour
             displayedProgress = Mathf.Lerp(displayedProgress, easedProgress, Time.deltaTime * 5f);
             _progressFill.style.width = Length.Percent(displayedProgress * 100f);
 
-            Debug.Log("Operation progress: " + operation.progress);
-            Debug.Log("Loading progress: " + displayedProgress);
 
             if (operation.progress >= 0.9f && displayedProgress >= 0.98f)
             {
@@ -209,6 +207,9 @@ public class UILoadingController : MonoBehaviour
             }
 
             MultiSceneManger.Instance.FindAllNetworkSingletonAndSpawnOnSceneLoad(loadedScene);
+
+            if (sceneName == Loader.Scene.WorldScene.ToString())
+                DataPersistenceManager.Instance.StartLoadGameAndAutoSave();
         }
     }
 }

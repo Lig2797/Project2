@@ -21,6 +21,20 @@ public class InventoryController : NetworkBehaviour, IDataPersistence
         if (!IsOwner) enabled = false;
     }
 
+    private void OnEnable()
+    {
+
+        _inputReader.playerActions.changeInventorySlotEvent += GetInputValueToChangeSlot;
+        _inputReader.playerActions.openInventoryEvent += OpenInventory;
+        _inputReader.uiActions.closeInventoryEvent += CloseInventory;
+    }
+
+    private void OnDisable()
+    {
+        _inputReader.playerActions.changeInventorySlotEvent -= GetInputValueToChangeSlot;
+        _inputReader.playerActions.openInventoryEvent -= OpenInventory;
+        _inputReader.uiActions.closeInventoryEvent -= CloseInventory;
+    }
     private void OpenInventory()
     {
         onOpenInventory.Raise(this, ActionMap.UI);
@@ -66,38 +80,28 @@ public class InventoryController : NetworkBehaviour, IDataPersistence
         }
     }
 
-    public void StartToLoad(GameData gameData)
-    {
-        
-    }
-
-    public void StartToSave(ref GameData gameData)
-    {
-       
-    }
 
     public void LoadData(GameData data)
     {
-        Debug.Log("current scene: " + SceneManager.GetActiveScene().name);
-        if (!SceneManager.GetActiveScene().name.Equals(Loader.Scene.WorldScene.ToString())) return;
-        _inputReader.playerActions.changeInventorySlotEvent += GetInputValueToChangeSlot;
-        _inputReader.playerActions.openInventoryEvent += OpenInventory;
-        _inputReader.uiActions.closeInventoryEvent += CloseInventory;
+        if (SceneManager.GetActiveScene().name != Loader.Scene.WorldScene.ToString()) return;
 
         _inventoryManagerSO.inventory = data.InventoryData;
         Debug.Log("Load Inventory Data: " + _inventoryManagerSO.inventory.InventoryItemList.Count);
         ItemDatabase.Instance.SetItem(_inventoryManagerSO.inventory.InventoryItemList);
+        StartCoroutine(WaitForUIInventoryAwaked());
+        
+    }   
+    
+    private IEnumerator WaitForUIInventoryAwaked()
+    {
+        yield return new WaitUntil(() => SceneManager.GetSceneByName("UIScene").isLoaded);
         onInventoryLoad.Raise(this, null);
         _inventoryManagerSO.RefreshCurrentHoldingItem();
         onChangeSelectedSlot.Raise(this, _inventoryManagerSO.selectedSlot);
-    }   
-    
+        Debug.Log("did load ui inven");
+    }
     public void SaveData(ref GameData gameData)
     {
         gameData.SetInventoryData(_inventoryManagerSO.inventory);
-
-        _inputReader.playerActions.changeInventorySlotEvent -= GetInputValueToChangeSlot;
-        _inputReader.playerActions.openInventoryEvent -= OpenInventory;
-        _inputReader.uiActions.closeInventoryEvent -= CloseInventory;
     }
 }

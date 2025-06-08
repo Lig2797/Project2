@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fc286fd68f1f6c4c819d3da5051d74a, type: 3}
   m_Name: OnMineralsDestroy
   m_EditorClassIdentifier: 
-  editorListeners: []
+  editorListeners:
+  - {fileID: 4747104288905322571, guid: 7e805ef0280d9f84781bc96f18c0b677, type: 3}

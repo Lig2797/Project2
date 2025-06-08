@@ -259,8 +259,8 @@ public class TileManager : NetworkPersistentSingleton<TileManager>, IDataPersist
 
     public void LoadData(GameData data)
     {
-        // only host can run this
-        
+        if (!IsHost) return;
+
         HoedTiles = data.TileSaveData.HoedTiles;
         WateredTiles = data.TileSaveData.WateredTiles;
         StartCoroutine(SetAllTileDataToNetworkData());
@@ -284,7 +284,7 @@ public class TileManager : NetworkPersistentSingleton<TileManager>, IDataPersist
     }
     public void SaveData(ref GameData data)
     {
-        
+        if (!IsHost) return;
         SetAllTileNetworkDataToLocal();
         _tileSaveData.SetTilesData(HoedTiles, WateredTiles);
         data.SetTiles(_tileSaveData);

@@ -45,7 +45,30 @@ public static class SceneUtils
 
         return null;
     }
+    public static List<GameObject> FindAllGameObjectsByNameInScene(string name, Scene scene)
+    {
+        List<GameObject> results = new();
 
+        if (!scene.IsValid() || !scene.isLoaded)
+            return results;
+
+        foreach (GameObject root in scene.GetRootGameObjects())
+        {
+            FindAllNamedInHierarchy(root.transform, name, results);
+        }
+
+        return results;
+    }
+    private static void FindAllNamedInHierarchy(Transform parent, string name, List<GameObject> results)
+    {
+        if (parent.name == name)
+            results.Add(parent.gameObject);
+
+        foreach (Transform child in parent)
+        {
+            FindAllNamedInHierarchy(child, name, results);
+        }
+    }
     private static GameObject FindNamedInHierarchy(Transform parent, string name)
     {
         if (parent.name == name)

@@ -35,14 +35,17 @@ public class UI_Inventory : MonoBehaviour
     }
     public void UpdateSlotUI(Component sender, object data)
     {
-        Debug.Log("UpdateSlotUI called");
+        Debug.Log("UpdateSlotUI called by: " + sender.ToString());
         var inventory = _inventoryManagerSO.inventory;
-        ClearSlotUI();
+        //ClearSlotUI();
+
+        inventorySlotsUI.Clear();
         int totalSlots = inventory.MaxSlotInventory;
 
         for (int i = 0; i < totalSlots; i++)
         {
             Transform parent = (i < maxToolBarSlot) ? toolBarContainer : inventoryContainer;
+            Debug.Log("slot num:" + i);
             GameObject slotUIGO = Instantiate(slotPrefab, parent);
             UI_InventorySlot inventoryslotUI = slotUIGO.GetComponent<UI_InventorySlot>();
             inventoryslotUI.slotIndex = i;
@@ -58,6 +61,8 @@ public class UI_Inventory : MonoBehaviour
 
     public void ClearSlotUI()
     {
+        if (inventorySlotsUI.Count == 0) return;
+        Debug.Log("count of ui inven slot: " +  inventorySlotsUI.Count);
         foreach (UI_InventorySlot slotUI in inventorySlotsUI) Destroy(slotUI.gameObject);
         inventorySlotsUI.Clear();
     }

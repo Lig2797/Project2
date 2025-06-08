@@ -223,6 +223,7 @@ public class CropManager : NetworkPersistentSingleton<CropManager>, IDataPersist
 
     public void LoadData(GameData data)
     {
+        if (!IsHost) return;
         PlantedCrops = data.CropsSaveData.CropTiles;
         StartCoroutine(MoveLocalListToNetwork());
         StartCoroutine(ApplyCropTilesOnHostLoad());
@@ -258,6 +259,7 @@ public class CropManager : NetworkPersistentSingleton<CropManager>, IDataPersist
     }
     public void SaveData(ref GameData data)
     {
+        if (!IsHost) return;
         EnviromentalStatusManager.OnTimeIncrease -= UpdateCropsGrowthTime;
         MoveNetworkListToLocal();
         _cropsSaveData.SetCropsData(PlantedCrops);

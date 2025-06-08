@@ -93,7 +93,6 @@ public class MultiSceneManger : PersistentSingleton<MultiSceneManger>
 
         foreach (var netObj in netObjs)
         {
-            Debug.Log("Found: " + netObj.name);
             if(!netObj.IsSpawned)
                 netObj.Spawn();
         }
