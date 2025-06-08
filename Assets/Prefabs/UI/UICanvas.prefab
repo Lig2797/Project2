@@ -3723,7 +3723,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ab80414496335f48af63873067de897, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onCloseInventory: {fileID: 0}
+  onCloseInventory: {fileID: 11400000, guid: 7424e7b02d0fa744cb65eff3f7094fbb, type: 2}
   _inventoryManagerSO: {fileID: 11400000, guid: 80487e6faf0fa794284f8125827666cd, type: 2}
 --- !u!1 &1001014330837708326
 GameObject:
@@ -13815,7 +13815,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 5, y: 0.0000076293945}
+  m_AnchoredPosition: {x: 5, y: -0.000022888184}
   m_SizeDelta: {x: 390, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &6147744256568916634
@@ -17121,6 +17121,7 @@ GameObject:
   - component: {fileID: 6015907628661695932}
   - component: {fileID: 4975086278068676089}
   - component: {fileID: 6549288778303288086}
+  - component: {fileID: 948402809777517277}
   m_Layer: 5
   m_Name: Create Session
   m_TagString: Untagged
@@ -17191,7 +17192,7 @@ MonoBehaviour:
   JoiningSession:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 948402809777517277}
         m_TargetAssemblyTypeName: HostShutdown, Assembly-CSharp
         m_MethodName: OnShutDownHost
         m_Mode: 1
@@ -17220,6 +17221,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 75fedd7803f469e4db6756a6dec11a48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &948402809777517277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5770401366620641908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d284c15584b072c4fba84062d6b09239, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &5831836170052309385
@@ -28518,4 +28531,16 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4356312895423774474}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6549288778303288086}
+        m_TargetAssemblyTypeName: HostCreate, Assembly-CSharp
+        m_MethodName: OnHostCreateClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

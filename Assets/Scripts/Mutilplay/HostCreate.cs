@@ -1,16 +1,9 @@
+using Unity.Netcode;
 using UnityEngine;
 
 public class HostCreate : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public async void OnHostCreateClicked()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

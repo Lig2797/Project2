@@ -17,8 +17,6 @@ public class MultiSceneManger : PersistentSingleton<MultiSceneManger>
     private GameObject _worldSceneMainCamera;
     private GameObject _worldSceneVirtualCamera;
 
-    
-
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -50,8 +48,9 @@ public class MultiSceneManger : PersistentSingleton<MultiSceneManger>
         SetWorldSceneCameraStatus(true);
         FindEntranceToSpawn();
         SetGlobalLightActiveInScene(WorldScene, true);
-        CameraController.Instance.RefreshFollowCamera(_worldSceneVirtualCamera.GetComponent<CinemachineVirtualCamera>());
 
+        CameraController.Instance.RefreshFollowCamera(_worldSceneVirtualCamera.GetComponent<CinemachineVirtualCamera>());
+        GameEventsManager.Instance.dataEvents.OnSceneLoaded(SceneToLoad.name);
     }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -93,10 +92,11 @@ public class MultiSceneManger : PersistentSingleton<MultiSceneManger>
 
         foreach (var netObj in netObjs)
         {
-            Debug.Log("Found: " + netObj.name);
             if(!netObj.IsSpawned)
                 netObj.Spawn();
         }
+
+        GameEventsManager.Instance.networkObjectEvents.OnNetworkObjectSpawned();
     }
 
 

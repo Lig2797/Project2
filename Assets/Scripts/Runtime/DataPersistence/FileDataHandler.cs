@@ -153,6 +153,11 @@ public class FileDataHandler
         {
             string profileId = dirInfo.Name;
 
+            if (profileId.Contains("Client", StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
             string fullPath = Path.Combine(dataDirPath, profileId, dataFileName);
             if (!File.Exists(fullPath))
             {

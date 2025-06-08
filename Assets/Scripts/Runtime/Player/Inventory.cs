@@ -22,7 +22,7 @@ public class Inventory
     public Inventory() 
     {
         this._maxSlotInventory = 44;
-        //this._inventoryItemList = new List<InventoryItem>(_maxSlotInventory);
+        this._inventoryItemList = new List<InventoryItem>(_maxSlotInventory);
     }
 
     public InventoryItem GetInventoryItemOfIndex(int index)
