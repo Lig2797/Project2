@@ -2,16 +2,25 @@ using UnityEngine;
 
 public class ObjectsSpawner : MonoBehaviour
 {
-    public GameObject objectPrefab;
-    public GameObject dialogueObjectPrefab;
+    [SerializeField] private string knotName;
+    [SerializeField] private GameObject objectPrefab;
 
-    private void OnEnable()
+    private void Start()
     {
-        
+        CheckSpawn();
     }
 
-    public void SpawnObject(string itemName)
+    private void CheckSpawn()
     {
-
-    }
+        if (GameFlowManager.Instance.gameFlowSO.gameFlowData.CompletedThirdCutscene)
+        {
+            GameObject npcGO = Instantiate(objectPrefab, this.gameObject.transform.position, Quaternion.identity);
+            DialogueTrigger dialogueTrigger = npcGO.GetComponentInChildren<DialogueTrigger>();
+            if (dialogueTrigger != null)
+            {
+                dialogueTrigger.enabled = true;
+                dialogueTrigger.SetKnotName(knotName);
+            }
+        }    
+    }    
 }
