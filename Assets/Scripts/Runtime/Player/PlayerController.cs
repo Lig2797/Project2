@@ -668,8 +668,8 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
 
     private void OnSubmit()
     {
+        
         onSubmit.Raise(this, ActionMap.Player);
-        _inputReader.SwitchActionMap(ActionMap.UI);
     }
 
     // Load & Save

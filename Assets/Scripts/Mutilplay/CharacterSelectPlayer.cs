@@ -49,6 +49,6 @@ public class CharacterSelectPlayer : MonoBehaviour
     private void SetCharacterId()
     {
         GameMultiplayerManager.Instance.SetCharacterId(playerIndex);
-        GameFlowManager.Instance.HasChoosenCharacte(true);
+        GameFlowManager.Instance.gameFlowSO.gameFlowData.SetHasChoosenCharacter(true);
     }
 }

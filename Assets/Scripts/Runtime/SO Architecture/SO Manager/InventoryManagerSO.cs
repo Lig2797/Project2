@@ -5,6 +5,7 @@ using UnityEngine;
 public class InventoryManagerSO : ScriptableObject
 {
     public Inventory inventory;
+    public bool hasLoad = false;
 
     public event Func<Transform> onFindEmptySlot;
     public event Action onChangedSelectedSlot;
@@ -80,8 +81,9 @@ public class InventoryManagerSO : ScriptableObject
     }
 
     public void Reset()
-    {
+    { 
         inventory = new Inventory();
+        hasLoad = false;
         _selectedSlot = 0;
         currentDraggingItem = null;
         _isOpeningInventory = false;

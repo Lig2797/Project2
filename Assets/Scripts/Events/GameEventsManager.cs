@@ -21,6 +21,7 @@ public class GameEventsManager : MonoBehaviour
     public NetworkObjectEvents networkObjectEvents;
     public InventoryEvents inventoryEvents;
     public UIEvents uiEvents;
+    public PlayerHouseEvents playerHouseEvents;
 
     public InputReader inputReader;
 
@@ -53,5 +54,6 @@ public class GameEventsManager : MonoBehaviour
         networkObjectEvents = new NetworkObjectEvents();
         inventoryEvents = new InventoryEvents();
         uiEvents = new UIEvents();
+        playerHouseEvents = new PlayerHouseEvents();
     }
 }

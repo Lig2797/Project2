@@ -21,9 +21,10 @@ public class DialogueTriggerButton : MonoBehaviour
         }
     }
 
-    public void EnterDialogue()
+    public void EnterDialogue(Component sender, object data)
     {
         if (!playerInRange) return;
+
         if (hasEnteredDialogue) return;
 
         GameEventsManager.Instance.dialogueEvents.EnterDialogue(dialogueKnotName);

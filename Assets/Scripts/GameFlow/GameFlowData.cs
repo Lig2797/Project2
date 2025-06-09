@@ -6,6 +6,7 @@ public class GameFlowData
     [SerializeField] private bool _hasChoosenCharacter;
     [SerializeField] private bool _completedFirstCutscene;
     [SerializeField] private bool _completedSecondCutscene;
+    [SerializeField] private bool _hasOpenedPlayerHouse;
     [SerializeField] private string _lastScene;
 
     public bool HasChoosenCharacter
@@ -16,6 +17,9 @@ public class GameFlowData
 
     public bool CompletedSecondCutscene
     { get { return _completedSecondCutscene; } }
+
+    public bool HasOpenedPlayerHouse
+    { get { return _hasOpenedPlayerHouse; } }
 
     public Loader.Scene LastScene
     { get { return ConvertToScene(_lastScene); } }
@@ -61,5 +65,10 @@ public class GameFlowData
     public void SetCompletedSecondCutscene(bool completedSecondCutscene)
     {
         _completedSecondCutscene = completedSecondCutscene;
+    }
+
+    public void SetHasOpendPlayerHouse(bool hasOpenedPlayerHouse)
+    {
+        _hasOpenedPlayerHouse = hasOpenedPlayerHouse;
     }
 }
