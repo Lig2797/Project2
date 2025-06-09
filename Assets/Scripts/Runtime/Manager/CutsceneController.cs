@@ -40,8 +40,6 @@ public class CutsceneController : MonoBehaviour
 
     private void AssignPlayer(PlayerController player)
     {
-        if (GameFlowManager.Instance.gameFlowSO.gameFlowData.CompletedSecondCutscene) return;
-
         if (!NetworkManager.Singleton.IsHost) return;
 
         foreach (var playableAssetOutput in cutsceneDirector.playableAsset.outputs)
