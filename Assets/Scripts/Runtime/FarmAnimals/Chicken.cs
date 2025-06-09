@@ -68,6 +68,7 @@ public class Chicken : FarmAnimal
             CanMove.Value = true;
 
         ApplyStage(_currentGrowthStage.ToString());
+        isFed = false;
     }
 
     protected override void ApplyStage(string stage)

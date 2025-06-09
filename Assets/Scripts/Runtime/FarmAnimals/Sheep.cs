@@ -61,6 +61,7 @@ public class Sheep : FarmAnimal
         _currentGrowthStage = (SheepGrowthStage)Mathf.Min(next, max);
 
         ApplyStage(_currentGrowthStage.ToString());
+        isFed = false;
     }
 
     private void DecreaseGrowStage()

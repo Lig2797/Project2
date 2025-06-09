@@ -45,6 +45,7 @@ public class Cow : FarmAnimal
         _currentGrowthStage = (CowGrowthStage)Mathf.Min(next, max);
 
         ApplyStage(_currentGrowthStage.ToString());
+        isFed = false;
     }
 
 
