@@ -13,13 +13,11 @@ public class CutsceneController : MonoBehaviour
     private void OnEnable()
     {
         GameEventsManager.Instance.playerEvents.onPlayerSpawned += AssignPlayer;
-        GameEventsManager.Instance.cutsceneEvents.onResumeCutscene += ResumeCutscene;
     }
 
     private void OnDisable()
     {
         GameEventsManager.Instance.playerEvents.onPlayerSpawned -= AssignPlayer;
-        GameEventsManager.Instance.cutsceneEvents.onResumeCutscene -= ResumeCutscene;
     }
 
     private void Start()
@@ -55,7 +53,6 @@ public class CutsceneController : MonoBehaviour
         else if (SceneManager.GetActiveScene().name == Loader.Scene.WorldScene.ToString()) player.gameObject.transform.position = new Vector3(-1.69902f, 37.40618f, 0);
         cutsceneDirector.Play();
         hasPlayerAssigned = true;
-        player._inputReader.DisableControl();
     }
 
     public void PlayCutscene()
@@ -81,37 +78,5 @@ public class CutsceneController : MonoBehaviour
         }
 
         cutsceneDirector.Play();
-    }
-
-    public void StopCutscene()
-    {
-        if (cutsceneDirector.state == PlayState.Playing || cutsceneDirector.state == PlayState.Paused)
-        {
-            cutsceneDirector.Stop();
-            PlayerController.LocalInstance._inputReader.EnableControl();
-        }
-    }
-
-    public void PauseCutscene()
-    {
-        if (cutsceneDirector.state == PlayState.Playing)
-        {
-            cutsceneDirector.Pause();
-            PlayerController.LocalInstance._inputReader.EnableControl();
-        }
-    }
-
-    public void ResumeCutscene()
-    {
-        if (cutsceneDirector.state == PlayState.Paused)
-        {
-            cutsceneDirector.Resume();
-            PlayerController.LocalInstance._inputReader.DisableControl();
-        }
-    }
-
-    public void EnableControl()
-    {
-        PlayerController.LocalInstance._inputReader.EnableControl();
     }
 }

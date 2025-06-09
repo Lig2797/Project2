@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class NPCCutsceneController : MonoBehaviour
 {
-    public List
+    
 
     public void EnterDialogue(string knotName)
     {

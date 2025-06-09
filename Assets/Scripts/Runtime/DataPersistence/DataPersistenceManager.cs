@@ -72,11 +72,11 @@ public class DataPersistenceManager : PersistentSingleton<DataPersistenceManager
             scene.name == Loader.Scene.UIScene.ToString() )
             return;
         // start up the auto saving coroutine
-        if (autoSaveCoroutine != null)
-        {
-            StopCoroutine(autoSaveCoroutine);
-        }
-        autoSaveCoroutine = StartCoroutine(AutoSave());
+        //if (autoSaveCoroutine != null)
+        //{
+        //    StopCoroutine(autoSaveCoroutine);
+        //}
+        //autoSaveCoroutine = StartCoroutine(AutoSave());
     }
 
     public void StartLoadGameAndAutoSave()
