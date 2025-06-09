@@ -104,6 +104,7 @@ public class TileTargeter : NetworkBehaviour
             SceneManager.GetActiveScene().name.Equals(Loader.Scene.CharacterSelectScene.ToString()) ||
             SceneManager.GetActiveScene().name.Equals(Loader.Scene.CutScene.ToString()) ||
             SceneManager.GetActiveScene().name.Equals(Loader.Scene.UIScene.ToString())) return;
+
         GetTargetTile();
     }
 
@@ -125,7 +126,6 @@ public class TileTargeter : NetworkBehaviour
     private void LoadedScene(string sceneName)
     {
         StartCoroutine(WaitForSceneLoaded(sceneName));
-
     }
 
     IEnumerator WaitForSceneLoaded(string scene)
@@ -193,6 +193,11 @@ public class TileTargeter : NetworkBehaviour
     public void RefreshTilemapCheck(bool showTarget)
     {
         tilemapCheck.Clear();
+        if (_targetTilemap == null)
+        {
+            UnityEngine.Debug.Log("Target Tilemap is not set!");
+            return;
+        }
         _targetTilemap.SetTile(_previousTilePos, null); // Remove previous highlight
 
         foreach (Tilemap tilemap in _tilemaps)

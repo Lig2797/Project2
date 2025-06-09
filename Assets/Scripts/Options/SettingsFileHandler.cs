@@ -15,7 +15,11 @@ public static class SettingsFileHandler
     {
         if (!File.Exists(FilePath))
         {
-            return new SettingsData(defaultSO.overalVolume, defaultSO.musicVolume, defaultSO.sfxVolume, defaultSO.resolutionIndex, defaultSO.isFullScreen);
+            return new SettingsData(defaultSO.settingsData.OveralVolume, 
+                                    defaultSO.settingsData.MusicVolume, 
+                                    defaultSO.settingsData.SFXVolume, 
+                                    defaultSO.settingsData.ResolutionIndex, 
+                                    defaultSO.settingsData.IsFullScreen);
         }
 
         string json = File.ReadAllText(FilePath);

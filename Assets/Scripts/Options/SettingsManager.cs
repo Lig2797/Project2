@@ -15,31 +15,31 @@ public class SettingsManager : PersistentSingleton<SettingsManager>
 
     public void ApplySettings()
     {
-        SetMasterVolume(defaultSettings.overalVolume);
-        SetResolution(defaultSettings.resolutionIndex);
-        SetFullScreen(defaultSettings.isFullScreen);
+        SetMasterVolume(defaultSettings.settingsData.OveralVolume);
+        SetResolution(defaultSettings.settingsData.ResolutionIndex);
+        SetFullScreen(defaultSettings.settingsData.IsFullScreen);
     }
 
     public void SetMasterVolume(float volume)
     {
-        defaultSettings.overalVolume = volume;
+        defaultSettings.settingsData.SetOveralVolume(volume);
         AudioListener.volume = volume;
     }
 
     public void SetResolution(int resolutionIndex)
     {
-        defaultSettings.resolutionIndex = resolutionIndex;
+        defaultSettings.settingsData.SetResolutionIndex(resolutionIndex);
 
         switch (resolutionIndex)
         {
             case 0:
-                Screen.SetResolution(1920, 1080, defaultSettings.isFullScreen);
+                Screen.SetResolution(1920, 1080, defaultSettings.settingsData.IsFullScreen);
                 break;
             case 1:
-                Screen.SetResolution(1280, 720, defaultSettings.isFullScreen);
+                Screen.SetResolution(1280, 720, defaultSettings.settingsData.IsFullScreen);
                 break;
             case 2:
-                Screen.SetResolution(800, 600, defaultSettings.isFullScreen);
+                Screen.SetResolution(800, 600, defaultSettings.settingsData.IsFullScreen);
                 break;
             default:
                 Debug.LogWarning("Invalid resolution index");
@@ -49,27 +49,19 @@ public class SettingsManager : PersistentSingleton<SettingsManager>
 
     public void SetFullScreen(bool isFullScreen)
     {
-        defaultSettings.isFullScreen = isFullScreen;
-        Screen.fullScreen = defaultSettings.isFullScreen;
+        defaultSettings.settingsData.SetIsFullScreen(isFullScreen);
+        Screen.fullScreen = defaultSettings.settingsData.IsFullScreen;
     }
 
     public void LoadData()
     {
         settingsData = SettingsFileHandler.Load(defaultSettings);
-        defaultSettings.overalVolume = settingsData.OveralVolume;
-        defaultSettings.musicVolume = settingsData.MusicVolume;
-        defaultSettings.sfxVolume = settingsData.SFXVolume;
-        defaultSettings.resolutionIndex = settingsData.ResolutionIndex;
-        defaultSettings.isFullScreen = settingsData.IsFullScreen;
+        defaultSettings.settingsData = settingsData;
         ApplySettings();
     }
 
     public void SaveData()
     {
-        SettingsFileHandler.Save(new SettingsData(defaultSettings.overalVolume,
-                                                  defaultSettings.musicVolume,
-                                                  defaultSettings.sfxVolume,
-                                                  defaultSettings.resolutionIndex,
-                                                  defaultSettings.isFullScreen));
+        SettingsFileHandler.Save(defaultSettings.settingsData);
     }
 }

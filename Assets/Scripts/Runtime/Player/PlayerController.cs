@@ -206,7 +206,7 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
 
     #region Dependencies Scripts
     [Header("Dependencies")]
-    [SerializeField] private InputReader _inputReader;
+    public InputReader _inputReader;
     //private PlayerData player;
 
     private VehicleController _currentVehicle;
@@ -288,7 +288,7 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
             LocalInstance = this;
             DontDestroyOnLoad(gameObject);
 
-            //DataPersistenceManager.Instance.LoadGame();
+            DataPersistenceManager.Instance.LoadGame();
 
             StartCoroutine(WaitForLoadedData());
         }

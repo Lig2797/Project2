@@ -13,6 +13,7 @@ public class PlayerActions : Controls.IPlayerActions
     public Action<InputAction.CallbackContext> runEvent;
     public Action openInventoryEvent;
     public Action submitEvent;
+    public Action onTestEvent;
 
     public Action<int, bool> changeInventorySlotEvent;
     public void OnAttack(InputAction.CallbackContext context)
@@ -84,5 +85,13 @@ public class PlayerActions : Controls.IPlayerActions
     public void OnSubmit(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Started) submitEvent?.Invoke();
+    }
+
+    public void OnTest(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            onTestEvent?.Invoke();
+        }
     }
 }

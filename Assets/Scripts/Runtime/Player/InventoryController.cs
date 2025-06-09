@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -27,6 +28,7 @@ public class InventoryController : NetworkBehaviour, IDataPersistence
         _inputReader.playerActions.changeInventorySlotEvent += GetInputValueToChangeSlot;
         _inputReader.playerActions.openInventoryEvent += OpenInventory;
         _inputReader.uiActions.closeInventoryEvent += CloseInventory;
+        GameEventsManager.Instance.inventoryEvents.onItemAdded += AddItem;
     }
 
     private void OnDisable()
@@ -34,6 +36,7 @@ public class InventoryController : NetworkBehaviour, IDataPersistence
         _inputReader.playerActions.changeInventorySlotEvent -= GetInputValueToChangeSlot;
         _inputReader.playerActions.openInventoryEvent -= OpenInventory;
         _inputReader.uiActions.closeInventoryEvent -= CloseInventory;
+        GameEventsManager.Instance.inventoryEvents.onItemAdded -= AddItem;
     }
     private void OpenInventory()
     {
@@ -80,10 +83,58 @@ public class InventoryController : NetworkBehaviour, IDataPersistence
         }
     }
 
+    private void AddItem(string itemName)
+    {
+        Item item = ItemDatabase.Instance.GetItemByName(itemName);
+        if (item == null)
+        {
+            Debug.LogWarning("Item not found in database: " + itemName);
+            return;
+        }
+        int slotIndex = GetEmptySlot();
+        if (slotIndex == -1)
+        {
+            Debug.LogWarning("No empty slot available in inventory.");
+            return;
+        }
+        InventoryItem inventoryItem = new InventoryItem(null, item, slotIndex);
+        _inventoryManagerSO.inventory.AddItemToInventory(inventoryItem, slotIndex);
+        GameEventsManager.Instance.inventoryEvents.AddItemToUI(inventoryItem, slotIndex);
+    }
+
+    private int GetEmptySlot()
+    {
+        for (int i = 0; i < _inventoryManagerSO.inventory.MaxSlotInventory; i++)
+        {
+            if (_inventoryManagerSO.inventory.GetInventoryItemOfIndex(i) == null)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public void UseItem(Component sender, object obj)
+    {
+        Item item = _inventoryManagerSO.GetCurrentItem();
+
+        if (item == null) return;
+
+        if (item.type != ItemType.Usable) return;
+
+        switch (item.itemName)
+        {
+            case "Letter":
+                GameEventsManager.Instance.uiEvents.OpenLetter();
+                break;
+        }
+    }
 
     public void LoadData(GameData data)
     {
         if (SceneManager.GetActiveScene().name != Loader.Scene.WorldScene.ToString()) return;
+
+        if (!data.GameFlowData.HasChoosenCharacter) return;
 
         _inventoryManagerSO.inventory = data.InventoryData;
         Debug.Log("Load Inventory Data: " + _inventoryManagerSO.inventory.InventoryItemList.Count);
@@ -103,5 +154,6 @@ public class InventoryController : NetworkBehaviour, IDataPersistence
     public void SaveData(ref GameData gameData)
     {
         gameData.SetInventoryData(_inventoryManagerSO.inventory);
+        _inventoryManagerSO.Reset();
     }
 }

@@ -56,4 +56,29 @@ public class SettingsData
         ResolutionIndex = resolutionIndex;
         IsFullScreen = isFullScreen;
     }
+
+    public void SetOveralVolume(float overalVolume)
+    {
+        this.overalVolume = overalVolume;
+    }
+
+    public void SetMusicVolume(float musicVolume)
+    {
+        this.musicVolume = musicVolume;
+    }
+
+    public void SetSFXVolume(float sfxVolume)
+    { 
+        this.sfxVolume = sfxVolume;
+    }
+
+    public void SetResolutionIndex(int resolutionIndex)
+    {
+        this.resolutionIndex = resolutionIndex;
+    }
+
+    public void SetIsFullScreen(bool isFullScreen)
+    { 
+        this.isFullScreen = isFullScreen; 
+    }
 }

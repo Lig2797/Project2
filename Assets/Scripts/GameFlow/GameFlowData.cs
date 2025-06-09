@@ -5,13 +5,17 @@ public class GameFlowData
 {
     [SerializeField] private bool _hasChoosenCharacter;
     [SerializeField] private bool _completedFirstCutscene;
+    [SerializeField] private bool _completedSecondCutscene;
     [SerializeField] private string _lastScene;
 
     public bool HasChoosenCharacter
     { get { return _hasChoosenCharacter; } }
 
     public bool CompletedFirstCutscene
-    { get { return _completedFirstCutscene; } set { _completedFirstCutscene = value; } }
+    { get { return _completedFirstCutscene; } }
+
+    public bool CompletedSecondCutscene
+    { get { return _completedSecondCutscene; } }
 
     public Loader.Scene LastScene
     { get { return ConvertToScene(_lastScene); } }
@@ -23,10 +27,11 @@ public class GameFlowData
         _lastScene = Loader.Scene.CharacterSelectScene.ToString();
     }
 
-    public GameFlowData(bool hasChoosenCharacter, bool completedFirstCutscene, string lastScene)
+    public GameFlowData(bool hasChoosenCharacter, bool completedFirstCutscene, bool completeSecondCutscene, string lastScene)
     {
         _hasChoosenCharacter = hasChoosenCharacter;
         _completedFirstCutscene = completedFirstCutscene;
+        _completedSecondCutscene = completeSecondCutscene;
         _lastScene = lastScene;
     }
 
@@ -41,5 +46,20 @@ public class GameFlowData
             Debug.LogError($"Invalid scene name: {sceneName}");
             return Loader.Scene.CharacterSelectScene; // Default value
         }
+    }
+
+    public void SetHasChoosenCharacter(bool hasChoosenCharacter)
+    {
+        _hasChoosenCharacter = hasChoosenCharacter;
+    }
+
+    public void SetCompletedFirstCutscene(bool completedFirstCutscene)
+    {
+        _completedFirstCutscene = completedFirstCutscene;
+    }
+
+    public void SetCompletedSecondCutscene(bool completedSecondCutscene)
+    {
+        _completedSecondCutscene = completedSecondCutscene;
     }
 }

@@ -200,6 +200,10 @@ public class DialogueManager : Singleton<DialogueManager>
 
     private void OnSubmit()
     {
+        if (!dialoguePlaying)
+        {
+            return;
+        }
         SubmitPressed(InputEventContext.DIALOGUE);
     }
 }
