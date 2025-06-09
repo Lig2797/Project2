@@ -17,6 +17,7 @@ public static class Loader
         LobbyScene,
         LoadingScene,
         CharacterSelectScene,
+        HouseScene
     }
 
     private static Scene targetScene;

@@ -3,6 +3,7 @@ using UnityEngine.Playables;
 using UnityEngine.Timeline;
 using Unity.Netcode;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class CutsceneController : MonoBehaviour
 {
@@ -48,10 +49,11 @@ public class CutsceneController : MonoBehaviour
                 cutsceneDirector.SetGenericBinding(playableAssetOutput.sourceObject, player.GetComponent<Animator>());
             }
         }
-        player.gameObject.transform.position = new Vector3(4.371f, 1.154f, 0);
+        if (SceneManager.GetActiveScene().name == Loader.Scene.CutScene.ToString()) player.gameObject.transform.position = new Vector3(4.371f, 1.154f, 0);
+        else if (SceneManager.GetActiveScene().name == Loader.Scene.WorldScene.ToString()) player.gameObject.transform.position = new Vector3(-1.69902f, 37.40618f, 0);
         cutsceneDirector.Play();
         hasPlayerAssigned = true;
-        //player._inputReader.DisableControl();
+        player._inputReader.DisableControl();
     }
 
     public void PlayCutscene()
@@ -84,7 +86,7 @@ public class CutsceneController : MonoBehaviour
         if (cutsceneDirector.state == PlayState.Playing || cutsceneDirector.state == PlayState.Paused)
         {
             cutsceneDirector.Stop();
-            //PlayerController.LocalInstance._inputReader.EnableControl();
+            PlayerController.LocalInstance._inputReader.EnableControl();
         }
     }
 
@@ -93,7 +95,7 @@ public class CutsceneController : MonoBehaviour
         if (cutsceneDirector.state == PlayState.Playing)
         {
             cutsceneDirector.Pause();
-            //PlayerController.LocalInstance._inputReader.EnableControl();
+            PlayerController.LocalInstance._inputReader.EnableControl();
         }
     }
 
@@ -102,7 +104,7 @@ public class CutsceneController : MonoBehaviour
         if (cutsceneDirector.state == PlayState.Paused)
         {
             cutsceneDirector.Resume();
-            //PlayerController.LocalInstance._inputReader.DisableControl();
+            PlayerController.LocalInstance._inputReader.DisableControl();
         }
     }
 

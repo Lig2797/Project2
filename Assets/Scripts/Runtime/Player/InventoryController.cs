@@ -114,7 +114,7 @@ public class InventoryController : NetworkBehaviour, IDataPersistence
         return -1;
     }
 
-    public void UseItem(Component sender, object obj)
+    public void UseItem(Component sender, object data)
     {
         Item item = _inventoryManagerSO.GetCurrentItem();
 
@@ -126,7 +126,13 @@ public class InventoryController : NetworkBehaviour, IDataPersistence
         {
             case "Letter":
                 GameEventsManager.Instance.uiEvents.OpenLetter();
+                GameEventsManager.Instance.inputReader.SwitchActionMap(ActionMap.UI);
                 break;
+            case "Key":
+                GameEventsManager.Instance.playerHouseEvents.UnlockHouse();
+                break;
+            default :
+                return;
         }
     }
 
@@ -134,15 +140,18 @@ public class InventoryController : NetworkBehaviour, IDataPersistence
     {
         if (SceneManager.GetActiveScene().name != Loader.Scene.WorldScene.ToString()) return;
 
-        if (!data.GameFlowData.HasChoosenCharacter) return;
+        if (_inventoryManagerSO.hasLoad) return;
+
+        _inventoryManagerSO.Reset();
 
         _inventoryManagerSO.inventory = data.InventoryData;
         Debug.Log("Load Inventory Data: " + _inventoryManagerSO.inventory.InventoryItemList.Count);
         ItemDatabase.Instance.SetItem(_inventoryManagerSO.inventory.InventoryItemList);
         StartCoroutine(WaitForUIInventoryAwaked());
-        
-    }   
-    
+
+        if (!_inventoryManagerSO.hasLoad) _inventoryManagerSO.hasLoad = true;
+    }
+
     private IEnumerator WaitForUIInventoryAwaked()
     {
         yield return new WaitUntil(() => SceneManager.GetSceneByName("UIScene").isLoaded);
@@ -154,6 +163,5 @@ public class InventoryController : NetworkBehaviour, IDataPersistence
     public void SaveData(ref GameData gameData)
     {
         gameData.SetInventoryData(_inventoryManagerSO.inventory);
-        _inventoryManagerSO.Reset();
     }
 }

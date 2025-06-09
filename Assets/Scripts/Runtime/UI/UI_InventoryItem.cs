@@ -86,12 +86,15 @@ public class UI_InventoryItem : MonoBehaviour, IPointerDownHandler
     }
     public void SetItemImage()
     {
-        if (_inventoryItem.Item.cropLevelImage.Length != 0 && // check if this is crop
-            _inventoryItem.Item.cropLevelImage.Length > _inventoryItem.Level)
+        if (_inventoryItem.Item.type == ItemType.Crop)
         {
-            Debug.Log("Setting crop level image for item: " + _inventoryItem.Item.name + " at level: " + _inventoryItem.Level);
-            _inventoryItem.Item.image = _inventoryItem.Item.cropLevelImage[_inventoryItem.Level];
+            if (_inventoryItem.Item.cropLevelImage != null && _inventoryItem.Item.cropLevelImage.Length > _inventoryItem.Level)
+            {
+                Debug.Log("Setting crop level image for item: " + _inventoryItem.Item.name + " at level: " + _inventoryItem.Level);
+                _inventoryItem.Item.image = _inventoryItem.Item.cropLevelImage[_inventoryItem.Level];
+            }
         }
+        
         image.sprite = _inventoryItem.Item.image;
     }
     public void RefreshCount() 

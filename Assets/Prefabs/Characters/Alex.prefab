@@ -79,9 +79,9 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1601079163
-  m_SortingLayer: 31
-  m_SortingOrder: 0
+  m_SortingLayerID: 1449220059
+  m_SortingLayer: 26
+  m_SortingOrder: 1
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &3522281362325681467
 MonoBehaviour:
@@ -606,7 +606,7 @@ GameObject:
   - component: {fileID: 7103883091122523786}
   - component: {fileID: 4614420684280623787}
   - component: {fileID: 1566556555428459181}
-  - component: {fileID: 4788892729738472718}
+  - component: {fileID: 3098973088393587364}
   m_Layer: 8
   m_Name: Alex
   m_TagString: Player
@@ -1191,7 +1191,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &4788892729738472718
+--- !u!114 &3098973088393587364
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
