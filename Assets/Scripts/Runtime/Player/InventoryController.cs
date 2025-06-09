@@ -138,28 +138,31 @@ public class InventoryController : NetworkBehaviour, IDataPersistence
 
     public void LoadData(GameData data)
     {
-        if (SceneManager.GetActiveScene().name != Loader.Scene.WorldScene.ToString()) return;
+        if (SceneManager.GetActiveScene().name == Loader.Scene.WorldScene.ToString() ||
+            SceneManager.GetActiveScene().name == Loader.Scene.CutScene.ToString())
+        {
+            if (_inventoryManagerSO.hasLoad) return;
 
-        if (_inventoryManagerSO.hasLoad) return;
+            _inventoryManagerSO.Reset();
 
-        _inventoryManagerSO.Reset();
+            _inventoryManagerSO.inventory = data.InventoryData;
+            Debug.Log("Load Inventory Data: " + _inventoryManagerSO.inventory.InventoryItemList.Count);
+            ItemDatabase.Instance.SetItem(_inventoryManagerSO.inventory.InventoryItemList);
+            //StartCoroutine(WaitForUIInventoryAwaked());
 
-        _inventoryManagerSO.inventory = data.InventoryData;
-        Debug.Log("Load Inventory Data: " + _inventoryManagerSO.inventory.InventoryItemList.Count);
-        ItemDatabase.Instance.SetItem(_inventoryManagerSO.inventory.InventoryItemList);
-        StartCoroutine(WaitForUIInventoryAwaked());
-
-        if (!_inventoryManagerSO.hasLoad) _inventoryManagerSO.hasLoad = true;
+            if (!_inventoryManagerSO.hasLoad) _inventoryManagerSO.hasLoad = true;
+        }
     }
 
-    private IEnumerator WaitForUIInventoryAwaked()
-    {
-        yield return new WaitUntil(() => SceneManager.GetSceneByName("UIScene").isLoaded);
-        onInventoryLoad.Raise(this, null);
-        _inventoryManagerSO.RefreshCurrentHoldingItem();
-        onChangeSelectedSlot.Raise(this, _inventoryManagerSO.selectedSlot);
-        Debug.Log("did load ui inven");
-    }
+    //private IEnumerator WaitForUIInventoryAwaked()
+    //{
+    //    yield return new WaitUntil(() => SceneManager.GetSceneByName("UIScene").isLoaded);
+    //    onInventoryLoad.Raise(this, null);
+    //    _inventoryManagerSO.RefreshCurrentHoldingItem();
+    //    onChangeSelectedSlot.Raise(this, _inventoryManagerSO.selectedSlot);
+    //    Debug.Log("did load ui inven");
+    //}
+
     public void SaveData(ref GameData gameData)
     {
         gameData.SetInventoryData(_inventoryManagerSO.inventory);
