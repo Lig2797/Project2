@@ -73,6 +73,6 @@ Theo như bảng thì bên phải là làng Eloria, vậy bên trái chắc ch�
 Có 2 chiếc chìa khóa, có vẻ chiếc chìa nhỏ này dùng để mở cửa ngôi nhà rồi. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
 
 -> DONE
-=== meet_josh ===
+
 
 
