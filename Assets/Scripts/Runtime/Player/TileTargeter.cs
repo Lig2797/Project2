@@ -79,20 +79,26 @@ public class TileTargeter : NetworkBehaviour
     }
     public override void OnNetworkSpawn()
     {
-        if (!IsOwner) enabled = false;
+        if (!IsOwner)
+        {
+            enabled = false;
+            return;
+        }
+        if (SceneUtils.ThisSceneIsGameplayScene(SceneManager.GetActiveScene().ToString()))
+            onExitToWorldScene(SceneManager.GetActiveScene().ToString());
     }
 
 
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
-        GameEventsManager.Instance.dataEvents.onSceneLoaded += LoadedScene;
+        GameEventsManager.Instance.dataEvents.onExitToWorldScene += onExitToWorldScene;
     }
 
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
-        GameEventsManager.Instance.dataEvents.onSceneLoaded -= LoadedScene;
+        GameEventsManager.Instance.dataEvents.onExitToWorldScene -= onExitToWorldScene;
     }
    
 
@@ -119,11 +125,11 @@ public class TileTargeter : NetworkBehaviour
             scene.name.Equals(Loader.Scene.CutScene.ToString())) return;
 
 
-        LoadedScene(scene.name);
+        onExitToWorldScene(scene.name);
     }
     #endregion
 
-    private void LoadedScene(string sceneName)
+    private void onExitToWorldScene(string sceneName)
     {
         StartCoroutine(WaitForSceneLoaded(sceneName));
     }

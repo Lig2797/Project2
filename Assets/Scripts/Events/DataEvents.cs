@@ -26,9 +26,9 @@ public class DataEvents
         onDataLoading?.Invoke(data);
     }
 
-    public event Action<string> onSceneLoaded;
-    public void OnSceneLoaded(string sceneName)
+    public event Action<string> onExitToWorldScene;
+    public void OnExitToWorldScene(string sceneName)
     {
-        onSceneLoaded?.Invoke(sceneName);
+        onExitToWorldScene?.Invoke(sceneName);
     }
 }
