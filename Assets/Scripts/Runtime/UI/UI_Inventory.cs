@@ -62,6 +62,8 @@ public class UI_Inventory : MonoBehaviour
             InventoryItem inventoryItem = inventory.GetInventoryItemOfIndex(i);
             if (inventoryItem != null)
             {
+                Item item = ItemDatabase.Instance.GetItemByName(inventoryItem.ItemName);
+                inventoryItem.SetItem(item);
                 SpawnItem(inventoryItem, slotUIGO);
             }
         }
