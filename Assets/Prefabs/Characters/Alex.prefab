@@ -79,9 +79,9 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1449220059
-  m_SortingLayer: 26
-  m_SortingOrder: 1
+  m_SortingLayerID: -1601079163
+  m_SortingLayer: 31
+  m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &3522281362325681467
 MonoBehaviour:
@@ -606,6 +606,7 @@ GameObject:
   - component: {fileID: 7103883091122523786}
   - component: {fileID: 4614420684280623787}
   - component: {fileID: 1566556555428459181}
+  - component: {fileID: 4788892729738472718}
   m_Layer: 8
   m_Name: Alex
   m_TagString: Player
@@ -787,7 +788,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1336017305
+  GlobalObjectIdHash: 2885833329
   InScenePlacedSourceGlobalObjectIdHash: 2885833329
   DeferredDespawnTick: 0
   Ownership: 1
@@ -1181,6 +1182,34 @@ MonoBehaviour:
       - m_Target: {fileID: 566550412973088920}
         m_TargetAssemblyTypeName: InventoryController, Assembly-CSharp
         m_MethodName: SwitchActionMap
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &4788892729738472718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3069992538054791838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bff034207f955204da86a51f19b7e975, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameEvent: {fileID: 11400000, guid: 49cfcb36600939e44b6db91a234b880b, type: 2}
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 566550412973088920}
+        m_TargetAssemblyTypeName: InventoryController, Assembly-CSharp
+        m_MethodName: UseItem
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -8,27 +8,29 @@ public class GameFlowManager : PersistentSingleton<GameFlowManager>, IDataPersis
 
     public void HasChoosenCharacte(bool hasChoosenCharacter)
     {
-        gameFlowSO.hasChoosenCharacter = hasChoosenCharacter;
+        gameFlowSO.gameFlowData.SetHasChoosenCharacter(hasChoosenCharacter);
     }
 
     public void SetCompletedFirstCutscene(bool completed)
     {
-        gameFlowSO.completedFirstCutscene = completed;
+        gameFlowSO.gameFlowData.SetCompletedFirstCutscene(completed);
+    }
+
+    public void SetCompletedSecondCutscene(bool completed)
+    {
+        gameFlowSO.gameFlowData.SetCompletedSecondCutscene(completed);
     }
 
     public void LoadData(GameData data)
     {
-        //if (gameFlowSO.hasChoosenCharacter) return;
+        if (!gameFlowSO.gameFlowData.HasChoosenCharacter || gameFlowSO.gameFlowData.CompletedFirstCutscene) return;
 
-        gameFlowSO.hasChoosenCharacter = data.GameFlowData.HasChoosenCharacter;
-        gameFlowSO.completedFirstCutscene = data.GameFlowData.CompletedFirstCutscene;
+        gameFlowSO.gameFlowData = data.GameFlowData;
     }
 
     public void SaveData(ref GameData data)
     {
-        data.SetGameFlowData(new GameFlowData (gameFlowSO.hasChoosenCharacter,
-                                               gameFlowSO.completedFirstCutscene,
-                                               SceneManager.GetActiveScene().name));
+        data.SetGameFlowData(gameFlowSO.gameFlowData);
 
         gameFlowSO.ResetGameFlow();
     }

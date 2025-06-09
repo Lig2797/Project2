@@ -39,8 +39,8 @@ public class UISettingsController : MonoBehaviour
 
     private void Start()
     {
-        _resolutionScreenDropdown.index = SettingsManager.Instance.defaultSettings.resolutionIndex;
-        _fullScreenToggle.value = SettingsManager.Instance.defaultSettings.isFullScreen;
+        _resolutionScreenDropdown.index = SettingsManager.Instance.defaultSettings.settingsData.ResolutionIndex;
+        _fullScreenToggle.value = SettingsManager.Instance.defaultSettings.settingsData.IsFullScreen;
     }
 
     private void OnEnable()

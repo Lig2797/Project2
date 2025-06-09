@@ -19,6 +19,8 @@ public class GameEventsManager : MonoBehaviour
     public NpcEvents npcEvents;
     public DateTimeEvents dateTimeEvents;
     public NetworkObjectEvents networkObjectEvents;
+    public InventoryEvents inventoryEvents;
+    public UIEvents uiEvents;
 
     public InputReader inputReader;
 
@@ -49,5 +51,7 @@ public class GameEventsManager : MonoBehaviour
         npcEvents = new NpcEvents();
         dateTimeEvents = new DateTimeEvents();
         networkObjectEvents = new NetworkObjectEvents();
+        inventoryEvents = new InventoryEvents();
+        uiEvents = new UIEvents();
     }
 }

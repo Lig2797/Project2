@@ -16,34 +16,38 @@ Nếu là thư của bố mẹ thì chắc chắn họ đã liên lạc trước
 
 === grandpa_letter ===
 
-Ô! Là bưu kiện từ dưới quê ông của mình gửi lên. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+~ AddItem("Letter")
+Ô! Là thư của ông nội gửi, để đọc thử nào. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+~ AddItem("Key")
+Bên trong còn có thêm 1 chiếc chìa khóa. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
 
-Hể? toàn đồ làm ruộng thế này, sao ông mình lại gửi những thứ này cho mình nhỉ? #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
-
-A! Còn một chiếc hộp nhỏ. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
-
-Hmm. Bên trong là 2 chiếc chìa khóa và một bức thư. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
 -> read_letter
 
 === read_letter ===
 
-+ [Đọc thư kỹ càng] 
-    Mình cũng rất nhớ ông. Có vẻ cơ hội để mình thay đổi bản thân đã đến rồi. Một cuộc sống ở thôn quê có vẻ sẽ hợp với mình hơn thành thị xô bồ. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
-    -> prepare_departure
++ [Đọc thư kỹ càng]
+    Bức thư có vẻ quan trọng mình cần phải đọc kỹ càng mới được. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+
+    -> DONE
     
 + [Bỏ qua thư]
     Thôi để lát nữa mình sẽ đọc vậy. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
     -> DONE
 
 === prepare_departure ===
+
+Mình cũng rất nhớ ông. Có vẻ cơ hội để mình thay đổi bản thân đã đến rồi. Một cuộc sống ở thôn quê có vẻ sẽ hợp với mình hơn thành thị xô bồ. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+
 Quyết định đã được đưa ra, mình cần chuẩn bị lên đường đến làng Eloria. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
 
 + [Chuẩn bị hành lý kỹ càng] 
+
     Mình cần thu dọn đồ đạc và sắp xếp những vật dụng cần thiết. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
     
     -> DONE
 
 + [Đi ngay lập tức, không chờ đợi]
+
     Không chần chừ thêm nữa, lên đường thôi. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
 
     -> DONE

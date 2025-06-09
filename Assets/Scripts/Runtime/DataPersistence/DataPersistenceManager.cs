@@ -61,23 +61,22 @@ public class DataPersistenceManager : PersistentSingleton<DataPersistenceManager
 
     public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        //GameEventsManager.Instance.inputReader.EnableControl();
-        //this.dataPersistenceObjects = FindAllDataPersistenceObjects();
-        //LoadGame();
+        GameEventsManager.Instance.inputReader.EnableControl();
+        this.dataPersistenceObjects = FindAllDataPersistenceObjects();
+        LoadGame();
 
-        //if (scene.name == Loader.Scene.MainMenu.ToString() ||
-        //    scene.name == Loader.Scene.CutScene.ToString() ||
-        //    scene.name == Loader.Scene.CharacterSelectScene.ToString() ||
-        //    scene.name == Loader.Scene.LobbyScene.ToString() ||
-        //    scene.name == Loader.Scene.UIScene.ToString() ||
-        //    scene.name == Loader.Scene.LoadingScene.ToString())
-        //    return;
-        //    // start up the auto saving coroutine
-        //if (autoSaveCoroutine != null)
-        //{
-        //    StopCoroutine(autoSaveCoroutine);
-        //}
-        //autoSaveCoroutine = StartCoroutine(AutoSave());
+        if (scene.name == Loader.Scene.MainMenu.ToString() ||
+            scene.name == Loader.Scene.CutScene.ToString() ||
+            scene.name == Loader.Scene.CharacterSelectScene.ToString() ||
+            scene.name == Loader.Scene.LobbyScene.ToString() ||
+            scene.name == Loader.Scene.UIScene.ToString() )
+            return;
+        // start up the auto saving coroutine
+        if (autoSaveCoroutine != null)
+        {
+            StopCoroutine(autoSaveCoroutine);
+        }
+        autoSaveCoroutine = StartCoroutine(AutoSave());
     }
 
     public void StartLoadGameAndAutoSave()

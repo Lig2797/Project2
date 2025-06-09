@@ -78,4 +78,13 @@ public class InventoryManagerSO : ScriptableObject
         onPutItemDownByRightClick?.Invoke(item, slot);
         inventory.AddItemToInventory(item, slotIndex);
     }
+
+    public void Reset()
+    {
+        inventory = new Inventory();
+        _selectedSlot = 0;
+        currentDraggingItem = null;
+        _isOpeningInventory = false;
+        _isPointerOverUI = false;
+    }
 }

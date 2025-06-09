@@ -92,7 +92,6 @@ public class UI_InventoryItem : MonoBehaviour, IPointerDownHandler
             Debug.Log("Setting crop level image for item: " + _inventoryItem.Item.name + " at level: " + _inventoryItem.Level);
             _inventoryItem.Item.image = _inventoryItem.Item.cropLevelImage[_inventoryItem.Level];
         }
-        Debug.Log("cai nay moi dung)");
         image.sprite = _inventoryItem.Item.image;
     }
     public void RefreshCount() 

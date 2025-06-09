@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 #if UNITY_EDITOR
 using static UnityEditor.Progress;
@@ -39,7 +40,14 @@ public class InventoryItem : IItemHolder
     { get { return _level; } }
     public InventoryItem(string id, Item item, int index)
     {
-        this._id = id;
+        if (id == null)
+        {
+            this._id = Guid.NewGuid().ToString();
+        }
+        else
+        {
+            this._id = id;
+        }
         this._item = item;
         this._itemName = item.itemName;
         this._quantity ++;

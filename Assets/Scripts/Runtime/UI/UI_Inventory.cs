@@ -22,22 +22,30 @@ public class UI_Inventory : MonoBehaviour
         Debug.Log("UI_Inventory Awake called");
     }
 
+    private void Start()
+    {
+       UpdateSlotUI(this, null);
+    }
+
     private void OnEnable()
     {
         _inventoryManagerSO.onFindEmptySlot += FindEmptySlot;
         _inventoryManagerSO.onPutItemDownByRightClick += SpawnItem;
+        GameEventsManager.Instance.inventoryEvents.onAddItemToUI += AddItem;
     }
 
     private void OnDisable()
     {
         _inventoryManagerSO.onFindEmptySlot -= FindEmptySlot;
         _inventoryManagerSO.onPutItemDownByRightClick -= SpawnItem;
+        GameEventsManager.Instance.inventoryEvents.onAddItemToUI -= AddItem;
     }
+
     public void UpdateSlotUI(Component sender, object data)
     {
         Debug.Log("UpdateSlotUI called by: " + sender.ToString());
         var inventory = _inventoryManagerSO.inventory;
-        //ClearSlotUI();
+        ClearSlotUI();
 
         inventorySlotsUI.Clear();
         int totalSlots = inventory.MaxSlotInventory;
@@ -74,6 +82,12 @@ public class UI_Inventory : MonoBehaviour
         SpawnItem(inventoryItem, slotUI.gameObject);
 
         return true;
+    }
+
+    public void AddItem(InventoryItem inventoryItem, int index)
+    {
+        UI_InventorySlot slotUI = inventorySlotsUI[index];
+        SpawnItem(inventoryItem, slotUI.gameObject);
     }
 
     public void SpawnItem(InventoryItem item, GameObject slot)
