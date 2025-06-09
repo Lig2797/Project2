@@ -289,14 +289,11 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
             DontDestroyOnLoad(gameObject);
 
             DataPersistenceManager.Instance.LoadGame();
+            animator.runtimeAnimatorController = GameMultiplayerManager.Instance.GetCharactersAnimator(playerDataSO.characterId);
+            playerNameText.text = playerDataSO.playerName.ToString();
 
             StartCoroutine(WaitForLoadedData());
         }
-        else
-        {
-            playerNameText.text = otherPlayerName;
-            animator.runtimeAnimatorController = GameMultiplayerManager.Instance.GetCharactersAnimator(otherCharacterId);
-        }    
     }
 
     private IEnumerator WaitForLoadedData()
