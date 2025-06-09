@@ -6,6 +6,11 @@ EXTERNAL PlayEmote(emoteName)
 EXTERNAL AddItem(itemName)
 EXTERNAL LoadScene(sceneName)
 EXTERNAL ShowHelpUI(indexHelp)
+EXTERNAL CompletedFirstCutscene()
+EXTERNAL CompletedSecondCutscene()
+EXTERNAL CompletedThirdCutscene()
+EXTERNAL CompletedAllCutscene()
+
 
 // quest ids (questId + "Id" for variable name)
 VAR CollectCoinsQuestId = "CollectCoinsQuest"

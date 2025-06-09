@@ -29,8 +29,11 @@ public class BedScript : MonoBehaviour
         }
     }
 
+    private bool playerInrange = false;
+
     public void SetSleep(bool toUse)
     {
+        if (!GameFlowManager.Instance.gameFlowSO.gameFlowData.CompletedThirdCutscene) return;
         IsBeingUsed = toUse;
         if (toUse)
         {

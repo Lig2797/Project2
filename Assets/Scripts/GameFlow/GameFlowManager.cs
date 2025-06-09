@@ -23,9 +23,12 @@ public class GameFlowManager : PersistentSingleton<GameFlowManager>, IDataPersis
 
     public void LoadData(GameData data)
     {
-        if (!gameFlowSO.gameFlowData.HasChoosenCharacter || gameFlowSO.gameFlowData.CompletedFirstCutscene) return;
+        if (SceneManager.GetActiveScene().name == Loader.Scene.MainMenu.ToString()) return;
+
+        if (gameFlowSO.hasLoaded) return;
 
         gameFlowSO.gameFlowData = data.GameFlowData;
+        gameFlowSO.hasLoaded = true;
     }
 
     public void SaveData(ref GameData data)

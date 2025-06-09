@@ -44,4 +44,9 @@ public class DialogueTrigger : MonoBehaviour
     {
         dialogueKnotName = knotName;
     }    
+
+    public void EnterDialogue()
+    {
+        GameEventsManager.Instance.dialogueEvents.EnterDialogue(dialogueKnotName);
+    }    
 }

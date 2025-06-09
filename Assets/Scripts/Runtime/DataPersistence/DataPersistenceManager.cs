@@ -64,32 +64,6 @@ public class DataPersistenceManager : PersistentSingleton<DataPersistenceManager
         GameEventsManager.Instance.inputReader.EnableControl();
         this.dataPersistenceObjects = FindAllDataPersistenceObjects();
         LoadGame();
-
-        if (scene.name == Loader.Scene.MainMenu.ToString() ||
-            scene.name == Loader.Scene.CutScene.ToString() ||
-            scene.name == Loader.Scene.CharacterSelectScene.ToString() ||
-            scene.name == Loader.Scene.LobbyScene.ToString() ||
-            scene.name == Loader.Scene.UIScene.ToString() )
-            return;
-        // start up the auto saving coroutine
-        //if (autoSaveCoroutine != null)
-        //{
-        //    StopCoroutine(autoSaveCoroutine);
-        //}
-        //autoSaveCoroutine = StartCoroutine(AutoSave());
-    }
-
-    public void StartLoadGameAndAutoSave()
-    {
-        GameEventsManager.Instance.inputReader.EnableControl();
-        this.dataPersistenceObjects = FindAllDataPersistenceObjects();
-        LoadGame();
-
-        if (autoSaveCoroutine != null)
-        {
-            StopCoroutine(autoSaveCoroutine);
-        }
-        autoSaveCoroutine = StartCoroutine(AutoSave());
     }
 
     public void ChangeSelectedProfileId(string newProfileId)
@@ -215,7 +189,7 @@ public class DataPersistenceManager : PersistentSingleton<DataPersistenceManager
     private void OnApplicationQuit()
     {
         SettingsManager.Instance.SaveData();
-        //SaveGame();
+        SaveGame();
     }
 
     private List<IDataPersistence> FindAllDataPersistenceObjects()
@@ -261,15 +235,5 @@ public class DataPersistenceManager : PersistentSingleton<DataPersistenceManager
     public Texture2D LoadScreenshot(string profileId)
     {
         return dataHandler.GetScreenshot(profileId);
-    }
-
-    private IEnumerator AutoSave()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(autoSaveTimeSeconds);
-            SaveGame();
-            Debug.Log("Auto Saved Game");
-        }
     }
 }

@@ -8,6 +8,7 @@ public class GameFlowData
     [SerializeField] private bool _completedSecondCutscene;
     [SerializeField] private bool _hasOpenedPlayerHouse;
     [SerializeField] private bool _completedThirdCutscene;
+    [SerializeField] private bool _completedAllCutscene;
 
     public bool HasChoosenCharacter
     { get { return _hasChoosenCharacter; } }
@@ -24,20 +25,25 @@ public class GameFlowData
     public bool CompletedThirdCutscene
     { get { return _completedThirdCutscene; } }
 
+    public bool CompletedAllCutscene
+    { get { return _completedAllCutscene; } }
+
     public GameFlowData()
     {
         _hasChoosenCharacter = false;
         _completedFirstCutscene = false;
         _completedSecondCutscene = false;
         _completedThirdCutscene = false;
+        _completedAllCutscene = false;
     }
 
-    public GameFlowData(bool hasChoosenCharacter, bool completedFirstCutscene, bool completeSecondCutscene, bool completedThirdCutscene)
+    public GameFlowData(bool hasChoosenCharacter, bool completedFirstCutscene, bool completeSecondCutscene, bool completedThirdCutscene, bool completedAllCutscene)
     {
         _hasChoosenCharacter = hasChoosenCharacter;
         _completedFirstCutscene = completedFirstCutscene;
         _completedSecondCutscene = completeSecondCutscene;
         _completedThirdCutscene = completedThirdCutscene;
+        _completedAllCutscene = completedAllCutscene;
 
     }
 
@@ -64,5 +70,10 @@ public class GameFlowData
     public void SetCompletedThirdCutscene(bool completedThirdCutscene)
     {
         _completedThirdCutscene = completedThirdCutscene;
+    }
+
+    public void SetCompletedAllCutscene(bool completedAllCutscene)
+    {
+        _completedAllCutscene = completedAllCutscene;
     }
 }

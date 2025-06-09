@@ -166,5 +166,7 @@ public class InventoryController : NetworkBehaviour, IDataPersistence
     public void SaveData(ref GameData gameData)
     {
         gameData.SetInventoryData(_inventoryManagerSO.inventory);
+
+        _inventoryManagerSO.ResetInventorySO();
     }
 }
