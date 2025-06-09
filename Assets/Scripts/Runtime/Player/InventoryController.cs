@@ -143,7 +143,7 @@ public class InventoryController : NetworkBehaviour, IDataPersistence
         {
             if (_inventoryManagerSO.hasLoad) return;
 
-            _inventoryManagerSO.Reset();
+            _inventoryManagerSO.ResetInventorySO();
 
             _inventoryManagerSO.inventory = data.InventoryData;
             Debug.Log("Load Inventory Data: " + _inventoryManagerSO.inventory.InventoryItemList.Count);

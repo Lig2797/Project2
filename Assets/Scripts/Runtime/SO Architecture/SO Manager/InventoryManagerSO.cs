@@ -80,7 +80,7 @@ public class InventoryManagerSO : ScriptableObject
         inventory.AddItemToInventory(item, slotIndex);
     }
 
-    public void Reset()
+    public void ResetInventorySO()
     { 
         inventory = new Inventory();
         hasLoad = false;
