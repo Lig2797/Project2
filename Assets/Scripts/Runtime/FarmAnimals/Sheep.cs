@@ -12,7 +12,7 @@ public class Sheep : FarmAnimal
     {
         _currentGrowthStage = 0;
         base.Initial();
-        ApplyStage(_currentGrowthStage.ToString());
+        base.ApplyStage(_currentGrowthStage.ToString());
     }
 
     protected override void MakeProduct()
@@ -60,7 +60,7 @@ public class Sheep : FarmAnimal
         int max = System.Enum.GetValues(typeof(SheepGrowthStage)).Length - 1;
         _currentGrowthStage = (SheepGrowthStage)Mathf.Min(next, max);
 
-        ApplyStage(_currentGrowthStage.ToString());
+        base.ApplyStage(_currentGrowthStage.ToString()); 
         isFed = false;
     }
 
@@ -70,6 +70,6 @@ public class Sheep : FarmAnimal
         int min = 0;
         _currentGrowthStage = (SheepGrowthStage)Mathf.Max(prev, min);
 
-        ApplyStage(_currentGrowthStage.ToString());
+        base.ApplyStage(_currentGrowthStage.ToString());
     }
 }

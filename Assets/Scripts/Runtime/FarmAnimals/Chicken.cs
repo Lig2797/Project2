@@ -11,7 +11,7 @@ public class Chicken : FarmAnimal
     {
         _currentGrowthStage = 0;
         base.Initial();
-        ApplyStage(_currentGrowthStage.ToString());
+        base.ApplyStage(_currentGrowthStage.ToString());
         CanMove.Value = false;
     }
     public override void FedTimeHandler(int minute)
@@ -67,14 +67,10 @@ public class Chicken : FarmAnimal
         if((int)_currentGrowthStage == 1)
             CanMove.Value = true;
 
-        ApplyStage(_currentGrowthStage.ToString());
+        base.ApplyStage(_currentGrowthStage.ToString());
         isFed = false;
     }
 
-    protected override void ApplyStage(string stage)
-    {
-        base.ApplyStage(stage);
-    }
 
     protected override void MakeProduct()
     {

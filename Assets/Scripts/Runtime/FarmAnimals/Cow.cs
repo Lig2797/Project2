@@ -11,7 +11,7 @@ public class Cow : FarmAnimal
     {
         _currentGrowthStage = 0;
         base.Initial();
-        ApplyStage(_currentGrowthStage.ToString());
+        base.ApplyStage(_currentGrowthStage.ToString());
     }
     public override void FedTimeHandler(int minute)
     {
@@ -44,7 +44,7 @@ public class Cow : FarmAnimal
         int max = System.Enum.GetValues(typeof(CowGrowthStage)).Length - 1;
         _currentGrowthStage = (CowGrowthStage)Mathf.Min(next, max);
 
-        ApplyStage(_currentGrowthStage.ToString());
+        base.ApplyStage(_currentGrowthStage.ToString());
         isFed = false;
     }
 

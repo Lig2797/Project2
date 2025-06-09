@@ -173,7 +173,6 @@ MonoBehaviour:
   isMoving: 0
   CanMove:
     m_InternalValue: 1
-  _isFacingRight: 0
   cowPrefab: {fileID: 6601258122538453835}
 --- !u!212 &7207136287203567867
 SpriteRenderer:

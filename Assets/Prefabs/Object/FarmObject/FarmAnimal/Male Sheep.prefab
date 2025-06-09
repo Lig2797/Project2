@@ -164,7 +164,6 @@ MonoBehaviour:
   isMoving: 0
   CanMove:
     m_InternalValue: 1
-  _isFacingRight: 0
   sheepPrefab: {fileID: 0}
   _canMakeProduct: 0
 --- !u!50 &2320925675581533198
