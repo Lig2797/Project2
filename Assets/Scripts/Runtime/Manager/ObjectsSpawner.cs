@@ -38,11 +38,6 @@ public class ObjectsSpawner : MonoBehaviour
         GameEventsManager.Instance.objectEvents.onSpawnObject -= CheckSpawn;
     }
 
-    private void Start()
-    {
-        CheckSpawn();
-    }
-
     private bool HasCompleted(ECondition eCondition)
     {
         switch (eCondition)

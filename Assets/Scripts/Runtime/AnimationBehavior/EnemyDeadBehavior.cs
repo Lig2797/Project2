@@ -7,7 +7,7 @@ public class EnemyDeadBehavior : StateMachineBehaviour
     {
         EnemyAI enemyAI = animator.GetComponent<EnemyAI>();
         enemyAI.StartCoroutine(enemyAI.DestroyAfter(stateInfo.length));
-        enemyAI.CanMove.Value = false;
+        enemyAI.CanMove = false;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

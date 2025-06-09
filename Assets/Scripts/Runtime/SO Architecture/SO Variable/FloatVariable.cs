@@ -1,10 +1,9 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
+[CreateAssetMenu(fileName = "FloatVariable", menuName = "ScriptableObject/SOVariables/FloatVariable")]
 public class FloatVariable : ScriptableObject
 {
     public float Value;
-    public event Action OnValueChanged;
 }

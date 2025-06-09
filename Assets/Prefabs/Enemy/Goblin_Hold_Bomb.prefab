@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1475318550465854935, guid: 5bacb55fe68bac64abbf970ff2a95448, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 909963909
+      value: 3073895673
       objectReference: {fileID: 0}
     - target: {fileID: 1475318550465854935, guid: 5bacb55fe68bac64abbf970ff2a95448, type: 3}
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
@@ -72,6 +72,10 @@ PrefabInstance:
       propertyPath: projectilePrefab
       value: 
       objectReference: {fileID: 6390245870295291354, guid: 66df8c95b1f064341b46cfe17074c419, type: 3}
+    - target: {fileID: 8016201154110748339, guid: 5bacb55fe68bac64abbf970ff2a95448, type: 3}
+      propertyPath: _projectileDamage
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BedScript : MonoBehaviour
 {
-    [SerializeField]
-    private PlayerController playerController;
+    public PlayerController playerController;
 
     [SerializeField]
     private bool _isVertical = false;
@@ -34,26 +34,31 @@ public class BedScript : MonoBehaviour
     public void SetSleep(bool toUse)
     {
         if (!GameFlowManager.Instance.gameFlowSO.gameFlowData.CompletedThirdCutscene) return;
+        Debug.Log("is use bed: " + toUse);
         IsBeingUsed = toUse;
         if (toUse)
         {
-            playerController.transform.SetParent(transform);
+            GameObject.FindWithTag("PlayerCollision").GetComponent<Collider2D>().isTrigger = true;
+            //SceneManager.MoveGameObjectToScene(playerController.gameObject, SceneManager.GetActiveScene());
+            //playerController.transform.SetParent(transform);
             if (!IsVertical)
             {
-                playerController.transform.position = transform.position + new Vector3(0.5f, 0.5f, 0);
+                playerController.transform.position = transform.position + new Vector3(0.4f, 0.5f, 0);
                 playerController.transform.rotation = Quaternion.Euler(0, 0, 90);
                 playerController.GetComponent<SpriteRenderer>().sortingOrder = 1;
             }
             else
             {
-                playerController.transform.position = transform.position;
+                playerController.transform.position = transform.position + new Vector3(0, 0.2f, 0);
             }
             playerController.Movement = Vector2.zero;
             playerController.GetComponent<Collider2D>().isTrigger = true;
         }
         else
         {
-            playerController.transform.SetParent(null);
+            GameObject.FindWithTag("PlayerCollision").GetComponent<Collider2D>().isTrigger = false;
+            //playerController.transform.SetParent(null);
+            //DontDestroyOnLoad(playerController.gameObject);
             playerController.transform.rotation = Quaternion.Euler(0, 0, 0);
             playerController.GetComponent<SpriteRenderer>().sortingOrder = 0;
             playerController.GetComponent<Collider2D>().isTrigger = false;
@@ -61,22 +66,5 @@ public class BedScript : MonoBehaviour
         
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        
-        if (collision.collider.CompareTag("Player"))
-        {
-            if (IsBeingUsed) return;
-            playerController = collision.collider.GetComponent<PlayerController>();
-            playerController.SetCurrentBed(this);
-        }
-    }
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.collider.CompareTag("Player"))
-        {
-            playerController.ClearBed();
-            playerController = null;
-        }
-    }
+    
 }

@@ -5,10 +5,19 @@ using UnityEngine;
 public class Sheep : FarmAnimal
 {
     [SerializeField] private GameObject sheepPrefab;
+    private SheepGrowthStage _currentGrowthStage;
+    [SerializeField] private bool _canMakeProduct = false;
+
+    protected override void Initial()
+    {
+        _currentGrowthStage = 0;
+        base.Initial();
+        base.ApplyStage(_currentGrowthStage.ToString());
+    }
+
     protected override void MakeProduct()
     {
         _canMakeProduct = true;
-        ApplyStage();
 
     }
     [ContextMenu("shave hair")]
@@ -18,7 +27,7 @@ public class Sheep : FarmAnimal
         {
             _canMakeProduct = false;
             Debug.Log("Got hair");
-            ApplyStage();
+            DecreaseGrowStage();
         }
     }
     protected override void InteractWithAnimal()
@@ -26,17 +35,41 @@ public class Sheep : FarmAnimal
 
     }
 
-    protected override void ApplyStage()
+    protected override void ApplyStage(string stage)
     {
-        if(_currentStage == "Mature")
+        base.ApplyStage(stage);
+    }
+
+    public override void FedTimeHandler(int minute)
+    {
+        if (!isFed || _currentGrowthStage == SheepGrowthStage.Haired) return;
+        fedTimeCounter += minute;
+        if(_currentGrowthStage != SheepGrowthStage.Haired)
         {
-            if(_canMakeProduct)
-                _animator.SetTrigger("Haired");
-            else
-                _animator.SetTrigger("Shaved");
-
+            if (fedTimeCounter > _animalInfo.FedTimesNeededToGrow)
+            {
+                fedTimeCounter = 0;
+                IncreaseGrowStage();
+            }
         }
+    }
 
+    public override void IncreaseGrowStage()
+    {
+        int next = (int)_currentGrowthStage + 1;
+        int max = System.Enum.GetValues(typeof(SheepGrowthStage)).Length - 1;
+        _currentGrowthStage = (SheepGrowthStage)Mathf.Min(next, max);
 
+        base.ApplyStage(_currentGrowthStage.ToString()); 
+        isFed = false;
+    }
+
+    private void DecreaseGrowStage()
+    {
+        int prev = (int)_currentGrowthStage - 1;
+        int min = 0;
+        _currentGrowthStage = (SheepGrowthStage)Mathf.Max(prev, min);
+
+        base.ApplyStage(_currentGrowthStage.ToString());
     }
 }

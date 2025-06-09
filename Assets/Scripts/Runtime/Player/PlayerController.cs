@@ -11,6 +11,7 @@ using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.TextCore.Text;
 
 public class PlayerController : NetworkBehaviour, IDataPersistence
@@ -28,6 +29,7 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
     [SerializeField] private Animator animator;
     [SerializeField] private Collider2D col;
     [SerializeField] private TextMeshPro playerNameText;
+    [SerializeField] private Damageable _damageable;
     #endregion
 
     #region Reference
@@ -42,6 +44,9 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
 
     #region PlayerStatus
     [Header("Player Status")]
+    [SerializeField] private FloatVariable _playerMana;
+    [SerializeField] private FloatVariable _playerStamina;
+    [SerializeField] private float _staminaDrainRate;
     [SerializeField] private float _acceleration;
     [SerializeField] private float walkSpeed;
     [SerializeField] private float runSpeed;
@@ -61,7 +66,13 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
     public string[] noTargetStates;
     public string[] toolsAndWeapon;
 
-
+    //[SerializeField]
+    //private bool _isHurting = false;
+    //public bool IsHurting 
+    //{
+    //    get { return _isHurting; }
+    //    set { _isHurting = value; }
+    //}
 
     [SerializeField]
     private bool _canMove = true;
@@ -122,14 +133,14 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
         private set { _canRun = value; }
     }
 
-    private bool _isRuning = false;
+    private bool _isRunning = false;
     public bool IsRunning
     {
-        get { return _isRuning; }
+        get { return _isRunning; }
         private set
         {
-            _isRuning = value;
-            animator.SetBool("IsRunning", _isRuning);
+            _isRunning = value;
+            animator.SetBool("IsRunning", _isRunning);
         }
     }
 
@@ -182,6 +193,7 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
         private set { _canAttack = value; }
     }
 
+    [SerializeField]
     private bool _canSleep = false;
     public bool CanSleep
     {
@@ -196,6 +208,7 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
         private set { _isSleeping = value; }
     }
 
+    [SerializeField]
     private bool _hadTarget;
     public bool HadTarget
     {
@@ -209,6 +222,7 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
     public InputReader _inputReader;
     //private PlayerData player;
 
+    [SerializeField]
     private VehicleController _currentVehicle;
     public VehicleController CurrentVehicle
     {
@@ -271,6 +285,7 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
         _inventoryController = GetComponent<InventoryController>();
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        _damageable = GetComponent<Damageable>();
     }
 
     public override void OnNetworkSpawn()
@@ -289,14 +304,11 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
             DontDestroyOnLoad(gameObject);
 
             DataPersistenceManager.Instance.LoadGame();
+            animator.runtimeAnimatorController = GameMultiplayerManager.Instance.GetCharactersAnimator(playerDataSO.characterId);
+            playerNameText.text = playerDataSO.playerName.ToString();
 
             StartCoroutine(WaitForLoadedData());
         }
-        else
-        {
-            playerNameText.text = otherPlayerName;
-            animator.runtimeAnimatorController = GameMultiplayerManager.Instance.GetCharactersAnimator(otherCharacterId);
-        }    
     }
 
     private IEnumerator WaitForLoadedData()
@@ -360,10 +372,11 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
     #endregion
 
     #region Game Loop
-    //void Update()
-    //{
-    //    CheckAnimation();
-    //}
+    void Update()
+    {
+        UpdatePlayerStatus();
+    }
+
 
     private void FixedUpdate()
     {
@@ -412,51 +425,52 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
         CurrentVehicle = null;
     }
 
-    [ServerRpc]
-    private void RequestToRideVehicleServerRpc(NetworkObjectReference playerRef, NetworkObjectReference vehicleRef, ServerRpcParams rpcParams = default)
-    {
-        if (playerRef.TryGet(out NetworkObject playerObj) && vehicleRef.TryGet(out NetworkObject vehicleObj))
-        {
-            var player = playerObj.GetComponent<PlayerController>();
-            var vehicle = vehicleObj.GetComponent<VehicleController>();
+    //[ServerRpc(RequireOwnership = false)]
+    //private void RequestToRideVehicleServerRpc(NetworkObjectReference playerRef, NetworkObjectReference vehicleRef, ServerRpcParams rpcParams = default)
+    //{
+    //    if (playerRef.TryGet(out NetworkObject playerObj) && vehicleRef.TryGet(out NetworkObject vehicleObj))
+    //    {
+    //        var player = playerObj.GetComponent<PlayerController>();
+    //        var vehicle = vehicleObj.GetComponent<VehicleController>();
 
-            vehicle.SetRiding(true, playerRef);
-            vehicle.transform.SetParent(playerObj.transform);
+    //        vehicle.SetRiding(true, playerRef);
+    //        vehicle.transform.SetParent(playerObj.transform,true);
 
-            FixVehicleLocalScaleClientRpc(vehicleRef, playerRef);
-        }
-    }
+    //        FixVehicleLocalScaleClientRpc(vehicleRef, playerRef);
+    //    }
+    //}
 
 
-    [ClientRpc]
-    private void FixVehicleLocalScaleClientRpc(NetworkObjectReference vehicleRef, NetworkObjectReference playerRef)
-    {
-        if (vehicleRef.TryGet(out NetworkObject vehicleObj) && playerRef.TryGet(out NetworkObject playerObj))
-        {
-            var player = playerObj.GetComponent<PlayerController>();
-            var vehicle = vehicleObj.GetComponent<VehicleController>();
-            if (vehicle.transform.localScale.x < 0) vehicle.transform.localScale = new Vector3(1, 1, 1);
-            player.IsFacingRight = vehicle.IsFacingRight.Value;
-        }
+    //[ClientRpc]
+    //private void FixVehicleLocalScaleClientRpc(NetworkObjectReference vehicleRef, NetworkObjectReference playerRef)
+    //{
+    //    if (vehicleRef.TryGet(out NetworkObject vehicleObj) && playerRef.TryGet(out NetworkObject playerObj))
+    //    {
+    //        var player = playerObj.GetComponent<PlayerController>();
+    //        var vehicle = vehicleObj.GetComponent<VehicleController>();
+    //        if (vehicle.transform.localScale.x < 0) vehicle.transform.localScale = new Vector3(1, 1, 1);
+    //        player.IsFacingRight = vehicle.IsFacingRight.Value;
+    //    }
 
-    }
+    //}
 
-    [ServerRpc]
-    private void RequestToUnRideVehicleServerRpc(NetworkObjectReference vehicleRef)
-    {
-        if (vehicleRef.TryGet(out NetworkObject vehicleObj))
-        {
-            vehicleObj.transform.SetParent(null, true);
-        }
-        RequestToUnRideVehicleClientRpc(vehicleRef);
-    }
+    //[ServerRpc]
+    //private void RequestToUnRideVehicleServerRpc(NetworkObjectReference vehicleRef)
+    //{
+    //    if (vehicleRef.TryGet(out NetworkObject vehicleObj))
+    //    {
+    //        SceneManager.MoveGameObjectToScene(vehicleObj.gameObject, SceneManager.GetActiveScene());
+    //        //vehicleObj.transform.SetParent(null, true);
+    //    }
+    //    RequestToUnRideVehicleClientRpc(vehicleRef);
+    //}
 
-    [ClientRpc]
-    private void RequestToUnRideVehicleClientRpc(NetworkObjectReference vehicleRef)
-    {
-        if (vehicleRef.TryGet(out NetworkObject vehicleObj))
-            vehicleObj.GetComponent<VehicleController>().SetRiding(false, GetComponent<NetworkObject>());
-    }
+    //[ClientRpc]
+    //private void RequestToUnRideVehicleClientRpc(NetworkObjectReference vehicleRef)
+    //{
+    //    if (vehicleRef.TryGet(out NetworkObject vehicleObj))
+    //        vehicleObj.GetComponent<VehicleController>().SetRiding(false, GetComponent<NetworkObject>());
+    //}
     #endregion
 
     #region Movement
@@ -474,6 +488,7 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
         }
         if (_movement != Vector2.zero)
         {
+
             rb.AddForce(_movement * _acceleration, ForceMode2D.Force);
             if (!IsRidingVehicle)
             {
@@ -502,12 +517,12 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
         }
         else // do deceleration
         {
+
             if (rb.linearVelocity.magnitude > 0.1f)
                 rb.AddForce(rb.linearVelocity * -_acceleration, ForceMode2D.Force);
             else
                 rb.linearVelocity = Vector2.zero;
         }
-        //rb.MovePosition(rb.position + _movement * CurrentSpeed * Time.fixedDeltaTime);
     }
     public void OnMove(Vector2 inputMovement)
     {
@@ -525,23 +540,26 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
 
         if (IsRidingVehicle)
         {
-            SetCurrentVehicleMovementServerRpc(CurrentVehicle.GetComponent<NetworkObject>(), _movement, IsFacingRight);
+            CurrentVehicle.SetMovement(_movement);
+            if (_movement == Vector2.zero) return;
+            CurrentVehicle.IsFacingRight = IsFacingRight;
+            //SetCurrentVehicleMovementServerRpc(CurrentVehicle.GetComponent<NetworkObject>(), _movement, IsFacingRight);
         }
 
     }
 
 
-    [ServerRpc]
-    private void SetCurrentVehicleMovementServerRpc(NetworkObjectReference vehicleRef, Vector2 movement, bool IsFacingRight)
-    {
-        if (vehicleRef.TryGet(out NetworkObject vehicleObj))
-        {
-            var vehicle = vehicleObj.GetComponent<VehicleController>();
-            vehicle.SetMovement(movement);
-            if (movement != Vector2.zero)
-                vehicle.IsFacingRight.Value = IsFacingRight;
-        }
-    }
+    //[ServerRpc]
+    //private void SetCurrentVehicleMovementServerRpc(NetworkObjectReference vehicleRef, Vector2 movement, bool IsFacingRight)
+    //{
+    //    if (vehicleRef.TryGet(out NetworkObject vehicleObj))
+    //    {
+    //        var vehicle = vehicleObj.GetComponent<VehicleController>();
+    //        vehicle.SetMovement(movement);
+    //        if (movement != Vector2.zero)
+    //            vehicle.IsFacingRight.Value = IsFacingRight;
+    //    }
+    //}
     #endregion
 
     #region Actions Block
@@ -617,6 +635,42 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
     #endregion
 
     #region Actions
+    public void PlayerOnHit(Vector2 knockBackDirection)
+    {
+        if (!_damageable.IsAlive) animator.SetTrigger(AnimationStrings.dead);
+        else
+        {
+            animator.SetTrigger(AnimationStrings.hurt);
+
+
+            StartCoroutine(ApplyKnockback(knockBackDirection));
+        }
+    }
+
+    private IEnumerator ApplyKnockback(Vector2 knockBackDirection)
+    {
+        yield return new WaitUntil(() => CanMove == false);
+        knockBackDirection *= 15;
+        rb.AddForce(knockBackDirection, ForceMode2D.Impulse);
+        Debug.Log("knockBack apply: " + knockBackDirection);
+    }
+    private void UpdatePlayerStatus()
+    {
+
+        if (_playerStamina.Value <= 0)
+            IsRunning = false;
+
+        if (IsRunning && _movement != Vector2.zero)
+            _playerStamina.Value -= _staminaDrainRate * Time.deltaTime;
+        else
+            _playerStamina.Value += _staminaDrainRate * Time.deltaTime;
+
+        if(_playerStamina.Value < 0) 
+            _playerStamina.Value = 0;
+        if (_playerStamina.Value > 100)
+            _playerStamina.Value = 100;
+
+    }
     private void OnAttack()
     {
         if (!IsRidingVehicle && IsHoldingItem && CanAttack && Input.GetMouseButton(0) && !_inventoryManagerSO.IsPointerOverUI)
@@ -681,18 +735,23 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
             if (IsRidingVehicle)
             {
                 ChangeAnimationState("Idle");
-                LastMovement = CurrentVehicle.VehicleLastMovement.Value;
                 StartAllAction();
-                RequestToRideVehicleServerRpc(
-                    GetComponent<NetworkObject>(),
-                    CurrentVehicle.GetComponent<NetworkObject>()
-                );
+                CurrentVehicle.SetRiding(true, this);
+                //CurrentVehicle.transform.SetParent(transform, true);
+                //if (CurrentVehicle.transform.localScale.x < 0) CurrentVehicle.transform.localScale = new Vector3(1, 1, 1);
+                //RequestToRideVehicleServerRpc(
+                //    GetComponent<NetworkObject>(),
+                //    CurrentVehicle.GetComponent<NetworkObject>()
+                //);
             }
             else
             {
-                RequestToUnRideVehicleServerRpc(
-                    CurrentVehicle.GetComponent<NetworkObject>()
-                );
+
+                //SceneManager.MoveGameObjectToScene(CurrentVehicle.gameObject, SceneManager.GetActiveScene());
+                CurrentVehicle.SetRiding(false,this);
+                //RequestToUnRideVehicleServerRpc(
+                //    CurrentVehicle.GetComponent<NetworkObject>()
+                //);
             }
         }
 
@@ -701,7 +760,7 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
             if (IsSleeping)
             {
                 StartAllAction();
-                IsSleeping = !IsSleeping;
+                IsSleeping = false;
                 CurrentBed.SetSleep(IsSleeping);
                 animator.SetBool(AnimationStrings.isSleep, false);
             }
@@ -710,7 +769,7 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
                 StopAllAction();
                 animator.SetBool(AnimationStrings.isSleep, true);
 
-                IsSleeping = !IsSleeping;
+                IsSleeping = true;
                 CurrentBed.SetSleep(IsSleeping);
             }
         }

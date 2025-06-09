@@ -1,253 +1,225 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Analytics;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(CapsuleCollider2D))]
 [RequireComponent(typeof(Animator))]
 public abstract class FarmAnimal : MonoBehaviour
 {
-    [SerializeField] private Gender _gender;
-    [SerializeField] protected string id;
-    [ContextMenu("Generate guid for id")]
-    private void GenerateGuid()
-    {
-        id = System.Guid.NewGuid().ToString();
-    }
-
+    #region Components
     [SerializeField] protected Rigidbody2D _body;
     [SerializeField] protected Animator _animator;
     [SerializeField] protected FarmAnimalSO _animalInfo;
+    #endregion
 
-    [SerializeField]
-    private bool _isFacingRight = true;
-    public bool IsFacingRight
-    {
-        get { return _isFacingRight; }
-        set
-        {
-            if (_isFacingRight != value)
-            {
-                transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
-            }
+    #region Variables
 
-            _isFacingRight = value;
-        }
-    }
+    [SerializeField] protected string id;
+    [ContextMenu("Generate guid for id")]
+    protected void GenerateGuid() => id = System.Guid.NewGuid().ToString();
 
-    [SerializeField] protected int _currentEatCount;
-    [SerializeField] protected int _eatTimesNeededToGrow;
-    [SerializeField] protected int _eatTimesNeededToMakeProduct;
-    [SerializeField] protected bool _canMakeProduct;
-    [SerializeField] protected string[] _growStages;
-    [SerializeField] protected int _stageIndex;
-    [SerializeField] protected string _currentStage;
-    public string CurrentStage
-    {
-        get { return _currentStage; }
-        private set { _currentStage = value; }
-    }
-    public bool IsMature => _stageIndex == _growStages.Length-1;
+    [SerializeField] protected Gender gender;
+    [SerializeField] protected bool canMakeProduct;
 
-    protected float maxRadius = 5f; // Maximum movement radius
-    protected float speed = 2f; // Movement speed
+    protected int fedTimeCounter = 0;
+    protected bool isFed = false;
 
-
+    protected float maxRadius = 5f;
+    protected float speed = 2f;
     protected Vector2 targetPosition;
 
     [SerializeField] protected bool isMoving = false;
-    [SerializeField] protected bool canMove = true;
 
+    [SerializeField] protected bool _canMove = true;
+    public bool CanMove
+    {
+        get => _canMove;
+        set
+        {
+            _canMove = value;
+            if (!_canMove)
+                _body.linearVelocity = Vector2.zero;
+        }
+    }
+
+    [Header("Obstacle Detection")]
+    [SerializeField] protected LayerMask collisionMask;
+    [SerializeField] private float rayDistance = 1.5f;
+    [SerializeField] private float rayAngleSpread = 30f; // total cone angle
+
+    #endregion
+
+    #region Animation variables
     protected Vector2 _lastMovement;
     public Vector2 LastMovement
     {
-        get { return _lastMovement; }
+        get => _lastMovement;
         set
         {
             _lastMovement = value;
-            _animator.SetFloat("Horizontal", Mathf.Abs(_lastMovement.x));
-            _animator.SetFloat("Vertical", _lastMovement.y);
-        }
+            float clampedX = Mathf.Abs(Mathf.Round(_lastMovement.x));
+            float clampedY = Mathf.Round(_lastMovement.y);
+            _animator.SetFloat(HorizontalParameter, clampedX);
+            _animator.SetFloat(VerticalParameter, clampedY);
 
+            if (_lastMovement.x > 0 && !_isFacingRight) IsFacingRight = true;
+            else if (_lastMovement.x < 0 && _isFacingRight) IsFacingRight = false;
+        }
     }
 
-    private Coroutine stopMovingCoroutine; 
-
-    protected void Start()
+    private bool _isFacingRight = false;
+    public bool IsFacingRight
     {
+        get => _isFacingRight;
+        set
+        {
+            _isFacingRight = value;
+            transform.localScale = _isFacingRight ? new Vector3(-1, 1, 1) : Vector3.one;
+        }
+    }
 
+    public string HorizontalParameter => "Horizontal";
+    public string VerticalParameter => "Vertical";
+    #endregion
+
+    private Coroutine stopMovingCoroutine;
+
+    protected void OnEnable()
+    {
         Initial();
+        FarmAnimalManager.Instance.RegisterAnimal(this);
+    }
+
+    protected void OnDisable()
+    {
+        FarmAnimalManager.Instance.UnregisterAnimal(this);
     }
 
     protected void Update()
     {
-        if (canMove)
-        {
-            if(!isMoving)
-            {
-                ChooseNewTarget();
-            }
-            else
-            {
-                MoveToTarget();
-            }
-        }
         SetAnimator();
-        CheckFacing();
-    }
+        if (!CanMove) return;
 
-    private void FixedUpdate()
-    {
-        //if (canMove)
-        //{
-        //    if (isMoving)
-        //    {
-        //        MoveToTarget();
-        //    }
-        //}
-        
-    }
-    [ContextMenu("Eat")]
-    protected void Eat()
-    {
-        if(CurrentStage != "Egg")
-        {
-            _animator.SetTrigger("Eat");
-            Debug.Log("Eat");
-            StartCoroutine(WaitForEatAnimation());  
-            
-        }
-
-    }
-
-    private IEnumerator WaitForEatAnimation()
-    {
-        // Wait until the Blend Tree tagged "Eat" is active
-        yield return new WaitUntil(() => _animator.GetCurrentAnimatorStateInfo(0).IsTag("Eat"));
-
-        float animationDuration = _animator.GetCurrentAnimatorStateInfo(0).length;
-        StartStopMoving((int)animationDuration + 1);
-    }
-
-    public virtual void EndOfEat()
-    {
-        _currentEatCount++;
-        if (!IsMature)
-        {
-            if (_currentEatCount >= _eatTimesNeededToGrow)
-            {
-                IncreaseGrowStage();
-            }
-        }
+        if (!isMoving)
+            ChooseNewTarget();
         else
-        {
-            if (_currentEatCount >= _eatTimesNeededToMakeProduct && !_canMakeProduct)
-            {
-                _currentEatCount = 0;
-                MakeProduct();
-
-            }
-        }
-        
+            MoveToTarget();
     }
 
-    public void IncreaseGrowStage()
-    {
-        _currentEatCount = 0;
-        _stageIndex++;
-        _currentStage = _growStages[_stageIndex];
-        ApplyStage();
-    }
-
-    protected void Initial()
-    {
-        GenerateGuid();
-        _currentEatCount = 0;
-        _eatTimesNeededToGrow = _animalInfo.EatTimesNeededToGrow;
-        _eatTimesNeededToMakeProduct = _animalInfo.EatTimesNeededToMakeProduct;
-        _growStages = _animalInfo.GrowStages;
-        _stageIndex = 0;
-        _currentStage = _growStages[_stageIndex];
-        _gender = _animalInfo.Gender;
-        FarmAnimalManager.Instance.RegisterAnimal(this);
-        ApplyStage();
-    }
     private void ChooseNewTarget()
     {
         Vector2 currentPosition = transform.position;
-
         float randomAngle = Random.Range(0f, 2f * Mathf.PI);
         float randomDistance = Random.Range(0f, maxRadius);
         Vector2 offset = new Vector2(Mathf.Cos(randomAngle), Mathf.Sin(randomAngle)) * randomDistance;
-
         targetPosition = currentPosition + offset;
         isMoving = true;
     }
 
     private void MoveToTarget()
     {
-        if (!canMove) return;
+        // 1) fan-ray obstacle check
+        if (CheckFanObstacle())
+        {
+            isMoving = false;
+            StartStopMoving(5);
+            return;
+        }
 
+        // 2) normal movement
         Vector2 currentPosition = _body.position;
         Vector2 direction = (targetPosition - currentPosition).normalized;
-
         _body.linearVelocity = direction * speed;
 
         if (direction != Vector2.zero)
             LastMovement = direction;
 
-        if (Vector2.Distance(currentPosition, targetPosition) < 0.1f)
+        if (Vector2.Distance(currentPosition, targetPosition) < 0.5f)
         {
-            isMoving = false; 
+            isMoving = false;
             StartStopMoving(5);
         }
+
+        Debug.DrawRay(currentPosition, LastMovement * rayDistance, Color.yellow);
     }
 
-    private IEnumerator StopMoving(int minute)
+    private bool CheckFanObstacle()
     {
-        _body.linearVelocity = Vector2.zero; 
-        canMove = false; 
+        if (LastMovement == Vector2.zero) return false;
 
-        yield return new WaitForSeconds(minute); 
+        Vector2 origin = _body.position;
+        Vector2 forward = LastMovement.normalized;
+        float half = rayAngleSpread * 0.5f;
+        float[] angles = { -half, 0f, half };
 
-        canMove = true; 
-        stopMovingCoroutine = null; 
+        foreach (float a in angles)
+        {
+            Vector2 dir = Quaternion.Euler(0, 0, a) * forward;
+            Debug.DrawRay(origin, dir * rayDistance, Color.red);
+            if (Physics2D.Raycast(origin, dir, rayDistance, collisionMask))
+                return true;
+        }
+        return false;
     }
 
-    private void StartStopMoving(int minute)
+    private IEnumerator StopMoving(int seconds)
+    {
+        CanMove = false;
+        yield return new WaitForSeconds(seconds);
+        CanMove = true;
+    }
+
+    private void StartStopMoving(int seconds)
     {
         if (stopMovingCoroutine != null)
-        {
             StopCoroutine(stopMovingCoroutine);
-        }
+        stopMovingCoroutine = StartCoroutine(StopMoving(seconds));
+    }
 
-        stopMovingCoroutine = StartCoroutine(StopMoving(minute));
-    }
-    private void OnCollisionEnter2D(Collision2D collision)
+    // Draw the fan cone in the Scene view when selected
+    private void OnDrawGizmosSelected()
     {
-        if (collision.gameObject.name == "Collision")
+        if (_body == null) return;
+        Vector2 origin = Application.isPlaying ? _body.position : (Vector2)transform.position;
+        Vector2 forward = LastMovement.normalized;
+        if (forward == Vector2.zero)
+            forward = Vector2.right;
+
+        Gizmos.color = Color.red;
+        float half = rayAngleSpread * 0.5f;
+        float[] angles = { -half, 0f, half };
+        foreach (float a in angles)
         {
-            StartStopMoving(5);
+            Vector2 dir = Quaternion.Euler(0, 0, a) * forward;
+            Gizmos.DrawLine(origin, origin + dir * rayDistance);
         }
-        
-    }
-    protected void CheckFacing()
-    {
-        if (IsFacingRight && _lastMovement.x < 0)
-            IsFacingRight = !IsFacingRight;
-        else if(!IsFacingRight && _lastMovement.x > 0)
-            IsFacingRight = !IsFacingRight;
     }
 
     public void SetAnimator()
     {
         _animator.SetFloat("Speed", _body.linearVelocity.magnitude);
-
     }
-    protected virtual void ApplyStage() { }
-    protected virtual void MakeProduct() { } // each animal will have different way to product
+
+    [ContextMenu("Eat")]
+    protected virtual void Eat()
+    {
+        if (isFed) return;
+        _animator.SetTrigger("Eat");
+        isFed = true;
+    }
+
+    public abstract void FedTimeHandler(int minute);
+    protected virtual void MakeProduct() { }
     protected virtual void GetProduct() { }
     protected virtual void InteractWithAnimal() { }
+    public abstract void IncreaseGrowStage();
 
+    protected virtual void ApplyStage(string stage)
+        => _animator.SetTrigger(stage);
+
+    protected virtual void Initial()
+    {
+        gender = _animalInfo.Gender;
+        GenerateGuid();
+    }
 }

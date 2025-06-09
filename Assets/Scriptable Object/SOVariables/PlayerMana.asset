@@ -9,9 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aeb0b84fb54d0644ab095c1bc76d487c, type: 3}
-  m_Name: Female Cow
+  m_Script: {fileID: 11500000, guid: f345ae161ee052d4caa7d43442383c87, type: 3}
+  m_Name: PlayerMana
   m_EditorClassIdentifier: 
-  FedTimesNeededToGrow: 500
-  FedTimesNeededToMakeProduct: 500
-  Gender: 2
+  Value: 100

@@ -19,11 +19,11 @@ public class GameFlowData
     public bool CompletedSecondCutscene
     { get { return _completedSecondCutscene; } }
 
+    public bool CompletedThirdCutscene
+    { get { return _completedSecondCutscene; } }
+
     public bool HasOpenedPlayerHouse
     { get { return _hasOpenedPlayerHouse; } }
-
-    public bool CompletedThirdCutscene
-    { get { return _completedThirdCutscene; } }
 
     public bool CompletedAllCutscene
     { get { return _completedAllCutscene; } }
@@ -44,7 +44,19 @@ public class GameFlowData
         _completedSecondCutscene = completeSecondCutscene;
         _completedThirdCutscene = completedThirdCutscene;
         _completedAllCutscene = completedAllCutscene;
+    }
 
+    private Loader.Scene ConvertToScene(string sceneName)
+    {
+        if (System.Enum.TryParse(sceneName, out Loader.Scene scene))
+        {
+            return scene;
+        }
+        else
+        {
+            Debug.LogError($"Invalid scene name: {sceneName}");
+            return Loader.Scene.CharacterSelectScene; // Default value
+        }
     }
 
     public void SetHasChoosenCharacter(bool hasChoosenCharacter)

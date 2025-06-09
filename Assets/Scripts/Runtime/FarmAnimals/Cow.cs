@@ -5,30 +5,49 @@ using UnityEngine;
 public class Cow : FarmAnimal
 {
     [SerializeField] private GameObject cowPrefab;
-    protected override void MakeProduct()
+    private CowGrowthStage _currentGrowthStage;
+
+    protected override void Initial()
     {
-        _canMakeProduct = true;
-        Debug.Log("Can get milk");
+        _currentGrowthStage = 0;
+        base.Initial();
+        base.ApplyStage(_currentGrowthStage.ToString());
     }
-    [ContextMenu("Get milk")]
-    protected override void GetProduct()
+    public override void FedTimeHandler(int minute)
     {
-        if (_canMakeProduct)
+        if (!isFed) return;
+        fedTimeCounter += minute;
+        if (_currentGrowthStage != CowGrowthStage.Baby)
         {
-            _canMakeProduct = false;
-            Debug.Log("Got milk");
-            
+            if (fedTimeCounter > _animalInfo.FedTimesNeededToGrow)
+            {
+                fedTimeCounter = 0;
+                IncreaseGrowStage();
+            }
+        }
+        else
+        {
+            if (fedTimeCounter > _animalInfo.FedTimesNeededToMakeProduct)
+            {
+                fedTimeCounter = 0;
+                MakeProduct();
+            }
         }
     }
-    protected override void InteractWithAnimal()
+    protected override void ApplyStage(string stage)
     {
+        base.ApplyStage(stage);
+    }
+    public override void IncreaseGrowStage()
+    {
+        int next = (int)_currentGrowthStage + 1;
+        int max = System.Enum.GetValues(typeof(CowGrowthStage)).Length - 1;
+        _currentGrowthStage = (CowGrowthStage)Mathf.Min(next, max);
 
+        base.ApplyStage(_currentGrowthStage.ToString());
+        isFed = false;
     }
 
 
-    protected override void ApplyStage()
-    {
-        _animator.SetBool("IsMature", IsMature);
 
-    }
 }

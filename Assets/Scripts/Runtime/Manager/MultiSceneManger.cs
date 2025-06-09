@@ -50,8 +50,8 @@ public class MultiSceneManger : PersistentSingleton<MultiSceneManger>
         SetGlobalLightActiveInScene(WorldScene, true);
 
         CameraController.Instance.RefreshFollowCamera(_worldSceneVirtualCamera.GetComponent<CinemachineVirtualCamera>());
-        GameEventsManager.Instance.dataEvents.OnSceneLoaded(SceneToLoad.name);
         GameEventsManager.Instance.objectEvents.SpawnObject();
+        GameEventsManager.Instance.dataEvents.OnExitToWorldScene(SceneToLoad.name);
     }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
