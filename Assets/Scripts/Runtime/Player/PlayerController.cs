@@ -193,6 +193,7 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
         private set { _canAttack = value; }
     }
 
+    [SerializeField]
     private bool _canSleep = false;
     public bool CanSleep
     {
@@ -207,6 +208,7 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
         private set { _isSleeping = value; }
     }
 
+    [SerializeField]
     private bool _hadTarget;
     public bool HadTarget
     {
@@ -761,7 +763,7 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
             if (IsSleeping)
             {
                 StartAllAction();
-                IsSleeping = !IsSleeping;
+                IsSleeping = false;
                 CurrentBed.SetSleep(IsSleeping);
                 animator.SetBool(AnimationStrings.isSleep, false);
             }
@@ -770,7 +772,7 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
                 StopAllAction();
                 animator.SetBool(AnimationStrings.isSleep, true);
 
-                IsSleeping = !IsSleeping;
+                IsSleeping = true;
                 CurrentBed.SetSleep(IsSleeping);
             }
         }
