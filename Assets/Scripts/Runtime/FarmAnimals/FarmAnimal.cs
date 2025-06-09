@@ -1,11 +1,10 @@
 using System.Collections;
-using Unity.Netcode;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(CapsuleCollider2D))]
 [RequireComponent(typeof(Animator))]
-public abstract class FarmAnimal : NetworkBehaviour
+public abstract class FarmAnimal : MonoBehaviour
 {
     #region Components
     [SerializeField] protected Rigidbody2D _body;
@@ -17,10 +16,7 @@ public abstract class FarmAnimal : NetworkBehaviour
 
     [SerializeField] protected string id;
     [ContextMenu("Generate guid for id")]
-    protected void GenerateGuid()
-    {
-        id = System.Guid.NewGuid().ToString();
-    }
+    protected void GenerateGuid() => id = System.Guid.NewGuid().ToString();
 
     [SerializeField] protected Gender gender;
     [SerializeField] protected bool canMakeProduct;
@@ -34,7 +30,22 @@ public abstract class FarmAnimal : NetworkBehaviour
 
     [SerializeField] protected bool isMoving = false;
 
-    public NetworkVariable<bool> CanMove = new(true);
+    [SerializeField] protected bool _canMove = true;
+    public bool CanMove
+    {
+        get => _canMove;
+        set
+        {
+            _canMove = value;
+            if (!_canMove)
+                _body.linearVelocity = Vector2.zero;
+        }
+    }
+
+    [Header("Obstacle Detection")]
+    [SerializeField] protected LayerMask collisionMask;
+    [SerializeField] private float rayDistance = 1.5f;
+    [SerializeField] private float rayAngleSpread = 30f; // total cone angle
 
     #endregion
 
@@ -48,18 +59,15 @@ public abstract class FarmAnimal : NetworkBehaviour
             _lastMovement = value;
             float clampedX = Mathf.Abs(Mathf.Round(_lastMovement.x));
             float clampedY = Mathf.Round(_lastMovement.y);
-
             _animator.SetFloat(HorizontalParameter, clampedX);
             _animator.SetFloat(VerticalParameter, clampedY);
 
-            if (_lastMovement.x > 0 && !_isFacingRight)
-                IsFacingRight = true;
-            else if (_lastMovement.x < 0 && _isFacingRight)
-                IsFacingRight = false;
+            if (_lastMovement.x > 0 && !_isFacingRight) IsFacingRight = true;
+            else if (_lastMovement.x < 0 && _isFacingRight) IsFacingRight = false;
         }
     }
 
-    private bool _isFacingRight = true;
+    private bool _isFacingRight = false;
     public bool IsFacingRight
     {
         get => _isFacingRight;
@@ -76,62 +84,26 @@ public abstract class FarmAnimal : NetworkBehaviour
 
     private Coroutine stopMovingCoroutine;
 
-    protected IEnumerator Start()
+    protected void OnEnable()
     {
-        yield return new WaitUntil(() => NetworkManager.Singleton.IsListening);
-        Debug.Log("run spawn");
-        GetComponent<NetworkObject>().Spawn();
-    }
-
-    public override void OnNetworkSpawn()
-    {
-        Debug.Log("animal spawned");
-        CanMove.OnValueChanged += onValueChange;
-
         Initial();
-        if (!IsServer) return;
-
         FarmAnimalManager.Instance.RegisterAnimal(this);
-        CanMove.Value = true;
     }
 
-    public override void OnNetworkDespawn()
+    protected void OnDisable()
     {
-        CanMove.OnValueChanged -= onValueChange;
-
-        if (!IsServer) return;
-
         FarmAnimalManager.Instance.UnregisterAnimal(this);
-    }
-
-    private void onValueChange(bool previousValue, bool newValue)
-    {
-        if (!newValue)
-        {
-            _body.linearVelocity = Vector2.zero;
-        }
     }
 
     protected void Update()
     {
-        if (!IsServer || !IsSpawned) return;
-
-        if (!CanMove.Value)
-        {
-            _body.linearVelocity = Vector2.zero;
-            return;
-        }
+        SetAnimator();
+        if (!CanMove) return;
 
         if (!isMoving)
-        {
             ChooseNewTarget();
-        }
         else
-        {
             MoveToTarget();
-        }
-
-        SetAnimator();
     }
 
     private void ChooseNewTarget()
@@ -140,73 +112,86 @@ public abstract class FarmAnimal : NetworkBehaviour
         float randomAngle = Random.Range(0f, 2f * Mathf.PI);
         float randomDistance = Random.Range(0f, maxRadius);
         Vector2 offset = new Vector2(Mathf.Cos(randomAngle), Mathf.Sin(randomAngle)) * randomDistance;
-
         targetPosition = currentPosition + offset;
         isMoving = true;
     }
 
     private void MoveToTarget()
     {
-        if (!CanMove.Value) return;
+        // 1) fan-ray obstacle check
+        if (CheckFanObstacle())
+        {
+            isMoving = false;
+            StartStopMoving(5);
+            return;
+        }
 
+        // 2) normal movement
         Vector2 currentPosition = _body.position;
         Vector2 direction = (targetPosition - currentPosition).normalized;
-
         _body.linearVelocity = direction * speed;
 
         if (direction != Vector2.zero)
             LastMovement = direction;
 
-        if (Vector2.Distance(currentPosition, targetPosition) < 0.1f)
+        if (Vector2.Distance(currentPosition, targetPosition) < 0.5f)
         {
             isMoving = false;
             StartStopMoving(5);
         }
+
+        Debug.DrawRay(currentPosition, LastMovement * rayDistance, Color.yellow);
+    }
+
+    private bool CheckFanObstacle()
+    {
+        if (LastMovement == Vector2.zero) return false;
+
+        Vector2 origin = _body.position;
+        Vector2 forward = LastMovement.normalized;
+        float half = rayAngleSpread * 0.5f;
+        float[] angles = { -half, 0f, half };
+
+        foreach (float a in angles)
+        {
+            Vector2 dir = Quaternion.Euler(0, 0, a) * forward;
+            Debug.DrawRay(origin, dir * rayDistance, Color.red);
+            if (Physics2D.Raycast(origin, dir, rayDistance, collisionMask))
+                return true;
+        }
+        return false;
     }
 
     private IEnumerator StopMoving(int seconds)
     {
-        // Wait until the object is properly spawned
-        while (!IsSpawned)
-        {
-            yield return null;
-        }
-
-        if (IsServer)
-        {
-            CanMove.Value = false;
-            _body.linearVelocity = Vector2.zero;
-        }
-
+        CanMove = false;
         yield return new WaitForSeconds(seconds);
-
-        if (IsServer)
-        {
-            CanMove.Value = true;
-            ChooseNewTarget(); // Optional: immediately choose new spot
-        }
+        CanMove = true;
     }
 
     private void StartStopMoving(int seconds)
     {
-        if (!IsServer || !IsSpawned) return;
-
         if (stopMovingCoroutine != null)
-        {
             StopCoroutine(stopMovingCoroutine);
-        }
-
         stopMovingCoroutine = StartCoroutine(StopMoving(seconds));
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    // Draw the fan cone in the Scene view when selected
+    private void OnDrawGizmosSelected()
     {
-        if (!IsServer || !IsSpawned) return;
+        if (_body == null) return;
+        Vector2 origin = Application.isPlaying ? _body.position : (Vector2)transform.position;
+        Vector2 forward = LastMovement.normalized;
+        if (forward == Vector2.zero)
+            forward = Vector2.right;
 
-        if (collision.gameObject.name == "Collision")
+        Gizmos.color = Color.red;
+        float half = rayAngleSpread * 0.5f;
+        float[] angles = { -half, 0f, half };
+        foreach (float a in angles)
         {
-            isMoving = false;
-            StartStopMoving(5);
+            Vector2 dir = Quaternion.Euler(0, 0, a) * forward;
+            Gizmos.DrawLine(origin, origin + dir * rayDistance);
         }
     }
 
@@ -230,9 +215,7 @@ public abstract class FarmAnimal : NetworkBehaviour
     public abstract void IncreaseGrowStage();
 
     protected virtual void ApplyStage(string stage)
-    {
-        _animator.SetTrigger(stage);
-    }
+        => _animator.SetTrigger(stage);
 
     protected virtual void Initial()
     {

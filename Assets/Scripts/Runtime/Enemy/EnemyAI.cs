@@ -57,7 +57,18 @@ public class EnemyAI : NetworkBehaviour
 
     public float Acceleration;
 
-    public NetworkVariable<bool> CanMove = new NetworkVariable<bool>(true); // Flag to control movement
+    [SerializeField]
+    private bool _canMove = true;
+    public bool CanMove
+    {
+        get {  return _canMove; }
+        set 
+        { 
+            _canMove = value;
+            if (!_canMove)
+                Rb.linearVelocity = Vector2.zero;
+        }
+    }
     
     public bool CanAttack = true; // Flag to control attacking
     
@@ -145,15 +156,6 @@ public class EnemyAI : NetworkBehaviour
         ChasingState = new EnemyChasingState(this, ChasingStateData);
     }
 
-    public override void OnNetworkSpawn()
-    {
-        CanMove.OnValueChanged += OnCanMoveChanged;
-    }
-
-    public override void OnNetworkDespawn()
-    {
-        CanMove.OnValueChanged -= OnCanMoveChanged;
-    }
     private void OnCanMoveChanged(bool previousValue, bool newValue)
     {
         Debug.Log("run on can moved changed");
@@ -175,7 +177,7 @@ public class EnemyAI : NetworkBehaviour
 
     public void ApplyMovement(Vector2 direction, float speed, float acceleration)
     {
-        if (!CanMove.Value)
+        if (!CanMove)
         {
             if (Rb.linearVelocity.magnitude > 0.1f)
                 Rb.AddForce(Rb.linearVelocity * -acceleration, ForceMode2D.Force);
@@ -270,13 +272,13 @@ public class EnemyAI : NetworkBehaviour
 
     public void StopAllAction()
     {
-        CanMove.Value = false;
+        CanMove = false;
         CanAttack = false;
     }
 
     public void StartAllAction()
     {
-        CanMove.Value = true;
+        CanMove = true;
         CanAttack = true;
     }
 
@@ -295,7 +297,7 @@ public class EnemyAI : NetworkBehaviour
 
     private IEnumerator ApplyKnockback(Vector2 knockBackDirection)
     {
-        yield return new WaitUntil(() => CanMove.Value == false);
+        yield return new WaitUntil(() => CanMove == false);
 
         Rb.AddForce(knockBackDirection, ForceMode2D.Impulse);
         Debug.Log("knockBack apply: " + knockBackDirection);

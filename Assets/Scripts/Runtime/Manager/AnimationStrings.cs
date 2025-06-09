@@ -17,6 +17,8 @@ internal class AnimationStrings
     internal static string hitTrigger = "Hit";
 
     internal static string pickup = "Pickup";
+    internal static string hurt = "Hurt";
+    internal static string dead = "Dead";
 
     internal static string hasBeenCut = "HasBeenCut";
 }

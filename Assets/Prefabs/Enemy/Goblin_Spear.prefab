@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackDamage: 10
-  knockbackStrength: 2
+  knockbackStrength: 3
   hitAbleLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -133,7 +133,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackDamage: 10
-  knockbackStrength: 2
+  knockbackStrength: 3
   hitAbleLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -220,7 +220,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackDamage: 10
-  knockbackStrength: 2
+  knockbackStrength: 3
   hitAbleLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -271,7 +271,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1475318550465854935, guid: 5bacb55fe68bac64abbf970ff2a95448, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 347042244
+      value: 1370326938
       objectReference: {fileID: 0}
     - target: {fileID: 1475318550465854935, guid: 5bacb55fe68bac64abbf970ff2a95448, type: 3}
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
@@ -347,7 +347,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1930141997547095064, guid: 5bacb55fe68bac64abbf970ff2a95448, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 4338824099086298165, guid: 5bacb55fe68bac64abbf970ff2a95448, type: 3}
+    - {fileID: 2097689795082657047, guid: 5bacb55fe68bac64abbf970ff2a95448, type: 3}
+    - {fileID: 3922989189252180987, guid: 5bacb55fe68bac64abbf970ff2a95448, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 6814551443767715304, guid: 5bacb55fe68bac64abbf970ff2a95448, type: 3}
       insertIndex: -1

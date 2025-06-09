@@ -50,14 +50,14 @@ public class EnemyPatrollingState : IState
 
     public void StateUpdate()
     {
-        if (!_enemyAI.CanMove.Value) return;
+        if (!_enemyAI.CanMove) return;
         DetectPlayerHandler();
         
     }
 
     public void StateFixedUpdate()
     {
-        if (!_hasTarget || !_enemyAI.CanMove.Value) return;
+        if (!_hasTarget || !_enemyAI.CanMove) return;
         PatrollingHandler();
         
     }

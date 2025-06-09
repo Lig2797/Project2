@@ -54,14 +54,14 @@ public class EnemyChasingState : IState
 
     public void StateUpdate()
     {
-        if (!_enemyAI.CanMove.Value) return;
+        if (!_enemyAI.CanMove) return;
         DetectPlayerHandler();
         AttackHandler();
     }
 
     public void StateFixedUpdate()
     {
-        if (_enemyAI.TargetPlayer == null || !_enemyAI.CanMove.Value) return;
+        if (_enemyAI.TargetPlayer == null || !_enemyAI.CanMove) return;
         ChasingHandler();
 
     }

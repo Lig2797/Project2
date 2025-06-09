@@ -12,6 +12,7 @@ TagManager:
   - Villager
   - Tree
   - Object
+  - PlayerCollision
   layers:
   - Default
   - TransparentFX

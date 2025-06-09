@@ -10,8 +10,6 @@ public class Damageable : MonoBehaviour
     private Animator animator;
 
     public FloatVariable playerHealth;
-    public FloatVariable playerMaxHealth;
-
     [SerializeField]
     private float _maxHealth = 100;
     public float MaxHealth
@@ -60,8 +58,7 @@ public class Damageable : MonoBehaviour
         animator = GetComponent<Animator>();
         if (GetComponent<PlayerController>() != null)
         {
-            playerMaxHealth.Value = _maxHealth;
-            playerHealth.Value = playerMaxHealth.Value;
+            playerHealth.Value = MaxHealth;
         }
         timeSinceHit = 0;
     }

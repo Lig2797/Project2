@@ -154,9 +154,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1449220059
-  m_SortingLayer: 16
+  m_SortingLayer: 26
   m_SortingOrder: 0
-  m_Sprite: {fileID: 890786053, guid: 280e0adce7e54c843a6e98a1f8d04bb5, type: 3}
+  m_Sprite: {fileID: 813240438, guid: f4720167f2140194fabba7b02c890b4a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -177,7 +177,7 @@ Animator:
   m_GameObject: {fileID: 5077854521655654177}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: cd6d812af800d904eb4f8d2fbb082d4f, type: 2}
+  m_Controller: {fileID: 22100000, guid: 6f372e5545f10a94ba43d2ec6bd0f47c, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -202,7 +202,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GlobalObjectIdHash: 832988623
-  InScenePlacedSourceGlobalObjectIdHash: 832988623
+  InScenePlacedSourceGlobalObjectIdHash: 1370326938
   DeferredDespawnTick: 0
   Ownership: 1
   AlwaysReplicateAsRoot: 0
@@ -355,8 +355,8 @@ MonoBehaviour:
     rayOriginOffset: {x: 0, y: 0.5}
     repulsionStrength: 20
     TimeToForgetPlayer: 4
-    AttackCooldown: 2
-    AttackRange: 10
+    AttackCooldown: 1
+    AttackRange: 1
   Rb: {fileID: 0}
   Animator: {fileID: 0}
   Damageable: {fileID: 0}
@@ -389,8 +389,7 @@ MonoBehaviour:
   GizmoFanAngle: 0
   GizmoFanRayCount: 0
   Acceleration: 50
-  CanMove:
-    m_InternalValue: 1
+  _canMove: 1
   CanAttack: 1
   projectilePrefab: {fileID: 861314114235552467, guid: 86fbe83f264c51b4d819e4dddb5212fd, type: 3}
   projectileSpeed: 15
@@ -459,7 +458,6 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   playerHealth: {fileID: 0}
-  playerMaxHealth: {fileID: 0}
   _maxHealth: 100
   _health: 100
   _isAlive: 1
