@@ -6,7 +6,9 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
+#if UNITY_EDITOR
 using static UnityEditor.Progress;
+#endif
 
 public class TileTargeter : NetworkBehaviour
 {
