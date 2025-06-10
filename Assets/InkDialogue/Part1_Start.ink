@@ -20,6 +20,13 @@ Nếu là thư của bố mẹ thì chắc chắn họ đã liên lạc trước
 Ô! Là thư của ông nội gửi, để đọc thử nào. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
 ~ AddItem("Key")
 Bên trong còn có thêm 1 chiếc chìa khóa. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+~ AddItem("Axe")
+~ AddItem("Hoe")
+~ AddItem("WaterCan")
+~ AddItem("Potato Seed")
+~ AddItem("Strawberry Seed")
+~ AddItem("Sword")
+Còn có cả những đồ nghề làm vườn nữa. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
 
 -> read_letter
 
@@ -36,6 +43,7 @@ Bên trong còn có thêm 1 chiếc chìa khóa. #speaker:Alex #background: Thin
 
 === prepare_departure ===
 
+~ RemoveItem("Letter", 1)
 Mình cũng rất nhớ ông. Có vẻ cơ hội để mình thay đổi bản thân đã đến rồi. Một cuộc sống ở thôn quê có vẻ sẽ hợp với mình hơn thành thị xô bồ. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
 
 Quyết định đã được đưa ra, mình cần chuẩn bị lên đường đến làng Eloria. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
@@ -75,6 +83,7 @@ Có 2 chiếc chìa khóa, có vẻ chiếc chìa nhỏ này dùng để mở c�
 -> DONE
 
 === House_1 ===
+~ RemoveItem("Key", 1)
 Ngôi nhà này trông thật cũ kĩ.
 #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
 Mình quá mệt để dọn dẹp rồi, làm một giấc rồi tính tiếp vậy.

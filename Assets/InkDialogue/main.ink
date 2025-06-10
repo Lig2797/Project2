@@ -10,6 +10,7 @@ EXTERNAL CompletedFirstCutscene()
 EXTERNAL CompletedSecondCutscene()
 EXTERNAL CompletedThirdCutscene()
 EXTERNAL CompletedAllCutscene()
+EXTERNAL RemoveItem(itemName, amount)
 
 
 // quest ids (questId + "Id" for variable name)

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,13 @@ public class Inventory
     public InventoryItem GetInventoryItemOfIndex(int index)
     {
         InventoryItem item = _inventoryItemList.Find(i => i.SlotIndex == index);
+        return item;
+    }
+
+    public InventoryItem GetInventoryItemFromName(string name)
+    {
+        InventoryItem item = _inventoryItemList.Find(i => i.ItemName == name);
+        if (item == null) return null;
         return item;
     }
 
@@ -74,4 +82,8 @@ public class Inventory
         return null;
     }
 
+    public int GetIndexOfInventory(InventoryItem inventoryItem)
+    {
+        return _inventoryItemList.IndexOf(inventoryItem);
+    }
 }

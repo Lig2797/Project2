@@ -29,6 +29,7 @@ public class InventoryController : NetworkBehaviour, IDataPersistence
         _inputReader.playerActions.openInventoryEvent += OpenInventory;
         _inputReader.uiActions.closeInventoryEvent += CloseInventory;
         GameEventsManager.Instance.inventoryEvents.onItemAdded += AddItem;
+        GameEventsManager.Instance.inventoryEvents.onRemoveItem += RemoveItem;
     }
 
     private void OnDisable()
@@ -37,6 +38,8 @@ public class InventoryController : NetworkBehaviour, IDataPersistence
         _inputReader.playerActions.openInventoryEvent -= OpenInventory;
         _inputReader.uiActions.closeInventoryEvent -= CloseInventory;
         GameEventsManager.Instance.inventoryEvents.onItemAdded -= AddItem;
+        GameEventsManager.Instance.inventoryEvents.onRemoveItem -= RemoveItem;
+
     }
     private void OpenInventory()
     {
@@ -100,6 +103,32 @@ public class InventoryController : NetworkBehaviour, IDataPersistence
         InventoryItem inventoryItem = new InventoryItem(null, item, slotIndex);
         _inventoryManagerSO.inventory.AddItemToInventory(inventoryItem, slotIndex);
         GameEventsManager.Instance.inventoryEvents.AddItemToUI(inventoryItem, slotIndex);
+    }
+
+    public void RemoveItem(string itemName, int amout)
+    {
+        InventoryItem inventoryItem = _inventoryManagerSO.inventory.GetInventoryItemFromName(itemName);
+        if (inventoryItem == null)
+        {
+            Debug.Log("null");
+            return;
+        }
+        
+        if (inventoryItem.Quantity >=  amout) 
+        {
+            inventoryItem.DecreaseQuantity(amout);
+
+            int slotIndex = _inventoryManagerSO.inventory.GetIndexOfInventory(inventoryItem);
+
+            if (inventoryItem.Quantity < 0 || inventoryItem.Quantity == 0)
+            {
+                _inventoryManagerSO.inventory.RemoveItemById(inventoryItem);
+                GameEventsManager.Instance.inventoryEvents.OnItemRemoved(slotIndex);
+                return;
+            }
+
+            GameEventsManager.Instance.inventoryEvents.UpDateAmount(slotIndex);
+        }
     }
 
     private int GetEmptySlot()

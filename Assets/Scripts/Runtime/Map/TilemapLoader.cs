@@ -77,7 +77,7 @@ public class TilemapLoader : MonoBehaviour
                         if (++processed >= 100)
                         {
                             processed = 0;
-                            yield return null; // tạm nghỉ, để không gây lag
+                            yield return null;
                         }
                     }
                 }

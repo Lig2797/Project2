@@ -57,7 +57,7 @@ public class DialogueTriggerButton : MonoBehaviour
             playerInRange = false;
             if (emoteGO != null)
             {
-                emoteGO.SetActive(true);
+                emoteGO.SetActive(false);
             }
         }
     }

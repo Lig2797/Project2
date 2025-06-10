@@ -17,6 +17,7 @@ public class InkExternalFunctions
         story.BindExternalFunction("CompletedSecondCutscene", () => CompletedSecondCutScene());
         story.BindExternalFunction("CompletedThirdCutscene", () => CompletedThirdCutScene());
         story.BindExternalFunction("CompletedAllCutscene", () => CompletedAllCutScene());
+        story.BindExternalFunction("RemoveItem", (string itemName, int amount) => RemoveItem(itemName, amount));
     }
 
     public void Unbind(Story story)
@@ -30,6 +31,7 @@ public class InkExternalFunctions
         story.UnbindExternalFunction("CompletedSecondCutscene");
         story.UnbindExternalFunction("CompletedThirdCutscene");
         story.UnbindExternalFunction("CompletedAllCutscene");
+        story.UnbindExternalFunction("RemoveItem");
     }
 
     private void StartQuest(string questId)
@@ -76,5 +78,10 @@ public class InkExternalFunctions
     public void CompletedAllCutScene()
     {
         GameFlowManager.Instance.gameFlowSO.gameFlowData.SetCompletedAllCutscene(true);
+    }
+
+    public void RemoveItem(string itemName, int amout)
+    {
+        GameEventsManager.Instance.inventoryEvents.RemoveItem(itemName, amout);
     }
 }

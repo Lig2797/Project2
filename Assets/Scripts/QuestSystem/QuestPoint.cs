@@ -96,4 +96,9 @@ public class QuestPoint : MonoBehaviour
     {
         SubmitPressed((InputEventContext)data);
     }
+
+    public void SetKnotName(string knotName)
+    {
+        dialogueKnotName = knotName;
+    }
 }

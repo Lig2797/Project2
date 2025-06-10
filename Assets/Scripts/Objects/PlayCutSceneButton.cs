@@ -1,5 +1,7 @@
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.SceneManagement;
 
 public class PlayCutSceneButton : MonoBehaviour
 {
@@ -37,6 +39,7 @@ public class PlayCutSceneButton : MonoBehaviour
         {
             if (playerInrange)
             {
+                AssignPlayer(PlayerController.LocalInstance);
                 playableDirector.Play();
             }
         }
@@ -56,5 +59,18 @@ public class PlayCutSceneButton : MonoBehaviour
         {
             playerInrange = true;
         }
+    }
+
+    private void AssignPlayer(PlayerController player)
+    {
+        foreach (var playableAssetOutput in playableDirector.playableAsset.outputs)
+        {
+            if (playableAssetOutput.streamName == "PlayerTrack")
+            {
+                playableDirector.SetGenericBinding(playableAssetOutput.sourceObject, player.GetComponent<Animator>());
+            }
+        }
+        if (SceneManager.GetActiveScene().name == Loader.Scene.CutScene.ToString()) player.gameObject.transform.position = new Vector3(4.371f, 1.154f, 0);
+        else if (SceneManager.GetActiveScene().name == Loader.Scene.WorldScene.ToString()) player.gameObject.transform.position = new Vector3(-1.69902f, 37.40618f, 0);
     }
 }

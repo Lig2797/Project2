@@ -32,6 +32,8 @@ public class UI_Inventory : MonoBehaviour
         _inventoryManagerSO.onFindEmptySlot += FindEmptySlot;
         _inventoryManagerSO.onPutItemDownByRightClick += SpawnItem;
         GameEventsManager.Instance.inventoryEvents.onAddItemToUI += AddItem;
+        GameEventsManager.Instance.inventoryEvents.onItemRemoved += RemoveItem;
+        GameEventsManager.Instance.inventoryEvents.upDateAmount += UpdateItemAmount;
     }
 
     private void OnDisable()
@@ -39,6 +41,8 @@ public class UI_Inventory : MonoBehaviour
         _inventoryManagerSO.onFindEmptySlot -= FindEmptySlot;
         _inventoryManagerSO.onPutItemDownByRightClick -= SpawnItem;
         GameEventsManager.Instance.inventoryEvents.onAddItemToUI -= AddItem;
+        GameEventsManager.Instance.inventoryEvents.onItemRemoved -= RemoveItem;
+        GameEventsManager.Instance.inventoryEvents.upDateAmount -= UpdateItemAmount;
     }
 
     public void UpdateSlotUI(Component sender, object data)
@@ -90,6 +94,18 @@ public class UI_Inventory : MonoBehaviour
     {
         UI_InventorySlot slotUI = inventorySlotsUI[index];
         SpawnItem(inventoryItem, slotUI.gameObject);
+    }
+
+    private void RemoveItem(int slotIndex)
+    {
+        UI_InventoryItem uI_InventoryItem = inventorySlotsUI[slotIndex].GetComponentInChildren<UI_InventoryItem>();
+        uI_InventoryItem.RefreshCount();
+    }
+
+    public void UpdateItemAmount(int slotIndex)
+    {
+        UI_InventoryItem uI_InventoryItem = inventorySlotsUI[slotIndex].GetComponentInChildren<UI_InventoryItem>();
+        Destroy(uI_InventoryItem.gameObject);
     }
 
     public void SpawnItem(InventoryItem item, GameObject slot)

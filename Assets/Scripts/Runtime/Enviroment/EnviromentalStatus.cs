@@ -32,7 +32,7 @@ public class EnvironmentalStatus
 
     public EnvironmentalStatus()
     {
-        _dateTime = new DateTime(1999, 1, 1, 13, 30, 00).ToString("O");
+        _dateTime = new DateTime(1999, 1, 1, 8, 30, 00).ToString("O");
         _seasonStatus = ESeason.Spring;
     }
 

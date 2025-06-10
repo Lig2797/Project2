@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum ECondition
 {
@@ -13,6 +14,7 @@ public class ObjectsSpawner : MonoBehaviour
     public enum EObjDialogue
     {
         Default,
+        Quest,
         Npc
     }   
     
@@ -31,11 +33,23 @@ public class ObjectsSpawner : MonoBehaviour
     private void OnEnable()
     {
         GameEventsManager.Instance.objectEvents.onSpawnObject += CheckSpawn;
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void OnDisable()
     {
         GameEventsManager.Instance.objectEvents.onSpawnObject -= CheckSpawn;
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        CheckSpawn();
+    }
+
+    private void Start()
+    {
+        CheckSpawn();
     }
 
     private bool HasCompleted(ECondition eCondition)
@@ -81,6 +95,11 @@ public class ObjectsSpawner : MonoBehaviour
                 {
                     npcGO.StartChoppingTrees();
                 }
+            }
+            else if (eObjDialogue == EObjDialogue.Quest)
+            {
+                QuestPoint questPoint = Instantiate(objectPrefab, this.gameObject.transform.position, Quaternion.identity).GetComponent<QuestPoint>();
+                questPoint.SetKnotName(knotName);
             }
         }    
     }    

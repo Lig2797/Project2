@@ -10,26 +10,37 @@
 
 = requirementsNotMet
 // not possible for this quest, but putting something here anyways
-Come back once you've leveled up a bit more.  #speaker:Josh #portrait:Josh_Default #layout:Right #audio:animal_crossing_mid
+Quay lại đây nói chuyện với tớ dến khi nào cậu làm xong việc.  #speaker:Josh #portrait:Josh_Default #layout:Right #audio:animal_crossing_mid
 -> END
 
 = canStart
-Will you collect 5 coins and bring them to my friend over there? #speaker:Josh #portrait:Josh_Default #layout:Left #audio:animal_crossing_mid
-* [Yes]
-    ~ StartQuest(CollectCoinsQuestId)
-    Great! #speaker:Josh #portrait:Josh_Smile #layout:Right #audio:animal_crossing_mid
-* [No]
-    Oh, ok then. Come back if you change your mind. #speaker:Josh #portrait:Josh_Sad #layout:Left #audio:animal_crossing_mid
+Này cậu gì ơi. #speaker:Alex #background: Say #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+Khoan đã là Josh đây mà. #speaker:Alex #background: Say #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+Ô! Alex? #speaker:Josh #background: Say #portrait:Alex_Default #layout:Left #audio:animal_crossing_mid
+Cậu về lúc nào mà không nói cho tớ biết. #speaker:Josh #background: Say #portrait:Alex_Default #layout:Left #audio:animal_crossing_mid
+Tớ mới về cách đây không lâu. Cậu dạo này thế nào. #speaker:Josh #background: Say #portrait:Alex_Default #layout:Left #audio:animal_crossing_mid
+Cậu nhìn mà không biết sao? Cầm lấy cây rìu này và phụ tớ chặt gỗ mau.#speaker:Josh #background: Say #portrait:Alex_Default #layout:Left #audio:animal_crossing_mid
+
+~ AddItem("Axe")
+
+Này tớ vừa mới về thôi mà Josh #speaker:Josh #background: Say #portrait:Alex_Default #layout:Left #audio:animal_crossing_mid
+Josh!!! #speaker:Josh #background: Say #portrait:Alex_Default #layout:Left #audio:animal_crossing_mid
+
+ ~ StartQuest(CollectCoinsQuestId)
+ 
+Chờ tớ với Josh. #speaker:Josh #background: Say #portrait:Alex_Default #layout:Left #audio:animal_crossing_mid
 - -> END
 
 = inProgress
-How is collecting those coins going? #speaker:Josh #portrait:Josh_Default #layout:Left #audio:animal_crossing_mid
+Cậu làm đến đâu rồi? #speaker:Josh #portrait:Josh_Default #layout:Left #audio:animal_crossing_mid
 -> END
 
 = canFinish
-Oh? You collected the coins? Go give them to my friend over there and he'll give you a reward! #speaker:Josh #portrait:Josh_Smile #layout:Left #audio:animal_crossing_mid
+Ồ? Cậu làm xong rồi đấy à nhanh hơn tôi tưởng đấy. #speaker:Josh #portrait:Josh_Smile #layout:Left #audio:animal_crossing_mid
+Mau mang chúng đến chỗ Lyria đi có thể cô ấy sẽ gửi cậu vài món quà. #speaker:Josh #portrait:Josh_Smile #layout:Left #audio:animal_crossing_mid
 -> END
 
 = finished
-Thanks for collecting those coins! #speaker:Josh #portrait:Josh_Smile #layout:Left #audio:animal_crossing_mid
+Xong rồi ư. Giờ cậu hãy giao chúng đến Lyria. Đi sang phải vào làm sẽ gặp. #speaker:Josh #portrait:Josh_Default #layout:Left #audio:animal_crossing_mid
+
 -> END

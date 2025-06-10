@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QuestManager : MonoBehaviour
+public class QuestManager : Singleton<QuestManager>
 {
     [Header("Config")]
     [SerializeField] private bool loadQuestState = true;
@@ -12,8 +12,10 @@ public class QuestManager : MonoBehaviour
     // quest start requirements
     private int currentPlayerLevel;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         questMap = CreateQuestMap();
     }
 
@@ -226,5 +228,10 @@ public class QuestManager : MonoBehaviour
             Debug.LogError("Failed to load quest with id " + quest.info.id + ": " + e);
         }
         return quest;
+    }
+    
+    public void AddQuetMap(Quest quest)
+    {
+        questMap.Add(quest.info.id, quest);
     }
 }

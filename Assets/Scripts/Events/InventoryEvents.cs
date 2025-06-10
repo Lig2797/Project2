@@ -14,4 +14,22 @@ public class InventoryEvents
     {
         onAddItemToUI?.Invoke(invenItem, index);
     }
+
+    public event Action<string, int> onRemoveItem;
+    public void RemoveItem(string itemName, int amout)
+    {
+        onRemoveItem?.Invoke(itemName, amout);
+    }
+
+    public event Action<int> onItemRemoved;
+    public void OnItemRemoved(int index)
+    {
+        onItemRemoved?.Invoke(index);
+    }
+
+    public event Action<int> upDateAmount;
+    public void UpDateAmount(int slotIndex)
+    {
+        upDateAmount?.Invoke(slotIndex);
+    }
 }
