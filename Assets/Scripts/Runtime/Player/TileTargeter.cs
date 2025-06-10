@@ -156,7 +156,7 @@ public class TileTargeter : NetworkBehaviour
 
         if (gridObject == null)
         {
-            UnityEngine.Debug.LogError("No Grid found in the scene!");
+            Debug.LogError("No Grid found in the scene!");
             return;
         }
 
@@ -166,7 +166,7 @@ public class TileTargeter : NetworkBehaviour
         _tilemaps.AddRange(foundTilemaps);
         foreach (Tilemap tilemap in _tilemaps)
         {
-            UnityEngine.Debug.Log($"Found Tilemap: {tilemap.name}");
+            Debug.Log($"Found Tilemap: {tilemap.name}");
         }
     }
 
