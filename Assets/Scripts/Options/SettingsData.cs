@@ -12,19 +12,19 @@ public class SettingsData
     public float OveralVolume
     {
         get => overalVolume;
-        private set => overalVolume = Mathf.Clamp01(value);
+        private set => overalVolume = value;
     }
 
     public float MusicVolume
     {
         get => musicVolume;
-        private set => musicVolume = Mathf.Clamp01(value);
+        private set => musicVolume = value;
     }
 
     public float SFXVolume
     {
         get => sfxVolume;
-        private set => sfxVolume = Mathf.Clamp01(value);
+        private set => sfxVolume = value;
     }
 
     public int ResolutionIndex
@@ -41,11 +41,11 @@ public class SettingsData
 
     public SettingsData()
     {
-        overalVolume = 1f;
-        musicVolume = 1f;
-        sfxVolume = 1f;
+        overalVolume = 20f;
+        musicVolume = 20f;
+        sfxVolume = 20f;
         resolutionIndex = 0;
-        isFullScreen = false;
+        isFullScreen = true;
     }
 
     public SettingsData(float overalVolume, float musicVolume, float sfxVolume, int resolutionIndex, bool isFullScreen)
@@ -59,17 +59,17 @@ public class SettingsData
 
     public void SetOveralVolume(float overalVolume)
     {
-        this.overalVolume = overalVolume;
+        OveralVolume = overalVolume;
     }
 
     public void SetMusicVolume(float musicVolume)
     {
-        this.musicVolume = musicVolume;
+        MusicVolume = musicVolume;
     }
 
     public void SetSFXVolume(float sfxVolume)
     { 
-        this.sfxVolume = sfxVolume;
+        SFXVolume = sfxVolume;
     }
 
     public void SetResolutionIndex(int resolutionIndex)

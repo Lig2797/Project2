@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Audio;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class AudioManager : MonoBehaviour
 {
@@ -45,6 +46,32 @@ public class AudioManager : MonoBehaviour
             sfxDict[item.name] = item.clip;
     }
 
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        switch (scene.name)
+        {
+            case "MainMenu":
+                PlayMusic("Chill");
+                break;
+            case "WorldScene":
+                PlayMusic("Default");
+                break;
+            default:
+                StopMusic();
+                break;
+        }
+    }
+
     public void PlayMusic(string name)
     {
         if (musicDict.TryGetValue(name, out var clip))
@@ -57,6 +84,11 @@ public class AudioManager : MonoBehaviour
         {
             Debug.LogWarning($"Music clip '{name}' not found!");
         }
+    }
+
+    public void StopMusic()
+    {
+        musicSource.Stop();
     }
 
     public void PlaySFX(string name)
@@ -77,8 +109,8 @@ public class AudioManager : MonoBehaviour
 
     private void SetVolume(string param, float volume)
     {
-        float dB = Mathf.Log10(Mathf.Clamp(volume, 0.0001f, 1f)) * 20f;
-        audioMixer.SetFloat(param, dB);
+        //float dB = Mathf.Log10(Mathf.Clamp(volume, 0.0001f, 1f)) * 20f;
+        audioMixer.SetFloat(param, volume);
     }
 
     public float GetVolume(string param)

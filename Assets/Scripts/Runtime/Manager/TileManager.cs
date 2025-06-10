@@ -6,6 +6,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
+using static CaveGenerator;
 
 public class TileManager : NetworkPersistentSingleton<TileManager>, IDataPersistence
 {
@@ -261,6 +262,13 @@ public class TileManager : NetworkPersistentSingleton<TileManager>, IDataPersist
     {
         if (!IsHost) return;
 
+        //if (SceneManager.GetSceneByName("WorldScene").isLoaded) return;
+        //Debug.Log("Co load");
+        //Tilemap listtm = GameObject.Find("FarmGround").GetComponent<Tilemap>();
+        //tilemaps.Add(listtm);
+        //var listnj = GameObject.Find("WateredGround").GetComponent<Tilemap>();
+        //tilemaps.Add(listnj);
+
         HoedTiles = data.TileSaveData.HoedTiles;
         WateredTiles = data.TileSaveData.WateredTiles;
         StartCoroutine(SetAllTileDataToNetworkData());
@@ -292,4 +300,8 @@ public class TileManager : NetworkPersistentSingleton<TileManager>, IDataPersist
         EnviromentalStatusManager.OnTimeIncrease -= UpdateAllTileStatus;
     }
 
+    public void AddTilemap(Tilemap tilemap)
+    {
+        tilemaps.Add(tilemap);
+    }
 }

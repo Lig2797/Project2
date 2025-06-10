@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Rendering.Universal;
 using Unity.Netcode;
+using UnityEngine.SceneManagement;
 
 public class EnviromentalStatusManager : NetworkPersistentSingleton<EnviromentalStatusManager>, IDataPersistence
 {
@@ -23,7 +24,7 @@ public class EnviromentalStatusManager : NetworkPersistentSingleton<Enviromental
 
     private void Start()
     {
-        
+        DataPersistenceManager.Instance.LoadGame();
     }
 
     public bool ChangeSeason()
@@ -104,7 +105,9 @@ public class EnviromentalStatusManager : NetworkPersistentSingleton<Enviromental
 
     public void LoadData(GameData gameData)
     {
-        if(!IsHost) return;
+        if (SceneManager.GetActiveScene().name == Loader.Scene.CutScene.ToString() ||
+            SceneManager.GetActiveScene().name == Loader.Scene.LoadingScene.ToString() ||
+            SceneManager.GetActiveScene().name == Loader.Scene.CutScene.ToString()) return;
         eStarus = gameData.EnviromentData;
         StartCoroutine(WaitToIncreaseDay());
     }

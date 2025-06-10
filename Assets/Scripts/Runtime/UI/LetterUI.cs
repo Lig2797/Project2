@@ -34,6 +34,9 @@ public class LetterUI : MonoBehaviour
     {
         GameEventsManager.Instance.inputReader.SwitchActionMap(ActionMap.Player);
         letterContent.gameObject.SetActive(false);
+
+        if (GameFlowManager.Instance.gameFlowSO.gameFlowData.CompletedFirstCutscene) return;
+
         GameEventsManager.Instance.dialogueEvents.EnterDialogue("prepare_departure");
     }
 }

@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 967e4981ce46d954fa3b2404dc42db6c, type: 3}
   m_Name: DefaultSettings
   m_EditorClassIdentifier: 
-  overalVolume: 1
-  musicVolume: 1
-  sfxVolume: 1
-  resolutionIndex: 0
-  isFullScreen: 0
+  settingsData:
+    overalVolume: 100
+    musicVolume: 100
+    sfxVolume: 100
+    resolutionIndex: 0
+    isFullScreen: 1

@@ -61,6 +61,8 @@ public class DataPersistenceManager : PersistentSingleton<DataPersistenceManager
 
     public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        //if (scene.name == Loader.Scene.WorldScene.ToString() && 
+        //    SceneManager.GetSceneByName("WorldScene").isLoaded) return;
         GameEventsManager.Instance.inputReader.EnableControl();
         this.dataPersistenceObjects = FindAllDataPersistenceObjects();
         LoadGame();
