@@ -224,6 +224,10 @@ public class CropManager : NetworkPersistentSingleton<CropManager>, IDataPersist
     public void LoadData(GameData data)
     {
         if (!IsHost) return;
+        //if (SceneManager.GetSceneByName("WorldScene").isLoaded) return;
+
+        //cropTilemap = GameObject.Find("PlantGround").GetComponent<Tilemap>();
+
         PlantedCrops = data.CropsSaveData.CropTiles;
         StartCoroutine(MoveLocalListToNetwork());
         StartCoroutine(ApplyCropTilesOnHostLoad());
@@ -264,5 +268,10 @@ public class CropManager : NetworkPersistentSingleton<CropManager>, IDataPersist
         MoveNetworkListToLocal();
         _cropsSaveData.SetCropsData(PlantedCrops);
         data.SetCropsData(_cropsSaveData);
+    }
+
+    public void SetTilemap(Tilemap tilemap)
+    {
+        cropTilemap = tilemap;
     }
 }

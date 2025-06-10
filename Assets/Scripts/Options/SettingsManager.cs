@@ -1,10 +1,14 @@
 ﻿using System.Xml.Serialization;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class SettingsManager : PersistentSingleton<SettingsManager>
 {
     [Header("Reference")]
     public DefaultSettingsSO defaultSettings;
+
+    [Header("Audio")]
+    public AudioMixer audioMixer;
 
     private SettingsData settingsData;
 
@@ -16,6 +20,8 @@ public class SettingsManager : PersistentSingleton<SettingsManager>
     public void ApplySettings()
     {
         SetMasterVolume(defaultSettings.settingsData.OveralVolume);
+        SetMusicVolume(defaultSettings.settingsData.MusicVolume);
+        SetSFXVolume(defaultSettings.settingsData.SFXVolume);
         SetResolution(defaultSettings.settingsData.ResolutionIndex);
         SetFullScreen(defaultSettings.settingsData.IsFullScreen);
     }
@@ -23,8 +29,27 @@ public class SettingsManager : PersistentSingleton<SettingsManager>
     public void SetMasterVolume(float volume)
     {
         defaultSettings.settingsData.SetOveralVolume(volume);
-        AudioListener.volume = volume;
+        SetVolumeInMixer("MasterVolume", volume);
     }
+
+    public void SetMusicVolume(float volume)
+    {
+        defaultSettings.settingsData.SetMusicVolume(volume);
+        SetVolumeInMixer("MusicVolume", volume);
+    }
+
+    public void SetSFXVolume(float volume)
+    {
+        defaultSettings.settingsData.SetSFXVolume(volume);
+        SetVolumeInMixer("SFXVolume", volume);
+    }
+
+    private void SetVolumeInMixer(string parameter, float volume)
+    {
+        float dB = Mathf.Log10(Mathf.Clamp(volume, 0.0001f, 1f)) * 20f;
+        audioMixer.SetFloat(parameter, dB);
+    }
+
 
     public void SetResolution(int resolutionIndex)
     {
@@ -63,5 +88,6 @@ public class SettingsManager : PersistentSingleton<SettingsManager>
     public void SaveData()
     {
         SettingsFileHandler.Save(defaultSettings.settingsData);
+        defaultSettings.ResetSettingData();
     }
 }

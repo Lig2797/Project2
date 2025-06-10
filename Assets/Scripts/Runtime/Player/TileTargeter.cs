@@ -236,7 +236,7 @@ public class TileTargeter : NetworkBehaviour
 
     private bool CheckCanHoe(Vector3Int pos)
     {
-        Tilemap walkFrontTilemap = _tilemaps.Find(x => x.name == "CropGround");
+        Tilemap walkFrontTilemap = _tilemaps.Find(x => x.name == "Ground");
         if (walkFrontTilemap == null)
         {
             UnityEngine.Debug.LogWarning("WalkFront tilemap not found.");
@@ -332,8 +332,10 @@ public class TileTargeter : NetworkBehaviour
 
     private void UseHoe(Item item)
     {
+      
         if (LockedCanHoe)
         {
+            Debug.Log("chat cái nay");
             Tilemap targetTilemap = null;
             foreach (Tilemap tilemap in _tilemaps)
             {
@@ -400,5 +402,10 @@ public class TileTargeter : NetworkBehaviour
                     break;
                 }        
         }
+    }
+
+    public void SetTilemap(Tilemap[] tilemap)
+    {
+        _tilemaps = tilemap.ToList();
     }
 }

@@ -7,7 +7,8 @@ public class GameFlowData
     [SerializeField] private bool _completedFirstCutscene;
     [SerializeField] private bool _completedSecondCutscene;
     [SerializeField] private bool _hasOpenedPlayerHouse;
-    [SerializeField] private string _lastScene;
+    [SerializeField] private bool _completedThirdCutscene;
+    [SerializeField] private bool _completedAllCutscene;
 
     public bool HasChoosenCharacter
     { get { return _hasChoosenCharacter; } }
@@ -18,25 +19,31 @@ public class GameFlowData
     public bool CompletedSecondCutscene
     { get { return _completedSecondCutscene; } }
 
+    public bool CompletedThirdCutscene
+    { get { return _completedSecondCutscene; } }
+
     public bool HasOpenedPlayerHouse
     { get { return _hasOpenedPlayerHouse; } }
 
-    public Loader.Scene LastScene
-    { get { return ConvertToScene(_lastScene); } }
+    public bool CompletedAllCutscene
+    { get { return _completedAllCutscene; } }
 
     public GameFlowData()
     {
         _hasChoosenCharacter = false;
         _completedFirstCutscene = false;
-        _lastScene = Loader.Scene.CharacterSelectScene.ToString();
+        _completedSecondCutscene = false;
+        _completedThirdCutscene = false;
+        _completedAllCutscene = false;
     }
 
-    public GameFlowData(bool hasChoosenCharacter, bool completedFirstCutscene, bool completeSecondCutscene, string lastScene)
+    public GameFlowData(bool hasChoosenCharacter, bool completedFirstCutscene, bool completeSecondCutscene, bool completedThirdCutscene, bool completedAllCutscene)
     {
         _hasChoosenCharacter = hasChoosenCharacter;
         _completedFirstCutscene = completedFirstCutscene;
         _completedSecondCutscene = completeSecondCutscene;
-        _lastScene = lastScene;
+        _completedThirdCutscene = completedThirdCutscene;
+        _completedAllCutscene = completedAllCutscene;
     }
 
     private Loader.Scene ConvertToScene(string sceneName)
@@ -70,5 +77,15 @@ public class GameFlowData
     public void SetHasOpendPlayerHouse(bool hasOpenedPlayerHouse)
     {
         _hasOpenedPlayerHouse = hasOpenedPlayerHouse;
+    }
+
+    public void SetCompletedThirdCutscene(bool completedThirdCutscene)
+    {
+        _completedThirdCutscene = completedThirdCutscene;
+    }
+
+    public void SetCompletedAllCutscene(bool completedAllCutscene)
+    {
+        _completedAllCutscene = completedAllCutscene;
     }
 }

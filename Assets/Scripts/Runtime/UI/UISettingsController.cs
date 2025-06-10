@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UIElements;
 
 public class UISettingsController : MonoBehaviour
@@ -35,12 +35,20 @@ public class UISettingsController : MonoBehaviour
 
         _resolutionScreenDropdown = root.Q<DropdownField>("ScreenDropdownField");
         _fullScreenToggle = root.Q<Toggle>("FullScreenToggle");
+
+        _overalVolumeSlider = root.Q<Slider>("OveralVolumeSlider");
+        _musicVolumeSlider = root.Q<Slider>("MusicVolumeSlider");
+        _sfxVolumeSlider = root.Q<Slider>("SFXVolumeSlider");
     }
 
     private void Start()
     {
         _resolutionScreenDropdown.index = SettingsManager.Instance.defaultSettings.settingsData.ResolutionIndex;
         _fullScreenToggle.value = SettingsManager.Instance.defaultSettings.settingsData.IsFullScreen;
+
+        _overalVolumeSlider.value = SettingsManager.Instance.defaultSettings.settingsData.OveralVolume;
+        _musicVolumeSlider.value = SettingsManager.Instance.defaultSettings.settingsData.MusicVolume;
+        _sfxVolumeSlider.value = SettingsManager.Instance.defaultSettings.settingsData.SFXVolume;
     }
 
     private void OnEnable()
@@ -60,6 +68,24 @@ public class UISettingsController : MonoBehaviour
         _fullScreenToggle.RegisterValueChangedCallback(evt =>
         {
             SettingsManager.Instance.SetFullScreen(evt.newValue);
+        });
+
+        _overalVolumeSlider.RegisterCallback<ChangeEvent<float>>(evt =>
+        {
+            AudioManager.Instance.SetMasterVolume(evt.newValue);
+            SettingsManager.Instance.defaultSettings.settingsData.SetOveralVolume(evt.newValue);
+        });
+
+        _musicVolumeSlider.RegisterCallback<ChangeEvent<float>>(evt =>
+        {
+            AudioManager.Instance.SetMusicVolume(evt.newValue);
+            SettingsManager.Instance.defaultSettings.settingsData.SetMusicVolume(evt.newValue);
+        });
+
+        _sfxVolumeSlider.RegisterCallback<ChangeEvent<float>>(evt =>
+        {
+            AudioManager.Instance.SetSFXVolume(evt.newValue);
+            SettingsManager.Instance.defaultSettings.settingsData.SetSFXVolume(evt.newValue);
         });
     }
 

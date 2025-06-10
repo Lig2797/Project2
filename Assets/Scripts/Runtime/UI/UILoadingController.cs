@@ -108,7 +108,7 @@ public class UILoadingController : MonoBehaviour
 
         Debug.Log("new scene " + loadedScene.name + " is loaded");
         SceneManager.SetActiveScene(loadedScene);
-
+        
         if (sceneName != Loader.Scene.WorldScene.ToString())
         {
             MultiSceneManger.Instance.ActiveSubScene = SceneManager.GetSceneByName(sceneName);
@@ -206,9 +206,6 @@ public class UILoadingController : MonoBehaviour
             }
 
             MultiSceneManger.Instance.FindAllNetworkSingletonAndSpawnOnSceneLoad(loadedScene);
-
-            if (sceneName == Loader.Scene.WorldScene.ToString())
-                DataPersistenceManager.Instance.StartLoadGameAndAutoSave();
         }
     }
 }

@@ -12,6 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90ee4ec452fc82543bc99c38276c247b, type: 3}
   m_Name: GameFlowSO
   m_EditorClassIdentifier: 
-  hasChoosenCharacter: 0
-  completedFirstCutscene: 0
-  lastScene: 5
+  gameFlowData:
+    _hasChoosenCharacter: 0
+    _completedFirstCutscene: 0
+    _completedSecondCutscene: 0
+    _hasOpenedPlayerHouse: 0
+    _completedThirdCutscene: 0
+    _completedAllCutscene: 0
+  hasLoaded: 0

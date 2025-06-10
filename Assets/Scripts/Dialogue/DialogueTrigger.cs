@@ -39,4 +39,14 @@ public class DialogueTrigger : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    public void SetKnotName(string knotName)
+    {
+        dialogueKnotName = knotName;
+    }    
+
+    public void EnterDialogue()
+    {
+        GameEventsManager.Instance.dialogueEvents.EnterDialogue(dialogueKnotName);
+    }    
 }

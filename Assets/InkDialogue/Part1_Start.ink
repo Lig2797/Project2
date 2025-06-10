@@ -41,19 +41,19 @@ Mình cũng rất nhớ ông. Có vẻ cơ hội để mình thay đổi bản t
 Quyết định đã được đưa ra, mình cần chuẩn bị lên đường đến làng Eloria. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
 
 + [Chuẩn bị hành lý kỹ càng] 
-
+~ CompletedFirstCutscene()
     Mình cần thu dọn đồ đạc và sắp xếp những vật dụng cần thiết. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
     
     -> DONE
 
 + [Đi ngay lập tức, không chờ đợi]
-
+~ CompletedFirstCutscene()
     Không chần chừ thêm nữa, lên đường thôi. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
 
     -> DONE
 
 === to_eloria ===
-
+~ CompletedSecondCutscene()
 Thật là một chuyến đi dài mệt mỏi, phải nhanh chóng về nhà nghỉ ngơi mới được.
 #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
 
@@ -74,5 +74,40 @@ Có 2 chiếc chìa khóa, có vẻ chiếc chìa nhỏ này dùng để mở c�
 
 -> DONE
 
+=== House_1 ===
+Ngôi nhà này trông thật cũ kĩ.
+#speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+Mình quá mệt để dọn dẹp rồi, làm một giấc rồi tính tiếp vậy.
+#speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+-> DONE
 
+=== noises_1 ===
 
+Tiếng động gì mà ồn vậy ta. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+~ CompletedThirdCutscene()
+Phải ra ngoài xem thử mới được. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+
+-> DONE
+
+=== noise_2 ===
+
+Haizzz~~~ Tại sao Lyria lại cần nhiều gỗ đến như vậy chứ. Thật là....
+#speaker:??? #background: Say #portrait:Alex_Default #layout:Left #audio:animal_crossing_mid
+
+Giọng nói phát ra từ đằng sau nhà mình nên ra xem thử thế nào.
+#speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+
+-> DONE
+
+=== meet_josh ===
+Này cậu gì ơi. #speaker:Alex #background: Say #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+Khoan đã là Josh đây mà. #speaker:Alex #background: Say #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+Ô! Alex? #speaker:Josh #background: Say #portrait:Alex_Default #layout:Left #audio:animal_crossing_mid
+Cậu về lúc nào mà không nói cho tớ biết. #speaker:Josh #background: Say #portrait:Alex_Default #layout:Left #audio:animal_crossing_mid
+Tớ mới về cách đây không lâu. Cậu dạo này thế nào. #speaker:Josh #background: Say #portrait:Alex_Default #layout:Left #audio:animal_crossing_mid
+Cậu nhìn mà không biết sao? Cầm lấy cây rìu này và phụ tớ chặt gỗ mau.#speaker:Josh #background: Say #portrait:Alex_Default #layout:Left #audio:animal_crossing_mid
+~ AddItem("Axe")
+Này tớ vừa mới về thôi mà Josh #speaker:Josh #background: Say #portrait:Alex_Default #layout:Left #audio:animal_crossing_mid
+Josh!!! #speaker:Josh #background: Say #portrait:Alex_Default #layout:Left #audio:animal_crossing_mid
+Chờ tớ với Josh. #speaker:Josh #background: Say #portrait:Alex_Default #layout:Left #audio:animal_crossing_mid
+-> DONE

@@ -41,7 +41,10 @@ public class DialogueTriggerButton : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             playerInRange = true;
-            emoteGO.SetActive(true);
+            if (emoteGO != null)
+            {
+                emoteGO.SetActive(true);
+            }
         }
     }
 
@@ -52,7 +55,10 @@ public class DialogueTriggerButton : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             playerInRange = false;
-            emoteGO.SetActive(false);
+            if (emoteGO != null)
+            {
+                emoteGO.SetActive(true);
+            }
         }
     }
 }
