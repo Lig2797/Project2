@@ -151,7 +151,7 @@ public class TileManager : NetworkPersistentSingleton<TileManager>, IDataPersist
     public void ModifyTile(Vector3Int tilePos, string tilemapName, string ruleTileName = null)
     {
         var sceneName = SceneManager.GetActiveScene().name;
-        if (sceneName != "WorldScene" || sceneName != "GameplayScene") return;
+        if (sceneName != Loader.Scene.WorldScene.ToString()) return;
         RequestToModifyTileServerRpc(tilePos, tilemapName, ruleTileName);
 
         //HoedTileData newHoedTile = new HoedTileData();
@@ -300,8 +300,4 @@ public class TileManager : NetworkPersistentSingleton<TileManager>, IDataPersist
         EnviromentalStatusManager.OnTimeIncrease -= UpdateAllTileStatus;
     }
 
-    public void AddTilemap(Tilemap tilemap)
-    {
-        tilemaps.Add(tilemap);
-    }
 }

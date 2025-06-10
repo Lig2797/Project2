@@ -270,8 +270,4 @@ public class CropManager : NetworkPersistentSingleton<CropManager>, IDataPersist
         data.SetCropsData(_cropsSaveData);
     }
 
-    public void SetTilemap(Tilemap tilemap)
-    {
-        cropTilemap = tilemap;
-    }
 }
