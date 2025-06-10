@@ -10,6 +10,7 @@ using UnityEngine.Tilemaps;
 public class Item : ScriptableObject
 {
     [Header("Only gameplay")]
+    public int itemPrice = 0;
     [Header("For Crops")]
     public Crop CropSetting;
     [Header("For Crops Products")]

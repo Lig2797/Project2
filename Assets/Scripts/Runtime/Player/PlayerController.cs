@@ -713,6 +713,7 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
         {
             if (tileTargeter.CheckHarverst())
             {
+                AudioManager.Instance.PlaySFX("pop");
                 animator.SetTrigger(AnimationStrings.pickup);
                 _itemOnHand.gameObject.SetActive(false);
                 CurrentState = null;

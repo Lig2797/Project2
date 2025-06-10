@@ -19,7 +19,6 @@ public class UI_Inventory : MonoBehaviour
 
     private void Awake()
     {
-        Debug.Log("UI_Inventory Awake called");
     }
 
     private void Start()
@@ -53,7 +52,6 @@ public class UI_Inventory : MonoBehaviour
         for (int i = 0; i < totalSlots; i++)
         {
             Transform parent = (i < maxToolBarSlot) ? toolBarContainer : inventoryContainer;
-            Debug.Log("slot num:" + i);
             GameObject slotUIGO = Instantiate(slotPrefab, parent);
             UI_InventorySlot inventoryslotUI = slotUIGO.GetComponent<UI_InventorySlot>();
             inventoryslotUI.slotIndex = i;

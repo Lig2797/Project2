@@ -76,6 +76,10 @@ PrefabInstance:
       propertyPath: _projectileDamage
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 8016201154110748339, guid: 5bacb55fe68bac64abbf970ff2a95448, type: 3}
+      propertyPath: ChasingStateData.AttackCooldown
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

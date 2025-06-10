@@ -90,11 +90,11 @@ public class TileManager : NetworkPersistentSingleton<TileManager>, IDataPersist
             }
         }
         return null;
-    }
+    } 
     public void UpdateAllTileStatus(int minute)
     {
         var sceneName = SceneManager.GetActiveScene().name;
-        if (sceneName != "WorldScene" || sceneName != "GameplayScene") return;
+        //if (sceneName != "WorldScene" || sceneName != "GameplayScene") return;
 
         List<NetworkVector3Int> hoedTilesToRemove = new();
         List<NetworkVector3Int> wateredTilesToRemove = new();
@@ -175,14 +175,14 @@ public class TileManager : NetworkPersistentSingleton<TileManager>, IDataPersist
                 case "FarmGround":
                     if (!HoedTilesNetwork.ContainsKey(networkTilePos))
                     {
-                        HoedTilesNetwork.Add(networkTilePos, new HoedTileData(4320));
+                        HoedTilesNetwork.Add(networkTilePos, new HoedTileData(1000));
                     }
                     break;
 
                 case "WateredGround":
                     if (!WateredTilesNetwork.ContainsKey(networkTilePos))
                     {
-                        WateredTilesNetwork.Add(networkTilePos, new WateredTileData(4320));
+                        WateredTilesNetwork.Add(networkTilePos, new WateredTileData(2000));
                     }
                     break;
             }
@@ -268,7 +268,7 @@ public class TileManager : NetworkPersistentSingleton<TileManager>, IDataPersist
         //tilemaps.Add(listtm);
         //var listnj = GameObject.Find("WateredGround").GetComponent<Tilemap>();
         //tilemaps.Add(listnj);
-
+        Debug.Log("did subscribe time increase on tile manager");
         HoedTiles = data.TileSaveData.HoedTiles;
         WateredTiles = data.TileSaveData.WateredTiles;
         StartCoroutine(SetAllTileDataToNetworkData());

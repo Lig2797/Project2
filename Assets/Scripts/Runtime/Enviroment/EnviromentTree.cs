@@ -47,6 +47,7 @@ public class EnviromentTree : ItemDropableEntity
     }
     public override void OnHit(Vector2 knockback)
     {
+        AudioManager.Instance.PlaySFX("Chop3");
         if (!damageable.IsAlive)
         {
             DropItem(!damageable.IsAlive);

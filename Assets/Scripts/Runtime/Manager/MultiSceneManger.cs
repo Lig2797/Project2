@@ -101,6 +101,8 @@ public class MultiSceneManger : PersistentSingleton<MultiSceneManger>
         TileManager.Instance.GetComponent<NetworkObject>().Spawn();
         if(!CropManager.Instance.IsSpawned)
         CropManager.Instance.GetComponent<NetworkObject>().Spawn();
+        if(!EnviromentalStatusManager.Instance.IsSpawned)
+            EnviromentalStatusManager.Instance.GetComponent<NetworkObject>().Spawn();
 
         GameEventsManager.Instance.networkObjectEvents.OnNetworkObjectSpawned();
     }

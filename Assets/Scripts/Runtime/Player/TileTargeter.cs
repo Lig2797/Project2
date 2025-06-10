@@ -156,7 +156,7 @@ public class TileTargeter : NetworkBehaviour
             }
             else if (dirtTilemap.HasTile(cellPosOfGround))
             {
-                AudioManager.Instance.PlaySFX("walk_dirt");
+                AudioManager.Instance.PlaySFX("walk_Dirt");
             }
             stepTimer = stepCooldown;
         }
@@ -360,7 +360,6 @@ public class TileTargeter : NetworkBehaviour
                 }
             case "Pickaxe":
                 {
-                    AudioManager.Instance.PlaySFX("Pickaxe_blow");
                     break;
                 }
         }

@@ -107,6 +107,7 @@ public class CropManager : NetworkPersistentSingleton<CropManager>, IDataPersist
 
     public void PlantCrop(Vector3Int plantPosition, Item cropSeed)
     {
+        AudioManager.Instance.PlaySFX("walk_grass_2");
         cropTilemap.SetTile(plantPosition, cropSeed.CropSetting.growthStages[1]); // seed stage
     }
 
@@ -125,7 +126,7 @@ public class CropManager : NetworkPersistentSingleton<CropManager>, IDataPersist
     public bool TryToHarverst(Vector3Int pos)
     {
         var sceneName = SceneManager.GetActiveScene().name;
-        if (sceneName != "WorldScene" || sceneName != "GameplayScene") return false;
+        //if (sceneName != "WorldScene" || sceneName != "GameplayScene") return false;
 
         var networkPos = new NetworkVector3Int(pos);
 
@@ -178,11 +179,10 @@ public class CropManager : NetworkPersistentSingleton<CropManager>, IDataPersist
         return false;
     }
 
-
     public void UpdateCropsGrowthTime(int minute)
     {
         var sceneName = SceneManager.GetActiveScene().name;
-        if (sceneName != "WorldScene" || sceneName != "GameplayScene") return;
+        //if (sceneName != "WorldScene" || sceneName != "GameplayScene") return;
         foreach (var crop in PlantedCropsNetwork)
         {
             var cropInfo = crop.Value;
@@ -227,7 +227,7 @@ public class CropManager : NetworkPersistentSingleton<CropManager>, IDataPersist
         //if (SceneManager.GetSceneByName("WorldScene").isLoaded) return;
 
         //cropTilemap = GameObject.Find("PlantGround").GetComponent<Tilemap>();
-
+        Debug.Log("did subscribe time increase on crop manager");
         PlantedCrops = data.CropsSaveData.CropTiles;
         StartCoroutine(MoveLocalListToNetwork());
         StartCoroutine(ApplyCropTilesOnHostLoad());

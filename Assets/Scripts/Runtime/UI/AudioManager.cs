@@ -56,13 +56,14 @@ public class AudioManager : PersistentSingleton<AudioManager>
                 PlayMusic("Chill");
                 break;
             case "WorldScene":
+                Debug.Log("pokemon music");
                 PlayMusic("Default");
                 break;
-            case "UIScene":
-                // do nothing when load UIScene
+            case "LoadingScene":
+                Debug.Log("stop music");
+                StopMusic();
                 break;
             default:
-                StopMusic();
                 break;
         }
     }
@@ -91,7 +92,7 @@ public class AudioManager : PersistentSingleton<AudioManager>
         if (sfxDict.TryGetValue(name, out var clip))
         {
             float originalPitch = 1f;
-            sfxSource.pitch = Random.Range(originalPitch - 0.1f, originalPitch + 0.1f); 
+            sfxSource.pitch = Random.Range(originalPitch - 0.2f, originalPitch + 0.2f); 
             sfxSource.PlayOneShot(clip);
 
             sfxSource.pitch = originalPitch; // Reset to avoid affecting other sounds
