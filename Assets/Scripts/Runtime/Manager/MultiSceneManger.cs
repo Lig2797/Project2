@@ -88,7 +88,7 @@ public class MultiSceneManger : PersistentSingleton<MultiSceneManger>
 
     public void FindAllNetworkSingletonAndSpawnOnSceneLoad(Scene scene)
     {
-        if (!NetworkManager.Singleton.IsServer) return;
+        Debug.Log("scene loaded name to spawn object is: " + scene.name);
         List<NetworkObject> netObjs = SceneUtils.FindAllOfTypeInScene<NetworkObject>(scene);
 
         foreach (var netObj in netObjs)
@@ -96,6 +96,13 @@ public class MultiSceneManger : PersistentSingleton<MultiSceneManger>
             if(!netObj.IsSpawned)
                 netObj.Spawn();
         }
+
+        if(!TileManager.Instance.IsSpawned)
+        TileManager.Instance.GetComponent<NetworkObject>().Spawn();
+        if(!CropManager.Instance.IsSpawned)
+        CropManager.Instance.GetComponent<NetworkObject>().Spawn();
+        if(!EnviromentalStatusManager.Instance.IsSpawned)
+            EnviromentalStatusManager.Instance.GetComponent<NetworkObject>().Spawn();
 
         GameEventsManager.Instance.networkObjectEvents.OnNetworkObjectSpawned();
     }

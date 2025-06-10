@@ -3,9 +3,8 @@ using UnityEngine.Audio;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
-public class AudioManager : MonoBehaviour
+public class AudioManager : PersistentSingleton<AudioManager>
 {
-    public static AudioManager Instance { get; private set; }
 
     [Header("Audio Mixer")]
     public AudioMixer audioMixer;
@@ -26,16 +25,9 @@ public class AudioManager : MonoBehaviour
     private Dictionary<string, AudioClip> musicDict;
     private Dictionary<string, AudioClip> sfxDict;
 
-    private void Awake()
+    protected override void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-
+        base.Awake();
         // Convert lists to dictionaries for fast lookup
         musicDict = new Dictionary<string, AudioClip>();
         foreach (var item in musicClips)
@@ -64,10 +56,14 @@ public class AudioManager : MonoBehaviour
                 PlayMusic("Chill");
                 break;
             case "WorldScene":
+                Debug.Log("pokemon music");
                 PlayMusic("Default");
                 break;
-            default:
+            case "LoadingScene":
+                Debug.Log("stop music");
                 StopMusic();
+                break;
+            default:
                 break;
         }
     }
@@ -95,13 +91,18 @@ public class AudioManager : MonoBehaviour
     {
         if (sfxDict.TryGetValue(name, out var clip))
         {
+            float originalPitch = 1f;
+            sfxSource.pitch = Random.Range(originalPitch - 0.2f, originalPitch + 0.2f); 
             sfxSource.PlayOneShot(clip);
+
+            sfxSource.pitch = originalPitch; // Reset to avoid affecting other sounds
         }
         else
         {
             Debug.LogWarning($"SFX clip '{name}' not found!");
         }
     }
+
 
     public void SetMasterVolume(float volume) => SetVolume(masterVolumeParam, volume);
     public void SetMusicVolume(float volume) => SetVolume(musicVolumeParam, volume);

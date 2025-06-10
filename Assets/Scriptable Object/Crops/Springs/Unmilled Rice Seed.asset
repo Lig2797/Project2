@@ -22,7 +22,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 72b042acc6d18b340940b33d4b866926, type: 2}
     - {fileID: 11400000, guid: 03fed469343b5c945a545f62a91ce186, type: 2}
     - {fileID: 11400000, guid: f92dfa4c910b5d043be350ee1d33f9b3, type: 2}
-    TimeToGrowth: 4320
+    TimeToGrowth: 6000
     canReHarvest: 0
     numOfProductCouldDrop: 0200000003000000
     ratioForEachNum:

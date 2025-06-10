@@ -39,6 +39,7 @@ public class StoneAndMineral : ItemDropableEntity
 
     public override void OnHit(Vector2 knockback)
     {
+        AudioManager.Instance.PlaySFX("Pickaxe_blow");
         if (!damageable.IsAlive)
         {
             DropItem(false);

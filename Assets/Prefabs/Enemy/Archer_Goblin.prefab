@@ -346,7 +346,7 @@ MonoBehaviour:
     fanAngle: 150
     fanRayCount: 20
   ChasingStateData:
-    chaseSpeed: 1.5
+    chaseSpeed: 1.2
     fanRange: 12
     fanAngle: 150
     fanRayCount: 20
@@ -356,7 +356,7 @@ MonoBehaviour:
     repulsionStrength: 20
     TimeToForgetPlayer: 4
     AttackCooldown: 1
-    AttackRange: 1
+    AttackRange: 5
   Rb: {fileID: 0}
   Animator: {fileID: 0}
   Damageable: {fileID: 0}

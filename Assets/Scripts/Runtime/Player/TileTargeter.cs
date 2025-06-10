@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
+using static UnityEditor.Progress;
 
 public class TileTargeter : NetworkBehaviour
 {
@@ -70,6 +71,10 @@ public class TileTargeter : NetworkBehaviour
         get { return _canPlantGround; }
         set { _canPlantGround = value; }
     }
+
+    [SerializeField]
+    private float stepCooldown = 0.3f;
+    private float stepTimer = 0f;
     #endregion
 
     #region Before Gameloop
@@ -84,8 +89,8 @@ public class TileTargeter : NetworkBehaviour
             enabled = false;
             return;
         }
-        if (SceneUtils.ThisSceneIsGameplayScene(SceneManager.GetActiveScene().ToString()))
-            onExitToWorldScene(SceneManager.GetActiveScene().ToString());
+        //if (SceneUtils.ThisSceneIsGameplayScene(SceneManager.GetActiveScene().ToString()))
+        //    onExitToWorldScene(SceneManager.GetActiveScene().ToString());
     }
 
 
@@ -104,6 +109,7 @@ public class TileTargeter : NetworkBehaviour
 
     private void Update()
     {
+        CheckSoundWhenMoving();
         if (SceneManager.GetActiveScene().name.Equals(Loader.Scene.MainMenu.ToString()) ||
             SceneManager.GetActiveScene().name.Equals(Loader.Scene.LoadingScene.ToString()) ||
             SceneManager.GetActiveScene().name.Equals(Loader.Scene.LobbyScene.ToString()) ||
@@ -113,7 +119,53 @@ public class TileTargeter : NetworkBehaviour
 
         GetTargetTile();
     }
+    private void CheckSoundWhenMoving()
+    {
 
+        if (playerController.Movement != Vector2.zero)
+        {
+            stepTimer -= Time.deltaTime;
+            if (stepTimer > 0f) return;
+
+            Vector3 playerPos = playerController.transform.position;
+            Tilemap grassTilemap = null;
+            foreach (Tilemap tilemap in _tilemaps)
+            {
+                if (tilemap.name == "Grass")
+                {
+                    grassTilemap = tilemap;
+                    break;
+                }
+            }
+            Tilemap dirtTilemap = null;
+            foreach (Tilemap tilemap in _tilemaps)
+            {
+                if (tilemap.name == "Ground")
+                {
+                    dirtTilemap = tilemap;
+                    break;
+                }
+            }
+
+            Vector3Int cellPosOfGrass = grassTilemap.WorldToCell(playerPos);
+            Vector3Int cellPosOfGround = dirtTilemap.WorldToCell(playerPos);
+
+            if (grassTilemap.HasTile(cellPosOfGrass))
+            {
+                AudioManager.Instance.PlaySFX("walk_grass");
+            }
+            else if (dirtTilemap.HasTile(cellPosOfGround))
+            {
+                AudioManager.Instance.PlaySFX("walk_Dirt");
+            }
+            stepTimer = stepCooldown;
+        }
+        else
+        {
+            
+            stepTimer = 0f;
+        }
+    }
     public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         Debug.Log("day la scene loaded: " + scene.name);
@@ -156,7 +208,7 @@ public class TileTargeter : NetworkBehaviour
 
         if (gridObject == null)
         {
-            UnityEngine.Debug.LogError("No Grid found in the scene!");
+            Debug.LogError("No Grid found in the scene!");
             return;
         }
 
@@ -166,7 +218,7 @@ public class TileTargeter : NetworkBehaviour
         _tilemaps.AddRange(foundTilemaps);
         foreach (Tilemap tilemap in _tilemaps)
         {
-            UnityEngine.Debug.Log($"Found Tilemap: {tilemap.name}");
+            Debug.Log($"Found Tilemap: {tilemap.name}");
         }
     }
 
@@ -236,32 +288,33 @@ public class TileTargeter : NetworkBehaviour
 
     private bool CheckCanHoe(Vector3Int pos)
     {
-        Tilemap walkFrontTilemap = _tilemaps.Find(x => x.name == "Ground");
-        if (walkFrontTilemap == null)
+        Tilemap groundTilemap = _tilemaps.Find(x => x.name == "Ground");
+        Tilemap grassTilemap = _tilemaps.Find(x => x.name == "Grass");
+        if (groundTilemap == null || grassTilemap == null)
         {
-            UnityEngine.Debug.LogWarning("WalkFront tilemap not found.");
+            Debug.LogWarning("tilemap to check can hoe not found.");
             return false;
         }
+        if (grassTilemap.HasTile(pos)) return false;
+        //Vector3Int[] directions =
+        //{
+        //new Vector3Int(1, 0, 0),
+        //new Vector3Int(-1, 0, 0),
+        //new Vector3Int(0, 1, 0),
+        //new Vector3Int(0, -1, 0),
+        //new Vector3Int(1, 1, 0),
+        //new Vector3Int(-1, 1, 0),
+        //new Vector3Int(1, -1, 0),
+        //new Vector3Int(-1, -1, 0)
+        //};
 
-        Vector3Int[] directions =
-        {
-        new Vector3Int(1, 0, 0),
-        new Vector3Int(-1, 0, 0),
-        new Vector3Int(0, 1, 0),
-        new Vector3Int(0, -1, 0),
-        new Vector3Int(1, 1, 0),
-        new Vector3Int(-1, 1, 0),
-        new Vector3Int(1, -1, 0),
-        new Vector3Int(-1, -1, 0)
-        };
-
-        foreach (var dir in directions)
-        {
-            if (!walkFrontTilemap.HasTile(pos + dir))
-            {
-                return false;
-            }
-        }
+        //foreach (var dir in directions)
+        //{
+        //    if (grassTilemap.HasTile(pos + dir))
+        //    {
+        //        return false;
+        //    }
+        //}
 
         return true;
     }
@@ -305,6 +358,10 @@ public class TileTargeter : NetworkBehaviour
                     UseWaterCan(item);
                     break;
                 }
+            case "Pickaxe":
+                {
+                    break;
+                }
         }
     }
     private void ChangePlayerFacingDirection()
@@ -332,10 +389,9 @@ public class TileTargeter : NetworkBehaviour
 
     private void UseHoe(Item item)
     {
-      
+        AudioManager.Instance.PlaySFX("shovel");
         if (LockedCanHoe)
         {
-            Debug.Log("chat cái nay");
             Tilemap targetTilemap = null;
             foreach (Tilemap tilemap in _tilemaps)
             {
@@ -349,10 +405,9 @@ public class TileTargeter : NetworkBehaviour
             }
             if (!TileManager.Instance.HoedTilesNetwork.ContainsKey(new NetworkVector3Int(_lockedTilePosition)))
             {
+
+                Debug.Log("chat cái nay");
                 TileManager.Instance.ModifyTile(_lockedTilePosition, targetTilemap.name, item.ruleTile.name);
-            }
-            else
-            {
             }
 
 
@@ -361,6 +416,7 @@ public class TileTargeter : NetworkBehaviour
 
     private void UseWaterCan(Item item)
     {
+        AudioManager.Instance.PlaySFX("waterCan");
         if (LockedCanWater)
         {
             Tilemap targetTilemap = null;
@@ -404,8 +460,4 @@ public class TileTargeter : NetworkBehaviour
         }
     }
 
-    public void SetTilemap(Tilemap[] tilemap)
-    {
-        _tilemaps = tilemap.ToList();
-    }
 }
