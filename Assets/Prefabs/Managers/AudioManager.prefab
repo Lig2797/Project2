@@ -196,6 +196,8 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 0967233b607004d4cb361e8a22fa04fb, type: 3}
   - name: Default
     clip: {fileID: 8300000, guid: 71899bbf02841074d8cc5ce2d3c0cf14, type: 3}
+  - name: Cave
+    clip: {fileID: 8300000, guid: 9dfee8168e4d8d946a4e59d1f8dace04, type: 3}
   sfxClips:
   - name: Bicycle
     clip: {fileID: 8300000, guid: fc106acdc831eba4c912152af3742192, type: 3}
@@ -252,7 +254,7 @@ MonoBehaviour:
   - name: walk1_House
     clip: {fileID: 8300000, guid: 1cd3b8e47245b9443a494777ad0304bf, type: 3}
   - name: walk_grass
-    clip: {fileID: 8300000, guid: 2ed0023c1aa442540994f355c498a2d7, type: 3}
+    clip: {fileID: 8300000, guid: d0e9a6ee6d2b50e4e98dc9d138f8cea6, type: 3}
   - name: walk_grass1
     clip: {fileID: 8300000, guid: 283db09eda043d94bb133ac121aef75c, type: 3}
   - name: walk_grass2
@@ -264,7 +266,7 @@ MonoBehaviour:
   - name: waterCan
     clip: {fileID: 8300000, guid: d89b43cde3e14ce4bacc252542c0e012, type: 3}
   - name: walk_Dirt
-    clip: {fileID: 8300000, guid: d378cd1eb27c20d49ababa6ef754991d, type: 3}
+    clip: {fileID: 8300000, guid: 4d39c4fdb13b2994e9d059e2134ba913, type: 3}
   - name: pop
     clip: {fileID: 8300000, guid: 41df5b082c29cc34e8db217ece2e1f57, type: 3}
   - name: walk_grass_2
