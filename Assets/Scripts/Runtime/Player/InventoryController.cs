@@ -122,7 +122,7 @@ public class InventoryController : NetworkBehaviour, IDataPersistence
 
             if (inventoryItem.Quantity < 0 || inventoryItem.Quantity == 0)
             {
-                _inventoryManagerSO.inventory.RemoveItemById(inventoryItem);
+                _inventoryManagerSO.inventory.RemoveInventoryItem(inventoryItem);
                 GameEventsManager.Instance.inventoryEvents.OnItemRemoved(slotIndex);
                 return;
             }
