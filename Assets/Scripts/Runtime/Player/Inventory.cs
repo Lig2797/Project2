@@ -46,25 +46,26 @@ public class Inventory
         return true;
     }
 
-    public bool AddItemToInventory(string id, Item item, int slotIndex, int amount)
-    {
-        InventoryItem inventoryItem = new InventoryItem(id, item, slotIndex, amount,1);
-        _inventoryItemList.Add(inventoryItem);
-        return true;
-    }
+    //public bool AddItemToInventory(string id, Item item, int slotIndex, int amount)
+    //{
+    //    InventoryItem inventoryItem = new InventoryItem(id, item, slotIndex, amount,1);
+    //    _inventoryItemList.Add(inventoryItem);
+    //    return true;
+    //}
 
-    public bool RemoveItemFromInventory(Item item, int amount = 1)
-    {
-        InventoryItem existingItem = _inventoryItemList.Find(i => i.Item == item);
-        if (existingItem != null)
-        {
-            existingItem.DecreaseQuantity(amount);
-            if (existingItem.Quantity <= 0) _inventoryItemList.Remove(existingItem); return true;
-        }
-        return false;
-    }
+    //public bool RemoveItemFromInventory(Item item, int amount = 1)
+    //{
+    //    InventoryItem existingItem = _inventoryItemList.Find(i => i.Item == item);
+    //    if (existingItem != null)
+    //    {
+    //        existingItem.DecreaseQuantity(amount);
+    //        if (existingItem.Quantity <= 0) _inventoryItemList.Remove(existingItem); 
+    //        return true;
+    //    }
+    //    return false;
+    //}
 
-    public bool RemoveItemById(InventoryItem inventoryItem)
+    public bool RemoveInventoryItem(InventoryItem inventoryItem)
     {
         InventoryItem existingItem = _inventoryItemList.Find(i => i.Id == inventoryItem.Id);
         if (existingItem != null)

@@ -581,7 +581,9 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
     #region Animation
     public void CheckAnimation()
     {
+        Debug.Log("after knockback the can attack is: " + CanAttack);
         if (!CanAttack || IsRidingVehicle) return;
+
         Item item = _inventoryManagerSO.GetCurrentItem();
         _itemOnHand.ActivateItemOnHandServerRpc(null, false);
         if (item != null)
@@ -625,7 +627,7 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
 
     private void ChangeAnimationState(string newState)
     {
-        if (CurrentState == newState) return;
+        //if (CurrentState == newState) return;
 
         animator.Play(newState);
         CurrentState = newState;

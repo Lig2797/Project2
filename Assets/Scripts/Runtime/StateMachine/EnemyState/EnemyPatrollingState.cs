@@ -98,7 +98,7 @@ public class EnemyPatrollingState : IState
         Vector2 direction = (_targetPosition - currentPos).normalized;
 
         // Fan-shaped obstacle detection
-        float rayLength = 1;
+        float rayLength = 0.7f;
         float halfAngle = _data.fanAngle / 4f;
         int rayCount = 3;
 

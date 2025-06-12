@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5539969245815471263
 RectTransform:
   m_ObjectHideFlags: 0
@@ -509,7 +509,7 @@ PolygonCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -1229,6 +1229,7 @@ MonoBehaviour:
   playerController: {fileID: 8285066285643473853}
   _tilemaps: []
   _targetTilemap: {fileID: 0}
+  _grassTilemap: {fileID: 0}
   _targetTile: {fileID: 11400000, guid: d7c3298a0a6669446a7e49bfc0d990bc, type: 2}
   TargetRange: 1
   tilemapCheck: []
@@ -1238,6 +1239,7 @@ MonoBehaviour:
   _lockedCanWater: 0
   _canPlantGround: 0
   stepCooldown: 0.3
+  _inventoryManagerSO: {fileID: 11400000, guid: 80487e6faf0fa794284f8125827666cd, type: 2}
 --- !u!114 &566550412973088920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1875,7 +1877,7 @@ PolygonCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -2286,7 +2288,7 @@ PolygonCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0

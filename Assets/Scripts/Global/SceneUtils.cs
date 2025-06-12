@@ -30,6 +30,13 @@ public static class SceneUtils
 
         return false;
     }
+    public static bool ThisSceneIsNotWorldScene(string sceneName)
+    {
+        if (sceneName != Loader.Scene.WorldScene.ToString())
+            return true;
+
+        return false;
+    }
 
 
     public static GameObject FindGameObjectWithTagInScene(string tag, Scene scene)

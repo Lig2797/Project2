@@ -288,7 +288,7 @@ public class EnemyAI : NetworkBehaviour
         else
         {
             Animator.SetTrigger(HurtParameter);
-
+            StateMachine.ChangeState(IdleState);
             LastMovement = -knockBackDirection.normalized;
 
             StartCoroutine(ApplyKnockback(knockBackDirection));

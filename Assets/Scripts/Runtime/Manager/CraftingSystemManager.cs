@@ -122,7 +122,7 @@ public class CraftingSystemManager : PersistentSingleton<CraftingSystemManager>
                     }
                     else if (grid[i, j].InventoryItem.Quantity == 1)
                     {
-                        _inventoryManagerSO.RemoveItemById(grid[i, j].InventoryItem);
+                        _inventoryManagerSO.RemoveInventoryItem(grid[i, j].InventoryItem);
                         Destroy(grid[i, j].gameObject);
                     }
                 }
@@ -145,7 +145,7 @@ public class CraftingSystemManager : PersistentSingleton<CraftingSystemManager>
             var itemInOutputSlot = outputSlot.GetComponentInChildren<UI_InventoryItem>();
             if (itemInOutputSlot != null)
             {
-                _inventoryManagerSO.RemoveItemById(itemInOutputSlot.InventoryItem);
+                _inventoryManagerSO.RemoveInventoryItem(itemInOutputSlot.InventoryItem);
                 Destroy(itemInOutputSlot.gameObject);
             }
         }

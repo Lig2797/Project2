@@ -56,11 +56,15 @@ public class AudioManager : PersistentSingleton<AudioManager>
                 PlayMusic("Chill");
                 break;
             case "WorldScene":
-                Debug.Log("pokemon music");
                 PlayMusic("Default");
                 break;
+            case "MineCaveScene":
+                PlayMusic("Cave");
+                break;
+            case "MineScene":
+                PlayMusic("Cave");
+                break;
             case "LoadingScene":
-                Debug.Log("stop music");
                 StopMusic();
                 break;
             default:
@@ -91,6 +95,7 @@ public class AudioManager : PersistentSingleton<AudioManager>
     {
         if (sfxDict.TryGetValue(name, out var clip))
         {
+            Debug.Log("Sound fx name: " + name);
             float originalPitch = 1f;
             sfxSource.pitch = Random.Range(originalPitch - 0.2f, originalPitch + 0.2f); 
             sfxSource.PlayOneShot(clip);

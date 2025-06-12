@@ -126,7 +126,6 @@ public class UILoadingController : MonoBehaviour
 
     private IEnumerator LoadAsync(string sceneName)
     {
-        Debug.Log("run load scene");
         // this is use to Load from "not-gameplay scene" to "gameplay scene"
         AsyncOperation operation;
 
@@ -203,6 +202,10 @@ public class UILoadingController : MonoBehaviour
             {
                 MultiSceneManger.Instance.ActiveSubScene = loadedScene;
                 Debug.Log("First scene is not world scene, start to set active subscene: " + MultiSceneManger.Instance.ActiveSubSceneName);
+            }
+            else
+            {
+                GameEventsManager.Instance.dataEvents.OnExitToWorldScene(sceneName);
             }
 
             MultiSceneManger.Instance.FindAllNetworkSingletonAndSpawnOnSceneLoad(loadedScene);

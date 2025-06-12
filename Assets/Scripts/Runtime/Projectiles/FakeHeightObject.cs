@@ -115,7 +115,6 @@ public class FakeHeightObject : MonoBehaviour
         }
         else
         {
-            AudioManager.Instance.PlaySFX("explosion");
             _animator.speed = 1; // Play explosion animation
         }
     }

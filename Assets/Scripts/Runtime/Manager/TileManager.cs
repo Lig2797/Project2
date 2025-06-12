@@ -93,7 +93,7 @@ public class TileManager : NetworkPersistentSingleton<TileManager>, IDataPersist
     } 
     public void UpdateAllTileStatus(int minute)
     {
-        var sceneName = SceneManager.GetActiveScene().name;
+        //var sceneName = SceneManager.GetActiveScene().name;
         //if (sceneName != "WorldScene" || sceneName != "GameplayScene") return;
 
         List<NetworkVector3Int> hoedTilesToRemove = new();
@@ -150,8 +150,8 @@ public class TileManager : NetworkPersistentSingleton<TileManager>, IDataPersist
 
     public void ModifyTile(Vector3Int tilePos, string tilemapName, string ruleTileName = null)
     {
-        var sceneName = SceneManager.GetActiveScene().name;
-        if (sceneName != Loader.Scene.WorldScene.ToString()) return;
+        //var sceneName = SceneManager.GetActiveScene().name;
+        //if (sceneName != Loader.Scene.WorldScene.ToString()) return;
         RequestToModifyTileServerRpc(tilePos, tilemapName, ruleTileName);
 
         //HoedTileData newHoedTile = new HoedTileData();
