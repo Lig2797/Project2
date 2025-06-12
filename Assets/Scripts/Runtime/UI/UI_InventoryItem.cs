@@ -207,7 +207,7 @@ public class UI_InventoryItem : MonoBehaviour, IPointerDownHandler
                         draggedItem.RefreshCount();
                         if (draggedItem.InventoryItem.Quantity <= 0)
                         {
-                            _inventoryManagerSO.RemoveItemById(draggedItem.InventoryItem);
+                            _inventoryManagerSO.RemoveInventoryItem(draggedItem.InventoryItem);
                             _inventoryManagerSO.currentDraggingItem = null;
                             Destroy(draggedItem.gameObject);
                         }
@@ -250,7 +250,7 @@ public class UI_InventoryItem : MonoBehaviour, IPointerDownHandler
         {
             InventoryItem.IncreaseQuantity(draggedItem.InventoryItem.Quantity);
             RefreshCount();
-            _inventoryManagerSO.RemoveItemById(draggedItem.InventoryItem);
+            _inventoryManagerSO.RemoveInventoryItem(draggedItem.InventoryItem);
             _inventoryManagerSO.currentDraggingItem = null;
             Destroy(draggedItem.gameObject);
         }

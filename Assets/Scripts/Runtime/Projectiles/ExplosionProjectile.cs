@@ -35,6 +35,7 @@ public class ExplosionProjectile : MonoBehaviour
 
     public void DestroyShadowObject()
     {
+        AudioManager.Instance.PlaySFX("explosion");
         Destroy(_shadowObject);
     }
 

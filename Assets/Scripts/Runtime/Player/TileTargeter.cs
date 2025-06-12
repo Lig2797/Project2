@@ -6,7 +6,6 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
-using static UnityEditor.Progress;
 
 public class TileTargeter : NetworkBehaviour
 {
@@ -17,6 +16,10 @@ public class TileTargeter : NetworkBehaviour
     
     [SerializeField]
     private Tilemap _targetTilemap;
+
+    [SerializeField]
+    private Tilemap _grassTilemap;
+    private Tilemap _groundTilemap;
 
     [Header("TARGET TILE SETTINGS")]
     [SerializeField]
@@ -77,6 +80,9 @@ public class TileTargeter : NetworkBehaviour
     private float stepTimer = 0f;
     #endregion
 
+    #region Dependencies
+    [SerializeField] private InventoryManagerSO _inventoryManagerSO;
+    #endregion
     #region Before Gameloop
     private void Awake()
     {
@@ -96,13 +102,13 @@ public class TileTargeter : NetworkBehaviour
 
     private void OnEnable()
     {
-        SceneManager.sceneLoaded += OnSceneLoaded;
+        //SceneManager.sceneLoaded += OnSceneLoaded;
         GameEventsManager.Instance.dataEvents.onExitToWorldScene += onExitToWorldScene;
     }
 
     private void OnDisable()
     {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
+        //SceneManager.sceneLoaded -= OnSceneLoaded;
         GameEventsManager.Instance.dataEvents.onExitToWorldScene -= onExitToWorldScene;
     }
    
@@ -110,14 +116,10 @@ public class TileTargeter : NetworkBehaviour
     private void Update()
     {
         CheckSoundWhenMoving();
-        if (SceneManager.GetActiveScene().name.Equals(Loader.Scene.MainMenu.ToString()) ||
-            SceneManager.GetActiveScene().name.Equals(Loader.Scene.LoadingScene.ToString()) ||
-            SceneManager.GetActiveScene().name.Equals(Loader.Scene.LobbyScene.ToString()) ||
-            SceneManager.GetActiveScene().name.Equals(Loader.Scene.CharacterSelectScene.ToString()) ||
-            SceneManager.GetActiveScene().name.Equals(Loader.Scene.CutScene.ToString()) ||
-            SceneManager.GetActiveScene().name.Equals(Loader.Scene.UIScene.ToString())) return;
 
-        GetTargetTile();
+        if (SceneUtils.ThisSceneIsNotGameplayScene(SceneManager.GetActiveScene().name)) return;
+
+        SetTargetTile();
     }
     private void CheckSoundWhenMoving()
     {
@@ -128,33 +130,15 @@ public class TileTargeter : NetworkBehaviour
             if (stepTimer > 0f) return;
 
             Vector3 playerPos = playerController.transform.position;
-            Tilemap grassTilemap = null;
-            foreach (Tilemap tilemap in _tilemaps)
-            {
-                if (tilemap.name == "Grass")
-                {
-                    grassTilemap = tilemap;
-                    break;
-                }
-            }
-            Tilemap dirtTilemap = null;
-            foreach (Tilemap tilemap in _tilemaps)
-            {
-                if (tilemap.name == "Ground")
-                {
-                    dirtTilemap = tilemap;
-                    break;
-                }
-            }
 
-            Vector3Int cellPosOfGrass = grassTilemap.WorldToCell(playerPos);
-            Vector3Int cellPosOfGround = dirtTilemap.WorldToCell(playerPos);
+            Vector3Int cellPosOfGrass = _grassTilemap.WorldToCell(playerPos);
+            Vector3Int cellPosOfGround = _groundTilemap.WorldToCell(playerPos);
 
-            if (grassTilemap.HasTile(cellPosOfGrass))
+            if (_grassTilemap.HasTile(cellPosOfGrass))
             {
                 AudioManager.Instance.PlaySFX("walk_grass");
             }
-            else if (dirtTilemap.HasTile(cellPosOfGround))
+            else if (_groundTilemap.HasTile(cellPosOfGround))
             {
                 AudioManager.Instance.PlaySFX("walk_Dirt");
             }
@@ -165,19 +149,6 @@ public class TileTargeter : NetworkBehaviour
             
             stepTimer = 0f;
         }
-    }
-    public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        Debug.Log("day la scene loaded: " + scene.name);
-        if (scene.name.Equals(Loader.Scene.MainMenu.ToString()) ||
-            scene.name.Equals(Loader.Scene.LobbyScene.ToString()) ||
-            scene.name.Equals(Loader.Scene.LoadingScene.ToString()) ||
-            scene.name.Equals(Loader.Scene.CharacterSelectScene.ToString()) ||
-            scene.name.Equals(Loader.Scene.UIScene.ToString()) ||
-            scene.name.Equals(Loader.Scene.CutScene.ToString())) return;
-
-
-        onExitToWorldScene(scene.name);
     }
     #endregion
 
@@ -195,10 +166,23 @@ public class TileTargeter : NetworkBehaviour
         
         GetAllTilemaps();
 
-        if (SceneManager.GetActiveScene().name.Equals(Loader.Scene.WorldScene.ToString()))
+        _targetTilemap = _tilemaps.LastOrDefault();
+        
+        foreach (var tilemap in _tilemaps)
         {
-            _targetTilemap = _tilemaps.LastOrDefault();
-            GetTargetTile();
+            if (tilemap.name == "Grass")
+            {
+                _grassTilemap = tilemap;
+                break;
+            }
+        }
+        foreach (var tilemap in _tilemaps)
+        {
+            if (tilemap.name == "Ground")
+            {
+                _groundTilemap = tilemap;
+                break;
+            }
         }
     }
 
@@ -216,13 +200,9 @@ public class TileTargeter : NetworkBehaviour
         Tilemap[] foundTilemaps = gridObject.GetComponentsInChildren<Tilemap>();
 
         _tilemaps.AddRange(foundTilemaps);
-        foreach (Tilemap tilemap in _tilemaps)
-        {
-            Debug.Log($"Found Tilemap: {tilemap.name}");
-        }
     }
 
-    void GetTargetTile()
+    void SetTargetTile()
     {
         // Get mouse position in world coordinates
         _mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -275,46 +255,29 @@ public class TileTargeter : NetworkBehaviour
         // Check if tile is valid to do something
         CanHoe = CheckCanHoe(_clampedTilePosition);
         CanWater = TileManager.Instance.HoedTilesNetwork.ContainsKey(new NetworkVector3Int(_clampedTilePosition)) && !TileManager.Instance.WateredTilesNetwork.ContainsKey(new NetworkVector3Int(_clampedTilePosition));
-        if (tilemapCheck.Count > 0)
-        {
-            string tilemapName = tilemapCheck[tilemapCheck.Count - 1].name;
-            CanPlantGround = (tilemapName == "FarmGround" || tilemapName == "WateredGround");
-        }
-        else
-        {
-            CanPlantGround = false;
-        }
+        CanPlantGround = TileManager.Instance.HoedTilesNetwork.ContainsKey(new NetworkVector3Int(_clampedTilePosition));
+
+
+        //if (tilemapCheck.Count > 0)
+        //{
+        //    string tilemapName = tilemapCheck[tilemapCheck.Count - 1].name;
+        //    CanPlantGround = (tilemapName == "FarmGround" || tilemapName == "WateredGround");
+        //}
+        //else
+        //{
+        //    CanPlantGround = false;
+        //}
     }
 
     private bool CheckCanHoe(Vector3Int pos)
     {
-        Tilemap groundTilemap = _tilemaps.Find(x => x.name == "Ground");
-        Tilemap grassTilemap = _tilemaps.Find(x => x.name == "Grass");
-        if (groundTilemap == null || grassTilemap == null)
+        
+        if (_grassTilemap == null)
         {
             Debug.LogWarning("tilemap to check can hoe not found.");
             return false;
         }
-        if (grassTilemap.HasTile(pos)) return false;
-        //Vector3Int[] directions =
-        //{
-        //new Vector3Int(1, 0, 0),
-        //new Vector3Int(-1, 0, 0),
-        //new Vector3Int(0, 1, 0),
-        //new Vector3Int(0, -1, 0),
-        //new Vector3Int(1, 1, 0),
-        //new Vector3Int(-1, 1, 0),
-        //new Vector3Int(1, -1, 0),
-        //new Vector3Int(-1, -1, 0)
-        //};
-
-        //foreach (var dir in directions)
-        //{
-        //    if (grassTilemap.HasTile(pos + dir))
-        //    {
-        //        return false;
-        //    }
-        //}
+        if (_grassTilemap.HasTile(pos)) return false;
 
         return true;
     }
@@ -455,6 +418,8 @@ public class TileTargeter : NetworkBehaviour
                 {
                     if (!CanPlantGround) return;
                     GameObject.Find("CropManager").GetComponent<CropManager>().TryModifyCrop(_clampedTilePosition,item.itemName,1);
+                    InventoryItem itemUsed = _inventoryManagerSO.GetItemInSlot(_inventoryManagerSO.selectedSlot);
+                    _inventoryManagerSO.RemoveInventoryItem(itemUsed);
                     break;
                 }        
         }

@@ -52,6 +52,7 @@ public class MultiSceneManger : PersistentSingleton<MultiSceneManger>
         CameraController.Instance.RefreshFollowCamera(_worldSceneVirtualCamera.GetComponent<CinemachineVirtualCamera>());
         GameEventsManager.Instance.objectEvents.SpawnObject();
         GameEventsManager.Instance.dataEvents.OnExitToWorldScene(SceneToLoad.name);
+        AudioManager.Instance.PlayMusic("Default");
     }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {

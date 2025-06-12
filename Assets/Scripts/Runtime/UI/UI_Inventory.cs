@@ -168,6 +168,11 @@ public class UI_Inventory : MonoBehaviour
         return;
     }
 
+    public void DecreaseItemQuantity(int slotToDecrease)
+    {
+
+    }
+
     // this is onCraftingWindowClosed
     public void FindSlotAndPutItemInInventory(Component sender, object data) // find and put item from crafting slot back into inventory
     {
@@ -188,7 +193,7 @@ public class UI_Inventory : MonoBehaviour
                 {
                     itemUI.InventoryItem.IncreaseQuantity(itemToAddInfo.Quantity);
                     itemUI.RefreshCount();
-                    _inventoryManagerSO.RemoveItemById(itemToAddInfo);
+                    _inventoryManagerSO.RemoveInventoryItem(itemToAddInfo);
                     Destroy(itemToAdd.gameObject);
                     return;
                 }
@@ -213,7 +218,7 @@ public class UI_Inventory : MonoBehaviour
             {
                 inventory.AddItemToInventory(itemToAddInfo, slotUI.slotIndex);
                 AddItemToInventoryUI(itemToAddInfo, slotUI.slotIndex);
-                _inventoryManagerSO.RemoveItemById(itemToAddInfo);
+                _inventoryManagerSO.RemoveInventoryItem(itemToAddInfo);
                 Destroy(itemToAdd.gameObject);
                 if (_inventoryManagerSO.selectedSlot == i) _inventoryManagerSO.RefreshCurrentHoldingItem();
 
@@ -223,7 +228,7 @@ public class UI_Inventory : MonoBehaviour
         // neu ko thay slot nao add dc thi quang ra world
         ItemWorld itemToDropIntoWorld = itemToAddInfo.GetItemWorld();
         ItemWorldManager.Instance.DropItemIntoWorld(itemToDropIntoWorld, true, true);
-        _inventoryManagerSO.RemoveItemById(itemToAddInfo);
+        _inventoryManagerSO.RemoveInventoryItem(itemToAddInfo);
         Destroy(itemToAdd.gameObject);
         return;
     }

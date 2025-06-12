@@ -125,9 +125,6 @@ public class CropManager : NetworkPersistentSingleton<CropManager>, IDataPersist
 
     public bool TryToHarverst(Vector3Int pos)
     {
-        var sceneName = SceneManager.GetActiveScene().name;
-        //if (sceneName != "WorldScene" || sceneName != "GameplayScene") return false;
-
         var networkPos = new NetworkVector3Int(pos);
 
         if (PlantedCropsNetwork.ContainsKey(networkPos) && PlantedCropsNetwork[networkPos].IsFullyGrown())
@@ -181,8 +178,6 @@ public class CropManager : NetworkPersistentSingleton<CropManager>, IDataPersist
 
     public void UpdateCropsGrowthTime(int minute)
     {
-        var sceneName = SceneManager.GetActiveScene().name;
-        //if (sceneName != "WorldScene" || sceneName != "GameplayScene") return;
         foreach (var crop in PlantedCropsNetwork)
         {
             var cropInfo = crop.Value;
