@@ -38,6 +38,7 @@
     -unity-background-image-tint-color: rgb(255, 255, 255);
     transition-timing-function: ease-out;
     transition-delay: 0s;
+    cursor: url("project://database/Assets/Farm%20RPG%20-%20Tiny%20Asset%20Pack%20-%20(All%20in%20One)/Farm%20RPG%20-%20Tiny%20Asset%20Pack%20-%20(All%20in%20One)/UI%20-%20Tiny%20Asset%20Pack/cursor1.png?fileID=2800000&guid=7f106fa1fccd1044981499737581fe21&type=3#cursor1");
 }
 
 .button-style:hover {
@@ -88,6 +89,7 @@
     scale: 1.05 1.05;
     -unity-background-image-tint-color: rgb(255, 255, 255);
     background-color: rgba(0, 0, 0, 0);
+    cursor: url("project://database/Assets/Farm%20RPG%20-%20Tiny%20Asset%20Pack%20-%20(All%20in%20One)/Farm%20RPG%20-%20Tiny%20Asset%20Pack%20-%20(All%20in%20One)/UI%20-%20Tiny%20Asset%20Pack/cursor2.png?fileID=2800000&guid=01273274b3c8e0842ba609a4c4a5eaf8&type=3#cursor2");
 }
 
 .button-style:selected {
@@ -294,4 +296,32 @@
     border-left-width: 0;
     transition-timing-function: ease-out-elastic;
     transition-duration: 0.2s;
+}
+
+.file_button-style :hover {
+    transition-timing-function: ease-out;
+    transition-duration: 0.2s;
+    background-image: url("project://database/Assets/Farm%20RPG%20-%20Tiny%20Asset%20Pack%20-%20(All%20in%20One)/Farm%20RPG%20-%20Tiny%20Asset%20Pack%20-%20(All%20in%20One)/UI%20-%20Tiny%20Asset%20Pack/button.png?fileID=323141436&guid=45bb0416b11523a49bd131d10df5c07f&type=3#button_87");
+    background-color: rgb(88, 88, 88);
+}
+
+.file_button-style {
+    width: 100%;
+    height: 400px;
+    -unity-text-align: middle-left;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: url("project://database/Assets/Farm%20RPG%20-%20Tiny%20Asset%20Pack%20-%20(All%20in%20One)/Farm%20RPG%20-%20Tiny%20Asset%20Pack%20-%20(All%20in%20One)/UI%20-%20Tiny%20Asset%20Pack/button.png?fileID=323141436&guid=45bb0416b11523a49bd131d10df5c07f&type=3#button_87");
+    -unity-slice-scale: 3px;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-out;
 }

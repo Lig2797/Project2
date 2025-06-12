@@ -88,3 +88,23 @@
 .soundsetting-panel-moveup {
     translate: 0 0%;
 }
+
+.game_title_image-style {
+    flex-grow: 1;
+    background-image: url("project://database/Assets/Farm%20RPG%20-%20Tiny%20Asset%20Pack%20-%20(All%20in%20One)/MainTitle.png?fileID=2800000&guid=80b4dcb84f68edf43a192c17d9c9b480&type=3#MainTitle");
+    background-size: 100% 100%;
+    width: 1400px;
+    height: 40%;
+    margin-top: 20px;
+    margin-right: 20px;
+    margin-bottom: 100px;
+    margin-left: 20px;
+    transition-duration: 1s;
+    transition-timing-function: ease-out;
+}
+
+.game_title_image-style2 {
+    scale: 1.2 1.2;
+    transition-duration: 1s;
+    transition-timing-function: ease-out;
+}

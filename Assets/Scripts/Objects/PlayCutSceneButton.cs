@@ -19,13 +19,13 @@ public class PlayCutSceneButton : MonoBehaviour
         switch (eCondition)
         {
             case ECondition.CompletedFirstCutscene:
-                return GameFlowManager.Instance.gameFlowSO.gameFlowData.CompletedFirstCutscene;
+                return GameFlowManager.Instance.Data.CompletedFirstCutscene;
             case ECondition.CompletedSecondCutscene:
-                return GameFlowManager.Instance.gameFlowSO.gameFlowData.CompletedSecondCutscene;
+                return GameFlowManager.Instance.Data.CompletedSecondCutscene;
             case ECondition.CompletedThirdCutscene:
-                return GameFlowManager.Instance.gameFlowSO.gameFlowData.CompletedThirdCutscene;
+                return GameFlowManager.Instance.Data.CompletedThirdCutscene;
             case ECondition.CompletedAllCutscene:
-                return GameFlowManager.Instance.gameFlowSO.gameFlowData.CompletedAllCutscene;
+                return GameFlowManager.Instance.Data.CompletedAllCutscene;
             default:
                 return false;
         }

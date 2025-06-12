@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -6,6 +8,7 @@ public enum ECondition
     CompletedFirstCutscene,
     CompletedSecondCutscene,
     CompletedThirdCutscene,
+    CompletedFourthCutscene,
     CompletedAllCutscene,
 }
 
@@ -26,81 +29,89 @@ public class ObjectsSpawner : MonoBehaviour
     
     public EObjDialogue eObjDialogue;
     public ENpcAction action;
-    public ECondition spawnCondition;
+    public List<ECondition> conditionsToSpawn;
+    public ECondition conditionForNotSpawning;
     [SerializeField] private string knotName;
     [SerializeField] private GameObject objectPrefab;
 
     private void OnEnable()
     {
-        GameEventsManager.Instance.objectEvents.onSpawnObject += CheckSpawn;
+        GameEventsManager.Instance.objectEvents.onSpawnObject += SpawnObject;
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void OnDisable()
     {
-        GameEventsManager.Instance.objectEvents.onSpawnObject -= CheckSpawn;
+        GameEventsManager.Instance.objectEvents.onSpawnObject -= SpawnObject;
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        CheckSpawn();
+        SpawnObject();
     }
 
     private void Start()
     {
-        CheckSpawn();
+        SpawnObject();
     }
 
     private bool HasCompleted(ECondition eCondition)
     {
-        switch (eCondition)
-        {
-            case ECondition.CompletedFirstCutscene:
-                return GameFlowManager.Instance.gameFlowSO.gameFlowData.CompletedFirstCutscene;
-            case ECondition.CompletedSecondCutscene:
-                return GameFlowManager.Instance.gameFlowSO.gameFlowData.CompletedSecondCutscene;
-            case ECondition.CompletedThirdCutscene:
-                return GameFlowManager.Instance.gameFlowSO.gameFlowData.CompletedThirdCutscene;
-            case ECondition.CompletedAllCutscene:
-                return GameFlowManager.Instance.gameFlowSO.gameFlowData.CompletedAllCutscene;
-            default:
-                return false;
-        }
+        if (eCondition == ECondition.CompletedFirstCutscene) return GameFlowManager.Instance.Data.CompletedFirstCutscene;
+        if (eCondition == ECondition.CompletedSecondCutscene) return GameFlowManager.Instance.Data.CompletedSecondCutscene;
+        if (eCondition == ECondition.CompletedThirdCutscene) return GameFlowManager.Instance.Data.CompletedThirdCutscene;
+        if (eCondition == ECondition.CompletedAllCutscene) return GameFlowManager.Instance.Data.CompletedAllCutscene;
+        return false;
     }
 
-    private void CheckSpawn()
+    private bool CheckConditionsToSpawn()
     {
-        if (HasCompleted(spawnCondition)) return;
-
-        if (!HasCompleted(spawnCondition))
+        foreach (var eCondition in conditionsToSpawn)
         {
-            if (eObjDialogue == EObjDialogue.Default)
-            {
-                DialogueTrigger dlTrigger = Instantiate(objectPrefab, this.gameObject.transform.position, Quaternion.identity).GetComponent<DialogueTrigger>();
-                dlTrigger.enabled = true;
-                dlTrigger.SetKnotName(knotName);
-            }
-            else if (eObjDialogue == EObjDialogue.Npc)
-            {
-                NpcController npcGO = Instantiate(objectPrefab, this.gameObject.transform.position, Quaternion.identity).GetComponent<NpcController>();
-                DialogueTrigger dialogueTrigger = npcGO.GetComponentInChildren<DialogueTrigger>();
-                if (dialogueTrigger != null)
-                {
-                    dialogueTrigger.enabled = true;
-                    dialogueTrigger.SetKnotName(knotName);
-                }
+            if (!HasCompleted(eCondition)) return false;
+        }
 
-                if (action == ENpcAction.Chopping)
-                {
-                    npcGO.StartChoppingTrees();
-                }
-            }
-            else if (eObjDialogue == EObjDialogue.Quest)
+        return true;
+    }
+
+    private bool CheckConditionForNotSpawn()
+    {
+        if (HasCompleted(conditionForNotSpawning)) return true;
+        return false;
+    }    
+
+    private void SpawnObject()
+    {
+        if (!CheckConditionsToSpawn()) return;
+
+        if (CheckConditionForNotSpawn()) return;
+
+        if (eObjDialogue == EObjDialogue.Default)
+        {
+            DialogueTrigger dlTrigger = Instantiate(objectPrefab, this.gameObject.transform.position, Quaternion.identity).GetComponent<DialogueTrigger>();
+            dlTrigger.enabled = true;
+            dlTrigger.SetKnotName(knotName);
+        }
+        else if (eObjDialogue == EObjDialogue.Npc)
+        {
+            NpcController npcGO = Instantiate(objectPrefab, this.gameObject.transform.position, Quaternion.identity).GetComponent<NpcController>();
+            DialogueTrigger dialogueTrigger = npcGO.GetComponentInChildren<DialogueTrigger>();
+            if (dialogueTrigger != null)
             {
-                QuestPoint questPoint = Instantiate(objectPrefab, this.gameObject.transform.position, Quaternion.identity).GetComponent<QuestPoint>();
-                questPoint.SetKnotName(knotName);
+                dialogueTrigger.enabled = true;
+                dialogueTrigger.SetKnotName(knotName);
             }
-        }    
+
+            if (action == ENpcAction.Chopping)
+            {
+                npcGO.StartChoppingTrees();
+            }
+        }
+        else if (eObjDialogue == EObjDialogue.Quest)
+        {
+            QuestPoint questPoint = Instantiate(objectPrefab, this.gameObject.transform.position, Quaternion.identity).GetComponent<QuestPoint>();
+            questPoint.SetKnotName(knotName);
+        }
     }    
 }

@@ -28,6 +28,7 @@ public class DialogueTrigger : MonoBehaviour
         {
             playerInRange = true;
             GameEventsManager.Instance.dialogueEvents.EnterDialogue(dialogueKnotName);
+            Destroy(gameObject);
         }
     }
 
@@ -36,7 +37,6 @@ public class DialogueTrigger : MonoBehaviour
         if (collider.gameObject.tag == "Player")
         {
             playerInRange = false;
-            Destroy(gameObject);
         }
     }
 

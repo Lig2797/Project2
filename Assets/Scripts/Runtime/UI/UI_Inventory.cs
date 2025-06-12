@@ -97,13 +97,13 @@ public class UI_Inventory : MonoBehaviour
     private void RemoveItem(int slotIndex)
     {
         UI_InventoryItem uI_InventoryItem = inventorySlotsUI[slotIndex].GetComponentInChildren<UI_InventoryItem>();
-        uI_InventoryItem.RefreshCount();
+        Destroy(uI_InventoryItem.gameObject);
     }
 
     public void UpdateItemAmount(int slotIndex)
     {
         UI_InventoryItem uI_InventoryItem = inventorySlotsUI[slotIndex].GetComponentInChildren<UI_InventoryItem>();
-        Destroy(uI_InventoryItem.gameObject);
+        uI_InventoryItem.RefreshCount();
     }
 
     public void SpawnItem(InventoryItem item, GameObject slot)

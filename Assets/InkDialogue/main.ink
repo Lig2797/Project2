@@ -9,6 +9,7 @@ EXTERNAL ShowHelpUI(indexHelp)
 EXTERNAL CompletedFirstCutscene()
 EXTERNAL CompletedSecondCutscene()
 EXTERNAL CompletedThirdCutscene()
+EXTERNAL CompletedFourthCutscene()
 EXTERNAL CompletedAllCutscene()
 EXTERNAL RemoveItem(itemName, amount)
 
@@ -28,3 +29,4 @@ VAR SceneName = "WorldScene"
 INCLUDE collect_coins_start_npc.ink
 INCLUDE collect_coins_finish_npc.ink
 INCLUDE Part1_Start.ink
+INCLUDE Part1_eloria.ink

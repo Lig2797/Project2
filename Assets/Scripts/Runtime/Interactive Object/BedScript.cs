@@ -33,7 +33,8 @@ public class BedScript : MonoBehaviour
 
     public void SetSleep(bool toUse)
     {
-        if (!GameFlowManager.Instance.gameFlowSO.gameFlowData.CompletedThirdCutscene) return;
+        if (!GameFlowManager.Instance.Data.CompletedThirdCutscene) return;
+
         Debug.Log("is use bed: " + toUse);
         IsBeingUsed = toUse;
         if (toUse)
@@ -65,6 +66,4 @@ public class BedScript : MonoBehaviour
         }
         
     }
-
-    
 }

@@ -12,7 +12,7 @@ public class UI_Fade : Singleton<UI_Fade>
 
     private void Start()
     {
-        gameObject.SetActive(false);
+        fadeScreen.gameObject.SetActive(false);
     }
 
     public void FadeToBlack()

@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Playables;
@@ -7,60 +6,67 @@ using UnityEngine.Playables;
 public class NpcController : MonoBehaviour
 {
     public Transform targetPosition;
+    public DetectionZone zone;
     private NavMeshAgent agent;
 
     [SerializeField] private Animator animator;
     [SerializeField] private PlayableDirector npcDirector;
 
     private Coroutine choppingRoutine;
-    public float detectionRadius = 5f;
-    public float raycastSpacing = 45f;
+    public float detectionRadius = 10f;
+    public float raycastSpacing = 2f;
     public LayerMask treeLayer;
 
-    private void OnEnable()
-    {
-        //GameEventsManager.Instance.npcEvents.onNpcSpawned += PlayDirector;
-        //GameEventsManager.Instance.npcEvents.onCallNpcHome += CallNpcHome;
-    }
-
-    private void OnDisable()
-    {
-        //GameEventsManager.Instance.npcEvents.onNpcSpawned -= PlayDirector;
-        //GameEventsManager.Instance.npcEvents.onCallNpcHome -= CallNpcHome;
-    }
+    private bool canAttack = true;
+    private bool canMove = true;
 
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-
         agent.updateRotation = false;
         agent.updateUpAxis = false;
     }
 
     private void Update()
     {
-        if (agent != null && agent.isActiveAndEnabled)
+        if (zone != null && zone.detectedColliders.Count > 0 && canAttack)
         {
-            UpdateAnimation();
+            animator.Play("Axe_Attack");
         }
+
+        if (targetPosition != null && canMove)
+        {
+            OnMove();
+        }
+        if (!canMove)
+        {
+            OnStop();
+        }    
     }
 
     private void OnDestroy()
     {
-        Debug.Log("AIController destroyed, stopping PlayableDirector if playing.");
+        Debug.Log("NpcController destroyed.");
     }
 
-    //private void PlayDirector()
-    //{
-    //    if (npcDirector != null)
-    //    {
-    //        npcDirector.Play();
-    //    }
-    //    else
-    //    {
-    //        Debug.LogWarning("PlayableDirector is not assigned.");
-    //    }
-    //}    
+    public void OnMove()
+    {
+        if (agent != null && agent.isActiveAndEnabled && targetPosition != null)
+        {
+            agent.isStopped = false;
+            agent.SetDestination(targetPosition.position);
+            UpdateAnimation();
+        }
+    }
+
+    public void OnStop()
+    {
+        if (agent != null && agent.isActiveAndEnabled)
+        {
+            agent.isStopped = true;
+            agent.ResetPath();
+        }
+    }
 
     private void UpdateAnimation()
     {
@@ -69,7 +75,6 @@ public class NpcController : MonoBehaviour
         if (speed > 0.1f)
         {
             Vector3 movementDirection = agent.velocity.normalized;
-
             animator.SetFloat("Horizontal", movementDirection.x);
             animator.SetFloat("Vertical", movementDirection.z);
             animator.SetFloat("Speed", speed);
@@ -80,14 +85,6 @@ public class NpcController : MonoBehaviour
         }
     }
 
-    private void CallNpcHome()
-    {
-        if (targetPosition != null)
-        {
-            agent.SetDestination(targetPosition.position);
-        }
-    }
-
     public void SetTargetPosition(Transform newTarget)
     {
         targetPosition = newTarget;
@@ -95,8 +92,14 @@ public class NpcController : MonoBehaviour
 
     public void StartChoppingTrees()
     {
-        if (choppingRoutine == null)
-            choppingRoutine = StartCoroutine(ChopTreeRoutine());
+        if (!canAttack || targetPosition == null || agent == null) return;
+
+        agent.SetDestination(targetPosition.position);
+
+        if (zone != null && zone.detectedColliders.Count > 0)
+        {
+            animator.Play("Axe_Attack");
+        }
     }
 
     public void StopChoppingTrees()
@@ -107,56 +110,49 @@ public class NpcController : MonoBehaviour
             choppingRoutine = null;
         }
 
-        agent.ResetPath();
-        animator.SetFloat("Speed", 0f);
-    }
-
-    private IEnumerator ChopTreeRoutine()
-    {
-        while (true)
+        if (agent != null)
         {
-            Transform tree = FindNearestTreeByRaycast2D();
-
-            if (tree != null)
-            {
-                agent.SetDestination(tree.position);
-
-                while (Vector2.Distance(transform.position, tree.position) > 0.5f)
-                {
-                    yield return null;
-                }
-
-                animator.SetFloat("Speed", 0f);
-                Debug.Log("NPC is chopping tree: " + tree.name);
-                yield return new WaitForSeconds(3f); // thời gian chặt cây
-            }
-            else
-            {
-                yield return new WaitForSeconds(2f);
-            }
+            agent.ResetPath();
         }
     }
 
-    private Transform FindNearestTreeByRaycast2D()
+    private void OnDrawGizmosSelected()
     {
+        if (!Application.isPlaying) return;
+
+        Vector2 origin = transform.position;
+
         for (float angle = 0; angle < 360; angle += raycastSpacing)
         {
             Vector2 dir = new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad));
-            Vector2 origin = transform.position;
-
-            // Vẽ ray trong Scene view
-            Debug.DrawRay(origin, dir * detectionRadius, Color.green, 0.1f);
+            Gizmos.color = Color.green;
+            Gizmos.DrawRay(origin, dir * detectionRadius);
 
             RaycastHit2D hit = Physics2D.Raycast(origin, dir, detectionRadius, treeLayer);
 
             if (hit.collider != null && hit.collider.CompareTag("Tree"))
             {
-                // Đổi màu ray nếu trúng cây
-                Debug.DrawRay(origin, dir * detectionRadius, Color.red, 0.5f);
-                return hit.collider.transform;
+                Gizmos.color = Color.red;
+                Gizmos.DrawRay(origin, dir * detectionRadius);
+
+                if (targetPosition == null)
+                {
+                    targetPosition = hit.collider.transform;
+                }
             }
         }
+    }
 
-        return null;
+    public void StopAllAction()
+    {
+        canAttack = false;
+        canMove = false;
+        StopChoppingTrees();
+    }
+
+    public void StartAllAction()
+    {
+        canAttack = true;
+        canMove = true;
     }
 }

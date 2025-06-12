@@ -16,6 +16,7 @@ public class InkExternalFunctions
         story.BindExternalFunction("CompletedFirstCutscene", () => CompletedFirstCutScene());
         story.BindExternalFunction("CompletedSecondCutscene", () => CompletedSecondCutScene());
         story.BindExternalFunction("CompletedThirdCutscene", () => CompletedThirdCutScene());
+        story.BindExternalFunction("CompletedFourthCutscene", () => CompletedFourthCutScene());
         story.BindExternalFunction("CompletedAllCutscene", () => CompletedAllCutScene());
         story.BindExternalFunction("RemoveItem", (string itemName, int amount) => RemoveItem(itemName, amount));
     }
@@ -30,6 +31,7 @@ public class InkExternalFunctions
         story.UnbindExternalFunction("CompletedFirstCutscene");
         story.UnbindExternalFunction("CompletedSecondCutscene");
         story.UnbindExternalFunction("CompletedThirdCutscene");
+        story.UnbindExternalFunction("CompletedFourthCutscene");
         story.UnbindExternalFunction("CompletedAllCutscene");
         story.UnbindExternalFunction("RemoveItem");
     }
@@ -62,22 +64,27 @@ public class InkExternalFunctions
 
     public void CompletedFirstCutScene()
     {
-        GameFlowManager.Instance.gameFlowSO.gameFlowData.SetCompletedFirstCutscene(true);
+        GameFlowManager.Instance.Data.SetCompletedFirstCutscene(true);
     }
 
     public void CompletedSecondCutScene()
     {
-        GameFlowManager.Instance.gameFlowSO.gameFlowData.SetCompletedSecondCutscene(true);
+        GameFlowManager.Instance.Data.SetCompletedSecondCutscene(true);
     }
 
     public void CompletedThirdCutScene()
     {
-        GameFlowManager.Instance.gameFlowSO.gameFlowData.SetCompletedThirdCutscene(true);
+        GameFlowManager.Instance.Data.SetCompletedThirdCutscene(true);
+    }
+
+    public void CompletedFourthCutScene()
+    {
+        GameFlowManager.Instance.Data.SetCompletedFourthCutscene(true);
     }
 
     public void CompletedAllCutScene()
     {
-        GameFlowManager.Instance.gameFlowSO.gameFlowData.SetCompletedAllCutscene(true);
+        GameFlowManager.Instance.Data.SetCompletedAllCutscene(true);
     }
 
     public void RemoveItem(string itemName, int amout)

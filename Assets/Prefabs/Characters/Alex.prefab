@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5539969245815471263
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1204,6 +1204,8 @@ MonoBehaviour:
   _currentSpeed: 0
   _movement: {x: 0, y: 0}
   _isFacingRight: 1
+  _canSleep: 0
+  _hadTarget: 0
   _inputReader: {fileID: 11400000, guid: cf53f8622c1b9894ba0584efa38f4650, type: 2}
   _currentVehicle: {fileID: 0}
   _itemOnHand: {fileID: 2382300655017927629}
@@ -1235,6 +1237,7 @@ MonoBehaviour:
   _canWater: 0
   _lockedCanWater: 0
   _canPlantGround: 0
+  stepCooldown: 0.3
 --- !u!114 &566550412973088920
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -277,7 +277,7 @@ public class DialoguePanelUI : Singleton<DialoguePanelUI>
             switch (tagKey)
             {
                 case SPEAKER_TAG:
-                    displayNameText.text = tagValue;
+                    displayNameText.text = PlayerController.LocalInstance.playerDataSO.playerName.ToString();
                     break;
                 case BACKGROUND_TAG:
                     backgroundAnimator.Play(tagValue);

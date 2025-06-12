@@ -25,7 +25,7 @@ public class UIInputNameConfirmButton : MonoBehaviour
 
     private void OnConfirmButtonClicked()
     {
-        if (!GameFlowManager.Instance.gameFlowSO.gameFlowData.HasChoosenCharacter)
+        if (!GameFlowManager.Instance.Data.HasChoosenCharacter)
         {
             errorText.gameObject.SetActive(true);
             errorText.text = "Please choose a character first.";
@@ -50,7 +50,7 @@ public class UIInputNameConfirmButton : MonoBehaviour
 
         if (!GameMultiplayerManager.playMultiplayer)
         {
-            if (!GameFlowManager.Instance.gameFlowSO.gameFlowData.CompletedFirstCutscene)
+            if (!GameFlowManager.Instance.Data.CompletedFirstCutscene)
             {
                 Loader.Load(Loader.Scene.CutScene);
                 NetworkManager.Singleton.StartHost();

@@ -12,6 +12,7 @@ public class UIMainMenuController : MonoBehaviour
     //Main menu
     private VisualElement _mainMenuContainer;
     private VisualElement _gameTitleLabel;
+    private VisualElement _gameTitleImage;
     private Button _singleplayerButton;
     private Button _multiplayerButton;
     private Button _optionsButton;
@@ -24,6 +25,7 @@ public class UIMainMenuController : MonoBehaviour
 
         _mainMenuContainer = root.Q<VisualElement>("MainMenuContainer");
         _gameTitleLabel = root.Q<Label>("GameTitleLabel");
+        _gameTitleImage = root.Q<VisualElement>("GameTitleImage");
         _singleplayerButton = root.Q<Button>("SingleplayerButton");
         _multiplayerButton = root.Q<Button>("MultiplayerButton");
         _optionsButton = root.Q<Button>("OptionsButton");
@@ -96,9 +98,9 @@ public class UIMainMenuController : MonoBehaviour
     {
         while (true)
         {
-            _gameTitleLabel.AddToClassList("gametitlelable--zoom");
+            _gameTitleImage.AddToClassList("game_title_image-style2");
             yield return new WaitForSeconds(1f);
-            _gameTitleLabel.RemoveFromClassList("gametitlelable--zoom");
+            _gameTitleImage.RemoveFromClassList("game_title_image-style2");
             yield return new WaitForSeconds(1f);
         }
     }

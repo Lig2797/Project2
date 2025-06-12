@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Tilemaps;
 using System.Collections.Generic;
-using System.Collections;
 
 public class TilemapLoader : MonoBehaviour
 {
@@ -14,13 +13,12 @@ public class TilemapLoader : MonoBehaviour
 
     public MapGroupData mapGroupData;
     public Camera cam;
-    public int buffer = 5;
+    public int buffer = 2;
     public LayerLoader[] layerLoaders;
 
     private Dictionary<string, Dictionary<Vector3Int, TileBase>> tileDataPerLayer = new();
     private Dictionary<string, HashSet<Vector3Int>> activeTilesPerLayer = new();
     private Vector3Int lastMin, lastMax;
-    private Coroutine loadingRoutine;
 
     void Start()
     {
@@ -45,58 +43,38 @@ public class TilemapLoader : MonoBehaviour
 
         if (minCell != lastMin || maxCell != lastMax)
         {
-            if (loadingRoutine != null) StopCoroutine(loadingRoutine);
-            loadingRoutine = StartCoroutine(LoadVisibleTiles(minCell, maxCell));
-            lastMin = minCell;
-            lastMax = maxCell;
-        }
-    }
-
-    IEnumerator LoadVisibleTiles(Vector3Int minCell, Vector3Int maxCell)
-    {
-        foreach (var layer in layerLoaders)
-        {
-            var tileDict = tileDataPerLayer[layer.layerName];
-            var activeSet = activeTilesPerLayer[layer.layerName];
-            var newActive = new HashSet<Vector3Int>();
-
-            int processed = 0;
-
-            for (int x = minCell.x; x <= maxCell.x; x++)
+            foreach (var layer in layerLoaders)
             {
-                for (int y = minCell.y; y <= maxCell.y; y++)
+                var tileDict = tileDataPerLayer[layer.layerName];
+                var activeSet = activeTilesPerLayer[layer.layerName];
+                var newActive = new HashSet<Vector3Int>();
+
+                for (int x = minCell.x; x <= maxCell.x; x++)
                 {
-                    Vector3Int pos = new Vector3Int(x, y, 0);
-                    if (tileDict.TryGetValue(pos, out var tile))
+                    for (int y = minCell.y; y <= maxCell.y; y++)
                     {
-                        if (!activeSet.Contains(pos))
-                            layer.tilemap.SetTile(pos, tile);
-
-                        newActive.Add(pos);
-
-                        if (++processed >= 100)
+                        Vector3Int pos = new Vector3Int(x, y, 0);
+                        if (tileDict.ContainsKey(pos))
                         {
-                            processed = 0;
-                            yield return null;
+                            if (!activeSet.Contains(pos))
+                                layer.tilemap.SetTile(pos, tileDict[pos]);
+
+                            newActive.Add(pos);
                         }
                     }
                 }
-            }
 
-            foreach (var pos in activeSet)
-            {
-                if (!newActive.Contains(pos))
+                foreach (var pos in activeSet)
                 {
-                    layer.tilemap.SetTile(pos, null);
-                    if (++processed >= 100)
-                    {
-                        processed = 0;
-                        yield return null;
-                    }
+                    if (!newActive.Contains(pos))
+                        layer.tilemap.SetTile(pos, null);
                 }
+
+                activeTilesPerLayer[layer.layerName] = newActive;
             }
 
-            activeTilesPerLayer[layer.layerName] = newActive;
+            lastMin = minCell;
+            lastMax = maxCell;
         }
     }
 }

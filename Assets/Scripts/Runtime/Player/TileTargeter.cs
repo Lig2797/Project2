@@ -107,11 +107,11 @@ public class TileTargeter : NetworkBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
         GameEventsManager.Instance.dataEvents.onExitToWorldScene -= onExitToWorldScene;
     }
-   
 
     private void Update()
     {
         CheckSoundWhenMoving();
+
         if (SceneManager.GetActiveScene().name.Equals(Loader.Scene.MainMenu.ToString()) ||
             SceneManager.GetActiveScene().name.Equals(Loader.Scene.LoadingScene.ToString()) ||
             SceneManager.GetActiveScene().name.Equals(Loader.Scene.LobbyScene.ToString()) ||
@@ -121,6 +121,7 @@ public class TileTargeter : NetworkBehaviour
 
         GetTargetTile();
     }
+
     private void CheckSoundWhenMoving()
     {
 
@@ -448,7 +449,7 @@ public class TileTargeter : NetworkBehaviour
 
     public void SetTile(Item item)
     {
-        switch(item.type)
+        switch (item.type)
         {
             default:
                 break;
@@ -456,10 +457,9 @@ public class TileTargeter : NetworkBehaviour
             case ItemType.Crop:
                 {
                     if (!CanPlantGround) return;
-                    GameObject.Find("CropManager").GetComponent<CropManager>().TryModifyCrop(_clampedTilePosition,item.itemName,1);
+                    GameObject.Find("CropManager").GetComponent<CropManager>().TryModifyCrop(_clampedTilePosition, item.itemName, 1);
                     break;
-                }        
+                }
         }
     }
-
 }

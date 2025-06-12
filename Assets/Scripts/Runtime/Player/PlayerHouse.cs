@@ -19,7 +19,7 @@ public class PlayerHouse : MonoBehaviour
 
     private void Start()
     {
-        hasOpened = GameFlowManager.Instance.gameFlowSO.gameFlowData.HasOpenedPlayerHouse;
+        hasOpened = GameFlowManager.Instance.Data.HasOpenedPlayerHouse;
 
         CheckOpenedHouse();
     }
@@ -43,7 +43,7 @@ public class PlayerHouse : MonoBehaviour
         if (!playerInrange) return;
 
         hasOpened = true;
-        GameFlowManager.Instance.gameFlowSO.gameFlowData.SetHasOpendPlayerHouse(hasOpened);
+        GameFlowManager.Instance.Data.SetHasOpendPlayerHouse(hasOpened);
 
         CheckOpenedHouse();
     }

@@ -9,12 +9,16 @@ public class StopAndStartAllActionOnState : StateMachineBehaviour
     {
         PlayerController playerController = animator.GetComponent<PlayerController>();
         EnemyAI enemyAI = animator.GetComponent<EnemyAI>();
+        NpcController npcController = animator.GetComponent<NpcController>();
         if (playerController != null)
         {
             playerController.StopAllAction();
         }else if(enemyAI != null)
         {
             enemyAI.StopAllAction();
+        }else if(npcController != null)
+        {
+            npcController.StopAllAction();
         }
     }
 
@@ -29,13 +33,16 @@ public class StopAndStartAllActionOnState : StateMachineBehaviour
     {
         PlayerController playerController = animator.GetComponent<PlayerController>();
         EnemyAI enemyAI = animator.GetComponent<EnemyAI>();
-
+        NpcController npcCtrl = animator.GetComponent<NpcController>();
         if (playerController != null)
         {
             playerController.StartAllAction();
         }else if(enemyAI!= null)
         {
             enemyAI.StartAllAction();
+        }else if (npcCtrl != null)
+        {
+            npcCtrl.StartAllAction();
         }
     }
 

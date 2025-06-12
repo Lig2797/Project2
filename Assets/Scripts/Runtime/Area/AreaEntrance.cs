@@ -48,8 +48,8 @@ public class AreaEntrance : MonoBehaviour
             }
 
             PlayerController.LocalInstance.CanMove = true;
-            //UI_Fade.Instance.FadeToClear();
-            //UI_Fade.Instance.gameObject.SetActive(false);
+            UI_Fade.Instance.FadeToClear();
+            UI_Fade.Instance.gameObject.SetActive(false);
 
             return true;
         }
