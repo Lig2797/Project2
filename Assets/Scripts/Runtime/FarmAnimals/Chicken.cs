@@ -11,7 +11,7 @@ public class Chicken : FarmAnimal
     {
         _currentGrowthStage = 0;
         base.Initial();
-        base.ApplyStage(_currentGrowthStage.ToString());
+        //base.ApplyStage(_currentGrowthStage.ToString());
         CanMove = false;
     }
     public override void FedTimeHandler(int minute)
@@ -19,7 +19,7 @@ public class Chicken : FarmAnimal
         if (_currentGrowthStage == 0)
         {
             fedTimeCounter += minute;
-            if (fedTimeCounter > _animalInfo.FedTimesNeededToGrow)
+            if (fedTimeCounter >= _animalInfo.FedTimesNeededToGrow)
             {
                 fedTimeCounter = 0;
                 _animator.Play("AboutToHatch");
@@ -31,19 +31,28 @@ public class Chicken : FarmAnimal
             fedTimeCounter += minute;
             if (_currentGrowthStage != ChickenGrowthStage.Mature)
             {
-                if (fedTimeCounter > _animalInfo.FedTimesNeededToGrow)
+                if (fedTimeCounter >= _animalInfo.FedTimesNeededToGrow)
                 {
                     fedTimeCounter = 0;
+                    ChangeResetFedTime();
+
                     IncreaseGrowStage();
                 }
             }
             else
             {
-                if (fedTimeCounter > _animalInfo.FedTimesNeededToMakeProduct)
+                if (fedTimeCounter >= _animalInfo.FedTimesNeededToMakeProduct)
                 {
                     fedTimeCounter = 0;
+                    ChangeResetFedTime();
                     MakeProduct();
                 }
+            }
+            
+            if(fedTimeCounter >= resetFedTime)
+            {
+                ChangeResetFedTime(resetFedTime + 1000);
+                isFed = false;
             }
         }
         
@@ -65,8 +74,12 @@ public class Chicken : FarmAnimal
         _currentGrowthStage = (ChickenGrowthStage)Mathf.Min(next, max);
 
         if((int)_currentGrowthStage == 1)
+        {
+            GetComponent<Collider2D>().isTrigger = false;
             CanMove = true;
-
+            fedTimeCounter = 0;
+        }
+        Debug.Log("chicken grow stage: " + _currentGrowthStage.ToString());
         base.ApplyStage(_currentGrowthStage.ToString());
         isFed = false;
     }

@@ -704,6 +704,7 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
                     tileTargeter.SetTile(item);
                     break;
                 }
+            
         }
     }
     private void OnInteract()

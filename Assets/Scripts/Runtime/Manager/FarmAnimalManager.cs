@@ -13,11 +13,17 @@ public class FarmAnimalManager : PersistentSingleton<FarmAnimalManager>
         EnviromentalStatusManager.OnTimeIncrease += IncreaseFedTime;
     }
 
+    private void OnDisable()
+    {
+        EnviromentalStatusManager.OnTimeIncrease -= IncreaseFedTime;
+    }
+
     private void IncreaseFedTime(int minute)
     {
-        foreach (var animal in _farmAnimals)
+
+        for(int i = _farmAnimals.Count - 1; i >= 0; i--)
         {
-            animal.FedTimeHandler(minute);
+            _farmAnimals[i].FedTimeHandler(minute);
         }
     }
 

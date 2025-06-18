@@ -19,9 +19,13 @@ public abstract class FarmAnimal : MonoBehaviour
     protected void GenerateGuid() => id = System.Guid.NewGuid().ToString();
 
     [SerializeField] protected Gender gender;
-    [SerializeField] protected bool canMakeProduct;
+    [SerializeField] protected bool canMakeProduct = false;
 
+    [SerializeField]
     protected int fedTimeCounter = 0;
+    [SerializeField]
+    protected int resetFedTime = 1000;
+    [SerializeField]
     protected bool isFed = false;
 
     protected float maxRadius = 5f;
@@ -86,7 +90,6 @@ public abstract class FarmAnimal : MonoBehaviour
 
     protected void OnEnable()
     {
-        Initial();
         FarmAnimalManager.Instance.RegisterAnimal(this);
     }
 
@@ -94,7 +97,11 @@ public abstract class FarmAnimal : MonoBehaviour
     {
         FarmAnimalManager.Instance.UnregisterAnimal(this);
     }
+    private void Start()
+    {
 
+        Initial();
+    }
     protected void Update()
     {
         SetAnimator();
@@ -118,15 +125,13 @@ public abstract class FarmAnimal : MonoBehaviour
 
     private void MoveToTarget()
     {
-        // 1) fan-ray obstacle check
-        if (CheckFanObstacle())
+        if (_body.linearVelocity.sqrMagnitude > 0.01f && CheckFanObstacle())
         {
             isMoving = false;
             StartStopMoving(5);
             return;
         }
 
-        // 2) normal movement
         Vector2 currentPosition = _body.position;
         Vector2 direction = (targetPosition - currentPosition).normalized;
         _body.linearVelocity = direction * speed;
@@ -142,6 +147,7 @@ public abstract class FarmAnimal : MonoBehaviour
 
         Debug.DrawRay(currentPosition, LastMovement * rayDistance, Color.yellow);
     }
+
 
     private bool CheckFanObstacle()
     {
@@ -169,7 +175,9 @@ public abstract class FarmAnimal : MonoBehaviour
         CanMove = true;
     }
 
-    private void StartStopMoving(int seconds)
+    
+
+    private void StartStopMoving(int seconds = 5)
     {
         if (stopMovingCoroutine != null)
             StopCoroutine(stopMovingCoroutine);
@@ -205,9 +213,14 @@ public abstract class FarmAnimal : MonoBehaviour
     {
         if (isFed) return;
         _animator.SetTrigger("Eat");
+        StartStopMoving(5);
         isFed = true;
     }
 
+    protected void ChangeResetFedTime(int value = 1000)
+    {
+        resetFedTime = value;
+    }
     public abstract void FedTimeHandler(int minute);
     protected virtual void MakeProduct() { }
     protected virtual void GetProduct() { }
@@ -215,7 +228,9 @@ public abstract class FarmAnimal : MonoBehaviour
     public abstract void IncreaseGrowStage();
 
     protected virtual void ApplyStage(string stage)
-        => _animator.SetTrigger(stage);
+    {
+        _animator.SetTrigger(stage);
+    }
 
     protected virtual void Initial()
     {

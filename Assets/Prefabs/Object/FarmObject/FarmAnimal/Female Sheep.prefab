@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5983185927463610024}
   - component: {fileID: 2320925675581533198}
   - component: {fileID: 8961632403844252917}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Female Sheep
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -132,10 +132,12 @@ MonoBehaviour:
   gender: 0
   canMakeProduct: 0
   isMoving: 0
-  CanMove: 1
+  _canMove: 1
   collisionMask:
     serializedVersion: 2
     m_Bits: 520
+  rayDistance: 1.5
+  rayAngleSpread: 30
   sheepPrefab: {fileID: 0}
   _canMakeProduct: 0
 --- !u!50 &2320925675581533198
@@ -199,6 +201,6 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.007761568, y: -0.19078389}
-  m_Size: {x: 0.58738536, y: 0.58738536}
-  m_Direction: 0
+  m_Offset: {x: -0.02114409, y: -0.21754918}
+  m_Size: {x: 0.8461171, y: 0.5249336}
+  m_Direction: 1

@@ -32,8 +32,8 @@ public enum CowGrowthStage
 public enum SheepGrowthStage
 {
     Baby,
+    Shaved,
     Haired,
-    Shaved
 }
 
 

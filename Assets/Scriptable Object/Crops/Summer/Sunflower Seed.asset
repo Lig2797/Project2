@@ -10,26 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2937cd1ec553aec45961e357bc702d01, type: 3}
-  m_Name: Tomato Seed
+  m_Name: Sunflower Seed
   m_EditorClassIdentifier: 
   itemPrice: 0
   CropSetting:
     cropProductName: Tomato
     growthStages:
     - {fileID: 11400000, guid: 9ae68e0cd4a174b4787081a8909a9257, type: 2}
-    - {fileID: 11400000, guid: de3313b2a1ba4124ab88aeae163a6b0c, type: 2}
-    - {fileID: 11400000, guid: 6520357c7df5a1c42ab5a855e42ff789, type: 2}
-    - {fileID: 11400000, guid: c83e03678179411429d90274ee95d945, type: 2}
-    - {fileID: 11400000, guid: b87c902856a7df8429b10271412324c2, type: 2}
-    - {fileID: 11400000, guid: a957ffa19502133438ce6c24147304d2, type: 2}
-    - {fileID: 11400000, guid: c565af72e524f7845a51f41614210ad6, type: 2}
-    - {fileID: 11400000, guid: 59b5b13649c5fe7489fdb1d7ab3b0002, type: 2}
+    - {fileID: 11400000, guid: a4ecc9f933c8ffe418d7085322596b04, type: 2}
+    - {fileID: 11400000, guid: ec7bc223299195e4bbb1d4591de087c5, type: 2}
+    - {fileID: 11400000, guid: 86b4b2a3b869b5d4b85de5a34e87a4a2, type: 2}
+    - {fileID: 11400000, guid: 5e865000ed6d3c84d9612038d20268d9, type: 2}
+    - {fileID: 11400000, guid: ffa4715f6768275469a2cae382e741f0, type: 2}
+    - {fileID: 11400000, guid: d6191313db023b644bf45fba669c2c68, type: 2}
     TimeToGrowth: 8000
-    canReHarvest: 1
-    numOfProductCouldDrop: 0100000002000000
+    canReHarvest: 0
+    numOfProductCouldDrop: 01000000
     ratioForEachNum:
-    - 70
-    - 30
+    - 100
     season: 1
   cropLevelImage: []
   tile: {fileID: 0}
@@ -39,5 +37,5 @@ MonoBehaviour:
   type: 3
   range: {x: 5, y: 4, z: 0}
   stackable: 1
-  image: {fileID: 86337522, guid: 2c60b7215c492ce4e97bac0488dabdcb, type: 3}
-  itemName: Tomato Seed
+  image: {fileID: -922144940, guid: 2c60b7215c492ce4e97bac0488dabdcb, type: 3}
+  itemName: Sunflower Seed

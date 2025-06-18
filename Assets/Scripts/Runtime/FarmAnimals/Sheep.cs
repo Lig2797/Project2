@@ -6,26 +6,25 @@ public class Sheep : FarmAnimal
 {
     [SerializeField] private GameObject sheepPrefab;
     private SheepGrowthStage _currentGrowthStage;
-    [SerializeField] private bool _canMakeProduct = false;
 
     protected override void Initial()
     {
         _currentGrowthStage = 0;
         base.Initial();
-        base.ApplyStage(_currentGrowthStage.ToString());
+        //base.ApplyStage(_currentGrowthStage.ToString());
     }
 
     protected override void MakeProduct()
     {
-        _canMakeProduct = true;
+        canMakeProduct = true;
 
     }
     [ContextMenu("shave hair")]
     protected override void GetProduct()
     {
-        if (_canMakeProduct)
+        if (canMakeProduct)
         {
-            _canMakeProduct = false;
+            canMakeProduct = false;
             Debug.Log("Got hair");
             DecreaseGrowStage();
         }
@@ -42,26 +41,38 @@ public class Sheep : FarmAnimal
 
     public override void FedTimeHandler(int minute)
     {
-        if (!isFed || _currentGrowthStage == SheepGrowthStage.Haired) return;
+        if (!isFed) return;
         fedTimeCounter += minute;
         if(_currentGrowthStage != SheepGrowthStage.Haired)
         {
-            if (fedTimeCounter > _animalInfo.FedTimesNeededToGrow)
+            if (fedTimeCounter >= _animalInfo.FedTimesNeededToGrow)
             {
                 fedTimeCounter = 0;
+                ChangeResetFedTime();
                 IncreaseGrowStage();
             }
+        }
+        if (fedTimeCounter >= resetFedTime)
+        {
+            ChangeResetFedTime(resetFedTime + 1000);
+            isFed = false;
         }
     }
 
     public override void IncreaseGrowStage()
     {
+        if((int)_currentGrowthStage == 0)
+        {
+            _currentGrowthStage += 1;
+        }
         int next = (int)_currentGrowthStage + 1;
         int max = System.Enum.GetValues(typeof(SheepGrowthStage)).Length - 1;
         _currentGrowthStage = (SheepGrowthStage)Mathf.Min(next, max);
 
         base.ApplyStage(_currentGrowthStage.ToString()); 
         isFed = false;
+        if (_currentGrowthStage == SheepGrowthStage.Haired)
+            MakeProduct();
     }
 
     private void DecreaseGrowStage()
@@ -71,5 +82,7 @@ public class Sheep : FarmAnimal
         _currentGrowthStage = (SheepGrowthStage)Mathf.Max(prev, min);
 
         base.ApplyStage(_currentGrowthStage.ToString());
+        fedTimeCounter = 0;
+        ChangeResetFedTime();
     }
 }

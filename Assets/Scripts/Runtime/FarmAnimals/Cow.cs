@@ -11,27 +11,49 @@ public class Cow : FarmAnimal
     {
         _currentGrowthStage = 0;
         base.Initial();
-        base.ApplyStage(_currentGrowthStage.ToString());
+        //base.ApplyStage(_currentGrowthStage.ToString());
+    }
+    protected override void MakeProduct()
+    {
+        canMakeProduct = true;
+
+    }
+    [ContextMenu("get milk")]
+    protected override void GetProduct()
+    {
+        if (canMakeProduct)
+        {
+            canMakeProduct = false;
+            Debug.Log("Got milk");
+        }
     }
     public override void FedTimeHandler(int minute)
     {
         if (!isFed) return;
         fedTimeCounter += minute;
-        if (_currentGrowthStage != CowGrowthStage.Baby)
+        if (_currentGrowthStage == CowGrowthStage.Baby)
         {
-            if (fedTimeCounter > _animalInfo.FedTimesNeededToGrow)
+            if (fedTimeCounter >= _animalInfo.FedTimesNeededToGrow)
             {
                 fedTimeCounter = 0;
+                ChangeResetFedTime();
                 IncreaseGrowStage();
             }
         }
         else
         {
-            if (fedTimeCounter > _animalInfo.FedTimesNeededToMakeProduct)
+            if (fedTimeCounter >= _animalInfo.FedTimesNeededToMakeProduct && !canMakeProduct)
             {
                 fedTimeCounter = 0;
+                ChangeResetFedTime();
                 MakeProduct();
             }
+        }
+
+        if (fedTimeCounter >= resetFedTime)
+        {
+            ChangeResetFedTime(resetFedTime + 1000);
+            isFed = false;
         }
     }
     protected override void ApplyStage(string stage)

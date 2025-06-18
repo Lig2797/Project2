@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aeb0b84fb54d0644ab095c1bc76d487c, type: 3}
   m_Name: Female Cow
   m_EditorClassIdentifier: 
-  FedTimesNeededToGrow: 500
-  FedTimesNeededToMakeProduct: 500
+  FedTimesNeededToGrow: 3000
+  FedTimesNeededToMakeProduct: 3000
   Gender: 2

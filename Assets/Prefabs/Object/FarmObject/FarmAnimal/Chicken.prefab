@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2400393669554931377}
   - component: {fileID: 8470694412381296445}
   - component: {fileID: 7207136287203567867}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Chicken
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -141,10 +141,12 @@ MonoBehaviour:
   gender: 0
   canMakeProduct: 0
   isMoving: 0
-  CanMove: 1
+  _canMove: 1
   collisionMask:
     serializedVersion: 2
     m_Bits: 520
+  rayDistance: 1.5
+  rayAngleSpread: 30
   chickenPrefab: {fileID: 6601258122538453835}
 --- !u!212 &7207136287203567867
 SpriteRenderer:

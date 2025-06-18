@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2400393669554931377}
   - component: {fileID: -8903156878625195728}
   - component: {fileID: 7207136287203567867}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Female Cow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,9 +97,9 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.007761717, y: -0.15523237}
-  m_Size: {x: 0.6707556, y: 0.6707556}
-  m_Direction: 0
+  m_Offset: {x: 0.001690964, y: -0.16737382}
+  m_Size: {x: 1.0471424, y: 0.6464737}
+  m_Direction: 1
 --- !u!95 &2400393669554931377
 Animator:
   serializedVersion: 7
@@ -141,11 +141,14 @@ MonoBehaviour:
   gender: 0
   canMakeProduct: 0
   isMoving: 0
-  CanMove: 1
+  _canMove: 1
   collisionMask:
     serializedVersion: 2
     m_Bits: 520
+  rayDistance: 1.5
+  rayAngleSpread: 30
   cowPrefab: {fileID: 6601258122538453835}
+  _canMakeProduct: 0
 --- !u!212 &7207136287203567867
 SpriteRenderer:
   m_ObjectHideFlags: 0
