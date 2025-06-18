@@ -1,7 +1,3 @@
-
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -22,7 +18,6 @@ public class Item : ScriptableObject
     public AnimatedTile animatedTile;
     public Tilemap tilemap;
     public ItemType type;
-    public ActionType actionType;
     public Vector3Int range = new Vector3Int(5, 4);
 
     [Header("Only UI")]
@@ -51,18 +46,8 @@ public enum ItemType
     Tile,
     Food,
     Tool,
-    Material,
     Crop,
-    Workbench,
-    Seed,
+    Object,
     Usable
 }
 
-public enum ActionType
-{
-    Cook,
-    Combine,
-    Mine,
-    Craft,
-    PlaceTile
-}

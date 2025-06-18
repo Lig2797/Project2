@@ -9,6 +9,7 @@ public class InventoryManagerSO : ScriptableObject
 
     public event Func<Transform> onFindEmptySlot;
     public event Action onChangedSelectedSlot;
+    public event Action<bool> onShowPlaceableObject;
     public event Action<int> onDecreaseItemQuantity;
     public event Action<InventoryItem, GameObject> onPutItemDownByRightClick;
     private int _selectedSlot = 0;
@@ -84,12 +85,12 @@ public class InventoryManagerSO : ScriptableObject
     public void DecreaseItemQuantityOnUse()
     {
         onDecreaseItemQuantity?.Invoke(_selectedSlot);
-        InventoryItem item = inventory.GetInventoryItemOfIndex(_selectedSlot);
-        item.DecreaseQuantity(1);
-        if (item.Quantity <= 0)
-            RemoveInventoryItem(item);
     }
 
+    public void ShowPlaceableObject(bool isActivate)
+    {
+        onShowPlaceableObject?.Invoke(isActivate);
+    }
     public void ResetInventorySO()
     { 
         inventory = new Inventory();

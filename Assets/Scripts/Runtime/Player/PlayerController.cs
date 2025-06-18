@@ -548,18 +548,6 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
 
     }
 
-
-    //[ServerRpc]
-    //private void SetCurrentVehicleMovementServerRpc(NetworkObjectReference vehicleRef, Vector2 movement, bool IsFacingRight)
-    //{
-    //    if (vehicleRef.TryGet(out NetworkObject vehicleObj))
-    //    {
-    //        var vehicle = vehicleObj.GetComponent<VehicleController>();
-    //        vehicle.SetMovement(movement);
-    //        if (movement != Vector2.zero)
-    //            vehicle.IsFacingRight.Value = IsFacingRight;
-    //    }
-    //}
     #endregion
 
     #region Actions Block
@@ -585,7 +573,9 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
         if (!CanAttack || IsRidingVehicle) return;
 
         Item item = _inventoryManagerSO.GetCurrentItem();
-        _itemOnHand.ActivateItemOnHandServerRpc(null, false);
+        _itemOnHand.ActivateItemOnHand(null, false);
+        _inventoryManagerSO.ShowPlaceableObject(false);
+        tileTargeter.TargetRange = 1;
         if (item != null)
         {
             IsHoldingItem = true;
@@ -607,7 +597,6 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
                     }
                 case ItemType.Tool:
                     {
-
                         ChangeAnimationState(item.name);
 
                         break;
@@ -615,10 +604,19 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
                 case ItemType.Crop:
                 case ItemType.Food:
                     {
-                        _itemOnHand.ActivateItemOnHandServerRpc(item.itemName, true);
+                        _itemOnHand.ActivateItemOnHand(item.image, true);
                         ChangeAnimationState("Pickup_idle");
                         break;
                     }
+                case ItemType.Tile:
+                    {
+                        _itemOnHand.ActivateItemOnHand(item.image, true);
+                        ChangeAnimationState("Pickup_idle");
+                        _inventoryManagerSO.ShowPlaceableObject(true);
+                        tileTargeter.TargetRange = 100;
+                        break;
+                    }
+
             }
         }
         else ChangeAnimationState(AnimationStrings.idle);
@@ -643,8 +641,6 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
         else
         {
             animator.SetTrigger(AnimationStrings.hurt);
-
-
             StartCoroutine(ApplyKnockback(knockBackDirection));
         }
     }
@@ -703,6 +699,7 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
                     break;
                 }
             case ItemType.Crop:
+            case ItemType.Tile:
                 {
                     tileTargeter.SetTile(item);
                     break;
@@ -737,24 +734,16 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
             IsRidingVehicle = !IsRidingVehicle;
             if (IsRidingVehicle)
             {
+                _itemOnHand.ActivateItemOnHand(null, false);
                 ChangeAnimationState("Idle");
                 StartAllAction();
                 CurrentVehicle.SetRiding(true, this);
-                //CurrentVehicle.transform.SetParent(transform, true);
-                //if (CurrentVehicle.transform.localScale.x < 0) CurrentVehicle.transform.localScale = new Vector3(1, 1, 1);
-                //RequestToRideVehicleServerRpc(
-                //    GetComponent<NetworkObject>(),
-                //    CurrentVehicle.GetComponent<NetworkObject>()
-                //);
             }
             else
             {
-
-                //SceneManager.MoveGameObjectToScene(CurrentVehicle.gameObject, SceneManager.GetActiveScene());
                 CurrentVehicle.SetRiding(false,this);
-                //RequestToUnRideVehicleServerRpc(
-                //    CurrentVehicle.GetComponent<NetworkObject>()
-                //);
+                CheckAnimation();
+
             }
         }
 
@@ -769,6 +758,7 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
             }
             else
             {
+                _itemOnHand.ActivateItemOnHand(null, false);
                 StopAllAction();
                 animator.SetBool(AnimationStrings.isSleep, true);
 

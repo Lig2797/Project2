@@ -131,6 +131,9 @@ TagManager:
   - name: Leaf
     uniqueID: 1716526539
     locked: 0
+  - name: PlaceableTile
+    uniqueID: 1426083937
+    locked: 0
   - name: Rimlit
     uniqueID: 2996297867
     locked: 0

@@ -1,27 +1,20 @@
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.UIElements;
+using static UnityEditor.Progress;
 
-public class ItemOnHand : NetworkBehaviour
+public class ItemOnHand : MonoBehaviour
 {
-    [ServerRpc(RequireOwnership = false)]
-    public void ActivateItemOnHandServerRpc(string itemName, bool isActivate)
-    {
-        ActivateItemOnHandClientRpc(itemName, isActivate);
-    }
-
-    [ClientRpc]
-    public void ActivateItemOnHandClientRpc(string itemName, bool isActivate)
+    public void ActivateItemOnHand(Sprite image, bool isActivate)
     {
         if (isActivate)
         {
-            Item item = ItemDatabase.Instance.GetItemByName(itemName);
-            SetItemSprite(item.image);
+            SetItemSprite(image);
         }
         else
         {
             SetItemSprite(null);
         }
-
     }
     public void SetItemSprite(Sprite image)
     {
