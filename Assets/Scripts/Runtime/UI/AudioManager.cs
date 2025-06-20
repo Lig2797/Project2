@@ -95,12 +95,10 @@ public class AudioManager : PersistentSingleton<AudioManager>
     {
         if (sfxDict.TryGetValue(name, out var clip))
         {
-            Debug.Log("Sound fx name: " + name);
-            float originalPitch = 1f;
-            sfxSource.pitch = Random.Range(originalPitch - 0.2f, originalPitch + 0.2f); 
+            sfxSource.pitch = Random.Range(0.7f, 1.3f); 
             sfxSource.PlayOneShot(clip);
 
-            sfxSource.pitch = originalPitch; // Reset to avoid affecting other sounds
+            //sfxSource.pitch = originalPitch; // reset pitch too son t will
         }
         else
         {

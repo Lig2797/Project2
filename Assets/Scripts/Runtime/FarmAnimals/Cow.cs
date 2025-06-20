@@ -70,6 +70,11 @@ public class Cow : FarmAnimal
         isFed = false;
     }
 
+    public override void Interact()
+    {
+        base.Interact();
+        _animator.SetTrigger("Interact");
+    }
 
 
 }

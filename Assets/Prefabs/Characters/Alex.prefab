@@ -634,7 +634,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b6498d391f06ca44bb0353714d0b776, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &2840840743689162244
 GameObject:
   m_ObjectHideFlags: 0
@@ -1230,15 +1229,15 @@ MonoBehaviour:
   _tilemaps: []
   _targetTilemap: {fileID: 0}
   _grassTilemap: {fileID: 0}
+  _groundTilemap: {fileID: 0}
   _targetTile: {fileID: 11400000, guid: d7c3298a0a6669446a7e49bfc0d990bc, type: 2}
   TargetRange: 1
-  tilemapCheck: []
   _canHoe: 0
   _lockedCanHoe: 0
   _canWater: 0
   _lockedCanWater: 0
   _canPlantGround: 0
-  stepCooldown: 0.3
+  stepCooldown: 0.35
   _inventoryManagerSO: {fileID: 11400000, guid: 80487e6faf0fa794284f8125827666cd, type: 2}
 --- !u!114 &566550412973088920
 MonoBehaviour:

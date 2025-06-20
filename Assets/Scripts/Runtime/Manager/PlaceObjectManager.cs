@@ -8,13 +8,37 @@ public class PlaceObjectManager : PersistentSingleton<PlaceObjectManager>
     [SerializeField]
     private Tilemap _placeObjectTilemap;
 
-    [SerializeField] private Transform _previewObject; 
+    [SerializeField] private Transform _previewObject;
+    [SerializeField] private SpriteRenderer _previewObjectSpriteRenderer;
     [SerializeField] private float tileSize = 1f;
 
     private Vector3Int _lastCellPosition;
 
     [SerializeField]
     private bool _isActivated;
+
+    [SerializeField]
+    private bool _canPlaceObject = true;
+    public bool CanPlaceObject
+    {
+        get => _canPlaceObject;
+        private set
+        {
+            _canPlaceObject = value;
+
+            Color color;
+            if (value)
+            {
+                color = Color.green;
+            }else
+                color = Color.red;
+
+            color.a = 0.5f; // Set 50% opacity
+
+            _previewObjectSpriteRenderer.color = color;
+        }
+    }
+
     [SerializeField] private InventoryManagerSO _inventoryManagerSO;
     private void OnEnable()
     {
@@ -29,6 +53,7 @@ public class PlaceObjectManager : PersistentSingleton<PlaceObjectManager>
     {
         base.Awake();
         _previewObject = GameObject.Find("PlaceableObjectPreview").GetComponent<Transform>();
+        _previewObjectSpriteRenderer = _previewObject.GetComponent<SpriteRenderer>();
         _previewObject.gameObject.SetActive(false);
     }
     public void SetTilemapForPlaceObject(Tilemap groundTilemap, Tilemap placeObjectTilemap)
@@ -65,20 +90,16 @@ public class PlaceObjectManager : PersistentSingleton<PlaceObjectManager>
 
     private void CheckIsValidToPlace()
     {
-        var spriteRenderer = _previewObject.GetComponent<SpriteRenderer>();
 
-        Color color;
         if (_groundTilemap.HasTile(_lastCellPosition) && !_placeObjectTilemap.HasTile(_lastCellPosition))
         {
-            color = Color.green;
+            CanPlaceObject = true;
         }
         else
         {
-            color = Color.red;
+            CanPlaceObject = false;
         }
 
-        color.a = 0.5f; // Set 50% opacity
-        spriteRenderer.color = color;
     }
 
     private void ActivatePlaceableObjectUI(bool isActivate)
@@ -106,6 +127,7 @@ public class PlaceObjectManager : PersistentSingleton<PlaceObjectManager>
 
     public void PlaceTile(TileBase tileToSet)
     {
+        AudioManager.Instance.PlaySFX("Pickaxe3");
         _placeObjectTilemap.SetTile(_lastCellPosition, tileToSet);
         CheckIsValidToPlace();
     }

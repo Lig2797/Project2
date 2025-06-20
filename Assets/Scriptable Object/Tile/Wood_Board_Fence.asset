@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2937cd1ec553aec45961e357bc702d01, type: 3}
   m_Name: Wood_Board_Fence
   m_EditorClassIdentifier: 
+  itemPrice: 0
   CropSetting:
     cropProductName: 
     growthStages: []
@@ -21,13 +22,13 @@ MonoBehaviour:
     ratioForEachNum: []
     season: 0
   cropLevelImage: []
+  foodType: 0
   tile: {fileID: 0}
-  ruleTile: {fileID: 11400000, guid: cc01d495fc80af1468cd8e319883e839, type: 2}
+  ruleTile: {fileID: 11400000, guid: 7f0f0bb0b36a4a24f89f65dd47f04c3d, type: 2}
   animatedTile: {fileID: 0}
   tilemap: {fileID: 0}
   type: 0
-  actionType: 4
   range: {x: 5, y: 4, z: 0}
   stackable: 1
-  image: {fileID: 1932881380, guid: 339a81f4c58050743a8361273b0b1167, type: 3}
+  image: {fileID: 428129601, guid: 339a81f4c58050743a8361273b0b1167, type: 3}
   itemName: Wood_Board_Fence

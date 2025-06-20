@@ -709,7 +709,7 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
     }
     private void OnInteract()
     {
-        if (!IsRidingVehicle && CanAttack && Input.GetMouseButton(1))
+        if (!IsRidingVehicle && CanAttack)
         {
             if (tileTargeter.CheckHarverst())
             {
@@ -717,6 +717,59 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
                 animator.SetTrigger(AnimationStrings.pickup);
                 _itemOnHand.gameObject.SetActive(false);
                 CurrentState = null;
+            }
+            else
+            {
+                InteractWithFarmAnimal();
+            }
+        }
+    }
+
+    private void InteractWithFarmAnimal()
+    {
+        Vector2 clampedMousePosition = new Vector2 (    
+            Mathf.Clamp(tileTargeter.MouseWorldPosition.x, transform.position.x - tileTargeter.TargetRange, transform.position.x + tileTargeter.TargetRange),
+            Mathf.Clamp(tileTargeter.MouseWorldPosition.y, transform.position.y - tileTargeter.TargetRange, transform.position.y + tileTargeter.TargetRange)
+        );
+
+        int farmAnimalLayerMask = 1 << LayerMask.NameToLayer("FarmAnimal");
+        Collider2D[] hit = Physics2D.OverlapCircleAll(clampedMousePosition, 1, farmAnimalLayerMask);
+        Debug.DrawLine(transform.position, clampedMousePosition, Color.red, 1f);
+        Item item = _inventoryManagerSO.GetCurrentItem();
+        if (item == null || item.type != ItemType.Food)  // neu ko cam food
+        {
+            foreach (Collider2D collider in hit)
+            {
+                if (collider.TryGetComponent(out FarmAnimal farmAnimal))
+                {
+                    if (farmAnimal.IsInteractable)
+                    {
+                        farmAnimal.Interact();
+                        return;
+                    }
+                }
+            }
+        }
+        else
+        {
+
+            foreach (Collider2D collider in hit)
+            {
+                if (collider.TryGetComponent(out FarmAnimal farmAnimal))
+                {
+                    if (farmAnimal.FoodToEat == FarmAnimal.Food.None || farmAnimal.FoodToEat != item.foodType) continue;
+
+                    if (farmAnimal.FoodToEat == item.foodType)
+                    {
+                        if(farmAnimal.Eat())
+                        {
+                            _inventoryManagerSO.DecreaseItemQuantityOnUse();
+                            CheckAnimation();
+                            return;
+                        }
+                        continue;
+                    }
+                }
             }
         }
     }

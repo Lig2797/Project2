@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemPrice: 0
   CropSetting:
-    cropProductName: Tomato
+    cropProductName: Sunflower
     growthStages:
     - {fileID: 11400000, guid: 9ae68e0cd4a174b4787081a8909a9257, type: 2}
     - {fileID: 11400000, guid: a4ecc9f933c8ffe418d7085322596b04, type: 2}

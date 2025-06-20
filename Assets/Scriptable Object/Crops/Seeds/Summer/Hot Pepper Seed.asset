@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemPrice: 0
   CropSetting:
-    cropProductName: Tomato
+    cropProductName: Hot Pepper
     growthStages:
     - {fileID: 11400000, guid: 0894b3f4eacc0ba4d979ccd694b8fc91, type: 2}
     - {fileID: 11400000, guid: 619af403839e64045a6620cab71dceb6, type: 2}

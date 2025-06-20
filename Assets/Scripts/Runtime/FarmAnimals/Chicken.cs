@@ -58,15 +58,19 @@ public class Chicken : FarmAnimal
         
     }
 
-    protected override void Eat()
+    public override bool Eat()
     {
         if (_currentGrowthStage == ChickenGrowthStage.Egg)
-            return;
+            return false;
 
-        base.Eat();
-
+        return base.Eat();
     }
-
+    public override void Interact()
+    {
+        if(_currentGrowthStage == ChickenGrowthStage.Egg)
+            return;
+        base.Interact();
+    }
     public override void IncreaseGrowStage()
     {
         int next = (int)_currentGrowthStage + 1;

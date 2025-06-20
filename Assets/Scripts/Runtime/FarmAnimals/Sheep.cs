@@ -85,4 +85,10 @@ public class Sheep : FarmAnimal
         fedTimeCounter = 0;
         ChangeResetFedTime();
     }
+
+    public override void Interact()
+    {
+        base.Interact();
+        _animator.SetTrigger("Interact");
+    }
 }

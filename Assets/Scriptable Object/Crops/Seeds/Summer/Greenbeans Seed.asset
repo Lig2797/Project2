@@ -10,23 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2937cd1ec553aec45961e357bc702d01, type: 3}
-  m_Name: Tomato Seed
+  m_Name: Greenbeans Seed
   m_EditorClassIdentifier: 
   itemPrice: 0
   CropSetting:
-    cropProductName: Tomato
+    cropProductName: Greenbeans
     growthStages:
     - {fileID: 11400000, guid: 9ae68e0cd4a174b4787081a8909a9257, type: 2}
-    - {fileID: 11400000, guid: de3313b2a1ba4124ab88aeae163a6b0c, type: 2}
-    - {fileID: 11400000, guid: 6520357c7df5a1c42ab5a855e42ff789, type: 2}
-    - {fileID: 11400000, guid: c83e03678179411429d90274ee95d945, type: 2}
-    - {fileID: 11400000, guid: b87c902856a7df8429b10271412324c2, type: 2}
-    - {fileID: 11400000, guid: a957ffa19502133438ce6c24147304d2, type: 2}
-    - {fileID: 11400000, guid: c565af72e524f7845a51f41614210ad6, type: 2}
-    - {fileID: 11400000, guid: 59b5b13649c5fe7489fdb1d7ab3b0002, type: 2}
+    - {fileID: 11400000, guid: 3c482c98c52ae57438b1e1e689cf0231, type: 2}
+    - {fileID: 11400000, guid: 6bc322afc37cb8942ab1ed2bccbc5171, type: 2}
+    - {fileID: 11400000, guid: 9d88ac580d85f774197820685dfcea07, type: 2}
+    - {fileID: 11400000, guid: 1182e504610ae5844af503194478071b, type: 2}
+    - {fileID: 11400000, guid: 1408d6099e3fd5a418f786346ebebb5b, type: 2}
+    - {fileID: 11400000, guid: 0a5fe50dcc94df043b354ea45e6d2c3d, type: 2}
+    - {fileID: 11400000, guid: ac686c584e148694cae4d510ac652c13, type: 2}
     TimeToGrowth: 8000
     canReHarvest: 1
-    numOfProductCouldDrop: 0100000002000000
+    numOfProductCouldDrop: 0200000003000000
     ratioForEachNum:
     - 70
     - 30
@@ -39,5 +39,5 @@ MonoBehaviour:
   type: 3
   range: {x: 5, y: 4, z: 0}
   stackable: 1
-  image: {fileID: 86337522, guid: 2c60b7215c492ce4e97bac0488dabdcb, type: 3}
-  itemName: Tomato Seed
+  image: {fileID: 592795561, guid: 2c60b7215c492ce4e97bac0488dabdcb, type: 3}
+  itemName: Greenbeans Seed

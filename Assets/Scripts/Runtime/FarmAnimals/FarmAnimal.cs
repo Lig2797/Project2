@@ -1,11 +1,19 @@
 using System.Collections;
 using UnityEngine;
 
+
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(CapsuleCollider2D))]
 [RequireComponent(typeof(Animator))]
 public abstract class FarmAnimal : MonoBehaviour
 {
+
+    public enum Food
+    {
+        None,
+        Seeds,
+        Wheat
+    }
     #region Components
     [SerializeField] protected Rigidbody2D _body;
     [SerializeField] protected Animator _animator;
@@ -22,11 +30,15 @@ public abstract class FarmAnimal : MonoBehaviour
     [SerializeField] protected bool canMakeProduct = false;
 
     [SerializeField]
+    public bool IsInteractable = true;
+
+
+    [SerializeField]
     protected int fedTimeCounter = 0;
     [SerializeField]
     protected int resetFedTime = 1000;
     [SerializeField]
-    protected bool isFed = false;
+    public bool isFed = false;
 
     protected float maxRadius = 5f;
     protected float speed = 2f;
@@ -42,9 +54,14 @@ public abstract class FarmAnimal : MonoBehaviour
         {
             _canMove = value;
             if (!_canMove)
+            {
                 _body.linearVelocity = Vector2.zero;
+                isMoving = false;
+            }
         }
     }
+
+    public Food FoodToEat;
 
     [Header("Obstacle Detection")]
     [SerializeField] protected LayerMask collisionMask;
@@ -86,6 +103,11 @@ public abstract class FarmAnimal : MonoBehaviour
     public string VerticalParameter => "Vertical";
     #endregion
 
+    #region Reference
+    [SerializeField]
+    private EmojiController _emoji;
+    #endregion
+
     private Coroutine stopMovingCoroutine;
 
     protected void OnEnable()
@@ -96,6 +118,12 @@ public abstract class FarmAnimal : MonoBehaviour
     protected void OnDisable()
     {
         FarmAnimalManager.Instance.UnregisterAnimal(this);
+    }
+
+
+    private void Awake()
+    {
+        _emoji = GetComponentInChildren<EmojiController>(true);
     }
     private void Start()
     {
@@ -139,7 +167,7 @@ public abstract class FarmAnimal : MonoBehaviour
         if (direction != Vector2.zero)
             LastMovement = direction;
 
-        if (Vector2.Distance(currentPosition, targetPosition) < 0.5f)
+        if (Vector2.Distance(currentPosition, targetPosition) < 0.1f)
         {
             isMoving = false;
             StartStopMoving(5);
@@ -209,12 +237,15 @@ public abstract class FarmAnimal : MonoBehaviour
     }
 
     [ContextMenu("Eat")]
-    protected virtual void Eat()
+    public virtual bool Eat()
     {
-        if (isFed) return;
+        if (isFed) return false;
         _animator.SetTrigger("Eat");
+        _emoji.SetEmojiSprite(EmojiType.VeryHappy);
+        _emoji.gameObject.SetActive(true);
         StartStopMoving(5);
         isFed = true;
+        return true;
     }
 
     protected void ChangeResetFedTime(int value = 1000)
@@ -236,5 +267,22 @@ public abstract class FarmAnimal : MonoBehaviour
     {
         gender = _animalInfo.Gender;
         GenerateGuid();
+    }
+
+    public virtual void Interact()
+    {
+        if(!IsInteractable) return;
+        _emoji.SetEmojiSprite(EmojiType.Happy);
+        _emoji.gameObject.SetActive(true);
+        StartCoroutine(ResetInteractable(3));
+    }
+
+    private IEnumerator ResetInteractable(float seconds)
+    {
+        IsInteractable = false;
+        CanMove = false;
+        yield return new WaitForSeconds(seconds);
+        IsInteractable = true;
+        CanMove = true;
     }
 }

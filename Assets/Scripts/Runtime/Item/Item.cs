@@ -7,10 +7,15 @@ public class Item : ScriptableObject
 {
     [Header("Only gameplay")]
     public int itemPrice = 0;
+
     [Header("For Crops")]
     public Crop CropSetting;
+
     [Header("For Crops Products")]
     public Sprite[] cropLevelImage;
+
+    [Header("For FarmAnimal")]
+    public FarmAnimal.Food foodType = FarmAnimal.Food.None;
 
     [Header("For Tools")]
     public TileBase tile;

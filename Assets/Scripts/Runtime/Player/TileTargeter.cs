@@ -30,6 +30,11 @@ public class TileTargeter : NetworkBehaviour
     public int TargetRange = 1;
 
     private Vector3 _mouseWorldPosition;
+    public Vector3 MouseWorldPosition
+    {
+        get { return _mouseWorldPosition; }
+        set { _mouseWorldPosition = value; }
+    }
     private Vector3Int _previousTilePos;
     private Vector3Int _mouseTilePosition;
     private Vector3Int _playerTilePosition;
@@ -209,6 +214,7 @@ public class TileTargeter : NetworkBehaviour
 
         _tilemaps.AddRange(foundTilemaps);
     }
+
 
     void SetTargetTile()
     {
@@ -424,7 +430,10 @@ public class TileTargeter : NetworkBehaviour
                 }  
             case ItemType.Tile:
                 {
+                    if (!PlaceObjectManager.Instance.CanPlaceObject) return;
                     PlaceObjectManager.Instance.PlaceTile(item.ruleTile);
+                    _inventoryManagerSO.DecreaseItemQuantityOnUse();
+                    playerController.CheckAnimation();
                     break;
                 }
         }
