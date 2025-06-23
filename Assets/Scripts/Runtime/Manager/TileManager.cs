@@ -268,7 +268,6 @@ public class TileManager : NetworkPersistentSingleton<TileManager>, IDataPersist
         //tilemaps.Add(listtm);
         //var listnj = GameObject.Find("WateredGround").GetComponent<Tilemap>();
         //tilemaps.Add(listnj);
-        Debug.Log("did subscribe time increase on tile manager");
         HoedTiles = data.TileSaveData.HoedTiles;
         WateredTiles = data.TileSaveData.WateredTiles;
         StartCoroutine(SetAllTileDataToNetworkData());

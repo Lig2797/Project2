@@ -138,16 +138,19 @@ MonoBehaviour:
   _body: {fileID: 6855903407996050479}
   _animator: {fileID: 2400393669554931377}
   _animalInfo: {fileID: 11400000, guid: df1e9a9652d43204c921b8cf39bfade4, type: 2}
-  id: 
   gender: 0
-  canMakeProduct: 0
   IsInteractable: 1
-  fedTimeCounter: 0
-  resetFedTime: 1000
+  animalKind: 0
   isFed: 0
+  resetFedTime: 1000
+  canMakeProduct: 0
+  fedTimeCounter: 0
   isMoving: 0
-  _canMove: 1
+  _canMove: 0
   FoodToEat: 1
+  animalSounds:
+  - {fileID: 8300000, guid: d72b569f7ee843445975142dcd066164, type: 3}
+  - {fileID: 8300000, guid: d3e139ad318f30b428acfdde7a5cb309, type: 3}
   collisionMask:
     serializedVersion: 2
     m_Bits: 520
@@ -197,7 +200,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1449220059
-  m_SortingLayer: 26
+  m_SortingLayer: 27
   m_SortingOrder: 0
   m_Sprite: {fileID: 1275734951, guid: 132fa77e6901c214e8ac93ecb5303ae4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

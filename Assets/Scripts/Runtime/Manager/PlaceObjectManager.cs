@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class PlaceObjectManager : PersistentSingleton<PlaceObjectManager>
+public class PlaceObjectManager : PersistentSingleton<PlaceObjectManager>, IDataPersistence
 {
+    private SerializableDictionary<Vector3Int, string> _placedTile = new SerializableDictionary<Vector3Int, string>();
+
     [SerializeField]
     private Tilemap _groundTilemap;
     [SerializeField]
@@ -129,7 +131,35 @@ public class PlaceObjectManager : PersistentSingleton<PlaceObjectManager>
     {
         AudioManager.Instance.PlaySFX("Pickaxe3");
         _placeObjectTilemap.SetTile(_lastCellPosition, tileToSet);
+        _placedTile[_lastCellPosition] = tileToSet.name;
         CheckIsValidToPlace();
     }
 
+    public void LoadData(GameData data)
+    {
+        _placedTile = data.PlacedTileData._placedTile;
+        if (_placedTile == null || _placedTile.Count == 0) return;
+        SetTileOnLoadData();
+    }
+
+    private void SetTileOnLoadData()
+    {
+        foreach (var placedTile in _placedTile)
+        {
+            Vector3Int position = placedTile.Key;
+            string tileName = placedTile.Value;
+
+            TileBase tileToSet = TileDatabase.Instance.GetTileByName(tileName);
+            if (tileToSet != null)
+            {
+                _placeObjectTilemap.SetTile(position, tileToSet);
+            }
+        }
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        PlacedTileData placedTileData = new PlacedTileData(_placedTile);
+        data.SetPlacedTileData(placedTileData);
+    }
 }

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -7,6 +8,14 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public abstract class FarmAnimal : MonoBehaviour
 {
+    public enum FarmAnimalKind
+    {
+        Chicken,
+        FemaleCow,
+        MaleCow,
+        FemaleSheep,
+        MaleSheep
+    }
 
     public enum Food
     {
@@ -22,23 +31,30 @@ public abstract class FarmAnimal : MonoBehaviour
 
     #region Variables
 
-    [SerializeField] protected string id;
-    [ContextMenu("Generate guid for id")]
-    protected void GenerateGuid() => id = System.Guid.NewGuid().ToString();
 
     [SerializeField] protected Gender gender;
-    [SerializeField] protected bool canMakeProduct = false;
 
     [SerializeField]
     public bool IsInteractable = true;
+    // needs to save
+    [SerializeField]
+    protected FarmAnimalKind animalKind;
 
+    [SerializeField]
+    public bool isFed = false;
+
+    [SerializeField]
+    protected int resetFedTime = 1000;
+
+    [SerializeField] 
+    protected bool canMakeProduct = false;
 
     [SerializeField]
     protected int fedTimeCounter = 0;
-    [SerializeField]
-    protected int resetFedTime = 1000;
-    [SerializeField]
-    public bool isFed = false;
+
+    // current stage and position too
+
+    //end
 
     protected float maxRadius = 5f;
     protected float speed = 2f;
@@ -62,6 +78,9 @@ public abstract class FarmAnimal : MonoBehaviour
     }
 
     public Food FoodToEat;
+
+    [SerializeField]
+    protected List<AudioClip> animalSounds = new();
 
     [Header("Obstacle Detection")]
     [SerializeField] protected LayerMask collisionMask;
@@ -127,8 +146,7 @@ public abstract class FarmAnimal : MonoBehaviour
     }
     private void Start()
     {
-
-        Initial();
+        PlaySoundAfterAFewTimes();
     }
     protected void Update()
     {
@@ -202,9 +220,6 @@ public abstract class FarmAnimal : MonoBehaviour
         yield return new WaitForSeconds(seconds);
         CanMove = true;
     }
-
-    
-
     private void StartStopMoving(int seconds = 5)
     {
         if (stopMovingCoroutine != null)
@@ -245,6 +260,10 @@ public abstract class FarmAnimal : MonoBehaviour
         _emoji.gameObject.SetActive(true);
         StartStopMoving(5);
         isFed = true;
+        if(this is Chicken)
+        PlayAnimalSound(1);
+        else
+            PlayAnimalSound();
         return true;
     }
 
@@ -263,18 +282,17 @@ public abstract class FarmAnimal : MonoBehaviour
         _animator.SetTrigger(stage);
     }
 
-    protected virtual void Initial()
-    {
-        gender = _animalInfo.Gender;
-        GenerateGuid();
-    }
-
+    
     public virtual void Interact()
     {
         if(!IsInteractable) return;
         _emoji.SetEmojiSprite(EmojiType.Happy);
         _emoji.gameObject.SetActive(true);
         StartCoroutine(ResetInteractable(3));
+        if (this is Chicken)
+            PlayAnimalSound(1);
+        else
+            PlayAnimalSound();
     }
 
     private IEnumerator ResetInteractable(float seconds)
@@ -285,4 +303,59 @@ public abstract class FarmAnimal : MonoBehaviour
         IsInteractable = true;
         CanMove = true;
     }
+
+    protected virtual IEnumerator PlaySoundAfterAFewTimes()
+    {
+        while(true)
+        {
+            float waitTime = Random.Range(5f, 10f);
+            yield return new WaitForSeconds(waitTime);
+            PlayAnimalSound();
+        }
+    }
+
+    protected void PlayAnimalSound(int? specificAudioClipIndex = null)
+    {
+        if(animalSounds.Count == 0) return;
+        AudioClip audioClip = specificAudioClipIndex == null ? animalSounds[Random.Range(0, animalSounds.Count)] : animalSounds[(int)specificAudioClipIndex];
+        AudioManager.Instance.PlaySFX(audioClip);
+    }
+
+
+    public void LoadData(FarmAnimalSaveData farmAnimalSaveData)
+    {
+        var data = farmAnimalSaveData.GetData();
+        this.isFed = data.IsFed;
+        this.resetFedTime = data.ResetFedTime;
+        this.canMakeProduct = data.CanMakeProduct;
+        this.fedTimeCounter = data.FedTimeCounter;
+        transform.position = data.Position;
+
+    }
+
+    public FarmAnimalSaveData GetDataToSave()
+    {
+        return new FarmAnimalSaveData(animalKind, resetFedTime, canMakeProduct, fedTimeCounter, isFed, transform.position);
+    }
+
+
+    public void SetCurrentGrowthStage(FarmAnimalSaveData farmAnimalSaveData)
+    {
+        switch (this)
+        {
+            case Chicken chicken:
+                chicken.SetChickenGrowthStage(farmAnimalSaveData.GetChickenGrowthStage());
+                break;
+            case Cow cow:
+                cow.SetCowGrowthStage(farmAnimalSaveData.GetCowGrowthStage());
+                break;
+            case Sheep sheep:
+                sheep.SetSheepGrowthStage(farmAnimalSaveData.GetSheepGrowthStage());
+                break;
+            default:
+                Debug.LogWarning($"Unknown farm animal type: {this.GetType().Name}. Cannot set growth stage.");
+                break;
+        }
+    }
+
 }

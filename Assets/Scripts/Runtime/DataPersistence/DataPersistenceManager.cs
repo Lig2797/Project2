@@ -171,7 +171,6 @@ public class DataPersistenceManager : PersistentSingleton<DataPersistenceManager
             currentSceneName == Loader.Scene.LobbyScene.ToString() ||
             currentSceneName == Loader.Scene.CharacterSelectScene.ToString() ||
             disableDataPersistence) return;
-
         if (this.gameData == null)
         {
             Debug.LogWarning("No data was found. A New Game needs to be started before data can be saved.");
@@ -186,6 +185,7 @@ public class DataPersistenceManager : PersistentSingleton<DataPersistenceManager
         gameData.SetLastUpdate(System.DateTime.Now);
 
         dataHandler.Save(gameData, selectedProfileId);
+        Debug.Log("Saved Game Data");
     }
 
     private void OnApplicationQuit()

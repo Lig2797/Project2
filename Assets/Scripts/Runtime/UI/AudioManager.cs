@@ -95,14 +95,26 @@ public class AudioManager : PersistentSingleton<AudioManager>
     {
         if (sfxDict.TryGetValue(name, out var clip))
         {
-            sfxSource.pitch = Random.Range(0.7f, 1.3f); 
+            sfxSource.pitch = Random.Range(0.8f, 1.2f); 
             sfxSource.PlayOneShot(clip);
 
-            //sfxSource.pitch = originalPitch; // reset pitch too son t will
+            //sfxSource.pitch = originalPitch; // reset pitch too soon so it doesn't affected
         }
         else
         {
             Debug.LogWarning($"SFX clip '{name}' not found!");
+        }
+    }
+    public void PlaySFX(AudioClip audioClip)
+    {
+        if (audioClip != null)
+        {
+            sfxSource.pitch = Random.Range(0.8f, 1.2f); // Random pitch variation
+            sfxSource.PlayOneShot(audioClip);
+        }
+        else
+        {
+            Debug.LogWarning("SFX clip is null!");
         }
     }
 

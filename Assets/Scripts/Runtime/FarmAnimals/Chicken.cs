@@ -5,15 +5,8 @@ using UnityEngine;
 public class Chicken : FarmAnimal
 {
     [SerializeField] private GameObject chickenPrefab;
-    private ChickenGrowthStage _currentGrowthStage;
+    private ChickenGrowthStage _currentGrowthStage = 0;
 
-    protected override void Initial()
-    {
-        _currentGrowthStage = 0;
-        base.Initial();
-        //base.ApplyStage(_currentGrowthStage.ToString());
-        CanMove = false;
-    }
     public override void FedTimeHandler(int minute)
     {
         if (_currentGrowthStage == 0)
@@ -92,7 +85,28 @@ public class Chicken : FarmAnimal
     protected override void MakeProduct()
     {
         var newAnimal = Instantiate(chickenPrefab, transform.position, Quaternion.identity);
-        newAnimal.GetComponent<Chicken>().Initial();
     }
 
+    protected override IEnumerator PlaySoundAfterAFewTimes()
+    {
+        yield return new WaitUntil(() => _currentGrowthStage != ChickenGrowthStage.Egg);
+        base.PlaySoundAfterAFewTimes();
+    }
+
+
+    public void SetChickenGrowthStage(ChickenGrowthStage stage)
+    {
+        _currentGrowthStage = stage;
+        base.ApplyStage(_currentGrowthStage.ToString());
+        if (stage != 0)
+        {
+            GetComponent<Collider2D>().isTrigger = false;
+            CanMove = true;
+        }
+    }
+
+    public ChickenGrowthStage GetChickenGrowthStage()
+    {
+        return _currentGrowthStage;
+    }
 }

@@ -15,7 +15,8 @@ public class GameData
     [SerializeField] private TileSaveData _tileSaveData;
     [SerializeField] private CropsSaveData _cropsSaveData;
     [SerializeField] private GameFlowData _gameFlowData;
-
+    [SerializeField] private FarmAnimalSaveDataCollection _farmAnimalSaveDataCollection;
+    [SerializeField] private PlacedTileData _placedTileData;
     public string SaveFileName
     { get { return _saveFileName; } }
     public DateTime LastUpdate
@@ -41,6 +42,11 @@ public class GameData
     public GameFlowData GameFlowData
     { get { return _gameFlowData; } }
 
+    public FarmAnimalSaveDataCollection FarmAnimalSaveDataCollection
+    { get { return _farmAnimalSaveDataCollection; } }
+
+    public PlacedTileData PlacedTileData
+    { get { return _placedTileData; } }
     public GameData()
     {
         this._saveFileName = string.Empty;
@@ -52,6 +58,8 @@ public class GameData
         this._tileSaveData = new TileSaveData();
         this._cropsSaveData = new CropsSaveData();
         this._gameFlowData = new GameFlowData();
+        this._farmAnimalSaveDataCollection = new FarmAnimalSaveDataCollection();
+        this._placedTileData = new PlacedTileData();
     }
 
     public void SetPlayerData(PlayerData playerData)
@@ -97,5 +105,15 @@ public class GameData
     public void SetGameFlowData(GameFlowData gameFlowData)
     {
         this._gameFlowData = gameFlowData;
+    }
+
+    public void SetFarmAnimalSaveDataCollection(FarmAnimalSaveDataCollection farmAnimalSaveDataCollection)
+    {
+        this._farmAnimalSaveDataCollection = farmAnimalSaveDataCollection;
+    }
+
+    public void SetPlacedTileData(PlacedTileData placedTileData)
+    {
+        this._placedTileData = placedTileData;
     }
 }

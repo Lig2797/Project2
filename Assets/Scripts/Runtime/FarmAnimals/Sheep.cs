@@ -5,14 +5,8 @@ using UnityEngine;
 public class Sheep : FarmAnimal
 {
     [SerializeField] private GameObject sheepPrefab;
-    private SheepGrowthStage _currentGrowthStage;
+    private SheepGrowthStage _currentGrowthStage = 0;
 
-    protected override void Initial()
-    {
-        _currentGrowthStage = 0;
-        base.Initial();
-        //base.ApplyStage(_currentGrowthStage.ToString());
-    }
 
     protected override void MakeProduct()
     {
@@ -90,5 +84,16 @@ public class Sheep : FarmAnimal
     {
         base.Interact();
         _animator.SetTrigger("Interact");
+    }
+
+    public void SetSheepGrowthStage(SheepGrowthStage stage)
+    {
+        _currentGrowthStage = stage;
+        base.ApplyStage(_currentGrowthStage.ToString());
+    }
+
+    public SheepGrowthStage GetSheepGrowthStage()
+    {
+        return _currentGrowthStage;
     }
 }

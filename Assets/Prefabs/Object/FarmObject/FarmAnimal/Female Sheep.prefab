@@ -79,7 +79,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1449220059
-  m_SortingLayer: 26
+  m_SortingLayer: 27
   m_SortingOrder: 0
   m_Sprite: {fileID: -1475521903, guid: 70eaf8a2f9c8c9944ba84cde381c714a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -129,16 +129,18 @@ MonoBehaviour:
   _body: {fileID: 2320925675581533198}
   _animator: {fileID: 8022438853240535272}
   _animalInfo: {fileID: 11400000, guid: 2f0b7577a6de31041bd9ee2b9cbc01a9, type: 2}
-  id: 
-  gender: 0
-  canMakeProduct: 0
+  gender: 2
   IsInteractable: 1
-  fedTimeCounter: 0
-  resetFedTime: 1000
+  animalKind: 3
   isFed: 0
+  resetFedTime: 1000
+  canMakeProduct: 0
+  fedTimeCounter: 0
   isMoving: 0
   _canMove: 1
   FoodToEat: 2
+  animalSounds:
+  - {fileID: 8300000, guid: 8d6ee52a9949dc94cb69479508606e9b, type: 3}
   collisionMask:
     serializedVersion: 2
     m_Bits: 520
