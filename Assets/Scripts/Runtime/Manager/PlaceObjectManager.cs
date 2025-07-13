@@ -1,15 +1,24 @@
-﻿using UnityEngine;
+﻿using UnityEditor.Tilemaps;
+using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class PlaceObjectManager : PersistentSingleton<PlaceObjectManager>, IDataPersistence
 {
     private SerializableDictionary<Vector3Int, string> _placedTile = new SerializableDictionary<Vector3Int, string>();
+    public SerializableDictionary<Vector3Int, string> PlacedTile => _placedTile;
 
     [SerializeField]
     private Tilemap _groundTilemap;
     [SerializeField]
     private Tilemap _placeObjectTilemap;
-
+    [SerializeField]
+    private Tilemap _hoedTilemap;
+    [SerializeField]
+    private Tilemap _wateredTilemap;
+    [SerializeField]
+    private Tilemap _cropTilemap;
+    [SerializeField]
+    private Tilemap _waterTilemap;
     [SerializeField] private Transform _previewObject;
     [SerializeField] private SpriteRenderer _previewObjectSpriteRenderer;
     [SerializeField] private float tileSize = 1f;
@@ -58,10 +67,16 @@ public class PlaceObjectManager : PersistentSingleton<PlaceObjectManager>, IData
         _previewObjectSpriteRenderer = _previewObject.GetComponent<SpriteRenderer>();
         _previewObject.gameObject.SetActive(false);
     }
-    public void SetTilemapForPlaceObject(Tilemap groundTilemap, Tilemap placeObjectTilemap)
+    public void SetTilemapForPlaceObject()
     {
-        _groundTilemap = groundTilemap;
-        _placeObjectTilemap = placeObjectTilemap;
+        _groundTilemap = TileDatabase.Instance.GetTilemapByName("Ground");
+        _hoedTilemap = TileDatabase.Instance.GetTilemapByName("FarmGround");
+        _wateredTilemap = TileDatabase.Instance.GetTilemapByName("WateredGround");
+        _cropTilemap = TileDatabase.Instance.GetTilemapByName("CropGround");
+        _waterTilemap = TileDatabase.Instance.GetTilemapByName("Water");
+
+        _placeObjectTilemap = TileDatabase.Instance.GetTilemapByName("PlaceableTile");
+
     }
     private void Update()
     {
@@ -92,14 +107,17 @@ public class PlaceObjectManager : PersistentSingleton<PlaceObjectManager>, IData
 
     private void CheckIsValidToPlace()
     {
-
-        if (_groundTilemap.HasTile(_lastCellPosition) && !_placeObjectTilemap.HasTile(_lastCellPosition))
+        if(_placeObjectTilemap.HasTile(_lastCellPosition) ||
+            _hoedTilemap.HasTile(_lastCellPosition) ||
+            _wateredTilemap.HasTile(_lastCellPosition) ||
+            _cropTilemap.HasTile(_lastCellPosition) ||
+            _waterTilemap.HasTile(_lastCellPosition))
         {
-            CanPlaceObject = true;
+            CanPlaceObject = false;
         }
         else
         {
-            CanPlaceObject = false;
+            CanPlaceObject = true;
         }
 
     }
@@ -127,11 +145,42 @@ public class PlaceObjectManager : PersistentSingleton<PlaceObjectManager>, IData
         }
     }
 
+    public string GetTileBaseNameByPosition(Vector3Int position)
+    {
+        if (_placedTile.TryGetValue(position, out string tileName))
+        {
+            return tileName;
+        }
+        return null;
+    }
+
     public void PlaceTile(TileBase tileToSet)
     {
         AudioManager.Instance.PlaySFX("Pickaxe3");
         _placeObjectTilemap.SetTile(_lastCellPosition, tileToSet);
         _placedTile[_lastCellPosition] = tileToSet.name;
+        CheckIsValidToPlace();
+    }
+
+    public void BreakPlacedTile(Vector3Int pos)
+    {
+        string tileName = GetTileBaseNameByPosition(pos);
+        tileName = tileName.Replace(" ", "_");
+        Item item = ItemDatabase.Instance.GetItemByName(tileName);
+
+        ItemWorld itemWorld = new ItemWorld
+        (
+            System.Guid.NewGuid().ToString(),
+            item,
+            1,
+            _placeObjectTilemap.GetCellCenterWorld(pos),
+            0
+        );
+        ItemWorldManager.Instance.DropItemIntoWorld(itemWorld,true,false);
+
+        AudioManager.Instance.PlaySFX("Pickaxe3");
+        _placeObjectTilemap.SetTile(pos, null);
+        _placedTile.Remove(pos);
         CheckIsValidToPlace();
     }
 

@@ -127,7 +127,7 @@ public class TileTargeter : NetworkBehaviour
     private void CheckSoundWhenMoving()
     {
 
-        if (playerController.Movement != Vector2.zero)
+        if (playerController.Movement != Vector2.zero && playerController.CanMove)
         {
             stepTimer -= Time.deltaTime;
             if (stepTimer > 0f) return;
@@ -196,7 +196,6 @@ public class TileTargeter : NetworkBehaviour
                 break;
             }
         }
-        PlaceObjectManager.Instance.SetTilemapForPlaceObject(_groundTilemap, placeableObjectTilemap);
     }
 
     void GetAllTilemaps()
@@ -213,6 +212,9 @@ public class TileTargeter : NetworkBehaviour
         Tilemap[] foundTilemaps = gridObject.GetComponentsInChildren<Tilemap>();
 
         _tilemaps.AddRange(foundTilemaps);
+        TileDatabase.Instance.SetListTilemap(_tilemaps);
+        playerController.waterTilemap = TileDatabase.Instance.GetTilemapByName("Water");
+        PlaceObjectManager.Instance.SetTilemapForPlaceObject();
     }
 
 
@@ -374,9 +376,12 @@ public class TileTargeter : NetworkBehaviour
             }
             if (!TileManager.Instance.HoedTilesNetwork.ContainsKey(new NetworkVector3Int(_lockedTilePosition)))
             {
-
-                Debug.Log("chat cái nay");
                 TileManager.Instance.ModifyTile(_lockedTilePosition, targetTilemap.name, item.ruleTile.name);
+            }
+            else if(CropManager.Instance.PlantedCropsNetwork.ContainsKey(new NetworkVector3Int(_lockedTilePosition)) &&
+                CropManager.Instance.PlantedCropsNetwork[new NetworkVector3Int(_lockedTilePosition)].IsDead)
+            {
+                CropManager.Instance.RemoveCrop(_lockedTilePosition);
             }
 
 
@@ -437,6 +442,16 @@ public class TileTargeter : NetworkBehaviour
                     break;
                 }
         }
+    }
+
+    public bool CanBreakPlacedTile()
+    {
+        if (PlaceObjectManager.Instance.PlacedTile.ContainsKey(_clampedTilePosition))
+        {
+            PlaceObjectManager.Instance.BreakPlacedTile(_clampedTilePosition);
+            return true;
+        }
+        return false;
     }
 
 }

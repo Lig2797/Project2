@@ -80,7 +80,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1449220059
-  m_SortingLayer: 26
+  m_SortingLayer: 27
   m_SortingOrder: 0
   m_Sprite: {fileID: -790498180, guid: 82a56d660086c94439a932cf6e53cf3f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -285,11 +285,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   testdir: {x: 1, y: 0}
   testDistance: 3
-  baseSpeed: 5
-  minSpeed: 3
-  maxSpeed: 10
-  heightFactor: 0.33
-  bounceDampening: 0.6
+  baseSpeed: 1.5
+  minSpeed: 1.2
+  maxSpeed: 5
+  heightFactor: 1.5
+  bounceDampening: 0.4
   minBounceDistance: 0.1
 --- !u!1 &2086567148679051196
 GameObject:

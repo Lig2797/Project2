@@ -13,19 +13,32 @@ public class ExplosionProjectile : MonoBehaviour
         if (((1 << collision.gameObject.layer) & hitAbleLayer) == 0)
             return;
 
-        Damageable damageable = collision.gameObject.GetComponent<Damageable>();
-        if (damageable != null)
+        CircleCollider2D circle = GetComponent<CircleCollider2D>();
+        if (circle == null)
         {
-            GameObject parentObject = transform.root.gameObject;
-            Vector3 explosionPosition = parentObject.transform.position;
+            Debug.LogWarning("No CircleCollider2D found on this object.");
+            return;
+        }
 
-            Vector2 direction = (collision.transform.position - explosionPosition).normalized;
-            Vector2 deliveredKnockBack = direction * _knockbackStrength; // Example knockback strength
+        float radius = circle.radius * Mathf.Max(transform.lossyScale.x, transform.lossyScale.y); // world size
+        Vector2 explosionPosition = transform.position;
 
-            damageable.Hit(DamageAmount, deliveredKnockBack); // Example damage value
+        Collider2D[] hits = Physics2D.OverlapCircleAll(explosionPosition, radius, hitAbleLayer);
 
+        foreach (var hit in hits)
+        {
+            Damageable damageable = hit.GetComponent<Damageable>();
+            if (damageable != null)
+            {
+                Vector2 direction = (hit.transform.position - (Vector3)explosionPosition).normalized;
+                Vector2 deliveredKnockBack = direction * _knockbackStrength;
+
+                damageable.Hit(DamageAmount, deliveredKnockBack);
+            }
         }
     }
+
+
 
     public void DestroyAfterDoneExplosion()
     {

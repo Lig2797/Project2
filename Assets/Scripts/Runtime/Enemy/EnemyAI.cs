@@ -265,6 +265,8 @@ public class EnemyAI : NetworkBehaviour
         {
             FakeHeightObject fakeHeightObject = projectile.GetComponentInChildren<FakeHeightObject>();
             fakeHeightObject.Initialize(TargetPlayer.position);
+            ExplosionProjectile explosionProjectile = fakeHeightObject.GetComponent<ExplosionProjectile>();
+            explosionProjectile.DamageAmount = _projectileDamage;
         }
 
     }
@@ -290,7 +292,7 @@ public class EnemyAI : NetworkBehaviour
             Animator.SetTrigger(HurtParameter);
             StateMachine.ChangeState(IdleState);
             LastMovement = -knockBackDirection.normalized;
-
+            AudioManager.Instance.PlaySFX("goblin_hurt");
             StartCoroutine(ApplyKnockback(knockBackDirection));
         }
     }

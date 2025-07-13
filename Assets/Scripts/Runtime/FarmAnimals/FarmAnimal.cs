@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -146,7 +147,7 @@ public abstract class FarmAnimal : MonoBehaviour
     }
     private void Start()
     {
-        PlaySoundAfterAFewTimes();
+        StartCoroutine(PlaySoundAfterAFewTimes());
     }
     protected void Update()
     {
@@ -306,13 +307,36 @@ public abstract class FarmAnimal : MonoBehaviour
 
     protected virtual IEnumerator PlaySoundAfterAFewTimes()
     {
-        while(true)
+        while (true)
         {
-            float waitTime = Random.Range(5f, 10f);
-            yield return new WaitForSeconds(waitTime);
-            PlayAnimalSound();
+            // Wait until we're in the correct scene before doing anything
+            while (SceneManager.GetActiveScene().name != Loader.Scene.WorldScene.ToString())
+            {
+                yield return new WaitForSeconds(1f); // wait a bit, not every frame
+            }
+
+            // Once in WorldScene, start the timer
+            float waitTime = Random.Range(7f, 20f);
+            float elapsed = 0f;
+
+            // Timer loop: wait only while still in the WorldScene
+            while (elapsed < waitTime)
+            {
+                if (SceneManager.GetActiveScene().name != Loader.Scene.WorldScene.ToString())
+                    break; // abort this cycle if we leave the scene
+
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            // Only play the sound if we finished the timer **and** still in the scene
+            if (SceneManager.GetActiveScene().name == Loader.Scene.WorldScene.ToString())
+            {
+                PlayAnimalSound();
+            }
         }
     }
+
 
     protected void PlayAnimalSound(int? specificAudioClipIndex = null)
     {

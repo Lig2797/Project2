@@ -135,7 +135,6 @@ public class UI_Inventory : MonoBehaviour
                 {
                     itemUI.InventoryItem.IncreaseQuantity(newItem.Quantity);
                     itemUI.RefreshCount();
-
                     ItemWorldManager.Instance.RemoveItemWorld(item, itemWorldControl);
                     return;
                 }
@@ -147,6 +146,7 @@ public class UI_Inventory : MonoBehaviour
                     newItem.DecreaseQuantity(quantityToAdd);
                 }
 
+                AudioManager.Instance.PlaySFX("pop");
 
             }
         }
@@ -159,6 +159,7 @@ public class UI_Inventory : MonoBehaviour
                 inventory.AddItemToInventory(newItem, slotUI.slotIndex);
                 AddItemToInventoryUI(newItem, slotUI.slotIndex);
 
+                AudioManager.Instance.PlaySFX("pop");
                 ItemWorldManager.Instance.RemoveItemWorld(item, itemWorldControl);
                 if (_inventoryManagerSO.selectedSlot == i) _inventoryManagerSO.RefreshCurrentHoldingItem();
                 break;

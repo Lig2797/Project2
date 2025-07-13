@@ -10,7 +10,7 @@ using UnityEngine.SceneManagement;
 
 public class EnviromentalStatusManager : NetworkPersistentSingleton<EnviromentalStatusManager>, IDataPersistence
 {
-    public EnvironmentalStatus eStarus;
+    public EnvironmentalStatus eStatus;
 
     public static event Action<ESeason> ChangeSeasonEvent;
 
@@ -29,26 +29,26 @@ public class EnviromentalStatusManager : NetworkPersistentSingleton<Enviromental
 
     public bool ChangeSeason()
     {
-        switch (eStarus.DateTime.Month, eStarus.DateTime.Day, eStarus.DateTime.Hour, eStarus.DateTime.Minute)
+        switch (eStatus.DateTime.Month, eStatus.DateTime.Day, eStatus.DateTime.Hour, eStatus.DateTime.Minute)
         {
             case (1, 1, 0, 0):
                 {
-                    eStarus.SetSeasonStatus(ESeason.Spring);
+                    eStatus.SetSeasonStatus(ESeason.Spring);
                     return true;
                 }
             case (4, 1, 0, 0):
                 {
-                    eStarus.SetSeasonStatus(ESeason.Summer);
+                    eStatus.SetSeasonStatus(ESeason.Summer);
                     return true;
                 }
             case (7, 1, 0, 0):
                 {
-                    eStarus.SetSeasonStatus(ESeason.Autumn);
+                    eStatus.SetSeasonStatus(ESeason.Autumn);
                     return true;
                 }
             case (10, 1, 0, 0):
                 {
-                    eStarus.SetSeasonStatus(ESeason.Winter);
+                    eStatus.SetSeasonStatus(ESeason.Winter);
                     return true;
                 }
             default:
@@ -60,7 +60,7 @@ public class EnviromentalStatusManager : NetworkPersistentSingleton<Enviromental
 
     public bool Startday()
     {
-        if (eStarus.DateTime.Hour == 6 && eStarus.DateTime.Minute == 0)
+        if (eStatus.DateTime.Hour == 6 && eStatus.DateTime.Minute == 0)
         {
             return true;
         }
@@ -69,7 +69,7 @@ public class EnviromentalStatusManager : NetworkPersistentSingleton<Enviromental
 
     public bool EndDay()
     {
-        if (eStarus.DateTime.Hour == 18 && eStarus.DateTime.Minute == 0)
+        if (eStatus.DateTime.Hour == 18 && eStatus.DateTime.Minute == 0)
         {
             return true;
         }
@@ -82,12 +82,12 @@ public class EnviromentalStatusManager : NetworkPersistentSingleton<Enviromental
 
         do
         {
-            GameEventsManager.Instance.dateTimeEvents.DateChanged(eStarus.DateTime);
+            GameEventsManager.Instance.dateTimeEvents.DateChanged(eStatus.DateTime);
             //DayCycleHandler.Instance.MoveSunAndMoon();
             //DayCycleHandler.Instance.UpdateLight();
             if (ChangeSeason())
             {
-                ChangeSeasonEvent?.Invoke(eStarus.SeasonStatus);
+                ChangeSeasonEvent?.Invoke(eStatus.SeasonStatus);
             }
             if (Startday())
             {
@@ -98,7 +98,7 @@ public class EnviromentalStatusManager : NetworkPersistentSingleton<Enviromental
                 GameEventsManager.Instance.npcEvents.CallNpcHome();
             }
             yield return new WaitForSeconds(1);
-            eStarus.IncreaseDate(minutesToIncrease);
+            eStatus.IncreaseDate(minutesToIncrease);
             OnTimeIncrease?.Invoke(minutesToIncrease);
         } while (true);
     }
@@ -108,15 +108,16 @@ public class EnviromentalStatusManager : NetworkPersistentSingleton<Enviromental
         if (SceneManager.GetActiveScene().name == Loader.Scene.CutScene.ToString() ||
             SceneManager.GetActiveScene().name == Loader.Scene.LoadingScene.ToString() ||
             SceneManager.GetActiveScene().name == Loader.Scene.CutScene.ToString()) return;
-        eStarus = gameData.EnviromentData;
+        eStatus = gameData.EnviromentData;
         StartCoroutine(WaitToIncreaseDay());
+        FishingManager.Instance.ChooseFishesBySeason();
     }
 
     public void SaveData(ref GameData gameData)
     {
         if (!IsHost) return;
 
-        gameData.SetSeason(eStarus);
+        gameData.SetSeason(eStatus);
     }
 
 }

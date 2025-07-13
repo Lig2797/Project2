@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -186,7 +187,7 @@ public class CropManager : NetworkPersistentSingleton<CropManager>, IDataPersist
             
             bool isWatered = TileManager.Instance.WateredTilesNetwork.ContainsKey(crop.Key);
             var cropPos = crop.Key.ToVector3Int();
-            if (cropInfo.Season != EnviromentalStatusManager.Instance.eStarus.SeasonStatus)
+            if (cropInfo.Season != EnviromentalStatusManager.Instance.eStatus.SeasonStatus)
             {
                 cropInfo.CurrentStage = 0; // Crop is dead
                 cropInfo.NeedChangeStage = true;
@@ -208,7 +209,6 @@ public class CropManager : NetworkPersistentSingleton<CropManager>, IDataPersist
         }
     }
 
-    
 
     public void RemoveCrop(Vector3Int pos)
     {
