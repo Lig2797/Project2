@@ -273,7 +273,7 @@ public class TileManager : NetworkPersistentSingleton<TileManager>, IDataPersist
         WateredTiles = data.TileSaveData.WateredTiles;
         StartCoroutine(SetAllTileDataToNetworkData());
         StartCoroutine(ApplyTileUpdatesOnLoadGame());
-        EnviromentalStatusManager.OnTimeIncrease += UpdateAllTileStatus;
+        GameEventsManager.Instance.enviromentStatusEvents.onTimeIncrease += UpdateAllTileStatus;
     }
     private IEnumerator ApplyTileUpdatesOnLoadGame()
     {
@@ -297,7 +297,7 @@ public class TileManager : NetworkPersistentSingleton<TileManager>, IDataPersist
         _tileSaveData.SetTilesData(HoedTiles, WateredTiles);
         data.SetTiles(_tileSaveData);
 
-        EnviromentalStatusManager.OnTimeIncrease -= UpdateAllTileStatus;
+        GameEventsManager.Instance.enviromentStatusEvents.onTimeIncrease -= UpdateAllTileStatus;
     }
 
 }

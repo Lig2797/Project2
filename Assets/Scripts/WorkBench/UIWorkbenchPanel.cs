@@ -5,10 +5,12 @@ public class UIWorkbenchPanel : Singleton<UIWorkbenchPanel>
 {
     [SerializeField] private GameObject craftingPanel;
     [SerializeField] private Button closeButton;
+    [SerializeField] private Button openRecipeBookButton;
 
     private void Start()
     {
         closeButton.onClick.AddListener(Close);
+        openRecipeBookButton.onClick.AddListener(OpenRecipeBook);
     }
 
     public void OpenCraftingPanel()
@@ -27,5 +29,10 @@ public class UIWorkbenchPanel : Singleton<UIWorkbenchPanel>
     {
         craftingPanel.SetActive(false);
         GameEventsManager.Instance.inputReader.SwitchActionMap(ActionMap.Player);
-    }    
+    }  
+    
+    public void OpenRecipeBook()
+    {
+        GameEventsManager.Instance.craftingEvents.OpenRecipeBook();
+    }
 }

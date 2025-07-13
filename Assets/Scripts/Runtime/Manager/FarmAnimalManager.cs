@@ -10,7 +10,7 @@ public class FarmAnimalManager : PersistentSingleton<FarmAnimalManager>
 
     private void OnEnable()
     {
-        EnviromentalStatusManager.OnTimeIncrease += IncreaseFedTime;
+        GameEventsManager.Instance.enviromentStatusEvents.onTimeIncrease += IncreaseFedTime;
     }
 
     private void IncreaseFedTime(int minute)

@@ -12,9 +12,6 @@ public class EnviromentalStatusManager : NetworkPersistentSingleton<Enviromental
 {
     public EnvironmentalStatus eStarus;
 
-    public static event Action<ESeason> ChangeSeasonEvent;
-
-    public static event Action<int> OnTimeIncrease;
     public int minutesToIncrease;
 
     public override void OnNetworkSpawn()
@@ -87,7 +84,7 @@ public class EnviromentalStatusManager : NetworkPersistentSingleton<Enviromental
             DayCycleHandler.Instance.UpdateLight();
             if (ChangeSeason())
             {
-                ChangeSeasonEvent?.Invoke(eStarus.SeasonStatus);
+                GameEventsManager.Instance.enviromentStatusEvents.CHangeSeason(eStarus.SeasonStatus);
             }
             if (Startday())
             {
@@ -99,7 +96,7 @@ public class EnviromentalStatusManager : NetworkPersistentSingleton<Enviromental
             }
             yield return new WaitForSeconds(1);
             eStarus.IncreaseDate(minutesToIncrease);
-            OnTimeIncrease?.Invoke(minutesToIncrease);
+            GameEventsManager.Instance.enviromentStatusEvents.TimeIncrease(minutesToIncrease);
         } while (true);
     }
 

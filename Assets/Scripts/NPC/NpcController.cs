@@ -5,10 +5,12 @@ using UnityEngine.Playables;
 
 public class NpcController : MonoBehaviour
 {
+    public float speed = 1f;
+    public Vector2 movement;
     public Transform targetPosition;
     public DetectionZone zone;
-    private NavMeshAgent agent;
 
+    [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Animator animator;
     [SerializeField] private PlayableDirector npcDirector;
 
@@ -20,11 +22,11 @@ public class NpcController : MonoBehaviour
     private bool canAttack = true;
     private bool canMove = true;
 
-    private void Start()
+    private void Awake()
     {
-        agent = GetComponent<NavMeshAgent>();
-        agent.updateRotation = false;
-        agent.updateUpAxis = false;
+        rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+        npcDirector = GetComponent<PlayableDirector>();
     }
 
     private void Update()
@@ -44,6 +46,14 @@ public class NpcController : MonoBehaviour
         }    
     }
 
+    private void FixedUpdate()
+    {
+        if (canMove)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocityX * speed, rb.linearVelocityY);
+        }
+    }
+
     private void OnDestroy()
     {
         Debug.Log("NpcController destroyed.");
@@ -51,38 +61,17 @@ public class NpcController : MonoBehaviour
 
     public void OnMove()
     {
-        if (agent != null && agent.isActiveAndEnabled && targetPosition != null)
-        {
-            agent.isStopped = false;
-            agent.SetDestination(targetPosition.position);
-            UpdateAnimation();
-        }
+        
     }
 
     public void OnStop()
     {
-        if (agent != null && agent.isActiveAndEnabled)
-        {
-            agent.isStopped = true;
-            agent.ResetPath();
-        }
+        
     }
 
     private void UpdateAnimation()
     {
-        float speed = agent.velocity.magnitude;
-
-        if (speed > 0.1f)
-        {
-            Vector3 movementDirection = agent.velocity.normalized;
-            animator.SetFloat("Horizontal", movementDirection.x);
-            animator.SetFloat("Vertical", movementDirection.z);
-            animator.SetFloat("Speed", speed);
-        }
-        else
-        {
-            animator.SetFloat("Speed", 0f);
-        }
+        
     }
 
     public void SetTargetPosition(Transform newTarget)
@@ -92,10 +81,6 @@ public class NpcController : MonoBehaviour
 
     public void StartChoppingTrees()
     {
-        if (!canAttack || targetPosition == null || agent == null) return;
-
-        agent.SetDestination(targetPosition.position);
-
         if (zone != null && zone.detectedColliders.Count > 0)
         {
             animator.Play("Axe_Attack");
@@ -108,11 +93,6 @@ public class NpcController : MonoBehaviour
         {
             StopCoroutine(choppingRoutine);
             choppingRoutine = null;
-        }
-
-        if (agent != null)
-        {
-            agent.ResetPath();
         }
     }
 

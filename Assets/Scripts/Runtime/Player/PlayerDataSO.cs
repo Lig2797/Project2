@@ -13,6 +13,6 @@ public class PlayerDataSO : ScriptableObject
     public float currentMana;
     public float maxStamina;
     public float currentStamina;
-    public float money;
+    public int money;
     public Vector3 position;
 }

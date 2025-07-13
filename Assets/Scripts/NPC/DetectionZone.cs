@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DetectionZone : MonoBehaviour
 {
-    public string tag = "Player";
+    public LayerMask layer;
     public List<Collider2D> detectedColliders = new List<Collider2D>();
     Collider2D col;
 
@@ -15,12 +15,24 @@ public class DetectionZone : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        detectedColliders.Add(collision);
+        if (((1 << collision.gameObject.layer) & layer) != 0)
+        {
+            if (!detectedColliders.Contains(collision))
+            {
+                Debug.Log("Add" + collision.gameObject.name);
+                detectedColliders.Add(collision);
+            }
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        detectedColliders.Remove(collision);
-
+        if (((1 << collision.gameObject.layer) & layer) != 0)
+        {
+            if (detectedColliders.Contains(collision))
+            {
+                detectedColliders.Remove(collision);
+            }
+        }
     }
 }

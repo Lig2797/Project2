@@ -11,6 +11,12 @@ public class GoldEvents
         }
     }
 
+    public event Action<int> onGoldLost;
+    public void GoldLost(int gold)
+    {
+        onGoldLost(gold);
+    }
+
     public event Action<int> onGoldChange;
     public void GoldChange(int gold) 
     {

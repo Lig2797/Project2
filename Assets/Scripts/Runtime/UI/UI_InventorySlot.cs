@@ -68,5 +68,4 @@ public class UI_InventorySlot : MonoBehaviour, IPointerDownHandler
         InventoryItem newItem = new InventoryItem(System.Guid.NewGuid().ToString(), draggedItem.InventoryItem.Item, slotIndex, 1, draggedItem.InventoryItem.Level);
         _inventoryManagerSO.PutItemDownByRightClick(newItem, newItem.SlotIndex, gameObject);
     }
-    
 }

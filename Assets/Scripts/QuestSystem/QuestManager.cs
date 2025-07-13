@@ -9,7 +9,6 @@ public class QuestManager : Singleton<QuestManager>
 
     private Dictionary<string, Quest> questMap;
 
-    // quest start requirements
     private int currentPlayerLevel;
 
     protected override void Awake()
@@ -154,10 +153,10 @@ public class QuestManager : Singleton<QuestManager>
 
     private Dictionary<string, Quest> CreateQuestMap()
     {
-        // loads all QuestInfoSO Scriptable Objects under the Assets/Resources/Quests folder
         QuestInfoSO[] allQuests = Resources.LoadAll<QuestInfoSO>("Quests");
-        // Create the quest map
+        
         Dictionary<string, Quest> idToQuestMap = new Dictionary<string, Quest>();
+
         foreach (QuestInfoSO questInfo in allQuests)
         {
             if (idToQuestMap.ContainsKey(questInfo.id))
@@ -192,11 +191,8 @@ public class QuestManager : Singleton<QuestManager>
         try
         {
             QuestData questData = quest.GetQuestData();
-            // serialize using JsonUtility, but use whatever you want here (like JSON.NET)
+           
             string serializedData = JsonUtility.ToJson(questData);
-            // saving to PlayerPrefs is just a quick example for this tutorial video,
-            // you probably don't want to save this info there long-term.
-            // instead, use an actual Save & Load system and write to a file, the cloud, etc..
             PlayerPrefs.SetString(quest.info.id, serializedData);
         }
         catch (System.Exception e)
@@ -210,14 +206,12 @@ public class QuestManager : Singleton<QuestManager>
         Quest quest = null;
         try
         {
-            // load quest from saved data
             if (PlayerPrefs.HasKey(questInfo.id) && loadQuestState)
             {
                 string serializedData = PlayerPrefs.GetString(questInfo.id);
                 QuestData questData = JsonUtility.FromJson<QuestData>(serializedData);
                 quest = new Quest(questInfo, questData.state, questData.questStepIndex, questData.questStepStates);
             }
-            // otherwise, initialize a new quest
             else
             {
                 quest = new Quest(questInfo);

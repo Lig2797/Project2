@@ -12,10 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2937cd1ec553aec45961e357bc702d01, type: 3}
   m_Name: Onion
   m_EditorClassIdentifier: 
-  cropProductName: 
-  growthStages: []
-  TimeToGrowth: 0
-  season: 0
+  itemPrice: 100
+  CropSetting:
+    cropProductName: 
+    growthStages: []
+    TimeToGrowth: 0
+    canReHarvest: 0
+    numOfProductCouldDrop: 
+    ratioForEachNum: []
+    season: 0
   cropLevelImage:
   - {fileID: -539069091, guid: e41db14acf9013449b4399be8fb2f498, type: 3}
   - {fileID: 1066081532, guid: e41db14acf9013449b4399be8fb2f498, type: 3}
@@ -27,7 +32,7 @@ MonoBehaviour:
   tilemap: {fileID: 0}
   type: 1
   actionType: 0
-  range: {x: 5, y: 4}
+  range: {x: 5, y: 4, z: 0}
   stackable: 1
   image: {fileID: -1770397792, guid: 6d5dacad31d5dc9458c33856e6a57497, type: 3}
   itemName: Onion

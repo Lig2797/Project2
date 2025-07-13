@@ -242,8 +242,6 @@ public class UI_InventoryItem : MonoBehaviour, IPointerDownHandler
         otherItem.OnItemFinishDrag();
     }
 
-    
-
     public void OnItemDropOnItem(UI_InventoryItem draggedItem)
     {
         if (InventoryItem.Quantity + draggedItem.InventoryItem.Quantity <= InventoryItem.MaxStack)

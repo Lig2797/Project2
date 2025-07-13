@@ -49,7 +49,7 @@ public class PlayerData
     [SerializeField] private float _currentMana;
     [SerializeField] private float _maxStamina;
     [SerializeField] private float _currentStamina;
-    [SerializeField] private float _money;
+    [SerializeField] private int _money;
     [SerializeField] private Vector3 _position;
 
     public PlayerDataNetwork PlayerDataNetwork
@@ -73,7 +73,7 @@ public class PlayerData
     public float CurrentStamina
     { get { return _currentStamina; } }
 
-    public float Money
+    public int Money
     { get { return _money; } }
 
     public Vector3 Position
@@ -94,11 +94,11 @@ public class PlayerData
         this._currentMana = 100;
         this._maxStamina = 100;
         this._currentStamina = 100;
-        this._money = 0;
+        this._money = 2000;
         this._position = new Vector3(4.371f, 1.154f, 0);
     }
 
-    public PlayerData(PlayerDataNetwork playerDataNetwork, float maxHealth, float currentHealth, float maxMana, float currentMana, float maxStamina, float currentStamina, float money, Vector3 position)
+    public PlayerData(PlayerDataNetwork playerDataNetwork, float maxHealth, float currentHealth, float maxMana, float currentMana, float maxStamina, float currentStamina, int money, Vector3 position)
     {
         this._playerDataNetwork = playerDataNetwork;
         this._maxHealth = maxHealth;
@@ -123,7 +123,7 @@ public class PlayerData
     }
 
     // Money
-    public void SetMoney(float money)
+    public void SetMoney(int money)
     {
         this._money = money;
     }

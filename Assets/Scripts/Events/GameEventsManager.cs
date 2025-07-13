@@ -23,6 +23,9 @@ public class GameEventsManager : MonoBehaviour
     public UIEvents uiEvents;
     public PlayerHouseEvents playerHouseEvents;
     public ObjectEvents objectEvents;
+    public EnviromentStatusEvents enviromentStatusEvents;
+    public ShopEvents shopEvents;
+    public CraftingEvents craftingEvents;
 
     public InputReader inputReader;
 
@@ -57,5 +60,8 @@ public class GameEventsManager : MonoBehaviour
         uiEvents = new UIEvents();
         playerHouseEvents = new PlayerHouseEvents();
         objectEvents = new ObjectEvents();
+        enviromentStatusEvents = new EnviromentStatusEvents();
+        shopEvents = new ShopEvents();
+        craftingEvents = new CraftingEvents();
     }
 }

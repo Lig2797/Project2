@@ -12,12 +12,12 @@ public class EnviromentTree : ItemDropableEntity
     }
     protected void OnEnable()
     {
-        EnviromentalStatusManager.ChangeSeasonEvent += ChangeBySeason;
+        GameEventsManager.Instance.enviromentStatusEvents.onChangeSeason += ChangeBySeason;
     }
 
     protected void OnDisable()
     {
-        EnviromentalStatusManager.ChangeSeasonEvent -= ChangeBySeason;
+        GameEventsManager.Instance.enviromentStatusEvents.onChangeSeason -= ChangeBySeason;
     }
     protected void ChangeBySeason(ESeason season)
     {
