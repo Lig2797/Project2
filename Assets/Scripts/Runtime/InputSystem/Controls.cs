@@ -131,7 +131,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""name"": ""SecondInteract"",
                     ""type"": ""Button"",
                     ""id"": ""ffcabe34-a710-4fc0-835e-dab6967e64d9"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false

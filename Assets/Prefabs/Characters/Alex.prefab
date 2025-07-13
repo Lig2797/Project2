@@ -80,7 +80,7 @@ MeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1449220059
-  m_SortingLayer: 26
+  m_SortingLayer: 27
   m_SortingOrder: 1
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &3522281362325681467
@@ -275,6 +275,51 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.3
+--- !u!1 &680159010714484244
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5333000255535504954}
+  - component: {fileID: 4075495381071567517}
+  m_Layer: 8
+  m_Name: Up
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &5333000255535504954
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 680159010714484244}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.05, y: 1.58, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8664031023102026198}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4075495381071567517
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 680159010714484244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31a987444749cc9468c0ba86e706d51a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerController: {fileID: 8285066285643473853}
 --- !u!1 &998308337810241518
 GameObject:
   m_ObjectHideFlags: 0
@@ -609,7 +654,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1449220059
-  m_SortingLayer: 26
+  m_SortingLayer: 27
   m_SortingOrder: 1
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -634,7 +679,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b6498d391f06ca44bb0353714d0b776, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &2840840743689162244
 GameObject:
   m_ObjectHideFlags: 0
@@ -773,6 +817,7 @@ Transform:
   - {fileID: 4619600026611397267}
   - {fileID: 1040034170766496943}
   - {fileID: 846053578170193866}
+  - {fileID: 8664031023102026198}
   - {fileID: 7596998118380914401}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -818,7 +863,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1449220059
-  m_SortingLayer: 26
+  m_SortingLayer: 27
   m_SortingOrder: 0
   m_Sprite: {fileID: 659270592, guid: 8f61e7cf7a36914449d44136773dc15b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1033,6 +1078,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+  hurtSounds:
+  - {fileID: 8300000, guid: 86f96e46e41c22e4786b3adbea1e7223, type: 3}
+  - {fileID: 8300000, guid: 2c18f5f8cc61a454bb43eb02a91b6504, type: 3}
+  - {fileID: 8300000, guid: 4bb8ac77a9f04d74799a650d87ded1bf, type: 3}
+  waterTilemap: {fileID: 0}
+  IsFishing: 0
+  IsHookingFish: 0
+  fishingTimeSetting: 5
+  chosenFishingTime: 0
+  fishingTimer: 0
   tileTargeter: {fileID: 621800067739870697}
   _inventoryController: {fileID: 566550412973088920}
   rb: {fileID: 2706262993133320821}
@@ -1193,6 +1248,7 @@ MonoBehaviour:
   - Axe
   - Scythe
   - Pickaxe
+  - FishingRod
   toolsAndWeapon:
   - Sword
   - Axe
@@ -1200,6 +1256,7 @@ MonoBehaviour:
   - WaterCan
   - Pickaxe
   - Shovel
+  - FishingRod
   _canMove: 1
   _currentSpeed: 0
   _movement: {x: 0, y: 0}
@@ -1230,15 +1287,15 @@ MonoBehaviour:
   _tilemaps: []
   _targetTilemap: {fileID: 0}
   _grassTilemap: {fileID: 0}
+  _groundTilemap: {fileID: 0}
   _targetTile: {fileID: 11400000, guid: d7c3298a0a6669446a7e49bfc0d990bc, type: 2}
   TargetRange: 1
-  tilemapCheck: []
   _canHoe: 0
   _lockedCanHoe: 0
   _canWater: 0
   _lockedCanWater: 0
   _canPlantGround: 0
-  stepCooldown: 0.3
+  stepCooldown: 0.35
   _inventoryManagerSO: {fileID: 11400000, guid: 80487e6faf0fa794284f8125827666cd, type: 2}
 --- !u!114 &566550412973088920
 MonoBehaviour:
@@ -1575,6 +1632,51 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.2
+--- !u!1 &4133635842950173567
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7454960602483506323}
+  - component: {fileID: 8380866840083044220}
+  m_Layer: 8
+  m_Name: Side
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &7454960602483506323
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4133635842950173567}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.18, y: -0.19, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8664031023102026198}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8380866840083044220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4133635842950173567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31a987444749cc9468c0ba86e706d51a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerController: {fileID: 8285066285643473853}
 --- !u!1 &4350292960011906514
 GameObject:
   m_ObjectHideFlags: 0
@@ -1661,6 +1763,51 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.3
+--- !u!1 &5144205950151539804
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7533315456025825768}
+  - component: {fileID: 6499934790257708815}
+  m_Layer: 8
+  m_Name: Down
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &7533315456025825768
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5144205950151539804}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.032, y: -1.31, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8664031023102026198}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6499934790257708815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5144205950151539804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31a987444749cc9468c0ba86e706d51a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerController: {fileID: 8285066285643473853}
 --- !u!1 &5601186593802515202
 GameObject:
   m_ObjectHideFlags: 0
@@ -1901,6 +2048,40 @@ PolygonCollider2D:
       - {x: 0.32037437, y: -0.7198799}
       - {x: 0.8273913, y: -0.14569515}
   m_UseDelaunayMesh: 0
+--- !u!1 &6648620898031305095
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8664031023102026198}
+  m_Layer: 8
+  m_Name: FishingPointBox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8664031023102026198
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6648620898031305095}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7533315456025825768}
+  - {fileID: 7454960602483506323}
+  - {fileID: 5333000255535504954}
+  m_Father: {fileID: 1376378692862310241}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6941288843611133770
 GameObject:
   m_ObjectHideFlags: 0

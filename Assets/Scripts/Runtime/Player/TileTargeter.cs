@@ -19,23 +19,29 @@ public class TileTargeter : NetworkBehaviour
 
     [SerializeField]
     private Tilemap _grassTilemap;
+    [SerializeField]
     private Tilemap _groundTilemap;
+
 
     [Header("TARGET TILE SETTINGS")]
     [SerializeField]
     private AnimatedTile _targetTile;
 
-    [SerializeField]
-    private int TargetRange = 1;
+    public int TargetRange = 1;
 
     private Vector3 _mouseWorldPosition;
+    public Vector3 MouseWorldPosition
+    {
+        get { return _mouseWorldPosition; }
+        set { _mouseWorldPosition = value; }
+    }
     private Vector3Int _previousTilePos;
     private Vector3Int _mouseTilePosition;
     private Vector3Int _playerTilePosition;
     private Vector3Int _clampedTilePosition;
     private Vector3Int _lockedTilePosition;
 
-    [SerializeField] private List<Tilemap> tilemapCheck = new();
+    //[SerializeField] private List<Tilemap> tilemapCheck = new();
     [Header("HOE ON TILES SETTINGS")]
     [SerializeField] private bool _canHoe = false;
     public bool CanHoe
@@ -75,6 +81,7 @@ public class TileTargeter : NetworkBehaviour
         set { _canPlantGround = value; }
     }
 
+
     [SerializeField]
     private float stepCooldown = 0.3f;
     private float stepTimer = 0f;
@@ -84,10 +91,6 @@ public class TileTargeter : NetworkBehaviour
     [SerializeField] private InventoryManagerSO _inventoryManagerSO;
     #endregion
     #region Before Gameloop
-    private void Awake()
-    {
-        
-    }
     public override void OnNetworkSpawn()
     {
         if (!IsOwner)
@@ -124,7 +127,7 @@ public class TileTargeter : NetworkBehaviour
     private void CheckSoundWhenMoving()
     {
 
-        if (playerController.Movement != Vector2.zero)
+        if (playerController.Movement != Vector2.zero && playerController.CanMove)
         {
             stepTimer -= Time.deltaTime;
             if (stepTimer > 0f) return;
@@ -184,6 +187,15 @@ public class TileTargeter : NetworkBehaviour
                 break;
             }
         }
+        Tilemap placeableObjectTilemap = null;
+        foreach (var tilemap in _tilemaps)
+        {
+            if (tilemap.name == "PlaceableTile")
+            {
+                placeableObjectTilemap = tilemap;
+                break;
+            }
+        }
     }
 
     void GetAllTilemaps()
@@ -200,7 +212,11 @@ public class TileTargeter : NetworkBehaviour
         Tilemap[] foundTilemaps = gridObject.GetComponentsInChildren<Tilemap>();
 
         _tilemaps.AddRange(foundTilemaps);
+        TileDatabase.Instance.SetListTilemap(_tilemaps);
+        playerController.waterTilemap = TileDatabase.Instance.GetTilemapByName("Water");
+        PlaceObjectManager.Instance.SetTilemapForPlaceObject();
     }
+
 
     void SetTargetTile()
     {
@@ -230,21 +246,21 @@ public class TileTargeter : NetworkBehaviour
 
     public void RefreshTilemapCheck(bool showTarget)
     {
-        tilemapCheck.Clear();
+        //tilemapCheck.Clear();
         if (_targetTilemap == null)
         {
-            UnityEngine.Debug.Log("Target Tilemap is not set!");
+            Debug.Log("Target Tilemap is not set!");
             return;
         }
         _targetTilemap.SetTile(_previousTilePos, null); // Remove previous highlight
 
-        foreach (Tilemap tilemap in _tilemaps)
-        {
-            if (tilemap.HasTile(_clampedTilePosition)) 
-            {
-                tilemapCheck.Add(tilemap);
-            }
-        }
+        //foreach (Tilemap tilemap in _tilemaps)
+        //{
+        //    if (tilemap.HasTile(_clampedTilePosition)) 
+        //    {
+        //        tilemapCheck.Add(tilemap);
+        //    }
+        //}
 
         if (showTarget)
         {
@@ -252,23 +268,15 @@ public class TileTargeter : NetworkBehaviour
         }
         _previousTilePos = _clampedTilePosition;
 
-        // Check if tile is valid to do something
+        CheckTileIsValidTodoSomething();
+
+    }
+    private void CheckTileIsValidTodoSomething()
+    {
         CanHoe = CheckCanHoe(_clampedTilePosition);
         CanWater = TileManager.Instance.HoedTilesNetwork.ContainsKey(new NetworkVector3Int(_clampedTilePosition)) && !TileManager.Instance.WateredTilesNetwork.ContainsKey(new NetworkVector3Int(_clampedTilePosition));
         CanPlantGround = TileManager.Instance.HoedTilesNetwork.ContainsKey(new NetworkVector3Int(_clampedTilePosition));
-
-
-        //if (tilemapCheck.Count > 0)
-        //{
-        //    string tilemapName = tilemapCheck[tilemapCheck.Count - 1].name;
-        //    CanPlantGround = (tilemapName == "FarmGround" || tilemapName == "WateredGround");
-        //}
-        //else
-        //{
-        //    CanPlantGround = false;
-        //}
     }
-
     private bool CheckCanHoe(Vector3Int pos)
     {
         
@@ -368,9 +376,12 @@ public class TileTargeter : NetworkBehaviour
             }
             if (!TileManager.Instance.HoedTilesNetwork.ContainsKey(new NetworkVector3Int(_lockedTilePosition)))
             {
-
-                Debug.Log("chat cái nay");
                 TileManager.Instance.ModifyTile(_lockedTilePosition, targetTilemap.name, item.ruleTile.name);
+            }
+            else if(CropManager.Instance.PlantedCropsNetwork.ContainsKey(new NetworkVector3Int(_lockedTilePosition)) &&
+                CropManager.Instance.PlantedCropsNetwork[new NetworkVector3Int(_lockedTilePosition)].IsDead)
+            {
+                CropManager.Instance.RemoveCrop(_lockedTilePosition);
             }
 
 
@@ -418,11 +429,29 @@ public class TileTargeter : NetworkBehaviour
                 {
                     if (!CanPlantGround) return;
                     GameObject.Find("CropManager").GetComponent<CropManager>().TryModifyCrop(_clampedTilePosition,item.itemName,1);
-                    InventoryItem itemUsed = _inventoryManagerSO.GetItemInSlot(_inventoryManagerSO.selectedSlot);
-                    _inventoryManagerSO.RemoveInventoryItem(itemUsed);
+                    _inventoryManagerSO.DecreaseItemQuantityOnUse();
+                    playerController.CheckAnimation();
                     break;
-                }        
+                }  
+            case ItemType.Tile:
+                {
+                    if (!PlaceObjectManager.Instance.CanPlaceObject) return;
+                    PlaceObjectManager.Instance.PlaceTile(item.ruleTile);
+                    _inventoryManagerSO.DecreaseItemQuantityOnUse();
+                    playerController.CheckAnimation();
+                    break;
+                }
         }
+    }
+
+    public bool CanBreakPlacedTile()
+    {
+        if (PlaceObjectManager.Instance.PlacedTile.ContainsKey(_clampedTilePosition))
+        {
+            PlaceObjectManager.Instance.BreakPlacedTile(_clampedTilePosition);
+            return true;
+        }
+        return false;
     }
 
 }

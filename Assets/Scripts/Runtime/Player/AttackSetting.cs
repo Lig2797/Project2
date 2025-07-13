@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class AttackSetting : MonoBehaviour
 {
@@ -29,5 +30,6 @@ public class AttackSetting : MonoBehaviour
                 Debug.Log(collision.gameObject.name + " hit for " + attackDamage);
             }
         }
+        
     }
 }

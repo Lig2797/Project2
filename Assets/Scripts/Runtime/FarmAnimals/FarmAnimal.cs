@@ -1,11 +1,29 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(CapsuleCollider2D))]
 [RequireComponent(typeof(Animator))]
 public abstract class FarmAnimal : MonoBehaviour
 {
+    public enum FarmAnimalKind
+    {
+        Chicken,
+        FemaleCow,
+        MaleCow,
+        FemaleSheep,
+        MaleSheep
+    }
+
+    public enum Food
+    {
+        None,
+        Seeds,
+        Wheat
+    }
     #region Components
     [SerializeField] protected Rigidbody2D _body;
     [SerializeField] protected Animator _animator;
@@ -14,15 +32,30 @@ public abstract class FarmAnimal : MonoBehaviour
 
     #region Variables
 
-    [SerializeField] protected string id;
-    [ContextMenu("Generate guid for id")]
-    protected void GenerateGuid() => id = System.Guid.NewGuid().ToString();
 
     [SerializeField] protected Gender gender;
-    [SerializeField] protected bool canMakeProduct;
 
+    [SerializeField]
+    public bool IsInteractable = true;
+    // needs to save
+    [SerializeField]
+    protected FarmAnimalKind animalKind;
+
+    [SerializeField]
+    public bool isFed = false;
+
+    [SerializeField]
+    protected int resetFedTime = 1000;
+
+    [SerializeField] 
+    protected bool canMakeProduct = false;
+
+    [SerializeField]
     protected int fedTimeCounter = 0;
-    protected bool isFed = false;
+
+    // current stage and position too
+
+    //end
 
     protected float maxRadius = 5f;
     protected float speed = 2f;
@@ -38,9 +71,17 @@ public abstract class FarmAnimal : MonoBehaviour
         {
             _canMove = value;
             if (!_canMove)
+            {
                 _body.linearVelocity = Vector2.zero;
+                isMoving = false;
+            }
         }
     }
+
+    public Food FoodToEat;
+
+    [SerializeField]
+    protected List<AudioClip> animalSounds = new();
 
     [Header("Obstacle Detection")]
     [SerializeField] protected LayerMask collisionMask;
@@ -82,11 +123,15 @@ public abstract class FarmAnimal : MonoBehaviour
     public string VerticalParameter => "Vertical";
     #endregion
 
+    #region Reference
+    [SerializeField]
+    private EmojiController _emoji;
+    #endregion
+
     private Coroutine stopMovingCoroutine;
 
     protected void OnEnable()
     {
-        Initial();
         FarmAnimalManager.Instance.RegisterAnimal(this);
     }
 
@@ -95,6 +140,15 @@ public abstract class FarmAnimal : MonoBehaviour
         FarmAnimalManager.Instance.UnregisterAnimal(this);
     }
 
+
+    private void Awake()
+    {
+        _emoji = GetComponentInChildren<EmojiController>(true);
+    }
+    private void Start()
+    {
+        StartCoroutine(PlaySoundAfterAFewTimes());
+    }
     protected void Update()
     {
         SetAnimator();
@@ -118,15 +172,13 @@ public abstract class FarmAnimal : MonoBehaviour
 
     private void MoveToTarget()
     {
-        // 1) fan-ray obstacle check
-        if (CheckFanObstacle())
+        if (_body.linearVelocity.sqrMagnitude > 0.01f && CheckFanObstacle())
         {
             isMoving = false;
             StartStopMoving(5);
             return;
         }
 
-        // 2) normal movement
         Vector2 currentPosition = _body.position;
         Vector2 direction = (targetPosition - currentPosition).normalized;
         _body.linearVelocity = direction * speed;
@@ -134,7 +186,7 @@ public abstract class FarmAnimal : MonoBehaviour
         if (direction != Vector2.zero)
             LastMovement = direction;
 
-        if (Vector2.Distance(currentPosition, targetPosition) < 0.5f)
+        if (Vector2.Distance(currentPosition, targetPosition) < 0.1f)
         {
             isMoving = false;
             StartStopMoving(5);
@@ -142,6 +194,7 @@ public abstract class FarmAnimal : MonoBehaviour
 
         Debug.DrawRay(currentPosition, LastMovement * rayDistance, Color.yellow);
     }
+
 
     private bool CheckFanObstacle()
     {
@@ -168,8 +221,7 @@ public abstract class FarmAnimal : MonoBehaviour
         yield return new WaitForSeconds(seconds);
         CanMove = true;
     }
-
-    private void StartStopMoving(int seconds)
+    private void StartStopMoving(int seconds = 5)
     {
         if (stopMovingCoroutine != null)
             StopCoroutine(stopMovingCoroutine);
@@ -201,13 +253,25 @@ public abstract class FarmAnimal : MonoBehaviour
     }
 
     [ContextMenu("Eat")]
-    protected virtual void Eat()
+    public virtual bool Eat()
     {
-        if (isFed) return;
+        if (isFed) return false;
         _animator.SetTrigger("Eat");
+        _emoji.SetEmojiSprite(EmojiType.VeryHappy);
+        _emoji.gameObject.SetActive(true);
+        StartStopMoving(5);
         isFed = true;
+        if(this is Chicken)
+        PlayAnimalSound(1);
+        else
+            PlayAnimalSound();
+        return true;
     }
 
+    protected void ChangeResetFedTime(int value = 1000)
+    {
+        resetFedTime = value;
+    }
     public abstract void FedTimeHandler(int minute);
     protected virtual void MakeProduct() { }
     protected virtual void GetProduct() { }
@@ -215,11 +279,107 @@ public abstract class FarmAnimal : MonoBehaviour
     public abstract void IncreaseGrowStage();
 
     protected virtual void ApplyStage(string stage)
-        => _animator.SetTrigger(stage);
-
-    protected virtual void Initial()
     {
-        gender = _animalInfo.Gender;
-        GenerateGuid();
+        _animator.SetTrigger(stage);
     }
+
+    
+    public virtual void Interact()
+    {
+        if(!IsInteractable) return;
+        _emoji.SetEmojiSprite(EmojiType.Happy);
+        _emoji.gameObject.SetActive(true);
+        StartCoroutine(ResetInteractable(3));
+        if (this is Chicken)
+            PlayAnimalSound(1);
+        else
+            PlayAnimalSound();
+    }
+
+    private IEnumerator ResetInteractable(float seconds)
+    {
+        IsInteractable = false;
+        CanMove = false;
+        yield return new WaitForSeconds(seconds);
+        IsInteractable = true;
+        CanMove = true;
+    }
+
+    protected virtual IEnumerator PlaySoundAfterAFewTimes()
+    {
+        while (true)
+        {
+            // Wait until we're in the correct scene before doing anything
+            while (SceneManager.GetActiveScene().name != Loader.Scene.WorldScene.ToString())
+            {
+                yield return new WaitForSeconds(1f); // wait a bit, not every frame
+            }
+
+            // Once in WorldScene, start the timer
+            float waitTime = Random.Range(7f, 20f);
+            float elapsed = 0f;
+
+            // Timer loop: wait only while still in the WorldScene
+            while (elapsed < waitTime)
+            {
+                if (SceneManager.GetActiveScene().name != Loader.Scene.WorldScene.ToString())
+                    break; // abort this cycle if we leave the scene
+
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            // Only play the sound if we finished the timer **and** still in the scene
+            if (SceneManager.GetActiveScene().name == Loader.Scene.WorldScene.ToString())
+            {
+                PlayAnimalSound();
+            }
+        }
+    }
+
+
+    protected void PlayAnimalSound(int? specificAudioClipIndex = null)
+    {
+        if(animalSounds.Count == 0) return;
+        AudioClip audioClip = specificAudioClipIndex == null ? animalSounds[Random.Range(0, animalSounds.Count)] : animalSounds[(int)specificAudioClipIndex];
+        AudioManager.Instance.PlaySFX(audioClip);
+    }
+
+
+    public void LoadData(FarmAnimalSaveData farmAnimalSaveData)
+    {
+        var data = farmAnimalSaveData.GetData();
+        this.isFed = data.IsFed;
+        this.resetFedTime = data.ResetFedTime;
+        this.canMakeProduct = data.CanMakeProduct;
+        this.fedTimeCounter = data.FedTimeCounter;
+        transform.position = data.Position;
+
+    }
+
+    public FarmAnimalSaveData GetDataToSave()
+    {
+        return new FarmAnimalSaveData(animalKind, resetFedTime, canMakeProduct, fedTimeCounter, isFed, transform.position);
+    }
+
+
+    public void SetCurrentGrowthStage(FarmAnimalSaveData farmAnimalSaveData)
+    {
+        switch (this)
+        {
+            case Chicken chicken:
+                chicken.SetChickenGrowthStage(farmAnimalSaveData.GetChickenGrowthStage());
+                break;
+            case Cow cow:
+                cow.SetCowGrowthStage(farmAnimalSaveData.GetCowGrowthStage());
+                break;
+            case Sheep sheep:
+                sheep.SetSheepGrowthStage(farmAnimalSaveData.GetSheepGrowthStage());
+                break;
+            default:
+                Debug.LogWarning($"Unknown farm animal type: {this.GetType().Name}. Cannot set growth stage.");
+                break;
+        }
+    }
+
 }

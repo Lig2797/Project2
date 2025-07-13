@@ -9,17 +9,42 @@ using Unity.VisualScripting;
 using UnityEditor.PackageManager;
 #endif
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
-using UnityEngine.TextCore.Text;
+using UnityEngine.Tilemaps;
 
 public class PlayerController : NetworkBehaviour, IDataPersistence
 {
     public static PlayerController LocalInstance { get; private set; }
 
+    [SerializeField]
+    private List<AudioClip> hurtSounds = new List<AudioClip>();
+
     private bool isPlayerLoadedData = false;
 
+    public Tilemap waterTilemap;
+    public bool CanFish
+    {
+        get => CanFish;
+        set
+        {
+            animator.SetBool("CanFish", value);
+            if (value)
+                ChooseFishingTime();
+        }
+    }
+
+    public bool IsFishing = false;
+
+    public bool IsHookingFish = false;
+
+    [SerializeField]
+    [Range(5f, 7f)]
+    private float fishingTimeSetting = 5;
+    [SerializeField]
+    private float chosenFishingTime;
+
+    [SerializeField]
+    private float fishingTimer = 0f;
     #region Setup Everything
     #region Components
     [Header("Components")]
@@ -36,6 +61,7 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
     [Header("Reference")]
     public PlayerDataSO playerDataSO;
     public PlayerDataNetwork playerDataNetwork;
+
 
     [Header("Other Data")]
     public string otherPlayerName;
@@ -190,7 +216,7 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
     public bool CanAttack
     {
         get { return _canAttack; }
-        private set { _canAttack = value; }
+        set { _canAttack = value; }
     }
 
     [SerializeField]
@@ -278,7 +304,6 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
     #endregion
     #endregion
 
-
     #region Setup Before Game Start
     private void Awake()
     {
@@ -286,6 +311,7 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         _damageable = GetComponent<Damageable>();
+
     }
 
     public override void OnNetworkSpawn()
@@ -375,6 +401,7 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
     void Update()
     {
         UpdatePlayerStatus();
+        UpdateFishingProgress();
     }
 
 
@@ -548,18 +575,6 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
 
     }
 
-
-    //[ServerRpc]
-    //private void SetCurrentVehicleMovementServerRpc(NetworkObjectReference vehicleRef, Vector2 movement, bool IsFacingRight)
-    //{
-    //    if (vehicleRef.TryGet(out NetworkObject vehicleObj))
-    //    {
-    //        var vehicle = vehicleObj.GetComponent<VehicleController>();
-    //        vehicle.SetMovement(movement);
-    //        if (movement != Vector2.zero)
-    //            vehicle.IsFacingRight.Value = IsFacingRight;
-    //    }
-    //}
     #endregion
 
     #region Actions Block
@@ -585,7 +600,9 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
         if (!CanAttack || IsRidingVehicle) return;
 
         Item item = _inventoryManagerSO.GetCurrentItem();
-        _itemOnHand.ActivateItemOnHandServerRpc(null, false);
+        _itemOnHand.ActivateItemOnHand(null, false);
+        _inventoryManagerSO.ShowPlaceableObject(false);
+        tileTargeter.TargetRange = 1;
         if (item != null)
         {
             IsHoldingItem = true;
@@ -607,7 +624,6 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
                     }
                 case ItemType.Tool:
                     {
-
                         ChangeAnimationState(item.name);
 
                         break;
@@ -615,15 +631,23 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
                 case ItemType.Crop:
                 case ItemType.Food:
                     {
-                        _itemOnHand.ActivateItemOnHandServerRpc(item.itemName, true);
+                        _itemOnHand.ActivateItemOnHand(item.image, true);
                         ChangeAnimationState("Pickup_idle");
                         break;
                     }
+                case ItemType.Tile:
+                    {
+                        _itemOnHand.ActivateItemOnHand(item.image, true);
+                        ChangeAnimationState("Pickup_idle");
+                        _inventoryManagerSO.ShowPlaceableObject(true);
+                        tileTargeter.TargetRange = 100;
+                        break;
+                    }
+
             }
         }
         else ChangeAnimationState(AnimationStrings.idle);
     }
-
 
     private void ChangeAnimationState(string newState)
     {
@@ -643,8 +667,7 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
         else
         {
             animator.SetTrigger(AnimationStrings.hurt);
-
-
+            AudioManager.Instance.PlaySFX(hurtSounds[Random.Range(0, hurtSounds.Count)]);
             StartCoroutine(ApplyKnockback(knockBackDirection));
         }
     }
@@ -679,8 +702,53 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
         {
             UseCurrentItem();
         }
+        else if(IsFishing || IsHookingFish)
+        {
+            FinishFishing();
+        }
+
     }
 
+    public void GetFish() // on end fishing animation
+    {
+        Item fish = FishingManager.Instance.GetRandomFish();
+
+        GameEventsManager.Instance.inventoryEvents.AddItem(fish.itemName);
+        
+    }
+
+    public void ChooseFishingTime()
+    {
+        chosenFishingTime = Random.Range(fishingTimeSetting - 2, fishingTimeSetting + 2);
+    }
+
+    private void UpdateFishingProgress()
+    {
+        if (!IsFishing) return;
+        fishingTimer += Time.deltaTime;
+        if (fishingTimer >= chosenFishingTime)
+        {
+            animator.SetTrigger("HookedFish");
+            fishingTimer = 0f;
+            AudioManager.Instance.PlaySFX("hooked_fish");
+            return;
+        }
+    }
+
+    private void FinishFishing()
+    {
+
+        fishingTimer = 0f;
+        if (!IsHookingFish)
+        {
+            animator.SetTrigger("StopFishing");
+
+        }
+        else
+        {
+            animator.SetTrigger("StartCaptureFish");
+        }
+    }
     public void DeactivateAttack2()
     {
         animator.SetBool("CanAttack2", false);
@@ -689,36 +757,100 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
     private void UseCurrentItem()
     {
         Item item = _inventoryManagerSO.GetCurrentItem();
-        if(item == null) return;
+        if (item == null) return;
         switch (item.type)
         {
             default:
                 {
+
                     break;
                 }
             case ItemType.Tool:
                 {
                     animator.SetTrigger("Attack");
-                    tileTargeter.UseTool(!noTargetStates.Contains(CurrentState));
+                    if(CurrentState != "FishingRod")
+                        tileTargeter.UseTool(!noTargetStates.Contains(CurrentState));
+                    if(CurrentState == "Sword")
+                        AudioManager.Instance.PlaySFX("sword_swing");
+
                     break;
                 }
             case ItemType.Crop:
+            case ItemType.Tile:
                 {
                     tileTargeter.SetTile(item);
                     break;
                 }
+
         }
+
     }
+
+
     private void OnInteract()
     {
-        if (!IsRidingVehicle && CanAttack && Input.GetMouseButton(1))
+        if (!IsRidingVehicle && CanAttack)
         {
-            if (tileTargeter.CheckHarverst())
+            if (tileTargeter.CanBreakPlacedTile()) return;
+            else if (tileTargeter.CheckHarverst())
             {
                 AudioManager.Instance.PlaySFX("pop");
                 animator.SetTrigger(AnimationStrings.pickup);
-                _itemOnHand.gameObject.SetActive(false);
+                _itemOnHand.ActivateItemOnHand(null, false);
                 CurrentState = null;
+            }
+            else
+            {
+                InteractWithFarmAnimal();
+            }
+        }
+    }
+
+    private void InteractWithFarmAnimal()
+    {
+        Vector2 clampedMousePosition = new Vector2 (    
+            Mathf.Clamp(tileTargeter.MouseWorldPosition.x, transform.position.x - tileTargeter.TargetRange, transform.position.x + tileTargeter.TargetRange),
+            Mathf.Clamp(tileTargeter.MouseWorldPosition.y, transform.position.y - tileTargeter.TargetRange, transform.position.y + tileTargeter.TargetRange)
+        );
+
+        int farmAnimalLayerMask = 1 << LayerMask.NameToLayer("FarmAnimal");
+        Collider2D[] hit = Physics2D.OverlapCircleAll(clampedMousePosition, 1, farmAnimalLayerMask);
+        Debug.DrawLine(transform.position, clampedMousePosition, Color.red, 1f);
+        Item item = _inventoryManagerSO.GetCurrentItem();
+        if (item == null || item.type != ItemType.Food)  // neu ko cam food
+        {
+            foreach (Collider2D collider in hit)
+            {
+                if (collider.TryGetComponent(out FarmAnimal farmAnimal))
+                {
+                    if (farmAnimal.IsInteractable)
+                    {
+                        farmAnimal.Interact();
+                        return;
+                    }
+                }
+            }
+        }
+        else
+        {
+
+            foreach (Collider2D collider in hit)
+            {
+                if (collider.TryGetComponent(out FarmAnimal farmAnimal))
+                {
+                    if (farmAnimal.FoodToEat == FarmAnimal.Food.None || farmAnimal.FoodToEat != item.foodType) continue;
+
+                    if (farmAnimal.FoodToEat == item.foodType)
+                    {
+                        if(farmAnimal.Eat())
+                        {
+                            _inventoryManagerSO.DecreaseItemQuantityOnUse();
+                            CheckAnimation();
+                            return;
+                        }
+                        continue;
+                    }
+                }
             }
         }
     }
@@ -737,24 +869,16 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
             IsRidingVehicle = !IsRidingVehicle;
             if (IsRidingVehicle)
             {
+                _itemOnHand.ActivateItemOnHand(null, false);
                 ChangeAnimationState("Idle");
                 StartAllAction();
                 CurrentVehicle.SetRiding(true, this);
-                //CurrentVehicle.transform.SetParent(transform, true);
-                //if (CurrentVehicle.transform.localScale.x < 0) CurrentVehicle.transform.localScale = new Vector3(1, 1, 1);
-                //RequestToRideVehicleServerRpc(
-                //    GetComponent<NetworkObject>(),
-                //    CurrentVehicle.GetComponent<NetworkObject>()
-                //);
             }
             else
             {
-
-                //SceneManager.MoveGameObjectToScene(CurrentVehicle.gameObject, SceneManager.GetActiveScene());
                 CurrentVehicle.SetRiding(false,this);
-                //RequestToUnRideVehicleServerRpc(
-                //    CurrentVehicle.GetComponent<NetworkObject>()
-                //);
+                CheckAnimation();
+
             }
         }
 
@@ -769,6 +893,7 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
             }
             else
             {
+                _itemOnHand.ActivateItemOnHand(null, false);
                 StopAllAction();
                 animator.SetBool(AnimationStrings.isSleep, true);
 

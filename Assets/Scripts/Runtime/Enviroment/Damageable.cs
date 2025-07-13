@@ -88,7 +88,7 @@ public class Damageable : MonoBehaviour
         if (IsAlive && !isInvincible)
         {
             if(GetComponent<PlayerController>() != null)
-                {
+            {
                 playerHealth.Value -= damage;
                 if (playerHealth.Value <= 0)
                 {

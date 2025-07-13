@@ -37,7 +37,7 @@ public class DayCycleHandler : Singleton<DayCycleHandler>
 
     public void MoveSunAndMoon()
     {
-        float timeOfDay = (float)(EnviromentalStatusManager.Instance.eStarus.DateTime.Hour * 60f + EnviromentalStatusManager.Instance.eStarus.DateTime.Minute) / (24f * 60f);
+        float timeOfDay = (float)(EnviromentalStatusManager.Instance.eStatus.DateTime.Hour * 60f + EnviromentalStatusManager.Instance.eStatus.DateTime.Minute) / (24f * 60f);
 
         float angle = timeOfDay * 360f * Mathf.Deg2Rad;
 
@@ -49,7 +49,7 @@ public class DayCycleHandler : Singleton<DayCycleHandler>
 
     public void UpdateLight()
     {
-        float timeOfDay = (float)(EnviromentalStatusManager.Instance.eStarus.DateTime.Hour * 60f + EnviromentalStatusManager.Instance.eStarus.DateTime.Minute) / (24f * 60f);
+        float timeOfDay = (float)(EnviromentalStatusManager.Instance.eStatus.DateTime.Hour * 60f + EnviromentalStatusManager.Instance.eStatus.DateTime.Minute) / (24f * 60f);
 
         dayLight.color = dayLightGradient.Evaluate(timeOfDay);
         nightLight.color = nightLightGradient.Evaluate(timeOfDay);

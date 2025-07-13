@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.VisualScripting;
+
 #if UNITY_EDITOR
 using UnityEditorInternal.Profiling.Memory.Experimental;
 #endif
@@ -17,9 +19,6 @@ public class UI_Inventory : MonoBehaviour
     private int maxToolBarSlot = 9;
     [SerializeField] private InventoryManagerSO _inventoryManagerSO;
 
-    private void Awake()
-    {
-    }
 
     private void Start()
     {
@@ -30,6 +29,7 @@ public class UI_Inventory : MonoBehaviour
     {
         _inventoryManagerSO.onFindEmptySlot += FindEmptySlot;
         _inventoryManagerSO.onPutItemDownByRightClick += SpawnItem;
+        _inventoryManagerSO.onDecreaseItemQuantity += DecreaseItemQuantity;
         GameEventsManager.Instance.inventoryEvents.onAddItemToUI += AddItem;
         GameEventsManager.Instance.inventoryEvents.onItemRemoved += RemoveItem;
         GameEventsManager.Instance.inventoryEvents.upDateAmount += UpdateItemAmount;
@@ -39,6 +39,7 @@ public class UI_Inventory : MonoBehaviour
     {
         _inventoryManagerSO.onFindEmptySlot -= FindEmptySlot;
         _inventoryManagerSO.onPutItemDownByRightClick -= SpawnItem;
+        _inventoryManagerSO.onDecreaseItemQuantity -= DecreaseItemQuantity;
         GameEventsManager.Instance.inventoryEvents.onAddItemToUI -= AddItem;
         GameEventsManager.Instance.inventoryEvents.onItemRemoved -= RemoveItem;
         GameEventsManager.Instance.inventoryEvents.upDateAmount -= UpdateItemAmount;
@@ -150,7 +151,6 @@ public class UI_Inventory : MonoBehaviour
                 {
                     itemUI.InventoryItem.IncreaseQuantity(newItem.Quantity);
                     itemUI.RefreshCount();
-
                     ItemWorldManager.Instance.RemoveItemWorld(item, itemWorldControl);
                     return;
                 }
@@ -162,6 +162,7 @@ public class UI_Inventory : MonoBehaviour
                     newItem.DecreaseQuantity(quantityToAdd);
                 }
 
+                AudioManager.Instance.PlaySFX("pop");
 
             }
         }
@@ -174,6 +175,7 @@ public class UI_Inventory : MonoBehaviour
                 inventory.AddItemToInventory(newItem, slotUI.slotIndex);
                 AddItemToInventoryUI(newItem, slotUI.slotIndex);
 
+                AudioManager.Instance.PlaySFX("pop");
                 ItemWorldManager.Instance.RemoveItemWorld(item, itemWorldControl);
                 if (_inventoryManagerSO.selectedSlot == i) _inventoryManagerSO.RefreshCurrentHoldingItem();
                 break;
@@ -187,6 +189,16 @@ public class UI_Inventory : MonoBehaviour
     public void DecreaseItemQuantity(int slotToDecrease)
     {
 
+        UI_InventoryItem ui_InventoryItem = inventorySlotsUI[slotToDecrease].GetComponentInChildren<UI_InventoryItem>();
+        ui_InventoryItem.InventoryItem.DecreaseQuantity(1);
+        
+        if (ui_InventoryItem.InventoryItem.Quantity <= 0)
+        {
+            Destroy(ui_InventoryItem.gameObject);
+            _inventoryManagerSO.RemoveInventoryItem(ui_InventoryItem.InventoryItem);
+        }
+        else
+            ui_InventoryItem.RefreshCount();
     }
 
     // this is onCraftingWindowClosed

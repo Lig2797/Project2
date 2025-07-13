@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 583336632
+  GlobalObjectIdHash: 825733784
   InScenePlacedSourceGlobalObjectIdHash: 3378413602
   DeferredDespawnTick: 0
   Ownership: 1
@@ -71,5 +71,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+  highestCaveLevel:
+    m_InternalValue: -1
+  highestCaveShape:
+    m_InternalValue: -1
   _caveLevelText: {fileID: 0}
   _caveLevelBox: {fileID: 0}

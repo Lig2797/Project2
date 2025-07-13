@@ -201,9 +201,9 @@ MonoBehaviour:
   sfxClips:
   - name: Bicycle
     clip: {fileID: 8300000, guid: fc106acdc831eba4c912152af3742192, type: 3}
-  - name: Cow
-    clip: {fileID: 8300000, guid: de76ffda2e0d3db4d92c9621537ad06b, type: 3}
   - name: Cow1
+    clip: {fileID: 8300000, guid: de76ffda2e0d3db4d92c9621537ad06b, type: 3}
+  - name: Cow
     clip: {fileID: 8300000, guid: fb48e6fec0f6ebe4082934df42fb75c1, type: 3}
   - name: Calming-rain
     clip: {fileID: 8300000, guid: 71faf44f6e4a9fe4982634db2ca7b12e, type: 3}
@@ -219,9 +219,9 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: e12ff840b36c45949af0605ef08b1ac8, type: 3}
   - name: Door
     clip: {fileID: 8300000, guid: e12ff840b36c45949af0605ef08b1ac8, type: 3}
-  - name: Chicken
-    clip: {fileID: 8300000, guid: d72b569f7ee843445975142dcd066164, type: 3}
   - name: Chicken1
+    clip: {fileID: 8300000, guid: d72b569f7ee843445975142dcd066164, type: 3}
+  - name: Chicken
     clip: {fileID: 8300000, guid: d3e139ad318f30b428acfdde7a5cb309, type: 3}
   - name: Horse
     clip: {fileID: 8300000, guid: 83a9ec900733b924cb512258c84632d6, type: 3}
@@ -232,7 +232,7 @@ MonoBehaviour:
   - name: Horse2run
     clip: {fileID: 8300000, guid: 99176184c5d354f4bab29f4e244a6837, type: 3}
   - name: explosion
-    clip: {fileID: 8300000, guid: d7f4ca2f554284d48b59618e3249e72a, type: 3}
+    clip: {fileID: 8300000, guid: 0321e2ee66f8d6e4d9e2b07c65882062, type: 3}
   - name: Pickaxe1
     clip: {fileID: 8300000, guid: ae1e1d9e4daa89f458edd625697a1db1, type: 3}
   - name: Pickaxe2
@@ -271,6 +271,14 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 41df5b082c29cc34e8db217ece2e1f57, type: 3}
   - name: walk_grass_2
     clip: {fileID: 8300000, guid: 8cf4fe4d12c3e5a4e86bcfa5e66abe6d, type: 3}
+  - name: hooked_fish
+    clip: {fileID: 8300000, guid: 5525d71a2f49a4846babe37a59ef8bbf, type: 3}
+  - name: caught_fish
+    clip: {fileID: 8300000, guid: 18bfc19497d7b754aac2e0bf9841efa0, type: 3}
+  - name: sword_swing
+    clip: {fileID: 8300000, guid: 100f49ab989f9cb48b642fdc90f0f1c1, type: 3}
+  - name: goblin_hurt
+    clip: {fileID: 8300000, guid: 8973b510057c2f14e8966f9c8b8423c6, type: 3}
 --- !u!1 &9188752828192335770
 GameObject:
   m_ObjectHideFlags: 0
@@ -315,7 +323,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 4497792350380121097, guid: b5ed36b21c552204da24fe0cb68a1a87, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

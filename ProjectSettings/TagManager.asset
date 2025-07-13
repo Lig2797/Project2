@@ -27,8 +27,8 @@ TagManager:
   - Villager
   - House
   - NavMesh
-  - Object
-  - 
+  - PlaceableTile
+  - FarmAnimal
   - 
   - 
   - 
@@ -124,6 +124,9 @@ TagManager:
     locked: 0
   - name: Decor
     uniqueID: 1195580027
+    locked: 0
+  - name: PlaceableTile
+    uniqueID: 1426083937
     locked: 0
   - name: Player
     uniqueID: 1449220059
