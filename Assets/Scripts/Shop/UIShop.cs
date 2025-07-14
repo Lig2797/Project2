@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIShop : MonoBehaviour
+public class UIShop : Singleton<UIShop>
 {
     [SerializeField] private List<ShopData> shopData;
     [SerializeField] private GameObject shopContainer;
@@ -12,6 +12,8 @@ public class UIShop : MonoBehaviour
     [SerializeField] private GameObject itemDetailsContainer;
     [SerializeField] private GameObject itemSellBoxContainer;
     [SerializeField] private Button closeButton;
+
+    public bool IsShopOpen => shopContainer.activeSelf;
 
     private void OnEnable()
     {
@@ -29,7 +31,7 @@ public class UIShop : MonoBehaviour
 
     private void Start()
     {
-        UpdateShop(EnviromentalStatusManager.Instance.eStarus.SeasonStatus);
+        UpdateShop(EnviromentalStatusManager.Instance.eStatus.SeasonStatus);
         itemSellBoxContainer.gameObject.SetActive(true);
         itemDetailsContainer.gameObject.SetActive(false);
         closeButton.onClick.AddListener(CloseShop);

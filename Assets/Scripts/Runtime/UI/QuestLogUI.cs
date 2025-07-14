@@ -29,7 +29,19 @@ public class QuestLogUI : PersistentSingleton<QuestLogUI>
         GameEventsManager.Instance.questEvents.onQuestStateChange -= QuestStateChange;
     }
 
-    public void ShowUI()
+    public void QuestLogTogglePressed()
+    {
+        if (contentParent.activeInHierarchy)
+        {
+            HideUI();
+        }
+        else
+        {
+            ShowUI();
+        }
+    }
+
+    private void ShowUI()
     {
         contentParent.SetActive(true);
         GameEventsManager.Instance.playerEvents.DisablePlayerMovement();
@@ -40,7 +52,7 @@ public class QuestLogUI : PersistentSingleton<QuestLogUI>
         }
     }
 
-    public void HideUI()
+    private void HideUI()
     {
         contentParent.SetActive(false);
         GameEventsManager.Instance.playerEvents.EnablePlayerMovement();

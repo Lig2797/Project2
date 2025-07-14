@@ -74,7 +74,7 @@ PrefabInstance:
       objectReference: {fileID: 6390245870295291354, guid: 66df8c95b1f064341b46cfe17074c419, type: 3}
     - target: {fileID: 8016201154110748339, guid: 5bacb55fe68bac64abbf970ff2a95448, type: 3}
       propertyPath: _projectileDamage
-      value: 15
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8016201154110748339, guid: 5bacb55fe68bac64abbf970ff2a95448, type: 3}
       propertyPath: ChasingStateData.AttackCooldown

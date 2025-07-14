@@ -1,5 +1,4 @@
-﻿using UnityEditor.Tilemaps;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class PlaceObjectManager : PersistentSingleton<PlaceObjectManager>, IDataPersistence

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2937cd1ec553aec45961e357bc702d01, type: 3}
   m_Name: Blueberry Seed
   m_EditorClassIdentifier: 
-  itemPrice: 0
+  itemPrice: 100
   CropSetting:
     cropProductName: Blueberry
     growthStages:
@@ -32,6 +32,7 @@ MonoBehaviour:
     - 10
     season: 0
   cropLevelImage: []
+  foodType: 0
   tile: {fileID: 0}
   ruleTile: {fileID: 0}
   animatedTile: {fileID: 0}

@@ -122,7 +122,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1449220059
-  m_SortingLayer: 18
+  m_SortingLayer: 27
   m_SortingOrder: 0
   m_Sprite: {fileID: -71049346, guid: ec97cead805b11847918de7664c20bab, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -153,7 +153,7 @@ MonoBehaviour:
   closedDoorSprite: {fileID: -71049346, guid: ec97cead805b11847918de7664c20bab, type: 3}
   upperLayer: 1
   lowerLayer: 0
-  areDestroy: {fileID: 0}
+  areaDestroy: {fileID: 0}
 --- !u!1 &5936042061888383459
 GameObject:
   m_ObjectHideFlags: 0
@@ -230,9 +230,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1449220059
-  m_SortingLayer: 18
+  m_SortingLayer: 27
   m_SortingOrder: 0
-  m_Sprite: {fileID: -340180283, guid: ec97cead805b11847918de7664c20bab, type: 3}
+  m_Sprite: {fileID: 1604728794, guid: ec97cead805b11847918de7664c20bab, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

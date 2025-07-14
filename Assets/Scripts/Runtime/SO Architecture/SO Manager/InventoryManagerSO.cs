@@ -49,6 +49,7 @@ public class InventoryManagerSO : ScriptableObject
         InventoryItem item = inventory.GetInventoryItemOfIndex(_selectedSlot);
         if (item != null)
         {
+            Debug.Log($"GetCurrentItem: {item.Item.itemName}");
             return item.Item;
         }
         return null;

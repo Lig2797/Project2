@@ -330,6 +330,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8016201154110748339, guid: 5bacb55fe68bac64abbf970ff2a95448, type: 3}
+      propertyPath: _projectileDamage
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8016201154110748339, guid: 5bacb55fe68bac64abbf970ff2a95448, type: 3}
       propertyPath: ChasingStateData.AttackRange
       value: 1
       objectReference: {fileID: 0}

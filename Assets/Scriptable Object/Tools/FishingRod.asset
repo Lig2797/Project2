@@ -31,4 +31,4 @@ MonoBehaviour:
   range: {x: 5, y: 4, z: 0}
   stackable: 0
   image: {fileID: -152423102, guid: 1964a41c77651ee45ae527d054e97830, type: 3}
-  itemName: FishingRod
+  itemName: Fishing Rod

@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1475318550465854935, guid: 5bacb55fe68bac64abbf970ff2a95448, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 1879455388
+      objectReference: {fileID: 0}
     - target: {fileID: 5077854521655654177, guid: 5bacb55fe68bac64abbf970ff2a95448, type: 3}
       propertyPath: m_Name
       value: Spike
@@ -55,6 +59,10 @@ PrefabInstance:
     - target: {fileID: 6814551443767715304, guid: 5bacb55fe68bac64abbf970ff2a95448, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8016201154110748339, guid: 5bacb55fe68bac64abbf970ff2a95448, type: 3}
+      propertyPath: _projectileDamage
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -4,11 +4,20 @@ using UnityEngine;
 
 public class Chicken : FarmAnimal
 {
-    [SerializeField] private GameObject chickenPrefab;
-    private ChickenGrowthStage _currentGrowthStage = 0;
+    [SerializeField] private ChickenGrowthStage _currentGrowthStage = 0;
+    [SerializeField] private bool isBabyDefault = false;
+
+    protected override void Start()
+    {
+        base.Start();
+
+        if (isBabyDefault) IncreaseGrowStage();
+    }
 
     public override void FedTimeHandler(int minute)
     {
+        Debug.Log("fedTimeCounter: " + minute);
+
         if (_currentGrowthStage == 0)
         {
             fedTimeCounter += minute;
@@ -84,7 +93,7 @@ public class Chicken : FarmAnimal
 
     protected override void MakeProduct()
     {
-        var newAnimal = Instantiate(chickenPrefab, transform.position, Quaternion.identity);
+        var newAnimal = Instantiate(_animalInfo.eggPrefab, transform.position, Quaternion.identity);
     }
 
     protected override IEnumerator PlaySoundAfterAFewTimes()

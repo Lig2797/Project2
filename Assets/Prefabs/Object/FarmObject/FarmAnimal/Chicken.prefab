@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7207136287203567867}
   m_Layer: 14
   m_Name: Chicken
-  m_TagString: Untagged
+  m_TagString: FarmAnimal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -158,6 +158,8 @@ MonoBehaviour:
   rayAngleSpread: 30
   _emoji: {fileID: 0}
   chickenPrefab: {fileID: 6601258122538453835}
+  _currentGrowthStage: 0
+  isBabyDefault: 0
 --- !u!212 &7207136287203567867
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -212,7 +214,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!1001 &1970956199248572866
 PrefabInstance:
   m_ObjectHideFlags: 0

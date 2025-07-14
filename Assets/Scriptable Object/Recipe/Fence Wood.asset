@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62be6fcc09cf4254e96f55392a919036, type: 3}
   m_Name: Fence Wood
   m_EditorClassIdentifier: 
+  Quantity: 4
   itemOutput: {fileID: 11400000, guid: f11b8d612ec04c345b1a5d0677b14a92, type: 2}
   item_00: {fileID: 0}
   item_01: {fileID: 0}

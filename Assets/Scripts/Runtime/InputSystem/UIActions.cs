@@ -9,6 +9,7 @@ public class UIActions : Controls.IUIActions
     public Action closeInventoryEvent;
     public Action continueDialogueEvent;
     public Action submitEvent;
+    public Action questEvent;
 
     public void OnCloseInventory(InputAction.CallbackContext context)
     {
@@ -23,5 +24,10 @@ public class UIActions : Controls.IUIActions
     public void OnSubmit(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Started) submitEvent?.Invoke();
+    }
+
+    public void OnQuest(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started) questEvent?.Invoke();
     }
 }

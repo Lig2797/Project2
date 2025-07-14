@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2937cd1ec553aec45961e357bc702d01, type: 3}
   m_Name: Grass
   m_EditorClassIdentifier: 
+  itemPrice: 0
   CropSetting:
     cropProductName: 
     growthStages: []
@@ -21,12 +22,12 @@ MonoBehaviour:
     ratioForEachNum: []
     season: 0
   cropLevelImage: []
+  foodType: 0
   tile: {fileID: 0}
   ruleTile: {fileID: 0}
   animatedTile: {fileID: 0}
   tilemap: {fileID: 0}
-  type: 3
-  actionType: 3
+  type: 6
   range: {x: 5, y: 4, z: 0}
   stackable: 1
   image: {fileID: -1590938115, guid: 4cd95594bce1de64ba0a7e50b194836f, type: 3}

@@ -121,6 +121,7 @@ public class ItemWorldControl : NetworkBehaviour
             _collider2D.enabled = false;    
             if(player.IsLocalPlayer)
             onItemWorldTouchPlayer.Raise(this, null);
+            CollectionWood();
         }
     }
 
@@ -156,7 +157,11 @@ public class ItemWorldControl : NetworkBehaviour
         }
     }
     
-
+    private void CollectionWood()
+    {
+        if (item.itemName != "Wood") return;
+        GameEventsManager.Instance.miscEvents.CoinCollected();
+    }
 }
 
 

@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 8961632403844252917}
   m_Layer: 14
   m_Name: Female Sheep
-  m_TagString: Untagged
+  m_TagString: FarmAnimal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -91,7 +91,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!95 &8022438853240535272
 Animator:
   serializedVersion: 7

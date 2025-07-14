@@ -15,3 +15,4 @@ MonoBehaviour:
   FedTimesNeededToGrow: 3000
   FedTimesNeededToMakeProduct: 3000
   Gender: 0
+  eggPrefab: {fileID: 6601258122538453835, guid: 42d56bbaf7fee46438ca48e95af4bd28, type: 3}

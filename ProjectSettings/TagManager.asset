@@ -13,6 +13,8 @@ TagManager:
   - Tree
   - Object
   - PlayerCollision
+  - CameraController
+  - FarmAnimal
   layers:
   - Default
   - TransparentFX

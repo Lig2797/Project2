@@ -12,7 +12,12 @@ public class RecipeScriptableObjectEditor : Editor
         GUIStyle boldLabel = new GUIStyle(EditorStyles.boldLabel)
         {
             alignment = TextAnchor.MiddleCenter
-        };
+         };
+
+        // QUANTITY
+        EditorGUILayout.LabelField("QUANTITY", boldLabel);
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("Quantity"), new GUIContent("Quantity"), true);
+        EditorGUILayout.Space();
 
         // OUTPUT
         EditorGUILayout.LabelField("OUTPUT", boldLabel);

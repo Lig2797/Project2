@@ -8,6 +8,7 @@ public class FarmAnimalSO : ScriptableObject
     public int FedTimesNeededToGrow;
     public int FedTimesNeededToMakeProduct;
     public Gender Gender;
+    public GameObject eggPrefab;
 }
 public enum Gender
 {

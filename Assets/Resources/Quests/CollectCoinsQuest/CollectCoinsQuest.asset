@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CollectCoinsQuest
   m_EditorClassIdentifier: 
   <id>k__BackingField: CollectCoinsQuest
-  displayName: Collect Coins Quest
+  displayName: Collect Woods Quest
   levelRequirement: 1
   questPrerequisites: []
   questStepPrefabs:

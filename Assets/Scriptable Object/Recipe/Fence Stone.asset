@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62be6fcc09cf4254e96f55392a919036, type: 3}
   m_Name: Fence Stone
   m_EditorClassIdentifier: 
+  Quantity: 4
   itemOutput: {fileID: 11400000, guid: 3e05f0d7aea1013439109b41a170e78c, type: 2}
   item_00: {fileID: 0}
   item_01: {fileID: 0}

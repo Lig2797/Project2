@@ -52,7 +52,6 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
     [SerializeField] private InventoryController _inventoryController;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Animator animator;
-    [SerializeField] private Collider2D col;
     [SerializeField] private TextMeshPro playerNameText;
     [SerializeField] private Damageable _damageable;
     #endregion
@@ -330,8 +329,6 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
             DontDestroyOnLoad(gameObject);
 
             DataPersistenceManager.Instance.LoadGame();
-            animator.runtimeAnimatorController = GameMultiplayerManager.Instance.GetCharactersAnimator(playerDataSO.characterId);
-            playerNameText.text = playerDataSO.playerName.ToString();
 
             StartCoroutine(WaitForLoadedData());
         }
@@ -348,12 +345,6 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
         playerNameText.text = playerDataSO.playerName.ToString();
         animator.runtimeAnimatorController = GameMultiplayerManager.Instance.GetCharactersAnimator(playerDataSO.characterId);
 
-        if (NetworkManager.Singleton.IsHost && IsServer) col.enabled = false;
-        else if (NetworkManager.Singleton.IsClient)
-        {
-            col.enabled = true;
-
-        }
         GameEventsManager.Instance.playerEvents.OnPlayerSpawned(this);
         StartCoroutine(WaitForNetworkControllerSpawn());
     }
@@ -630,6 +621,7 @@ public class PlayerController : NetworkBehaviour, IDataPersistence
                     }
                 case ItemType.Crop:
                 case ItemType.Food:
+                case ItemType.Resouce:
                     {
                         _itemOnHand.ActivateItemOnHand(item.image, true);
                         ChangeAnimationState("Pickup_idle");

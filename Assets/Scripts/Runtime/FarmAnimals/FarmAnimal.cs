@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using UnityEngine.SceneManagement;
 
 
@@ -88,6 +89,13 @@ public abstract class FarmAnimal : MonoBehaviour
     [SerializeField] private float rayDistance = 1.5f;
     [SerializeField] private float rayAngleSpread = 30f; // total cone angle
 
+    private bool isPlayingSound = false;
+    private bool canPlaySound = false;
+    private float distance;
+    private float maxDistance = 10f;
+    private Vector2 viewPos;
+    private bool isInView;
+
     #endregion
 
     #region Animation variables
@@ -145,19 +153,33 @@ public abstract class FarmAnimal : MonoBehaviour
     {
         _emoji = GetComponentInChildren<EmojiController>(true);
     }
-    private void Start()
+    protected virtual void Start()
     {
         StartCoroutine(PlaySoundAfterAFewTimes());
     }
+
     protected void Update()
     {
+        distance = Vector2.Distance(Camera.main.transform.position, transform.position);
+        viewPos = Camera.main.WorldToViewportPoint(transform.position);
+        isInView = viewPos.x >= 0 && viewPos.x <= 1 && viewPos.y >= 0 && viewPos.y <= 1 && distance <= maxDistance;
+
+        if (isInView)
+        {
+            canPlaySound = true;
+        }
+        else
+        {
+            canPlaySound = false;
+        }
+
         SetAnimator();
         if (!CanMove) return;
 
         if (!isMoving)
             ChooseNewTarget();
         else
-            MoveToTarget();
+            MoveToTarget(); 
     }
 
     private void ChooseNewTarget()
@@ -332,7 +354,7 @@ public abstract class FarmAnimal : MonoBehaviour
             // Only play the sound if we finished the timer **and** still in the scene
             if (SceneManager.GetActiveScene().name == Loader.Scene.WorldScene.ToString())
             {
-                PlayAnimalSound();
+                if (canPlaySound) PlayAnimalSound();
             }
         }
     }
@@ -381,5 +403,4 @@ public abstract class FarmAnimal : MonoBehaviour
                 break;
         }
     }
-
 }

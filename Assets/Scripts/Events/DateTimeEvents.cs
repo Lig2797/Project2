@@ -8,4 +8,10 @@ public class DateTimeEvents
     {
         onDateChanged?.Invoke(dateTime);
     }
+
+    public event Action<int> onMinuteIncrease;
+    public void MinuteIncreased(int minute)
+    {
+        onMinuteIncrease?.Invoke(minute);
+    }
 }

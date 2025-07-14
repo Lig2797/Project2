@@ -393,7 +393,7 @@ MonoBehaviour:
   CanAttack: 1
   projectilePrefab: {fileID: 861314114235552467, guid: 86fbe83f264c51b4d819e4dddb5212fd, type: 3}
   projectileSpeed: 15
-  _projectileDamage: 10
+  _projectileDamage: 5
 --- !u!58 &2577541456110375268
 CircleCollider2D:
   m_ObjectHideFlags: 0

@@ -159,6 +159,7 @@ public class InventoryController : NetworkBehaviour, IDataPersistence
                 break;
             case "Key":
                 GameEventsManager.Instance.playerHouseEvents.UnlockHouse();
+                Debug.Log("Player house unlocked!");
                 break;
             default :
                 return;

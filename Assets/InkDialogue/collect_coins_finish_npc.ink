@@ -5,31 +5,34 @@
 }
 
 = finished
-Ô! Alex cậu về lúc nào vậy? #speaker:Lyria #portrait:Lyria_Smile #layout:Left #audio:animal_crossing_mid
+Oh! Alex, when did you come back? #speaker:Lyria #portrait:Lyria_Smile #layout:Left #audio:animal_crossing_mid
 
-Tớ vừa mới về. Josh bảo tớ mang đống gỗ này đến chỗ cậu #speaker:Alex #background: Say #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+I just got back. #speaker:Alex #background: Say #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+
+Do you need something from me? #speaker:Lyria #portrait:Lyria_Smile #layout:Left #audio:animal_crossing_mid
+
+-> END
+
+= default
+Hi Alex! Long time no see. Is there any problem? #speaker:Lyria #portrait:Lyria_Smile #layout:Left #audio:animal_crossing_mid 
+
+* [Nothing.]
+    -> END
+* { CollectCoinsQuestState == "CAN_FINISH" } [Here is some wood you need.]
+    ~ FinishQuest(CollectCoinsQuestId)
 
 ~ RemoveItem("Wood", 5)
 
-Ôi, quý quá cảm ơn cậu nhé. #speaker:Lyria #portrait:Lyria_Smile #layout:Left #audio:animal_crossing_mid
+Oh, thank you so much. Sigh, that Josh can't even help with a small thing. #speaker:Lyria #portrait:Lyria_Smile #layout:Left #audio:animal_crossing_mid
 
-Tớ có vài món đồ làm vườn mà ông cậu nhờ tớ gửi giúp. #speaker:Lyria #portrait:Lyria_Smile #layout:Left #audio:animal_crossing_mid
+Ah, I have some gardening tools that my uncle asked me to send. #speaker:Lyria #portrait:Lyria_Smile #layout:Left #audio:animal_crossing_mid
 
 ~ AddItem("Strawberry Seed")
 ~ AddItem("Potato Seed")
 ~ AddItem("Carrot Seed")
 ~ AddItem("WaterCan")
 ~ AddItem("Hoe")
+~ AddItem("Fishing Rod")
 
-Là hạt giống, cuốc và bình tưới nước. Hay quá bây giờ đó có thể đi làm vườn rồi.#speaker:Alex #background: Say #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
--> END
-
-= default
-Chào Alex! Lâu lắm mới gặp cậu. Câu có vấn đề gì không. #speaker:Lyria #portrait:Lyria_Smile #layout:Left #audio:animal_crossing_mid 
-
-* [Không có gì cả.]
-    -> END
-* { CollectCoinsQuestState == "CAN_FINISH" } [Đây là một ít vật phẩm.]
-    ~ FinishQuest(CollectCoinsQuestId)
-    Oh? These coins are for me? Thank you!
+Seeds, hoe and watering can. Great, now I can go gardening.#speaker:Alex #background: Say #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
 -> END

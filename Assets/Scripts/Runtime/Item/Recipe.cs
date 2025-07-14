@@ -5,6 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "ScriptableObject/Recipe")]
 public class Recipe : ScriptableObject
 {
+    public int Quantity = 1;
+
     public Item itemOutput;
 
     [Header("Item 0")]

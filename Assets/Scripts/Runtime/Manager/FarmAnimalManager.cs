@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FarmAnimalManager : PersistentSingleton<FarmAnimalManager>, IDataPersistence
+public class FarmAnimalManager : PersistentSingleton<FarmAnimalManager>
 {
     [SerializeField]
     private List<FarmAnimal> _farmAnimals = new List<FarmAnimal>();
@@ -24,20 +24,20 @@ public class FarmAnimalManager : PersistentSingleton<FarmAnimalManager>, IDataPe
     private GameObject _maleSheepPrefab;
     private void OnEnable()
     {
-        GameEventsManager.Instance.enviromentStatusEvents.onTimeIncrease += IncreaseFedTime;
+        GameEventsManager.Instance.dateTimeEvents.onMinuteIncrease += IncreaseFedTime;
     }
 
     private void OnDisable()
     {
-        EnviromentalStatusManager.OnTimeIncrease -= IncreaseFedTime;
+        GameEventsManager.Instance.dateTimeEvents.onMinuteIncrease -= IncreaseFedTime;
     }
 
     private void IncreaseFedTime(int minute)
     {
-
         for(int i = _farmAnimals.Count - 1; i >= 0; i--)
         {
             _farmAnimals[i].FedTimeHandler(minute);
+            
         }
     }
 

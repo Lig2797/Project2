@@ -12,19 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2937cd1ec553aec45961e357bc702d01, type: 3}
   m_Name: Ruby
   m_EditorClassIdentifier: 
+  itemPrice: 0
   CropSetting:
     cropProductName: 
     growthStages: []
     TimeToGrowth: 0
+    canReHarvest: 0
+    numOfProductCouldDrop: 
+    ratioForEachNum: []
     season: 0
   cropLevelImage: []
+  foodType: 0
   tile: {fileID: 0}
   ruleTile: {fileID: 0}
   animatedTile: {fileID: 0}
   tilemap: {fileID: 0}
-  type: 3
-  actionType: 3
-  range: {x: 5, y: 4}
+  type: 6
+  range: {x: 5, y: 4, z: 0}
   stackable: 1
   image: {fileID: -420526778, guid: e5fc15e0419d01d4797d5b0df641cfb2, type: 3}
   itemName: Ruby

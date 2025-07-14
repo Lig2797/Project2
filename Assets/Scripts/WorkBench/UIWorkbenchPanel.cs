@@ -6,6 +6,8 @@ public class UIWorkbenchPanel : Singleton<UIWorkbenchPanel>
     [SerializeField] private GameObject craftingPanel;
     [SerializeField] private Button closeButton;
     [SerializeField] private Button openRecipeBookButton;
+    [SerializeField] private GameObject recipeOutput;
+    public bool isOpen = false;
 
     private void Start()
     {
@@ -18,6 +20,8 @@ public class UIWorkbenchPanel : Singleton<UIWorkbenchPanel>
         if (craftingPanel != null)
         {
             craftingPanel.SetActive(true);
+            isOpen = true;
+            CraftingSystemManager.Instance.outputSlot = recipeOutput;
         }
         else
         {
@@ -29,6 +33,7 @@ public class UIWorkbenchPanel : Singleton<UIWorkbenchPanel>
     {
         craftingPanel.SetActive(false);
         GameEventsManager.Instance.inputReader.SwitchActionMap(ActionMap.Player);
+        isOpen = false;
     }  
     
     public void OpenRecipeBook()

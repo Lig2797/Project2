@@ -33,7 +33,13 @@ public class DayCycleHandler : Singleton<DayCycleHandler>
     public AnimationCurve ShadowLength;
 
     public float orbitRadius = 10f;
-    public int minutesToIncrease;
+    //public int minutesToIncrease;
+
+    private void Update()
+    {
+        MoveSunAndMoon();
+        UpdateLight();
+    }
 
     public void MoveSunAndMoon()
     {

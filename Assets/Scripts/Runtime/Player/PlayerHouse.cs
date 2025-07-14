@@ -4,7 +4,7 @@ public class PlayerHouse : MonoBehaviour
 {
     [SerializeField] private GameObject door;
     [SerializeField] private GameObject areaExit;
-    private bool hasOpened;
+    private bool hasOpened = false;
     private bool playerInrange = false;
 
     private void OnEnable()
@@ -30,6 +30,7 @@ public class PlayerHouse : MonoBehaviour
         {
             door.gameObject.GetComponent<BoxCollider2D>().enabled = true;
             areaExit.gameObject.SetActive(true);
+            Debug.Log("Player house unlocked!");
         }
         else
         {

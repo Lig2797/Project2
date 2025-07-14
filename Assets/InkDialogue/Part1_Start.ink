@@ -1,16 +1,16 @@
 === start ===
 
-Haizzz, lại một ngày làm việc bận rộn khác #speaker:Alex #background: Think #portrait:Alex_Think #layout:Right #audio:animal_crossing_mid
+Haizzz, another busy and tired day. #speaker:Alex #background: Think #portrait:Alex_Think #layout:Right #audio:animal_crossing_mid
 
-Ngày nào mình cũng phải đối mặt với hàng đống công việc kể từ khi mình sống một mình hơn 2 năm nay. Các ca làm thêm giờ đang làm kiệt quệ mình. Đôi lúc mình tự hỏi liệu mục đích sống của mình là gì? #speaker:Alex #background: Think #portrait:Alex_Think #layout:Right #audio:animal_crossing_mid
+I have been dealing with a lot of work every day since I have been living alone for over 2 years now. The overtime is draining me. Sometimes I wonder what is the purpose of my life? #speaker:Alex #background: Think #portrait:Alex_Think #layout:Right #audio:animal_crossing_mid
 
 "~~~ Ping pong" #speaker:??? #background: Say #portrait:Alex_Surprise #layout:Left #audio:animal_crossing_mid
 
-"Giao thư đây!!!" #speaker:??? #background: Say #portrait:Alex_Surprise #layout:Left #audio:animal_crossing_mid
+"Delivery here!!!" #speaker:??? #background: Say #portrait:Alex_Surprise #layout:Left #audio:animal_crossing_mid
 
-Hửm? Lạ nhỉ, ai lại đi gửi thư vào thời này chứ? #speaker:Alex #background: Think #portrait:Alex_Surprise2 #layout:Right #audio:animal_crossing_mid
+Hmm? Strange, who sends letters these days? #speaker:Alex #background: Think #portrait:Alex_Surprise2 #layout:Right #audio:animal_crossing_mid
 
-Nếu là thư của bố mẹ thì chắc chắn họ đã liên lạc trước với mình rồi qua điện thoại rồi. Thôi để ra xem thử. #speaker:Alex #background: Think #portrait:Alex_Surprise2 #layout:Right #audio:animal_crossing_mid
+If it's from my parents, they must have contacted me by phone first. Let go check first. #speaker:Alex #background: Think #portrait:Alex_Surprise2 #layout:Right #audio:animal_crossing_mid
 
 -> DONE
 
@@ -18,116 +18,103 @@ Nếu là thư của bố mẹ thì chắc chắn họ đã liên lạc trước
 
 ~ AddItem("Letter")
 
-Ô! Là thư của ông nội gửi, để đọc thử nào. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+Oh! It's a letter from grandpa, let me read it. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
 
 ~ AddItem("Key")
 
-Bên trong còn có thêm 1 chiếc chìa khóa. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+There is also an old key inside. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
 
-Còn có cả những đồ nghề làm vườn nữa. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+And also the gardening tools...? #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
 
 -> read_letter
 
 === read_letter ===
 
-+ [Đọc thư kỹ càng]
-    Bức thư có vẻ quan trọng mình cần phải đọc kỹ càng mới được. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
-
++ [Read the letter carefully.]
+   The letter seems important so I need to read it carefully. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
     -> DONE
     
-+ [Bỏ qua thư]
-    Thôi để lát nữa mình sẽ đọc vậy. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
-    -> DONE
-
 === prepare_departure ===
 
 ~ RemoveItem("Letter", 1)
 
 ~ CompletedFirstCutscene()
 
-Mình cũng rất nhớ ông. Có vẻ cơ hội để mình thay đổi bản thân đã đến rồi. Một cuộc sống ở thôn quê có vẻ sẽ hợp với mình hơn thành thị xô bồ. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+I miss him too. It seems like my chance to change myself has come. A life in the countryside seems to suit me better than the hustle and bustle of the city. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
 
-Quyết định đã được đưa ra, mình cần chuẩn bị lên đường đến làng Eloria. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+The decision has been made, I need to prepare to leave for Eloria village. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
 
-+ [Chuẩn bị hành lý kỹ càng] 
-    Mình cần thu dọn đồ đạc và sắp xếp những vật dụng cần thiết. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
++ [Prepare your luggage carefully] 
+   I need to clean up and organize the necessary items. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
     
     -> DONE
 
-+ [Đi ngay lập tức, không chờ đợi]
-    Không chần chừ thêm nữa, lên đường thôi. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
++ [Go now, there is no time to lose.]
+    Without further ado, let's get started. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
 
     -> DONE
 
 === to_eloria ===
 ~ CompletedSecondCutscene()
-Thật là một chuyến đi dài mệt mỏi, phải nhanh chóng về nhà nghỉ ngơi mới được.
+What a long tiring trip, must quickly go home to rest.
 #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
 
 -> DONE
 
 === read_instructions ===
 
-Theo như bảng thì bên phải là làng Eloria, vậy bên trái chắc chắn là nhà ông nội rồi.
+According to the sign, the right side is Eloria village, so the left side must be grandpa's house.
 #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
 
 -> DONE
     
 === eloria_village ===
 
-Ồ! Cảnh vật quê đã thay đổi mấy so với trước kia nhỉ. Mình tự hỏi đã bao lâu rồi kể từ khi gia đình mình rời quê lên thành phố nhỉ? #speaker:Alex #background: Think #portrait:Alex_Surprise #layout:Right #audio:animal_crossing_mid
+Oh! How much the countryside has changed since before. I wonder how long it has been since my family left the countryside for the city? #speaker:Alex #background: Think #portrait:Alex_Surprise #layout:Right #audio:animal_crossing_mid
 
-Có 2 chiếc chìa khóa, có vẻ chiếc chìa nhỏ này dùng để mở cửa ngôi nhà rồi. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+There are two keys, it seems this small key is used to open the house door.. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
 
 -> DONE
 
 === House_1 ===
 
-Ngôi nhà này trông thật cũ kĩ. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+This house looks so old. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
 
-Mình quá mệt để dọn dẹp rồi, làm một giấc rồi tính tiếp vậy.
+I'm too tired to clean up, let's take a nap and then think about it.
 #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
 -> DONE
 
 === noises_1 ===
 
-Tiếng động gì mà ồn vậy ta. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+Hmm? What is that noise? #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
 
 ~ CompletedThirdCutscene()
 
-Phải ra ngoài xem thử mới được. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+I have to go check it. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
 
 -> DONE
 
 === noise_2 ===
 
-Haizzz~~~ Tại sao Lyria lại cần nhiều gỗ đến như vậy chứ. Thật là.... #speaker:??? #background: Say #portrait:Alex_Default #layout:Left #audio:animal_crossing_mid
+Haizzz~~~ Why does Lyria need so much wood. Really...... #speaker:??? #background: Say #portrait:Alex_Default #layout:Left #audio:animal_crossing_mid
 
-Giọng nói phát ra từ đằng sau nhà mình nên ra xem thử thế nào. #speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+The voice came from behind the house, I should go check it out.#speaker:Alex #background: Think #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
 
 -> DONE
 
-=== meet_josh ===
+=== meet_bill ===
 
-Này cậu gì ơi. #speaker:Alex #background: Say #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+Oh! Alex, long time no see. What are you going to ask me to forge for you?  #speaker:Bill #background: Say #portrait:Bill_Smile #layout:Left #audio:animal_crossing_mid
 
-Khoan đã là Josh đây mà. #speaker:Alex #background: Say #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+Hi Uncle Bill, I have nothing to do now. #speaker:Alex #background: Say #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
 
-Ô! Alex? #speaker:Josh #portrait:Josh_Default #layout:Left #audio:animal_crossing_mid
+So? Why don't you go find some ores for me to blacksmith? #speaker:Bill #background: Say #portrait:Bill_Default #layout:Left #audio:animal_crossing_mid
 
-Cậu về lúc nào mà không nói cho tớ biết.#speaker:Josh #portrait:Josh_Default #layout:Left #audio:animal_crossing_mid
+~ AddItem("Pickaxe")
 
-Tớ mới về cách đây không lâu. Cậu dạo này thế nào. #speaker:Alex #background: Say #portrait:Alex_Default #layout:Left #audio:animal_crossing_mid
+This is a pickaxe to help you dig rocks. Go past the tree on the right and go northeast and you will see a cave. #speaker:Bill #background: Say #portrait:Bill_Default #layout:Left #audio:animal_crossing_mid
 
-Cậu nhìn mà không biết sao? Cầm lấy cây rìu này và phụ tớ chặt gỗ mau. #speaker:Josh #portrait:Josh_Default #layout:Left #audio:animal_crossing_mid
+~ AddItem("Sword")
 
-~ AddItem("Axe")
-
-Này tớ vừa mới về thôi mà Josh #speaker:Alex #background: Say #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
-
-Josh!!! #speaker:Alex #background: Say #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
-
-~ CompletedFourthCutscene()
-
-Chờ tớ với Josh. #speaker:Alex #background: Say #portrait:Alex_Default #layout:Right #audio:animal_crossing_mid
+Also here's a sword in case you get attacked by animals. #speaker:Bill #background: Say #portrait:Bill_Default #layout:Left #audio:animal_crossing_mid
 -> DONE

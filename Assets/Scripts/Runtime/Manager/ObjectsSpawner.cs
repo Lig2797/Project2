@@ -110,8 +110,7 @@ public class ObjectsSpawner : MonoBehaviour
         }
         else if (eObjDialogue == EObjDialogue.Quest)
         {
-            QuestPoint questPoint = Instantiate(objectPrefab, this.gameObject.transform.position, Quaternion.identity).GetComponent<QuestPoint>();
-            questPoint.SetKnotName(knotName);
+            Instantiate(objectPrefab, this.gameObject.transform.position, Quaternion.identity);
         }
     }    
 }

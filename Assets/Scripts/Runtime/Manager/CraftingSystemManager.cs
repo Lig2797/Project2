@@ -87,20 +87,20 @@ public class CraftingSystemManager : PersistentSingleton<CraftingSystemManager>
 
             if (completeRecipe)
             {
-                CreateItem(recipe.itemOutput);
+                CreateItem(recipe.itemOutput, recipe.Quantity);
                 yield break;
             }
         }
     }
 
-    public void CreateItem(Item item)
+    public void CreateItem(Item item, int quantity)
     {
         if (item == null) return;
        
         if (outputSlot.transform.childCount > 0) return;
 
         UI_InventorySlot slot = outputSlot.GetComponent<UI_InventorySlot>();
-        InventoryItem inventoryItem = new InventoryItem(System.Guid.NewGuid().ToString(), item, slot.slotIndex);
+        InventoryItem inventoryItem = new InventoryItem(System.Guid.NewGuid().ToString(), item, slot.slotIndex, quantity, 1);
         GameObject newItem = Instantiate(ui_itemPrefab, outputSlot.transform);
         UI_InventoryItem inventoryItemUI = newItem.GetComponent<UI_InventoryItem>();
         inventoryItemUI.InitialiseItem(inventoryItem);

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2937cd1ec553aec45961e357bc702d01, type: 3}
   m_Name: Wheat
   m_EditorClassIdentifier: 
-  itemPrice: 0
+  itemPrice: 50
   CropSetting:
     cropProductName: 
     growthStages: []

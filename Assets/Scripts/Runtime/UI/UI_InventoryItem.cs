@@ -134,7 +134,9 @@ public class UI_InventoryItem : MonoBehaviour, IPointerDownHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if(!_inventoryManagerSO.isOpeningInventory) return; // prevent dragging when inventory is closed
+        if(!_inventoryManagerSO.isOpeningInventory &&
+           !UIWorkbenchPanel.Instance.isOpen &&
+           !UIShop.Instance.IsShopOpen) return; // prevent dragging when inventory is closed
         onItemBeginDrag.Raise(this,null); // for sound
         if (_inventoryManagerSO.currentDraggingItem == null) // start to drag
         {

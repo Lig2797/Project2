@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62be6fcc09cf4254e96f55392a919036, type: 3}
   m_Name: Fence Wood Board
   m_EditorClassIdentifier: 
+  Quantity: 4
   itemOutput: {fileID: 11400000, guid: 3b631d149c5f69242b2c015db99366bc, type: 2}
   item_00: {fileID: 0}
   item_01: {fileID: 0}

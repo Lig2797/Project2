@@ -84,7 +84,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1449220059
-  m_SortingLayer: 26
+  m_SortingLayer: 27
   m_SortingOrder: 0
   m_Sprite: {fileID: -2111084553, guid: 621639a1c189b36479c1f0aeec13c06a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -168,7 +168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3590504701
+  GlobalObjectIdHash: 1249891198
   InScenePlacedSourceGlobalObjectIdHash: 1249891198
   DeferredDespawnTick: 0
   Ownership: 1
@@ -237,8 +237,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   playerHealth: {fileID: 0}
-  _maxHealth: 40
-  _health: 40
+  _maxHealth: 100
+  _health: 100
   _isAlive: 1
   isInvincible: 0
   invincibilityTime: 0.1

@@ -62,8 +62,8 @@ public class ShopSellBox : MonoBehaviour, IPointerDownHandler
 
         if (dragItem == null || dragItem.InventoryItem == null || dragItem.InventoryItem.Item == null ||
             dragItem.InventoryItem.Item.type != ItemType.Crop || dragItem.InventoryItem.Item.itemPrice <= 0) return;
-
-        totalPrice = dragItem.InventoryItem.Quantity * dragItem.InventoryItem.Item.itemPrice;
+        
+        totalPrice = dragItem.InventoryItem.Quantity * (dragItem.InventoryItem.Item.itemPrice + dragItem.InventoryItem.Item.itemPrice * 20/100);
         priceText.text = totalPrice.ToString();
         _inventoryItem = dragItem.InventoryItem;
     }
@@ -74,7 +74,7 @@ public class ShopSellBox : MonoBehaviour, IPointerDownHandler
         
         _inventoryManagerSO.RemoveInventoryItem(_inventoryItem);
         GameEventsManager.Instance.inventoryEvents.RemoveItem(_inventoryItem.Item.itemName, _inventoryItem.Quantity);
-        GameEventsManager.Instance.goldEvents.GoldLost(totalPrice);
+        GameEventsManager.Instance.goldEvents.GoldGained(totalPrice);
         RefreshBox();
     }
 

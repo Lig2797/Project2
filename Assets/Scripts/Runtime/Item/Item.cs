@@ -53,6 +53,7 @@ public enum ItemType
     Tool,
     Crop,
     Object,
-    Usable
+    Usable,
+    Resouce,
 }
 

@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7207136287203567867}
   m_Layer: 14
   m_Name: Male Cow
-  m_TagString: Untagged
+  m_TagString: FarmAnimal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -212,7 +212,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!1001 &6116762205037860362
 PrefabInstance:
   m_ObjectHideFlags: 0
