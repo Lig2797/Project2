@@ -12,7 +12,7 @@ public class ShopSellBox : MonoBehaviour, IPointerDownHandler
     [SerializeField] private GameObject sellBoxContainer;
 
     private InventoryItem _inventoryItem;
-
+    private UI_InventoryItem _draggedItem;
     private int totalPrice = 0;
 
     private void Start()
@@ -23,14 +23,14 @@ public class ShopSellBox : MonoBehaviour, IPointerDownHandler
     public void OnPointerDown(PointerEventData eventData)
     {
         if (_inventoryManagerSO.currentDraggingItem == null) return;
-        var DraggedItem = _inventoryManagerSO.currentDraggingItem;
+        _draggedItem = _inventoryManagerSO.currentDraggingItem;
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            DropItemOnInventorySlot(DraggedItem);
+            DropItemOnInventorySlot(_draggedItem);
         }
         else if (eventData.button == PointerEventData.InputButton.Right)
         {
-            DropOneOfDraggingItem(DraggedItem);
+            DropOneOfDraggingItem(_draggedItem);
         }
     }
 
@@ -61,7 +61,7 @@ public class ShopSellBox : MonoBehaviour, IPointerDownHandler
         totalPrice = 0;
 
         if (dragItem == null || dragItem.InventoryItem == null || dragItem.InventoryItem.Item == null ||
-            dragItem.InventoryItem.Item.type != ItemType.Crop || dragItem.InventoryItem.Item.itemPrice <= 0) return;
+            dragItem.InventoryItem.Item.type != ItemType.Food || dragItem.InventoryItem.Item.itemPrice <= 0) return;
         
         totalPrice = dragItem.InventoryItem.Quantity * (dragItem.InventoryItem.Item.itemPrice + dragItem.InventoryItem.Item.itemPrice * 20/100);
         priceText.text = totalPrice.ToString();
@@ -75,6 +75,7 @@ public class ShopSellBox : MonoBehaviour, IPointerDownHandler
         _inventoryManagerSO.RemoveInventoryItem(_inventoryItem);
         GameEventsManager.Instance.inventoryEvents.RemoveItem(_inventoryItem.Item.itemName, _inventoryItem.Quantity);
         GameEventsManager.Instance.goldEvents.GoldGained(totalPrice);
+        Destroy(_draggedItem.gameObject);
         RefreshBox();
     }
 

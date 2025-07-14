@@ -26,12 +26,12 @@ MonoBehaviour:
   - {fileID: 1503402408, guid: e41db14acf9013449b4399be8fb2f498, type: 3}
   - {fileID: 1626738781, guid: e41db14acf9013449b4399be8fb2f498, type: 3}
   - {fileID: -102853779, guid: e41db14acf9013449b4399be8fb2f498, type: 3}
+  foodType: 0
   tile: {fileID: 0}
   ruleTile: {fileID: 0}
   animatedTile: {fileID: 0}
   tilemap: {fileID: 0}
   type: 1
-  actionType: 0
   range: {x: 5, y: 4, z: 0}
   stackable: 1
   image: {fileID: -1569568651, guid: 6d5dacad31d5dc9458c33856e6a57497, type: 3}
