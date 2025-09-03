@@ -316,6 +316,7 @@ public class CaveGenerator : NetworkSingleton<CaveGenerator>
     {
         int caveNumber = 0;
         bool isInHighestCaveLevel = CaveManager.Instance.highestCaveLevel.Value == CaveManager.Instance.CurrentLocalCaveLevel;
+        isInHighestCaveLevel = false; // temp fix for single player
         if (!isInHighestCaveLevel)
         {
             _isHavingOtherPlayerInCave = false;
