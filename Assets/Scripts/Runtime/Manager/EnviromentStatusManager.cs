@@ -24,7 +24,9 @@ public class EnviromentalStatusManager : NetworkPersistentSingleton<Enviromental
 
     private void Start()
     {
-        DataPersistenceManager.Instance.LoadGame();
+        //DataPersistenceManager.Instance.LoadGame();
+
+        StartCoroutine(WaitToIncreaseDay());
     }
 
     public bool ChangeSeason()
@@ -106,11 +108,8 @@ public class EnviromentalStatusManager : NetworkPersistentSingleton<Enviromental
 
     public void LoadData(GameData gameData)
     {
-        if (SceneManager.GetActiveScene().name == Loader.Scene.CutScene.ToString() ||
-            SceneManager.GetActiveScene().name == Loader.Scene.LoadingScene.ToString() ||
-            SceneManager.GetActiveScene().name == Loader.Scene.CutScene.ToString()) return;
+        if (SceneManager.GetActiveScene().name != Loader.Scene.WorldScene.ToString()) return;
         eStatus = gameData.EnviromentData;
-        StartCoroutine(WaitToIncreaseDay());
         FishingManager.Instance.ChooseFishesBySeason();
     }
 
