@@ -233,7 +233,7 @@ public class CaveGenerator : NetworkSingleton<CaveGenerator>
     private ItemDropableEntitySO[] _chosenBigMineralInfoArray;
     #endregion
 
-    private bool _isHavingOtherPlayerInCave = true;
+    private bool _isHavingOtherPlayerInCave = false;
 
 
     protected override void Awake()
@@ -314,18 +314,19 @@ public class CaveGenerator : NetworkSingleton<CaveGenerator>
     }
     void DrawSelectedCave()
     {
-        int caveNumber = 0;
-        bool isInHighestCaveLevel = CaveManager.Instance.highestCaveLevel.Value == CaveManager.Instance.CurrentLocalCaveLevel;
-        isInHighestCaveLevel = false; // temp fix for single player
-        if (!isInHighestCaveLevel)
-        {
-            _isHavingOtherPlayerInCave = false;
-            caveNumber = Random.Range(0, CaveShapes.caves.Length);
-        }
-        else
-            caveNumber = CaveManager.Instance.highestCaveLevel.Value;
+        //int caveNumber = 0;
+        //bool isInHighestCaveLevel = CaveManager.Instance.highestCaveLevel.Value == CaveManager.Instance.CurrentLocalCaveLevel;
+        //isInHighestCaveLevel = false; // temp fix for single player
+        //if (!isInHighestCaveLevel)
+        //{
+        //    _isHavingOtherPlayerInCave = false;
+        //    caveNumber = Random.Range(0, CaveShapes.caves.Length);
+        //}
+        //else
+        //    caveNumber = CaveManager.Instance.highestCaveLevel.Value;
+        int caveNumber = Random.Range(0, CaveShapes.caves.Length);
 
-        CaveManager.Instance.CheckAndUpdateHighestLevelServerRpc(CaveManager.Instance.CurrentLocalCaveLevel, caveNumber);
+        //CaveManager.Instance.CheckAndUpdateHighestLevelServerRpc(CaveManager.Instance.CurrentLocalCaveLevel, caveNumber);
 
         int[,] selected = CaveShapes.caves[caveNumber];
         int[,] padded = AddWallPadding(selected, wallThickness);
@@ -338,7 +339,7 @@ public class CaveGenerator : NetworkSingleton<CaveGenerator>
          * if someone in this cave then just update tile for that client only
          * 
          */
-        if (!_isHavingOtherPlayerInCave)
+        //if (!_isHavingOtherPlayerInCave)
             ModifyTileServerRpc(null, null, new NetworkVector3Int(Vector3Int.zero), true); // clear all tile first
 
         for (int y = 0; y < height; y++)
