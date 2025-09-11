@@ -18,14 +18,15 @@ public class TileManager : NetworkPersistentSingleton<TileManager>, IDataPersist
     private string HoedTileName = "Hoed Tile";
     private string WateredTileName = "Watered Tile";
 
+    [SerializeField]
     private SerializableDictionary<Vector3Int, HoedTileData> _hoedTiles = new SerializableDictionary<Vector3Int, HoedTileData>();
     public SerializableDictionary<Vector3Int, HoedTileData> HoedTiles
     {
         get { return _hoedTiles; }
         set { _hoedTiles = value; }
     }
-   
 
+    [SerializeField]
     private SerializableDictionary<Vector3Int, WateredTileData> _wateredTiles = new SerializableDictionary<Vector3Int, WateredTileData>();
     public SerializableDictionary<Vector3Int, WateredTileData> WateredTiles
     {
@@ -235,11 +236,13 @@ public class TileManager : NetworkPersistentSingleton<TileManager>, IDataPersist
         foreach (var hoedTile in HoedTiles)
         {
             HoedTilesNetwork.Add(new NetworkVector3Int(hoedTile.Key), hoedTile.Value); // add to network data
+            Debug.Log("Add hoed tile to network data: " + hoedTile.Key);
         }
 
         foreach (var wateredTile in WateredTiles)
         {
             WateredTilesNetwork.Add(new NetworkVector3Int(wateredTile.Key), wateredTile.Value); // add to network data
+            Debug.Log("Add watered tile to network data: " + wateredTile.Key);
         }
     }
 
@@ -272,20 +275,20 @@ public class TileManager : NetworkPersistentSingleton<TileManager>, IDataPersist
         WateredTiles = data.TileSaveData.WateredTiles;
         StartCoroutine(SetAllTileDataToNetworkData());
         StartCoroutine(ApplyTileUpdatesOnLoadGame());
-        GameEventsManager.Instance.enviromentStatusEvents.onTimeIncrease += UpdateAllTileStatus;
+        GameEventsManager.Instance.dateTimeEvents.onMinuteIncrease += UpdateAllTileStatus;
     }
     private IEnumerator ApplyTileUpdatesOnLoadGame()
     {
         yield return new WaitForEndOfFrame(); // Wait until rendering is done
 
-        foreach (var hoedTile in HoedTilesNetwork)
+        foreach (var hoedTile in HoedTiles)
         {
-            ModifyTile(hoedTile.Key.ToVector3Int(), FarmGroundTilemapName, HoedTileName);
+            ModifyTile(hoedTile.Key, FarmGroundTilemapName, HoedTileName);
         }
 
-        foreach (var wateredTile in WateredTilesNetwork)
+        foreach (var wateredTile in WateredTiles)
         {
-            ModifyTile(wateredTile.Key.ToVector3Int(), WateredGroundTilemapName, WateredTileName);
+            ModifyTile(wateredTile.Key, WateredGroundTilemapName, WateredTileName);
         }
 
     }
@@ -296,7 +299,7 @@ public class TileManager : NetworkPersistentSingleton<TileManager>, IDataPersist
         _tileSaveData.SetTilesData(HoedTiles, WateredTiles);
         data.SetTiles(_tileSaveData);
 
-        GameEventsManager.Instance.enviromentStatusEvents.onTimeIncrease -= UpdateAllTileStatus;
+        GameEventsManager.Instance.dateTimeEvents.onMinuteIncrease -= UpdateAllTileStatus;
     }
 
 }

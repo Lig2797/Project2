@@ -226,7 +226,7 @@ public class CropManager : NetworkPersistentSingleton<CropManager>, IDataPersist
         PlantedCrops = data.CropsSaveData.CropTiles;
         StartCoroutine(MoveLocalListToNetwork());
         StartCoroutine(ApplyCropTilesOnHostLoad());
-        GameEventsManager.Instance.enviromentStatusEvents.onTimeIncrease += UpdateCropsGrowthTime;
+        GameEventsManager.Instance.dateTimeEvents.onMinuteIncrease += UpdateCropsGrowthTime;
     }
     private IEnumerator MoveLocalListToNetwork()
     {
@@ -242,9 +242,9 @@ public class CropManager : NetworkPersistentSingleton<CropManager>, IDataPersist
     private IEnumerator ApplyCropTilesOnHostLoad()
     {
         yield return new WaitForEndOfFrame();
-        foreach (var crop in PlantedCropsNetwork)
+        foreach (var crop in PlantedCrops)
         {
-            TryModifyCrop(crop.Key.ToVector3Int(), crop.Value.CropSeedName.ToString(), crop.Value.CurrentStage);
+            TryModifyCrop(crop.Key, crop.Value.CropSeedName.ToString(), crop.Value.CurrentStage);
         }
     }
     private void MoveNetworkListToLocal()
@@ -259,7 +259,7 @@ public class CropManager : NetworkPersistentSingleton<CropManager>, IDataPersist
     public void SaveData(ref GameData data)
     {
         if (!IsHost) return;
-        GameEventsManager.Instance.enviromentStatusEvents.onTimeIncrease -= UpdateCropsGrowthTime;
+        GameEventsManager.Instance.dateTimeEvents.onMinuteIncrease -= UpdateCropsGrowthTime;
         MoveNetworkListToLocal();
         _cropsSaveData.SetCropsData(PlantedCrops);
         data.SetCropsData(_cropsSaveData);
